@@ -1,0 +1,20 @@
+# Add an engineering department to our organization
+dn: ou=engineering,dc=fiveruns,dc=com
+changetype: add
+ou: engineering
+objectClass: organizationalUnit
+objectClass: extensibleObject
+objectClass: top
+
+# Now add a "mike" user within the engineering department.
+dn: uid=mike,ou=engineering,dc=fiveruns,dc=com
+changetype: add
+displayName: Mike Perham
+userPassword:: e1NIQX1XNnBoNU1tNVB6OEdnaVVMYlBnekczN21qOWc9
+uid: mike
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: top
+sn: Perham
+cn: Mike Perham
