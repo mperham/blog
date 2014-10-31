@@ -1,6 +1,5 @@
 ---
-title:
-  - event storm, detection, fault detection
+title: 'Detecting Event Storms'
 author: Mike Perham
 layout: post
 permalink: /2008/03/10/detecting-event-storms/

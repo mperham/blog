@@ -71,11 +71,8 @@ Now you can see your metrics, like this:
 
 That&#8217;s 0.6.0 in a nutshell! If you aren&#8217;t using Inspeqtor yet, [here&#8217;s how to get started][5].
 
-PS For readers who aren&#8217;t native US/European, the header image is [Inspector Gadget][6].
-
  [1]: https://github.com/mperham/inspeqtor/wiki/Initd
  [2]: http://contribsys.com/inspeqtor
  [3]: https://github.com/mperham/inspeqtor/wiki/Pro-Recurring-Jobs
  [4]: http://www.mikeperham.com/wp-content/uploads/2014/10/Screen-Shot-2014-10-22-at-10.49.24.png
  [5]: https://github.com/mperham/inspeqtor/wiki
- [6]: https://en.wikipedia.org/wiki/Inspector_Gadget
