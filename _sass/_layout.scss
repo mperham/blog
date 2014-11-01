@@ -177,6 +177,10 @@
 .post-meta {
     font-size: $small-font-size;
     color: $grey-color;
+
+    @include media-query($on-palm) {
+      display: none;
+    }
 }
 
 .post-link {
