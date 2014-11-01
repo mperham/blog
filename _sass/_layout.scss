@@ -191,6 +191,13 @@
     margin-left :  0.5em;
 }
 
+#search-form {
+  display: inline;
+
+  > input {
+    font-size: 16px;
+  }
+}
 
 
 /**
