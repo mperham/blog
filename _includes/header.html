@@ -19,6 +19,8 @@
         <form onsubmit="search_google()" id="search-form">
           <input type="text" id="google-search" placeholder="Search...">
         </form>
+        <a class="page-link" href="http://contribsys.com/sidekiq">Sidekiq</>
+        <a class="page-link" href="http://contribsys.com/inspeqtor">Inspeqtor</>
         {% for page in site.pages %}
           {% if page.title %}
           <a class="page-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
