@@ -1,8 +1,8 @@
 ---
-title: 'The expvar package - Monitoring for Go'
+title: 'The expvar package - Metrics for Go'
 author: Mike Perham
 layout: post
-permalink: /2014/12/15/expvar-monitoring-for-golang/
+permalink: /2014/12/15/expvar-metrics-for-golang/
 ---
 
 Last week I discovered a mysterious package in the Go standard library, [expvar][1].  A google search turned up
