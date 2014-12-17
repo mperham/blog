@@ -2,7 +2,7 @@
 title: 'The expvar package - Metrics for Go'
 author: Mike Perham
 layout: post
-permalink: /2014/12/15/expvar-metrics-for-golang/
+permalink: /2014/12/17/expvar-metrics-for-golang/
 ---
 
 Last week I discovered a mysterious package in the Go standard library, [expvar][1].  A google search turned up
@@ -73,7 +73,7 @@ Well, I'm even more excited because the next version of [Inspeqtor Pro][3] will 
 memory and GC data which the Go runtime exposes.  This type of functionality is always what I've wanted in
 production and with almost no effort.  Sweet.
 
-Here's a very early prototype I'm working on right now.  You modify your Go daemon to expose the expvar memory data and
+Here's a prototype I'm working on right now.  You modify your Go daemon to expose the expvar memory data and
 Inspeqtor Pro can give you this real-time memory visualization.
 
 ![memory and gc visualizer](/wp-content/uploads/2014/12/mem-viz.png)
@@ -81,7 +81,8 @@ Inspeqtor Pro can give you this real-time memory visualization.
 ## The Future
 
 I'd love to see other runtimes expose similar data via HTTP/JSON.  Can Ruby or Python expose similar data?
-What about the JVM?  Make it easy to expose and tooling will appear to support it.
+What about the JVM?  [Rubinius recently discussed their VM metrics support][6], let's see other runtimes do the same!
+Make it easy to expose and tooling will appear to support it.
 
 
  [1]: http://golang.org/pkg/expvar/
@@ -89,3 +90,4 @@ What about the JVM?  Make it easy to expose and tooling will appear to support i
  [3]: http://contribsys.com/inspeqtor
  [4]: http://localhost:8123/debug/vars
  [5]: https://www.datadoghq.com/2014/11/announcing-datadog-agent-5-1-support-btrfs-go-expvar/
+ [6]: http://rubini.us/2014/12/10/rubinius-metrics-meets-influxdb/
