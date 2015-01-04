@@ -1,9 +1,9 @@
 ---
-title: "Using Ruby's CGI"
+title: "CGI: Ruby's Bare Metal"
 author: Mike Perham
 layout: post
-permalink: /2015/01/02/using-rubys-cgi/
-published: false
+permalink: /2015/01/02/cgi-rubys-bare-metal/
+published: true
 ---
 
 **How simple can you make a web request?**
@@ -21,17 +21,20 @@ My Sidekiq Pro server is as simple as humanly possible: it's running only Apache
 static files but how do I handle an arbitrary request?  That's when
 I asked myself: **How simple can you make a web request?**  The requirements are straightforward: Stripe
 will call my server with a subscription event when someone starts or stops their Sidekiq Pro
-subscription.  I need a script to perform the magic to grant/revoke access.  This call will only
-happen a few times a day, max.
+subscription.  I need a script to perform the magic to grant/revoke access and send the customer an email
+with access details.  This call will only happen a few times a day, max.
 
 This is a perfect case for going down to the [bare metal][2] and using the oldest web technology: [CGI][3].
 
 **Common Gateway Interface**
 
-CGI allows a webserver like Apache to call an external script with the details of a web request as STDIN.
-The script then outputs the HTTP response back as STDOUT.  In this case, Stripe POSTs a blob of JSON
-in the request body.  Ruby's standard library comes with `cgi`, which handles the CGI protocol for us and
-provides some nice helpers for rendering responses.  Since I'm responding to the Stripe robot, it only
+CGI was the first standard for tying Unix and the Web together.  The Unix programming model says a process
+should take input on STDIN and output on STDOUT.  CGI allows a webserver like Apache to call an external
+script with the details of a web request as STDIN.  The script then outputs the HTTP response back as STDOUT.
+Ruby's `cgi` library will parse the request coming from STDIN and provides some response output helpers
+your code can use to generate HTML responses.
+
+In my case, Stripe POSTs a blob of JSON in the request body. Since I'm responding to the Stripe robot, it only
 needs to see a 200 OK response &mdash; no fancy view rendering layer required.
 
 {% highlight ruby %}
@@ -61,22 +64,25 @@ ScriptAlias /stripe/ /opt/stripe/
 </Directory>
 {% endhighlight %}
 
-Now if I request `http://server/stripe/event.rb`, Apache will call `/opt/stripe/event.rb`!
+Now if I request `http://server/stripe/event.rb`, Apache will call `/opt/stripe/event.rb`.
 
 Look at what I'm not running: puma or unicorn, rails or sinatra, redis or memcached, postgres or mysql, bundler,
 capistrano, etc.
 The real thing is using 3-4 gems.  That's it.  The script runs in a few seconds and then exits.  Nothing
-to keep running 24/7, nothing to monitor and deployment means using `scp` to copy the .rb file to the server.  I
+to keep running 24/7 and nothing to monitor. Deployment means using `scp` to copy the .rb file to the server.  I
 don't even have to restart anything upon deploy because nothing was running in the first place!
 
 ## Reality Check
 
-CGI certainly isn't for everything: each request starts a new Ruby process so there's a small bit of overhead but for
-systems which expect little traffic but require maximum reliability, it's something worth considering.
+CGI certainly isn't the right solution for every problem: each request starts a new Ruby process so there's a
+small bit of overhead but for systems which expect little traffic but require maximum reliability, it's
+something worth considering.  There's a higher performance variant of CGI called [FastCGI][4] which
+solves the performance overhead by keeping a process running 24/7.
 
-Ultimately it solved my need though: only Apache is running 24/7 and new Sidekiq Pro customers now get their
-license information within seconds of purchase, making everyone happy!
+Ultimately plain old CGI solved my requirements: only Apache is running 24/7 and new Sidekiq Pro customers
+now get their license information within seconds of purchase, making everyone happy!
 
  [1]: http://sidekiq.org/pro/
  [2]: http://www.boblee.com/images/bear_guitar.jpg
  [3]: http://www.ruby-doc.org/stdlib-2.2.0/libdoc/cgi/rdoc/CGI.html
+ [4]: http://www.fastcgi.com/
