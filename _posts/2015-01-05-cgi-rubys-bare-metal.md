@@ -2,7 +2,7 @@
 title: "CGI: Ruby's Bare Metal"
 author: Mike Perham
 layout: post
-permalink: /2015/01/02/cgi-rubys-bare-metal/
+permalink: /2015/01/05/cgi-rubys-bare-metal/
 published: true
 ---
 
