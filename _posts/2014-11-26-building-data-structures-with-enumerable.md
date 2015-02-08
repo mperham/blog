@@ -65,7 +65,7 @@ root.left = Node.new(3)
 root.right = Node.new(12)
 root.each {|x| puts x.data } # will print "3 7 12"
 
-puts root.inject(0) { |memo, node| memo += val.data }
+puts root.inject(0) { |memo, node| memo += node.data }
 {% endhighlight %}
 
 The final trick to Enumerable is to implement a comparison operator so Ruby can compare two
