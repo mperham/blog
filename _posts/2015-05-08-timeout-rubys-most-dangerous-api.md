@@ -67,7 +67,7 @@ end
 
 If your favorite network library does not document its timeout options, be a sport
 and open a new issue or send them a PR with updated documentation.  I just did that for
-Redis.
+[Redis](https://github.com/redis/redis-rb/pull/528).
 
 
 ### Conclusion
