@@ -19,13 +19,13 @@ was still a "unique snowflake" and had a number of files which couldn't easily b
 ### The Present
 
 While I was waiting for the server to become available, I started the process of automating the gem server build.
-Once connectivity was restored, I immediately copied the irreplacable files off-site.  Today I have a new DigitalOcean
-droplet which was built with a simple shell script and a repository of those critical files necessary (TLS cert, .gem
-binary files, etc).
+Once connectivity was restored, I immediately copied the irreplacable files off-site.  As of today I have a new DigitalOcean
+droplet built with a simple shell script and a repository of those critical files necessary (TLS cert, .gem
+binary files, etc) successfully serving Sidekiq Pro's gems to my test app.
 
 ### The Future
 
-The plan going forward is to have two servers available, one in LA and one in NY.  I'll rebuild one every six
-months so the servers will never be older than one year.  This redundant setup should be active and working by the end of June.
+By the end of the month I will have two servers available, one in LA and one in NY.  Each server will be rebuilt annually to ensure
+the build process is tested every 6 months and remains usable.  I hope this will get us closer to the goal of 100% uptime.
 
 [0]: http://status.linode.com/incidents/2rm9ty3q8h3x
