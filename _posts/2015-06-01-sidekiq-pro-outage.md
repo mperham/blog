@@ -18,14 +18,19 @@ was still a "unique snowflake" and had a number of files which couldn't easily b
 
 ### The Present
 
-While I was waiting for the server to become available, I started the process of automating the gem server build.
-Once connectivity was restored, I immediately copied the irreplacable files off-site.  As of today I have a new DigitalOcean
-droplet built with a simple shell script and a repository of those critical files necessary (TLS cert, .gem
-binary files, etc) successfully serving Sidekiq Pro's gems to my test app.
+While I was waiting for the server to become available, I started the process of automating the gem server build Saturday morning.
+Once connectivity was restored, I immediately copied the irreplacable files off-site.  As of today (Monday) I was able to build
+a new DigitalOcean droplet with a simple shell script and a repository of those critical files necessary
+(TLS cert, .gem binary files, etc).  Within 10 minutes of creation it was successfully serving Sidekiq Pro's gems to my test app.
 
 ### The Future
 
-By the end of the month I will have two servers available, one in LA and one in NY.  Each server will be rebuilt annually to ensure
+By the end of the month I will have two servers available, one in SF and one in NY.  Each server will be rebuilt annually to ensure
 the build process is tested every 6 months and remains usable.  I hope this will get us closer to the goal of 100% uptime.
 
+### Postscript
+
+If you are interested in app deploys that don't depend on any gem servers, take a look at the [`bundle package`][1] command.
+
 [0]: http://status.linode.com/incidents/2rm9ty3q8h3x
+[1]: http://bundler.io/v1.9/bundle_package.html
