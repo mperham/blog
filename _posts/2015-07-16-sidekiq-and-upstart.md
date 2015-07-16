@@ -15,9 +15,9 @@ to manage deployments with Capistrano or another similar tool.
 
 The Sidekiq repo has [example .conf files](https://github.com/mperham/sidekiq/tree/master/examples/upstart) you can use as a template to create your
 own services.  Customize the .conf files as necessary and place them in `/etc/init`;
-they tell Upstart when and how to start the associated services.
+they tell Upstart when and how to start the associated processes.
 
-The `workers` service is a "fake" service which knows how to start/stop N Sidekiq
+The `workers` service is a "fake" service which knows how to start/stop N sidekiq
 processes.  Upon machine boot, Upstart will start `workers` which will start those N
 processes.  Within `workers.conf` we've declared how many processes we want to start:
 
@@ -30,7 +30,7 @@ them back up with `start workers`.  Of course you can do both with `restart work
 It literally can't be any easier!
 
 The `sidekiq` service is an "instance" service, allowing you to create N processes.
-It requires an index parameter to define which process you are controlling:
+It requires an index parameter to define which instance you are controlling:
 
 {%highlight ruby %}
 start sidekiq index=0
@@ -65,7 +65,7 @@ reload sidekiq index=X
 {% endhighlight %}
 
 Note that `workers` does not support reload since it doesn't map to a single process so we have to
-use a pgrep hack.
+use that pgrep hack.
 
 ### Restarting Sidekiq
 
@@ -84,7 +84,7 @@ end
 * We don't need to daemonize.  Modern daemons should never daemonize themselves.
 * We don't need PID files.  PID files are legacy from years ago and their use should
 signal that something is wrong.
-* We don't need to specify log files.  Sidekiq will output to stdout; Upstart will direct stdout to
+* We don't need to specify our own log files.  Sidekiq will output to stdout; Upstart will direct stdout to
 a file within `/var/log/upstart/` **and** automatically rotate those log files
 for you - no logrotate setup necessary!
 
