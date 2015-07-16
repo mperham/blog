@@ -58,14 +58,14 @@ task :quiet do
 end
 {% endhighlight %}
 
-You can also use Upstart's `reload` command to do the same:
+Note that `workers` does not support reload since it doesn't map to a single process so we have to
+use that pgrep hack.
+
+You can use Upstart's `reload` command to quiet a specific instance:
 
 {%highlight ruby %}
 $ reload sidekiq index=X
 {% endhighlight %}
-
-Note that `workers` does not support reload since it doesn't map to a single process so we have to
-use that pgrep hack.
 
 ### Restarting Sidekiq
 
