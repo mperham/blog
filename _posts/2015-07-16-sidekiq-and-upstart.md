@@ -33,9 +33,9 @@ The `sidekiq` service is an "instance" service, allowing you to create N process
 It requires an index parameter to define which instance you are controlling:
 
 {%highlight ruby %}
-start sidekiq index=0
-start sidekiq index=1
-stop sidekiq index=2
+$ start sidekiq index=0
+$ start sidekiq index=1
+$ stop sidekiq index=2
 etc...
 {% endhighlight %}
 
@@ -61,7 +61,7 @@ end
 You can also use Upstart's `reload` command to do the same:
 
 {%highlight ruby %}
-reload sidekiq index=X
+$ reload sidekiq index=X
 {% endhighlight %}
 
 Note that `workers` does not support reload since it doesn't map to a single process so we have to
