@@ -32,7 +32,7 @@ It literally can't be any easier!
 The `sidekiq` service is an "instance" service, allowing you to create N processes.
 It requires an index parameter to define which instance you are controlling:
 
-{%highlight ruby %}
+{%highlight bash %}
 $ start sidekiq index=0
 $ start sidekiq index=1
 $ stop sidekiq index=2
@@ -63,7 +63,7 @@ use that pgrep hack.
 
 You can use Upstart's `reload` command to quiet a specific instance:
 
-{%highlight ruby %}
+{%highlight bash %}
 $ reload sidekiq index=X
 {% endhighlight %}
 
