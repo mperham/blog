@@ -104,7 +104,7 @@ th, td, caption {
 }
 </style>
 <table>
-<tr><th>Version</th><th>Latency</th><th>Memory required to<br/> process 10,000 jobs</th><th>Time to process<br/> 100,000 jobs</th><th>Throughput</th></tr>
+<tr><th>Version</th><th>Latency</th><th>Garbage created when<br/> processing 10,000 jobs</th><th>Time to process<br/> 100,000 jobs</th><th>Throughput</th></tr>
 <tr><th>3.5.1</th><td>22ms</td><td>1257 MB</td><td>125 sec</td><td>800 job/sec</td></tr>
 <tr><th>4.0.0</th><td>10ms</td><td>151 MB</td><td>22 sec</td><td>4500 jobs/sec</td></tr>
 </table>
