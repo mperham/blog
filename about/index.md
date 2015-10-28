@@ -2,6 +2,7 @@
 title: About
 author: Mike Perham
 layout: page
+public: true
 ---
 I&#8217;m an independent open source software developer based in Portland, OR where I live with a beautiful wife, energetic little boy and a furry cat.
 
