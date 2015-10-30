@@ -8,7 +8,7 @@ Send me events so I can list them here, mperham AT gmail.
 
 ## Sunday 11/15
 
-None yet, send me any!
+**Game Night**, Marriott Conf Rm 12, 7pm, any non-electric gaming welcome - bring your favorite!
 
 ## Monday 11/16
 
