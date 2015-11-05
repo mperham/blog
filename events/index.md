@@ -12,7 +12,7 @@ Send me events so I can list them here, mperham AT gmail.
 
 ## Sunday 11/15
 
-**Game Night**, Marriott Conf Rm 12, 7-11pm, any non-electric games welcome - bring your favorite!
+**Game Night**, Marriott Rivercenter Conf Rm 12, 7-11pm, any non-electric games welcome - bring your favorite!
 
 ## Monday 11/16
 
@@ -23,3 +23,12 @@ Send me events so I can list them here, mperham AT gmail.
 ## Tuesday 11/17
 
 None yet, send me any!
+
+### Hotels
+
+Note that there are **two** Marriotts right next to each other:
+
+* The official hotel and conference location is the Marriott **Rivercenter** ([google map][0])
+* Across the street is the Marriott **Riverwalk**
+
+[0]: https://www.google.com/maps/place/San+Antonio+Marriott+Rivercenter/@29.4228277,-98.4846095,18z/data=!4m2!3m1!1s0x0000000000000000:0xd50ddcaac8dc6db7
