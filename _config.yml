@@ -10,3 +10,4 @@ github_username:  mperham
 # Build settings
 markdown: kramdown
 highlighter: pygments
+timezone: America/Los_Angeles
