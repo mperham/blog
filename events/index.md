@@ -17,7 +17,7 @@ Send me events so I can list them here, mperham AT gmail.
 ## Monday 11/16
 
 **Rubyconf 5k run**, River Walk next to The River’s Edge Cafe + Patio Bar, 7am, <a href="https://rubyconf5k2015.eventbrite.com/">RSVP here</a><br/>
-**New Relic User Group**, San Antonio Marriott Riverwalk, 6-8pm, <a href="http://www.eventbrite.com/e/november-san-antonio-new-relic-user-group-registration-19393062171?aff=erelexporg">RSVP here</a><br/>
+**New Relic User Group**, Marriott Rivercenter Conf Rm 13-14, 6-8pm, <a href="http://www.eventbrite.com/e/november-san-antonio-new-relic-user-group-registration-19393062171?aff=erelexporg">RSVP here</a><br/>
 **Procore party**, Howl at the Moon, 8-11pm, <a href="http://procore.com/rubyconf">RSVP here</a>
 
 ## Tuesday 11/17
