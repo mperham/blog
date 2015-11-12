@@ -4,7 +4,9 @@ author: Mike Perham
 layout: page
 ---
 
-Send me events so I can list them here, mperham AT gmail.
+Send me events so I can list them here, mperham AT gmail.  I will be
+giving out free **Sidekiq** t-shirts, men and
+women's sizes available, just find me at the conf.
 
 ## Saturday 11/14
 
