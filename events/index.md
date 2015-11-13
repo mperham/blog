@@ -16,7 +16,9 @@ href="http://www.diwalisa.com/">Details</a><br/>
 
 ## Sunday 11/15
 
-**Game Night**, Marriott Rivercenter Conf Rm 12, 7-11pm, any non-electric games welcome - bring your favorite!
+**Game Night**, Marriott Rivercenter Conf Rm 12, 7-11pm, any non-electric games welcome - bring your favorite!<br/>
+**Pub Trivia Night**, Marriott Rivercenter Salon ABF, 7-10pm<br/>
+**#rubykaraoke**, <a href="http://therepublicoftexasrestaurant.com/">The Republic of Texas</a>, 9pm<br/>
 
 ## Monday 11/16
 
