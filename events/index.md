@@ -28,7 +28,7 @@ href="http://www.diwalisa.com/">Details</a><br/>
 
 ## Tuesday 11/17
 
-None yet, send me any!
+Karaoke at "Me and C A Karaoke Bar", 8373 Perrin Beitel Rd, 8:30pm, @keithrbennett
 
 ### Hotels
 
