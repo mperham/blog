@@ -63,6 +63,10 @@ think that's overly conservative but IANAL.
 4. Note in your README that the licensing is AGPL by default but an MIT
    license is available for purchase.
 
+Note this is the simplest thing that might work, not what I do.  MIT allows
+redistribution so a real business would want to use a custom license which
+forbids redistribution.
+
 ## Commerce
 
 This assumes you are in the United States.
