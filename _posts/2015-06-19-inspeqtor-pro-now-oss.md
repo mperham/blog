@@ -2,7 +2,7 @@
 title: "Inspeqtor Pro now Open Source"
 author: Mike Perham
 layout: post
-permalink: /2015/06/19/inspeqtor-pro-now-oss
+permalink: /2015/06/19/inspeqtor-pro-now-oss/
 published: true
 ---
 

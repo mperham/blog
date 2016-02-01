@@ -2,7 +2,7 @@
 title: "Sidekiq and Upstart"
 author: Mike Perham
 layout: post
-permalink: /2015/07/16/sidekiq-and-upstart
+permalink: /2015/07/16/sidekiq-and-upstart/
 published: true
 ---
 

@@ -2,7 +2,7 @@
 title: "Contributed Systems: the 2015 wrapup"
 author: Mike Perham
 layout: post
-permalink: /2016/01/05/contributed-systems-2015
+permalink: /2016/01/05/contributed-systems-2015/
 ---
 
 In July 2014 I started my company Contributed Systems and work on Sidekiq full-time.

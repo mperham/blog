@@ -2,7 +2,7 @@
 title: "Sidekiq Pro Gem Server Outage"
 author: Mike Perham
 layout: post
-permalink: /2015/06/01/sidekiq-pro-gem-server-outage
+permalink: /2015/06/01/sidekiq-pro-gem-server-outage/
 published: true
 ---
 

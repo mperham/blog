@@ -2,7 +2,7 @@
 title: "Sidekiq Pro 2.0!"
 author: Mike Perham
 layout: post
-permalink: /2015/02/18/sidekiq-pro-2.0
+permalink: /2015/02/18/sidekiq-pro-2.0/
 published: true
 ---
 

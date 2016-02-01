@@ -2,7 +2,7 @@
 title: "Timeout: Ruby's Most Dangerous API"
 author: Mike Perham
 layout: post
-permalink: /2015/05/08/timeout-rubys-most-dangerous-api
+permalink: /2015/05/08/timeout-rubys-most-dangerous-api/
 published: true
 ---
 

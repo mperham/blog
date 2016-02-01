@@ -2,7 +2,7 @@
 title: "Optimizing Sidekiq"
 author: Mike Perham
 layout: post
-permalink: /2015/10/14/optimizing-sidekiq
+permalink: /2015/10/14/optimizing-sidekiq/
 published: true
 ---
 

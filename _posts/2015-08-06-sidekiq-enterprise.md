@@ -2,7 +2,7 @@
 title: "Sidekiq Enterprise"
 author: Mike Perham
 layout: post
-permalink: /2015/08/06/sidekiq-enterprise
+permalink: /2015/08/06/sidekiq-enterprise/
 published: true
 ---
 

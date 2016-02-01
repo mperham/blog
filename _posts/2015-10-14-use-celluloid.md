@@ -2,7 +2,7 @@
 title: "Should you use Celluloid?"
 author: Mike Perham
 layout: post
-permalink: /2015/10/14/should-you-use-celluloid
+permalink: /2015/10/14/should-you-use-celluloid/
 published: true
 ---
 

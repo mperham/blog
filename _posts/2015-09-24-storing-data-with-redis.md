@@ -2,7 +2,7 @@
 title: "Storing Data with Redis"
 author: Mike Perham
 layout: post
-permalink: /2015/09/24/storing-data-with-redis
+permalink: /2015/09/24/storing-data-with-redis/
 published: true
 ---
 

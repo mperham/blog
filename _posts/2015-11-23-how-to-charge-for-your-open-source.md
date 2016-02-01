@@ -2,7 +2,7 @@
 title: "How to Charge for your Open Source"
 author: Mike Perham
 layout: post
-permalink: /2015/11/23/how-to-charge-for-your-open-source
+permalink: /2015/11/23/how-to-charge-for-your-open-source/
 published: true
 ---
 

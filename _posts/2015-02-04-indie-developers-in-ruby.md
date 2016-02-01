@@ -2,7 +2,7 @@
 title: "Indie Developers in Ruby, 2015 Ed."
 author: Mike Perham
 layout: post
-permalink: /2015/02/04/indie-developers-in-ruby-2015-edition
+permalink: /2015/02/04/indie-developers-in-ruby-2015-edition/
 published: true
 ---
 

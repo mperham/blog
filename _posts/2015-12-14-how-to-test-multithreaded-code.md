@@ -2,7 +2,7 @@
 title: "How to Test Multithreaded Code"
 author: Mike Perham
 layout: post
-permalink: /2015/12/14/how-to-test-multithreaded-code
+permalink: /2015/12/14/how-to-test-multithreaded-code/
 published: true
 ---
 
