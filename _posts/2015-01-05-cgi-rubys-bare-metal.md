@@ -56,7 +56,7 @@ end
 
 I configured Apache to know to execute my CGI script by adding this inside the vhost configuration:
 
-{% highlight apache %}
+{% highlight conf %}
 ScriptAlias /stripe/ /opt/stripe/
 
 <Directory /opt/stripe/>
