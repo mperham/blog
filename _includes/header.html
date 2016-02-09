@@ -19,8 +19,7 @@
         <form onsubmit="search_google()" id="search-form">
           <input type="text" id="google-search" placeholder="Search...">
         </form>
-        <a class="page-link" style="color: #b1003e" href="http://sidekiq.org">Sidekiq</a>
-        <a class="page-link" style="color: #4ebfbb" href="http://contribsys.com/inspeqtor">Inspeqtor</a>
+        <a class="page-link" style="color:white;background-color:#b1003e" href="http://sidekiq.org">Sidekiq</a><a class="page-link" style="color:white;background-color:#4ebfbb" href="http://contribsys.com/inspeqtor">Inspeqtor</a>
         {% for page in site.pages %}
           {% if page.public %}
           <a class="page-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
