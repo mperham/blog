@@ -9,7 +9,7 @@ permalink: /2016/02/09/kill-your-dependencies/
   <img style="border: solid white 0px;" src="http://wookiehangover.github.io/dependency-injection-for-fun-and-profit/img/dependency-graph2.png" width="400px" />
 </figure>
 
-This post talks about Ruby but it's true of every language community: Python, JavaScript, Java, etc.  The scrouge of dependencies spares no one.
+This post talks about Ruby but it's true of every language community: Python, JavaScript, Java, etc.  The scourge of dependencies spares no one.
 
 This is a dependency visualization of every Rails app I've ever used.  Does any of this
 sound familiar:
