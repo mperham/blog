@@ -48,7 +48,7 @@ When you are considering adding a dependency to your Rails app, it's a
 good idea to do a quick sanity check, in order of preference:
 
 1. Do I really need this at all?  Kill it.
-1. Can I implement the required minimial functionality myself?  Own it.
+1. Can I implement the required minimal functionality myself?  Own it.
 
 If you need a gem:
 
