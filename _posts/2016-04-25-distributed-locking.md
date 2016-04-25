@@ -25,6 +25,14 @@ work**. It did however give me the idea to test [Sidekiq Enterprise's Rate Limit
 API](https://github.com/mperham/sidekiq/wiki/Ent-Rate-Limiting), which provides a flexible "concurrent" limiter,
 against other rubygems which provide a similar lock.
 
+> **Please Note**: I'm not talking about [Redlock](http://redis.io/topics/distlock) and other algorithms that
+provide fault-tolerant locking via distributed consensus.  Those
+algorithms are slower and **much** harder to get correct; I would never trust
+myself to write one (or anyone else that's not a Computer Science Ph.D).
+In this post, I'm talking about using a single Redis instance to
+coordinate many worker processes distributed across many machines.
+This is sufficiently safe and robust for most businesses.
+
 ### The Setup
 
 I tested four different distributed lock gems, including sidekiq-ent.
