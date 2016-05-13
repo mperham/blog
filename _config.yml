@@ -9,3 +9,5 @@ github_username:  mperham
 
 # Build settings
 timezone: America/Los_Angeles
+gems:
+  - jekyll-seo-tag
