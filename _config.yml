@@ -11,3 +11,5 @@ github_username:  mperham
 timezone: America/Los_Angeles
 gems:
   - jekyll-seo-tag
+kramdown:
+  input: GFM
