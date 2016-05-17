@@ -105,8 +105,10 @@ When I get a sale, my "Sidekiqbot" script sends me an email that the customer wa
 
 That's it: Apache, CSV and some basic Linux/Ruby scripting.  It took me weeks to develop all of this but there's nothing super difficult about it.  I try to keep the server as simple as possible so I can focus on Sidekiq development and support, not operations.  After all, you're buying what's **in** the gems, not what serves them.  This simplicity has real benefits: it's cheap ($10/mo for two servers), easy to maintain and reliable.  If you are thinking about following in my footsteps, I hope this blog post helps light the way.
 
+This article is part of a larger group on the technical nitty gritty of a software business.  Related articles are [Charging for your Open Source](/2015/11/23/how-to-charge-for-your-open-source/) (discussion on the money and legal aspects) and [CGI: Ruby's bare metal](/2015/01/05/cgi-rubys-bare-metal/) (discussion on handling Stripe webhooks).
+
 ### Postscript
 
 I became a member of [Ruby Together](https://rubytogether.org) because I rely on Bundler and the Rubygems infrastructure.
-The fact that we can do this at all is the beauty of Bundler and Rubygems: they are easily federated using HTTP and static files only.  As an alternative, consider npm; it requires CouchDB, a full copy of the npm dataset to serve and only supports a single package server.  This design is much more complex, requiring a much heavier server, and makes it effectively impossible for an individual to run an npm server due to the operational costs and maintenance required.
+The fact that we can do this at all is the beauty of Bundler and Rubygems: they are easily federated using HTTP and static files only.  As an alternative, consider npm; it requires CouchDB, a full copy of the npm dataset to serve and only supports a single package server.  This design is much more complex, requiring a much heavier server, and makes it effectively impossible for an individual to run an npm server due to the operational costs and maintenance required.  I encourage anyone whose business depends on Ruby to join.
 

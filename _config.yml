@@ -13,3 +13,4 @@ gems:
   - jekyll-seo-tag
 kramdown:
   input: GFM
+  hard_wrap: false
