@@ -115,7 +115,7 @@ for another week or two, ok?  Major functionality is missing,
 know](https://github.com/mperham/sidekiq.cr/issues) how it goes for you.
 
 Looking for other libraries written in Crystal?  Check out the
-[CrystalShards](http://crystalshards.herokuapp.com/?sort=stars&filter=)
+[CrystalShards](http://crystalshards.xyz/?sort=stars&filter=)
 listing.
 [AwesomeCrystal](https://github.com/veelenga/awesome-crystal#awesome-crystal--)
 is another curated list of resources.
