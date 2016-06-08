@@ -107,7 +107,7 @@ we've added a method for grateful users to support you and a legal mechanism for
 businesses to pay if they want to use your library and not open
 source their application due to the AGPL.
 
-Now it's up to you how much time and effort you want to spend evanglizing and
+Now it's up to you how much time and effort you want to spend evangelizing and
 supporting your work.  If you think having users feels good, just wait until you get a few
 customers and can pay for a vacation each year with your OSS work. Good luck!
 
