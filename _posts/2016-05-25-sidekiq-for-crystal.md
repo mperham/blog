@@ -23,8 +23,8 @@ syntax is similar enough to Ruby that I can reuse a lot of code but it
 adds a huge leap in performance.  In summary:
 
 * very similiar syntax to Ruby
-* 3-5x faster than Ruby 2.3 on most code
-* 3x smaller in memory footprint
+* at least 3-5x faster than Ruby 2.3 on most code
+* at least 3x smaller in memory footprint
 * statically typed
 * compiles to a single, 1MB binary! Deployment is easy.
 * comes with a large, useful standard library
@@ -83,8 +83,7 @@ require "./spec_helper"
 class MyWorker
   include Sidekiq::Worker
 
-  perform_types Int64, Int64, String
-  def perform(a, b, c)
+  def perform(a : Int64, b : Int64, c : String)
     #puts "hello world!"
   end
 end
