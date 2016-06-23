@@ -1,7 +1,7 @@
 title: Mike Perham
 email: mperham&#64;gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  Thoughts on open source software, the Internet, Ruby, Golang and programming in general.
+  Thoughts on open source software, the Internet, Ruby, Crystal and programming in general.
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://www.mikeperham.com" # the base hostname & protocol for your site
 twitter_username: mperham
