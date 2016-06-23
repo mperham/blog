@@ -65,5 +65,9 @@ method calls so it's easier to drill into the code execution.  You should
 profile with the --release flag when profiling your own non-trivial code
 so you are profiling the same binary as you run in production.
 
+Also note that Instruments supports a lot more modes that just the Time
+Profiler - it can track memory allocations, syscalls, and many other aspects.
+Play with it and see what modes are useful to you.
+
 In conclusion, profiling Crystal code is super easy due to Crystal leveraging the LLVM compiler.
 We can use LLVM-standard tools rather than needing custom profiling APIs and runtime support.
