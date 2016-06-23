@@ -10,7 +10,7 @@ How do I profile my program to determine where it is slow?
 
 This is one of the first questions any developer asks after building a
 non-toy program.  Crystal has a reputation for being quite fast but
-every language has tricks and optimizations we miss.
+every language has [tricks and optimizations][1] we miss.
 
 Since Crystal uses the LLVM compiler suite, we can reuse a lot of the
 infrastructure which knows about LLVM-compiled binaries. **Net result:
@@ -30,7 +30,8 @@ brew update
 brew install crystal-lang
 ```
 
-Now put this code in `bench.cr`:
+Now we need an app to profile.  Let's make a toy app that doesn't
+do much of anything; put this code in `app.cr`:
 
 ```ruby
 def foo(i)
@@ -45,8 +46,8 @@ end
 Compile and run in the profiler:
 
 ```
-$ crystal compile bench.cr
-$ instruments -t "Time Profiler" ./bench
+$ crystal compile app.cr
+$ instruments -t "Time Profiler" ./app
 Instruments Trace Complete (Duration : 4.458741s; Output : /Users/mike/instrumentscli0.trace)
 $ open instrumentscli0.trace/
 ```
@@ -71,3 +72,5 @@ Play with it and see what modes are useful to you.
 
 In conclusion, profiling Crystal code is super easy due to Crystal leveraging the LLVM compiler.
 We can use LLVM-standard tools rather than needing custom profiling APIs and runtime support.
+
+[1]: http://crystal-lang.org/docs/guides/performance.html
