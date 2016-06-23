@@ -56,7 +56,7 @@ can drill down into the trace to see where your code spent its time.
 Looks like 80% of my app's time was spent in Int32#to\_s and
 String#+, not exactly shocking but this is a toy example.
 
-![crystal profiler](https://dl.dropboxusercontent.com/u/3425424/Blog/crystal_profiling.png)
+![crystal profiler](https://dl.dropboxusercontent.com/u/3425424/Blog/crystal_profiler.png)
 
 Note that I didn't use `--release` flag with the compiler.  This was a
 choice I made for this blog post; the traces are a LOT easier to
