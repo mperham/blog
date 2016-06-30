@@ -12,7 +12,7 @@ don't be silly!*  What if I told you most people do just that with Redis?
 <img src="/images/redis.png" width="740px" />
 
 Redis users often have several distinct datasets in Redis: long-lived transactional data, background job queues,
-emphemeral cached data, etc.  At the same time I see lots of people using Redis in the most naive way possible:
+ephemeral cached data, etc.  At the same time I see lots of people using Redis in the most naive way possible:
 put everything into one database.
 
 There are several questions to answer when determining how to use Redis for different datasets:
