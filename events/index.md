@@ -1,40 +1,28 @@
 ---
-title: Rubyconf 2015 Events
+title: Rubyconf 2016 Events
 author: Mike Perham
 layout: page
 ---
 
-Send me events so I can list them here, mperham AT gmail.  I will be
-giving out free **Sidekiq** t-shirts, men and
-women's sizes available, just find me at the conf.
+Send me events so I can list them here, mperham AT gmail or @mperham.  I have
+50 free **Sidekiq** t-shirts, first come first served, just find me at the conf.
 
-## Saturday 11/14
+## Thursday 11/10
 
-**Diwali Festival of Lights**, 418 Villita Street, 5-11pm, <a
-href="http://www.diwalisa.com/">Details</a><br/>
-**Pre-conf meetup**, San Antonio Marriott Rivercenter Bar, 7:30-11pm, <a href="https://www.eventbrite.com/e/rubyconf-2015-pre-conference-get-together-tickets-19375343173">RSVP here</a>
+- TBD
 
-## Sunday 11/15
+## Friday 11/11
 
-**Game Night**, Marriott Rivercenter Conf Rm 12, 7-11pm, any non-electric games welcome - bring your favorite!<br/>
-**Pub Trivia Night**, Marriott Rivercenter Salon ABF, 7-10pm<br/>
-**#rubykaraoke**, <a href="http://therepublicoftexasrestaurant.com/">The Republic of Texas</a>, 9pm<br/>
+- **Rubyconf 5k run**, Yeatman's Cove, 7am, [Details and RSVP here](https://rubycentral.tito.io/rubyconf/rubyconf-2016-5k)
 
-## Monday 11/16
+## Saturday 11/12
 
-**Rubyconf 5k run**, River Walk next to The River’s Edge Cafe + Patio Bar, 7am, <a href="https://rubyconf5k2015.eventbrite.com/">RSVP here</a><br/>
-**New Relic User Group**, Marriott Rivercenter Conf Rm 13-14, 6-8pm, <a href="http://www.eventbrite.com/e/november-san-antonio-new-relic-user-group-registration-19393062171?aff=erelexporg">RSVP here</a><br/>
-**Procore party**, Howl at the Moon, 8-11pm, <a href="http://procore.com/rubyconf">RSVP here</a>
+- TBD
 
-## Tuesday 11/17
+## Sunday 11/13
 
-Karaoke at "Me and C A Karaoke Bar", 8373 Perrin Beitel Rd, 8:30pm, @keithrbennett
+- TBD
 
-### Hotels
+### Hotel
 
-Note that there are **two** Marriotts right next to each other:
-
-* The official hotel and conference location is the Marriott **Rivercenter** ([google map][0])
-* Across the street is the Marriott **Riverwalk**
-
-[0]: https://www.google.com/maps/place/San+Antonio+Marriott+Rivercenter/@29.4228277,-98.4846095,18z/data=!4m2!3m1!1s0x0000000000000000:0xd50ddcaac8dc6db7
+[Hyatt Regency Cincinnati](https://www.google.com/maps/place/Hyatt+Regency+Cincinnati/@39.100359,-84.5178257,17z/data=!4m12!1m6!3m5!1s0x8841b1519f3ce50f:0x86fb8e148252757!2sHyatt+Regency+Cincinnati!8m2!3d39.100359!4d-84.515637!3m4!1s0x8841b1519f3ce50f:0x86fb8e148252757!8m2!3d39.100359!4d-84.515637)
