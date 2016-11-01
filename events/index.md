@@ -9,7 +9,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.  I have
 
 ## Thursday 11/10
 
-- **Girl Develop It & Ample Happy Hour, Ample, 5:30-8pm, [RSVP](http://www.meetup.com/Girl-Develop-It-Cincinnati/events/234880049/?a=mikeperham)
+- **Girl Develop It & Ample Happy Hour**, Ample, 5:30-8pm, [RSVP](http://www.meetup.com/Girl-Develop-It-Cincinnati/events/234880049/?a=mikeperham)
 
 ## Friday 11/11
 
