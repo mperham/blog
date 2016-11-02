@@ -14,6 +14,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.  I have
 ## Friday 11/11
 
 - **Rubyconf 5k run**, Yeatman's Cove, 7am, [Details and RSVP here](https://rubycentral.tito.io/rubyconf/rubyconf-2016-5k)
+- **Rails Tutorial Beerware Night**, Palomino, 7pm [Details and RSVP](https://www.eventbrite.com/e/rails-tutorial-beerware-night-tickets-29063233915)
 
 ## Saturday 11/12
 
