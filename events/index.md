@@ -10,7 +10,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.  I have
 ## Thursday 11/10
 
 - **Girl Develop It & Ample Happy Hour**, Ample, 5:30-8pm, [RSVP](http://www.meetup.com/Girl-Develop-It-Cincinnati/events/234880049/?a=mikeperham)
-- **Board Games with @mperham**, Hyatt, 6-11pm, [RSVP](https://www.eventbrite.com/e/railsconf-board-game-night-tickets-29128976553)
+- **Board Games with @mperham**, Hyatt, 6-11pm, [RSVP](https://www.eventbrite.com/e/rubyconf-board-game-night-tickets-29128976553)
 
 ## Friday 11/11
 
