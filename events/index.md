@@ -11,6 +11,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.  I have
 
 - **Girl Develop It & Ample Happy Hour**, Ample, 5:30-8pm, [RSVP](http://www.meetup.com/Girl-Develop-It-Cincinnati/events/234880049/?a=mikeperham)
 - **Board Games with @mperham**, Hyatt, 6-11pm, [RSVP](https://www.eventbrite.com/e/rubyconf-board-game-night-tickets-29128976553)
+- **PythonSocial**, 84.51º, 6-8p, [RSVP](http://www.meetup.com/CincyPy/events/234303845/)
 
 ## Friday 11/11
 
