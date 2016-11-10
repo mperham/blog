@@ -17,6 +17,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.  I have
 
 - **Rubyconf 5k run**, Yeatman's Cove, 7am, [Details and RSVP here](https://rubycentral.tito.io/rubyconf/rubyconf-2016-5k)
 - **Rails Tutorial Beerware Night**, Palomino, 7pm [Details and RSVP](https://www.eventbrite.com/e/rails-tutorial-beerware-night-tickets-29063233915)
+- **Doximity Happy Hour**, Blind Pig, 6pm, [Details](https://gist.github.com/brupm/dbfe1a4576ef46a41f6a8d6d6db7c2e7)
 
 ## Saturday 11/12
 
