@@ -220,6 +220,9 @@
 .post-content {
     margin-bottom: $spacing-unit;
 
+    a {
+      font-weight: bold;
+    }
     h2 {
         font-size: 32px;
 
