@@ -58,7 +58,7 @@ Issues</th><td>663</td><td>1420</td><td>1887</td><td>2378</td></tr>
 
 # You Want Five?
 
-[Sidekiq 5.0 beta](https://github.com/mperham/sidekiq/issues/3301#issuecomment-274184726) is now
+[Sidekiq 5.0 beta](https://github.com/mperham/sidekiq/issues/3301) is now
 ready for testing in non-production environments.  The internals have
 been redesigned to work better with Rails 5.0.  It no longer supports
 older Rubies: Ruby 2.2.2+ only.  Read the [upgrade notes](https://github.com/mperham/sidekiq/blob/5-0/5.0-Upgrade.md) for more details.
