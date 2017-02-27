@@ -1,32 +1,20 @@
 ---
-title: Rubyconf 2016 Events
+title: Railsconf 2017 Events
 author: Mike Perham
 layout: page
 ---
 
-Send me events so I can list them here, mperham AT gmail or @mperham.  I have
-50 free **Sidekiq** t-shirts, first come first served, just find me at the conf.
+Send me events so I can list them here, mperham AT gmail or @mperham.
 
-## Thursday 11/10
+## Tuesday 4/25
 
-- **Girl Develop It & Ample Happy Hour**, Ample, 5:30-8pm, [RSVP](http://www.meetup.com/Girl-Develop-It-Cincinnati/events/234880049/?a=mikeperham)
-- **Board Games with @mperham**, Hyatt, 6-11pm, [RSVP](https://www.eventbrite.com/e/rubyconf-board-game-night-tickets-29128976553)
-- **PythonSocial**, 84.51º, 6-8p, [RSVP](http://www.meetup.com/CincyPy/events/234303845/)
 
-## Friday 11/11
+## Wednesday 04/26
 
-- **Rubyconf 5k run**, Yeatman's Cove, 7am, [Details and RSVP here](https://rubycentral.tito.io/rubyconf/rubyconf-2016-5k)
-- **Rails Tutorial Beerware Night**, Palomino, 7pm [Details and RSVP](https://www.eventbrite.com/e/rails-tutorial-beerware-night-tickets-29063233915)
-- **Doximity Happy Hour**, Blind Pig, 6pm, [Details](https://gist.github.com/brupm/dbfe1a4576ef46a41f6a8d6d6db7c2e7)
 
-## Saturday 11/12
+## Thursday 04/27
 
-- TBD
-
-## Sunday 11/13
-
-- TBD
 
 ### Hotel
 
-[Hyatt Regency Cincinnati](https://www.google.com/maps/place/Hyatt+Regency+Cincinnati/@39.100359,-84.5178257,17z/data=!4m12!1m6!3m5!1s0x8841b1519f3ce50f:0x86fb8e148252757!2sHyatt+Regency+Cincinnati!8m2!3d39.100359!4d-84.515637!3m4!1s0x8841b1519f3ce50f:0x86fb8e148252757!8m2!3d39.100359!4d-84.515637)
+[Sheraton Grand Phoenix](https://www.google.com/maps/place/sheraton+Grand+Phoenix,+North+3rd+Street,+Phoenix,+AZ/@33.4500609,-112.0727765,17z/data=!3m1!4b1!4m5!3m4!1s0x872b1218b2304b9b:0x61bebe037e093064!8m2!3d33.4500609!4d-112.0705878)
