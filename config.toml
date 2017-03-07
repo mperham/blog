@@ -6,6 +6,7 @@ relativeURLs = true
 enableEmoji = true
 publishDir = "docs"
 disableKinds = ["section", "taxonomy", "taxonomyTerm"]
+PygmentsCodeFences = true
 
 [permalinks]
   post = "/:year/:month/:day/:title/"

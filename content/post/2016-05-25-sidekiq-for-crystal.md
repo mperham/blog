@@ -66,12 +66,6 @@ Runtime | RSS | Time | Throughput
 MRI 2.3.0 | 50MB | 21.3 | 4,600 jobs/sec
 MRI/hiredis | 55MB | 19.2 | 5,200 jobs/sec
 Crystal 0.17 | 18MB | 5.9 | **16,900 jobs/sec**
-{: .content-table }
-
-<style>
-  .content-table TD { padding: 3px 10px }
-  .content-table { padding-bottom: 20px }
-</style>
 
 ## The codebase is a trainwreck though, right?
 
