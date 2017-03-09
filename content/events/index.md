@@ -11,6 +11,8 @@ Send me event so I can list them here, mperham AT gmail or @mperham.
 
 ## Wednesday 04/26
 
+Dinner at [Green New American Vegetarian](https://www.google.com/maps/place/Green+Restaurant/@33.470142,-112.0676519,17z/data=!3m1!4b1!4m5!3m4!1s0x872b126c70ca4875:0x374895659096d56a!8m2!3d33.470142!4d-112.0654579), RSVP to @albinosquirrel, 6:45 pm
+
 
 ## Thursday 04/27
 
