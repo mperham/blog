@@ -7,6 +7,7 @@ publishDir = "docs"
 disableKinds = ["section", "taxonomy", "taxonomyTerm"]
 PygmentsCodeFences = true
 rssLimit = 10
+disqusShortname = "mikeperham"
 
 [permalinks]
   post = "/:year/:month/:day/:title/"
