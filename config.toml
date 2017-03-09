@@ -1,19 +1,15 @@
 languageCode = "en-us"
 title = "Mike Perham"
-baseURL = "http://www.mikeperham.com/"
+baseURL = "http://www.mikeperham.com"
 theme = "simple-hugo"
 relativeURLs = true
-enableEmoji = true
 publishDir = "docs"
 disableKinds = ["section", "taxonomy", "taxonomyTerm"]
 PygmentsCodeFences = true
+rssLimit = 10
 
 [permalinks]
   post = "/:year/:month/:day/:title/"
-
-[author]
-    name = "Mike Perham"
-    email = "mperham@gmail.com"
 
 [params]
   author = "Mike Perham"
