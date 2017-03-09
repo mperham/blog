@@ -1,0 +1,118 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Comparing Document-oriented Databases </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Comparing Document-oriented Databases</h1>
+      <small class="post-meta">Sep 1, 2009</small>
+      <div class="post-content">
+        <p><a href="http://www.mongodb.org/display/DOCS/Home">MongoDB</a> is a relatively new &quot;schema-free, document-oriented database.&quot; The closest competitor to MongoDB is probably <a href="http://couchdb.apache.org/">CouchDB</a> or <a href="http://tokyocabinet.sourceforge.net/spex-en.html#features">Tokyo Cabinet's Table database</a> but all three differ in significant ways:</p>
+
+<ul>
+<li>CouchDB guarantees the ACID properties when saving documents through an MVCC mechanism like postgresql. Tokyo Cabinet provides ACID support via locking, like mysql.  Mongo updates documents in place with no real support for concurrency (e.g. optimistic or pessimistic locking). This means Mongo will be much faster for writing and scale horizontally very easily at the expense of guaranteed data consistency. This is a very common tradeoff.</li>
+<li>Couch and Mongo support datatypes for the values in documents but Mongo uses a binary JSON representation and protocol which makes it faster over the wire. Tokyo Cabinet does not support datatypes, except for string and number types in indexes. It does not have native boolean and date types which means you can't efficiently do queries like &quot;created_at &lt; 1 week ago&quot; although you could store dates and booleans as numbers to work around this limitation.</li>
+<li>Couch and Mongo support more complex structures (arrays, hashes) as values.  Tokyo only supports basic datatypes.</li>
+<li>Couch requires you to instantiate views for the queries required by your application. Couch will then auto-index the data required to fetch the view. Tokyo Cabinet and Mongo have a more traditional RDBMS notion of indexes, which are maintained separately from the table.</li>
+<li>CouchDB is written in Erlang while MongoDB is written in C++ and Tokyo Cabinet in C. I'm inclined to trust Erlang more for distributed infrastructure, given its long history in telecom. That said, I have no evidence that the other two are anything but rock solid.</li>
+</ul>
+
+<p>All projects are interesting takes on the traditional RDBMS datastore.  CouchDB would be useful where you absolutely must keep ACID and transactions to ensure data integrity but want to avoid the hard-coded schema that a traditional database requires.  Semantic web applications come to mind where your objects are just a bag of attributes.</p>
+
+<p>MongoDB would seem to be more designed for applications which need dynamic query functionality with high performance and can sacrifice data integrity to get it -- metrics and operational data come to mind.  As the MongoDB website says: &quot;High volume, low value data&quot;.</p>
+
+<p>Tokyo Cabinet feels a little more traditional and lower-level, like a layer on top of BerkeleyDB.  It's similar in design in that they are both C libraries and not designed to run as standalone daemons themselves.  It would be great for embedded applications.</p>
+
+<p>In my next post, I'll try out each with their latest Ruby driver and see how they perform in basic usecases.  Did I get anything wrong?  Leave a comment and let me know!</p>
+
+<p>Update: Tokyo Tyrant does not appear to support transactions and so Tokyo Cabinet cannot guarantee ACID when used as a service.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2009\/09\/01\/comparing-document-oriented-databases\/';
+    var disqus_title = 'Comparing Document-oriented Databases';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2009\/09\/01\/comparing-document-oriented-databases\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

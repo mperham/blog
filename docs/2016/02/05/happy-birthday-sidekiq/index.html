@@ -1,0 +1,176 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Happy 4th Birthday, Sidekiq </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Happy 4th Birthday, Sidekiq</h1>
+      <small class="post-meta">Feb 5, 2016</small>
+      <div class="post-content">
+        
+
+<p>Four years ago today I shipped Sidekiq 0.5.0.  110 versions later, it's
+still changing every day.  Pretty amazing.  So what's new?</p>
+
+<h2 id="sidekiq-enterprise">Sidekiq Enterprise</h2>
+
+<p>Sidekiq Enterprise gained two major new features this month.</p>
+
+<h3 id="historical-metrics">Historical Metrics</h3>
+
+<p>Sidekiq Enterprise can now send the global counts you see at
+the top of the Web UI to Statsd for monitoring and
+display within your metrics dashboard. <a href="https://github.com/mperham/sidekiq/wiki/Ent-Historical-Metrics">Read More</a></p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">STATSD</span> <span style="color: #f92672">=</span> <span style="color: #f92672">::</span><span style="color: #66d9ef">Statsd</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #f92672">...</span><span style="color: #f8f8f2">)</span>
+
+<span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">configure_server</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">save_history(</span><span style="color: #66d9ef">STATSD</span><span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<h3 id="multi-process">Multi-Process</h3>
+
+<p>If you start N Sidekiq processes, each process is completely separate
+and must be managed individually.</p>
+
+<p>Sidekiq Enterprise has a new binary, <code>sidekiqswarm</code>,
+which will spin up N child Sidekiq processes.  Those child processes
+will share memory with the parent process, leading to increased memory efficiency.
+If a child process dies, the parent will restart it immediately.
+Quieting and stopping the parent does the same to all children so you
+don't need to manage individual child processes.  With this new
+multi-process support, it's really simple to scale Sidekiq across all
+cores.  <a href="https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process">Read More</a></p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">COUNT</span><span style="color: #f92672">=</span><span style="color: #ae81ff">4</span> <span style="color: #f8f8f2">bundle</span> <span style="color: #f8f8f2">exec</span> <span style="color: #f8f8f2">sidekiqswarm</span> <span style="color: #f92672">-</span><span style="color: #f8f8f2">e</span> <span style="color: #f8f8f2">production</span>
+</pre></div>
+
+
+<h2 id="sidekiq-pro">Sidekiq Pro</h2>
+
+<p>Until today you had to be running reliable fetch in order to pause
+queues.  This is no longer required!  Anyone running Sidekiq Pro 3.x can now
+pause queues.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">q</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Queue</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+<span style="color: #f8f8f2">q</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">pause!</span>
+<span style="color: #f8f8f2">sleep</span> <span style="color: #ae81ff">10</span>
+<span style="color: #f8f8f2">q</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">unpause!</span>
+</pre></div>
+
+
+<p><a href="https://github.com/mperham/sidekiq/blob/master/Pro-Changes.md">Read More</a></p>
+
+<h2 id="sidekiq">Sidekiq</h2>
+
+<p>Sidekiq gained support for an ActiveJob-style <code>set</code> method, to set options
+dynamically:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">SomeWorker</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">set(</span><span style="color: #e6db74">queue</span><span style="color: #f8f8f2">:</span> <span style="color: #e6db74">&#39;high&#39;</span><span style="color: #f8f8f2">)</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">perform_async(</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">,</span> <span style="color: #ae81ff">2</span><span style="color: #f8f8f2">,</span> <span style="color: #ae81ff">3</span><span style="color: #f8f8f2">)</span>
+</pre></div>
+
+
+<p>Also, the Web UI now shows a tag next to any process which is quiet (has
+received the USR1 signal). <a href="https://github.com/mperham/sidekiq/blob/master/Changes.md">Read More</a></p>
+
+<h2 id="rails">Rails</h2>
+
+<p>When you buy <a href="http://sidekiq.org">Sidekiq Pro or Sidekiq Enterprise</a>, part of the deal is that
+I can work to improve Sidekiq <strong>and</strong> the Ruby ecosystem.  I've
+recently spent some time simplifying Rails 5 and cutting out unnecessary
+gem dependencies.  I'll have another blog post about that work next
+week.</p>
+
+<p>Until then, ciao!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2016\/02\/05\/happy-birthday-sidekiq\/';
+    var disqus_title = 'Happy 4th Birthday, Sidekiq';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2016\/02\/05\/happy-birthday-sidekiq\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

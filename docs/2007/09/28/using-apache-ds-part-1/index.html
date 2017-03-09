@@ -1,0 +1,116 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Using Apache DS, Part 1 </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Using Apache DS, Part 1</h1>
+      <small class="post-meta">Sep 28, 2007</small>
+      <div class="post-content">
+        <p>Every business beyond a certain size has an LDAP server. If you want to do anything with users in an enterprise, chances are you'd better understand LDAP. This blog post isn't not going to teach you LDAP <strong>but you need to understand LDAP</strong>. 30 minutes of reading will dramatically improve your understanding of how LDAP works and its terminology. If you don't understand what a Relative Distinguished Name is, stop reading this and go find <a href="http://www.ldapman.org/articles/intro_to_ldap.html">an introduction to LDAP</a>.</p>
+
+<p>We're going to install <a href="http://directory.apache.org/">Apache's Directory Service</a> or ApacheDS as it is commonly known. ApacheDS is a good server to use for development as it is lightweight, very easy to install and cross-platform.</p>
+
+<ol>
+<li>Download the latest ApacheDS installer. Mine was 1.5.1 for Mac OS X.</li>
+<li>Run the installer. In the case of OSX, it doesn't give any indication as to where things were installed. It actually installs the server in <strong>/usr/local/apacheds</strong>. (This took me way too long to figure out!) We'll call this directory DS_HOME.</li>
+<li>Open DS_HOME/server.xml in your favorite text editor. You'll need to configure the server to your own environment. Specifically you'll want to change a couple of items:
+
+<ul>
+<li>The default admin user and password is right at the top. For development, you should probably just stick with the defaults.</li>
+<li>The default LDAP port is 10389, <strong>not</strong> 389, so you don't have to run the server as root. In production, you'll want to run this on the standard LDAP 389 port.</li>
+</ul></li>
+<li>Once the configuration is complete, you can start up the server by running DS_HOME/apacheds.</li>
+</ol>
+
+<p>You should see a bunch of junk printed out, followed by a nice ApacheDS ASCII graphic. Fancy! You're up and running but it's not very useful just yet...</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2007\/09\/28\/using-apache-ds-part-1\/';
+    var disqus_title = 'Using Apache DS, Part 1';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2007\/09\/28\/using-apache-ds-part-1\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

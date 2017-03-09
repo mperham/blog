@@ -1,0 +1,126 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Glassfish versus Mongrel </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Glassfish versus Mongrel</h1>
+      <small class="post-meta">Oct 15, 2007</small>
+      <div class="post-content">
+        
+
+<p>I've been working on my upcoming AOR Glassfish talk. Here's some interesting numbers. (Unfortunately WordPress is pretty bad at offering good HTML formatting tools so you'll have to put up with some sad formatting.)</p>
+
+<h4 id="memory-usage">Memory Usage</h4>
+
+<pre>Glassfish - 230MB resident, 840MB virtual
+Mongrel Cluster (2 nodes) - 46MB resident, 104MB virtual
+Nginx (2 workers) - 2MB resident, 84MB virtual</pre>
+
+<h4 id="page-times">Page Times</h4>
+
+<p>This metric used Apache JMeter to simulate 25 users (threads) to request the home page for ThoughtWorks's Petstore2 Rails demo application as fast as possible. The application was tweaked so that there was no database usage. Numbers are requests/minute and denote with/without downloading associated static content (js/css/etc). Everything was running locally on my MacBook Pro 2.2Ghz.</p>
+
+<pre>Glassfish 790/833
+Mongrel 309/621
+2 Mongrels 318/1077
+2 Mongrels + Nginx 888/1050
+Glassfish + Nginx 815/845</pre>
+
+<h4 id="findings">Findings</h4>
+
+<p>As you can see, Glassfish suffers from Java's extreme memory usage. There's no point in using Java in a resource constrained server. On the performance side, Mongrel's static file handling is pathetically slow; there's a reason why everyone uses NginX as a frontend to Mongrel -- to serve static content. Glassfish's static content handling is much faster -- I didn't see much improvement when disabling static content or using Nginx to serve it, which shows that it wasn't taking significant amounts of CPU time. Ultimately Glassfish is constrained by JRuby's underlying Ruby performance -- since this is currently making leaps forward, we should see much faster performance from Glassfish/JRuby in the next six months as the JRuby compiler and other improvements become available. I don't see any hope for the memory issue though. What options are there to control the JVM's voracious appetite for RAM?</p>
+
+<p>Realistically, there's no technical reason I can determine to use Glassfish currently. It doesn't offer better performance than a Mongrel cluster, uses more memory and has a total lack of documentation and tuning options. It will certainly become more viable as performance improves and documentation becomes available.</p>
+
+<p>UPDATE: I tried running Glassfish with JRuby HEAD and there was no significant performance difference.  Disappointing, considering there are supposed to be major performance improvements coming soon.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2007\/10\/15\/glassfish-versus-mongrel\/';
+    var disqus_title = 'Glassfish versus Mongrel';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2007\/10\/15\/glassfish-versus-mongrel\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

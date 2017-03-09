@@ -1,0 +1,185 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Five Common Rails Mistakes </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Five Common Rails Mistakes</h1>
+      <small class="post-meta">May 5, 2012</small>
+      <div class="post-content">
+        <p>I've worked with Rails for quite a while now and in that time I've seen a lot of Rails applications and both read and written a lot of bad Ruby code. Here's five common mistakes that I see in almost every Rails codebase.<br />
+</p>
+
+<p><strong>1. Migrations with no schema specifics</strong></p>
+
+<p>Your data model is the core of your application. Without schema constraints, your data will slowly corrode due to bugs in your codebase until you can't depend on any fields being populated. Here's a Contact schema:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">create_table</span> <span style="color: #e6db74">&quot;contacts&quot;</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">t</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">integer</span>  <span style="color: #e6db74">&quot;user_id&quot;</span>
+  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;name&quot;</span>
+  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;phone&quot;</span>
+  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;email&quot;</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p>What is required? Presumably a Contact must belong_to a User and have a name &mdash; use database constraints to guarantee this. By adding <code>:null =&gt; false</code>, we ensure that the model is always consistent even if we have bugs in our validation because the database will not allow a model to be saved if it fails those constraints.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">create_table</span> <span style="color: #e6db74">&quot;contacts&quot;</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">t</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">integer</span>  <span style="color: #e6db74">&quot;user_id&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:null</span> <span style="color: #f92672">=&gt;</span> <span style="color: #66d9ef">false</span>
+  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;name&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:null</span> <span style="color: #f92672">=&gt;</span> <span style="color: #66d9ef">false</span>
+  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;phone&quot;</span>
+  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;email&quot;</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p><strong>Bonus points</strong>: use <code>:limit =&gt; N</code> to size your string columns appropriately. Strings default to 255 characters and phone probably doesn't need to be that big, does it?</p>
+
+<p><strong>2. Object-Oriented Programming</strong></p>
+
+<p>Most Rails developers do not write object-oriented Ruby code. They write MVC-oriented Ruby code by putting models and controllers in the expected locations. Most will add utility modules with class-methods in lib/, but that's it. It takes 2-3 years before developers realize: &quot;Rails is just Ruby. I can create simple objects and compose them in ways that Rails does not explicitly endorse!&quot;</p>
+
+<p><strong>Bonus points</strong>: introduce facades for any 3rd-party services you call. Provide a mock facade for use in your tests so that you don't actually call the 3rd party service in your test suite.</p>
+
+<p><strong>3. Concatenating HTML in helpers</strong></p>
+
+<p>If you are creating helper methods, kudos, at least you trying to keep your view layer clean. But developers often don't know the basics of creating tags within helpers, leading to messy string concatenation or interpolation:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">str</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;&lt;li class=&#39;vehicle_list&#39;&gt;&quot;</span>
+<span style="color: #f8f8f2">str</span> <span style="color: #f92672">+=</span> <span style="color: #f8f8f2">link_to(</span><span style="color: #e6db74">&quot;#{</span><span style="color: #f8f8f2">vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">title</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">upcase</span><span style="color: #e6db74">} Sale&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">show_all_styles_path(vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">id,</span> <span style="color: #f8f8f2">vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">url_title))</span>
+<span style="color: #f8f8f2">str</span> <span style="color: #f92672">+=</span> <span style="color: #e6db74">&quot;&lt;/li&gt;&quot;</span>
+<span style="color: #f8f8f2">str</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">html_safe</span>
+</pre></div>
+
+
+<p>Yikes, it's ugly and can easily lead to XSS security holes! <code>content_tag</code> is your friend.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">content_tag</span> <span style="color: #e6db74">:li</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:class</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">&#39;vehicle_list&#39;</span> <span style="color: #66d9ef">do</span>
+  <span style="color: #f8f8f2">link_to(</span><span style="color: #e6db74">&quot;#{</span><span style="color: #f8f8f2">vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">title</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">upcase</span><span style="color: #e6db74">} Sale&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">show_all_styles_path(vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">id,</span> <span style="color: #f8f8f2">vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">url_title))</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p><strong>Bonus points</strong>: start introducing helper methods that take blocks. Nested blocks are a natural fit when generating nested HTML.</p>
+
+<p><strong>4. Giant queries loading everything into memory</strong></p>
+
+<p>You need to fix some data so you'll just iterate through it all and fix it, right?</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">User</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">has_purchased(</span><span style="color: #66d9ef">true</span><span style="color: #f8f8f2">)</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">each</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">customer</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">customer</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">grant_role(</span><span style="color: #e6db74">:customer</span><span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p>You have an ecommerce site with a million customers. Let's say each User object takes 500 bytes. This code will take 500MB of memory at runtime! Better:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">User</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">has_purchased(</span><span style="color: #66d9ef">true</span><span style="color: #f8f8f2">)</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">find_each</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">customer</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">customer</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">grant_role(</span><span style="color: #e6db74">:customer</span><span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p><code>find_each</code> uses <code>find_in_batches</code> to pull in 1000 records at a time, dramatically lowering the runtime memory requirements.</p>
+
+<p><strong>Bonus points</strong>: use <code>update_all</code> or raw SQL to perform the mass update. SQL takes time to learn well but the benefits are even more tremendous: you'll see a 100x improvement in the performance.</p>
+
+<p><strong>5. Code review!</strong></p>
+
+<p>I'm guessing you are using GitHub and I'm also guessing you aren't using pull requests. If you spend a day or two building a feature, do it on a branch and send a pull request. Your team will be able to review your code, offer suggestions for improvement and possible edge cases that you didn't consider. I guarantee your code will be higher quality for it. We've switched to using pull requests for 90% of our changes at <a href="http://www.theclymb.com/invite-from/mperham">TheClymb</a> and it's been a 100% positive experience.</p>
+
+<p><strong>Bonus points</strong>: Don't merge pull requests without tests for at least the happy path. Testing is invaluable to keep your application stable and your sleep peaceful.</p>
+
+<p>Did I miss any common issues? Leave a comment and let me know!</p>
+
+<p>Update: use <code>find_each</code> rather than <code>find_in_batches</code>, thanks readers!</p>
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2012\/05\/05\/five-common-rails-mistakes\/';
+    var disqus_title = 'Five Common Rails Mistakes';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2012\/05\/05\/five-common-rails-mistakes\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

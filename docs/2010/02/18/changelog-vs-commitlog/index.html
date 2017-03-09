@@ -1,0 +1,106 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Changelog vs Commitlog </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Changelog vs Commitlog</h1>
+      <small class="post-meta">Feb 18, 2010</small>
+      <div class="post-content">
+        <p>One of the things I really like about some software projects is when they provide an actual changelog or release notes. RabbitMQ released 1.7.2 the other day and I asked the developers if they could link to a changelog. They pointed me to <a href="http://hg.rabbitmq.com/rabbitmq-server/log">this page</a>. Unfortunately this is not exactly what I had in mind. To me, a changelog is a brief overview of the changes in a version <em>that is digestible by the end user</em>. The key factor is that a changelog is not machine-generated but written by a project developer for the project's users. The RabbitMQ changelog is far too verbose (one entry per commit, along with merge noise).</p>
+
+<p>Here's a few examples of good changelogs: <a href="http://github.com/mperham/memcache-client/blob/master/History.rdoc">memcache-client</a>, <a href="http://java.sun.com/javase/6/webnotes/6u18.html">Java</a>, <a href="http://github.com/tenderlove/nokogiri/blob/master/CHANGELOG.rdoc">Nokogiri</a>, <a href="http://github.com/defunkt/resque/blob/master/HISTORY.md">Resque</a>, <a href="http://code.google.com/p/redis/wiki/Redis_1_2_0_Changelog">Redis</a>.</p>
+
+<p>Personally I consider a changelog one of the best indicators of a well run OSS project. If you run an OSS project, please consider supplying release notes or a changelog so that other developers can follow your project with ease!</p>
+
+<p>Update: looks like I just missed the changelog for RabbitMQ. Alexis was kind enough to point me to the release notes in the comments.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2010\/02\/18\/changelog-vs-commitlog\/';
+    var disqus_title = 'Changelog vs Commitlog';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2010\/02\/18\/changelog-vs-commitlog\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

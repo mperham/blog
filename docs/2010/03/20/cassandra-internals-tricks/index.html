@@ -1,0 +1,118 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Cassandra Internals -- Tricks! </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Cassandra Internals -- Tricks!</h1>
+      <small class="post-meta">Mar 20, 2010</small>
+      <div class="post-content">
+        <p>In my previous posts, I covered how Cassandra <a href="../../../../2010/03/17/cassandra-internals-reading/">reads</a> and <a href="../../../../2010/03/13/cassandra-internals-writing/">writes</a> data. In this post, I want to explain some of the trickery that Cassandra uses to provide a scalable distributed system.</p>
+
+<p><strong>Gossip</strong></p>
+
+<p>Cassandra is a cluster of individual nodes -- there's no &quot;master&quot; node or single point of failure -- so each node must actively verify the state of the other cluster members. They do this with a mechanism known as <a href="http://wiki.apache.org/cassandra/ArchitectureGossip">gossip</a>. Each node 'gossips' to 1-3 other nodes every second about the state of each node in the cluster. The gossip data is versioned so that any change for a node will quickly propagate throughout the entire cluster. In this way, every node will know the current state of every other node: whether it is bootstrapping, running normally, etc.</p>
+
+<p><strong>Hinted Handoff</strong></p>
+
+<p>In <a href="../../../../2010/03/13/cassandra-internals-writing/">writing</a>, I mentioned that Cassandra stores a copy of the data on N nodes. The client can select a consistency level for a write based on the importance of the data -- for example, ConsistencyLevel.QUORUM means that a majority of those N nodes must reply success for the write to be considered successful.</p>
+
+<p>What happens if one of those nodes goes down? How do those writes propagate to that node later? Cassandra uses a technique known as <a href="http://wiki.apache.org/cassandra/HintedHandoff">hinted handoff</a>, where the data is written to anther random node X to be stored and replayed for node Y when it comes back online (remember that gossip will quickly tell X when Y comes online). Hinted handoff ensures that node Y will quickly match the rest of the cluster. Note that read repair would still eventually &quot;fix&quot; the old data if hinted handoff did not work for some reason but only once the client asked for that data.</p>
+
+<p>Hinted writes are not readable (since node X is not officially one of the N copies) so they don't count toward write consistency. If Cassandra is configured for three copies and two of those nodes are down, it would be impossible to fulfill a ConsistencyLevel.QUORUM write.</p>
+
+<p><strong>Anti-Entropy</strong></p>
+
+<p>The final trick up Cassandra's proverbial sleeve is <a href="http://wiki.apache.org/cassandra/ArchitectureAntiEntropy">anti-entropy</a>. AE explicitly ensures that the nodes in the cluster agree on the current data. If read repair or hinted handoff don't work due to some set of circumstances, the AE service will ensure that nodes reach eventual consistency. The AE service runs during &quot;major compactions&quot; (the equivalent of rebuilding a table in an RDBMS) so it is a relatively heavyweight process that runs infrequently. AE uses a <a href="http://en.wikipedia.org/wiki/Hash_tree">Merkle Tree</a> to determine where within the tree of column family data the nodes disagree and then repairs each of those branches.</p>
+
+<p>This is the last post in my series on Cassandra. I hope you enjoyed them! Please leave a comment if you have questions or if I've made an error above.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2010\/03\/20\/cassandra-internals-tricks\/';
+    var disqus_title = 'Cassandra Internals -- Tricks!';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2010\/03\/20\/cassandra-internals-tricks\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

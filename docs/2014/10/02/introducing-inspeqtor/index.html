@@ -1,0 +1,161 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Introducing Inspeqtor </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Introducing Inspeqtor</h1>
+      <small class="post-meta">Oct 2, 2014</small>
+      <div class="post-content">
+        <p>I've written server-side applications for a decade now, and monitoring the components of your application is critical but painful. What monitors the CPU and RAM usage of your custom daemons? What monitors Redis, MySQL, memcached and the other parts of your system to ensure they are all behaving normally? What if I told you you could do all that and set it up in less than 5 minutes?</p>
+
+<p>Say hello to <a href="http://www.contribsys.com/inspeqtor/">Inspeqtor</a>!</p>
+
+<p><a href="http://www.contribsys.com/inspeqtor/" title="Inspeqtor"><img src="http://www.mikeperham.com/wp-content/uploads/2014/09/logo-inspeqtor.png" alt="logo-inspeqtor" width="370" height="74" class="alignnone size-full wp-image-1840" /></a></p>
+
+<p></p>
+
+<p>Inspeqtor is a Linux daemon which understands processes and major, popular pieces of application infrastructure. You write very simple rules about the services running on the machine and Inspeqtor will notify you when those rules are breached, processes disappear or change PID.</p>
+
+<p>Inspeqtor understands the notion of an <strong>application deploy</strong> and will not notify you during the deploy process since change is normal and expected.</p>
+
+<p>I want Inspeqtor to be incredibly easy to set up and monitor common, useful metrics. Here's how to monitor mysql:</p>
+
+<pre class="brush: bash; gutter: false; title: ; notranslate" title=""># /etc/inspeqtor/conf.d/mysql.inq
+check service mysql with username dbuser, password thepass, socket /tmp/mysql.sock
+  if memory:rss &gt; 1g then alert
+  if cpu:user &gt; 90% then alert
+  # inspeqtor checks every 15 seconds
+  # more than 50 queries per sec, let me know
+  if mysql:Queries &gt; 750 then alert
+  # watch out for those slow queries!
+  if mysql:Slow_queries &gt; 10 then alert
+  # you can even monitor slave replication lag!
+  if mysql:Seconds_Behind_Master &gt; 30 then alert
+</pre>
+
+<p><strong>That's it</strong>, just a few words of readable English, no XML, YAML or other painful formats. Inspeqtor talks to your init system to find the PID and monitor CPU and RAM. It knows how to log into mysql to gather metrics.</p>
+
+<p><strong>Look at this awesomeness</strong></p>
+
+<p>Get current status of all services with <code>inspeqtorctl status</code>:</p>
+
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-29-at-10.15.39.png"><img src="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-29-at-10.15.39.png" alt="Screen Shot 2014-09-29 at 10.15.39" width="545" height="158" class="alignnone size-full wp-image-1906" /></a></p>
+
+<p>See the graph for a specific metric over the last hour <strong>right in your console</strong> with <code>inspeqtorctl show host load:1</code>:</p>
+
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-26-at-10.39.09.png"><img src="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-26-at-10.39.09.png" alt="Screen Shot 2014-09-26 at 10.39.09" width="524" height="42" class="alignnone size-full wp-image-1892" /></a></p>
+
+<p>Inspeqtor is a single binary written in Go. It has no runtime dependencies and uses little memory. I'm hoping a fast, efficient language makes for a monitoring tool you can rely on.</p>
+
+<p><strong>But wait, THERE'S MORE!</strong></p>
+
+<p>Of course there's <a href="http://www.contribsys.com/inspeqtor/">Inspeqtor Pro</a>. The commercial version adds even more features:</p>
+
+<ul>
+<li>route alerts to different teams or individuals per machine, per service or per rule</li>
+<li>route alerts to your team chat room via Slack, HipChat, Campfire or Flowdock</li>
+<li>monitor legacy init.d services via pid files</li>
+<li><strong>many</strong> more features to come...</li>
+<li>dedicated email support</li>
+<li>that blissful feeling knowing you are supporting high quality OSS</li>
+</ul>
+
+<p>This is a tool I've wanted to build for years and I finally got the opportunity to make it real. I hope Inspeqtor becomes an indispensable tool in your devops toolkit but please remember this is brand new software and we're not at version 1.0 yet. <strong>I'm going to spend the next few years making it awesome. <a href="https://github.com/mperham/inspeqtor">If you want to help me, here's the place to start</a>.</strong></p>
+
+<p>Finally, thank you to @obfuscurity, @benbjohnson and other early reviewers for their great pre-release feedback.</p>
+
+<p>Useful Links:<br />
+* <a href="https://github.com/mperham/inspeqtor/wiki#getting-started">Getting Started</a><br />
+* <a href="https://github.com/mperham/inspeqtor/wiki">Inspeqtor documentation</a><br />
+* <a href="https://github.com/mperham/inspeqtor">Inspeqtor source</a><br />
+* <a href="http://www.contribsys.com/inspeqtor/">Inspeqtor Pro</a></p>
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2014\/10\/02\/introducing-inspeqtor\/';
+    var disqus_title = 'Introducing Inspeqtor';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2014\/10\/02\/introducing-inspeqtor\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,124 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Developing Rubygems with RVM and Bundler </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Developing Rubygems with RVM and Bundler</h1>
+      <small class="post-meta">Aug 3, 2010</small>
+      <div class="post-content">
+        <p>It's safe to say that RVM and Bundler have completely changed how I interact with my Ruby applications and gems. It's pretty well understood how to use each by itself, I didn't have a good idea how to use them in tandem until recently. Parts of this post are based on <a href="http://numbers.brighterplanet.com/2010/07/28/bundler-to-the-max/">Derek Kastner's great post on using Bundler</a>.</p>
+
+<p>When I grab the source for a random rubygem from github and want to run its tests or test drive it, I use RVM and Bundler to create a sandbox so I don't pollute the gems used by other Ruby projects on my box:</p>
+
+<pre lang="bash">rvm use 1.9.2@&lt;gemname> --create
+  gem install bundler --pre
+# Would love to see this cleaned up for bundler 1.0
+# e.g. bundle install --from-gemspec
+  cat > Gemfile &lt;&lt;eom
+source 'http://rubygems.org'
+gemspec :path => '.'
+EOM
+  bundle install
+  rake
+</pre>
+
+<p>The only trick here is using Bundler's support for gemspecs to avoid the need for a separate (and redundant) Gemfile. But <a href="http://andre.arko.net/2010/05/01/bundler-for-gem-development/">Andre Arko suggests that we prefer Bundler</a> to Jeweler and I agree with him. <a href="http://github.com/technicalpickles/jeweler/issues#issue/120">Jeweler should check for an existing Gemfile</a> and defer to it for dependencies when generating the gemspec:</p>
+
+<pre lang="ruby">require 'bundler'
+Gem::Specification.new do |s|
+  s.add_bundler_dependencies
+end
+</pre>
+
+<p>This means that <strong>gems should check in their gemspec into git</strong> and jeweler (or however you are generating your gemspec) should be declared as a development dependency. Do your gems pass this simple test? Any thoughts on how to make this even simpler?</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2010\/08\/03\/developing-rubygems-with-rvm-and-bundler\/';
+    var disqus_title = 'Developing Rubygems with RVM and Bundler';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2010\/08\/03\/developing-rubygems-with-rvm-and-bundler\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

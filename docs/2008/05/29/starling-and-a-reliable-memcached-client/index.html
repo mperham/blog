@@ -1,0 +1,110 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Starling and a reliable Memcached client </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Starling and a reliable Memcached client</h1>
+      <small class="post-meta">May 29, 2008</small>
+      <div class="post-content">
+        <p>We moved part of our <a href="http://fiveruns.com/products/manage">FiveRuns Manage</a> infrastructure to use Starling this week. I'm rapidly becoming a convert as it has proven to be simple, fast and reliable. The Starling 0.9.3 release is somewhat long in the tooth but GitHub has several Starling forks which contain performance improvements and bugfixes, including our own <a href="http://github.com/fiveruns/starling/tree/master">fiveruns/starling</a> fork. Our fork has proven to be about 3 times faster than 0.9.3 in raw message processing speed.</p>
+
+<p>More elusive has been the client library to use with Starling. Because Starling just uses the memcached protocol, any memcached client should be able to use Starling. The problem is that the most popular memcached client, Seattle.rb's memcache-client library, has several bugs in the latest 1.5.0 version:</p>
+
+<ol>
+<li>set() fails when the socket has been disconnected (<a href="http://dev.twitter.com/2008/02/solving-case-of-missing-updates.html">via Twitter</a>)</li>
+<li>it does not retry if a socket operation fails (<a href="http://willbryant.net/software/2007/12/21/ruby-memcache-client-reconnect-and-retry">via Will Bryant</a>)</li>
+<li>it does not retry the current operation on another server if a server dies</li>
+</ol>
+
+<p>The first two I fixed by applying the patches at the links above. The last one I found and fixed myself -- it's critical for fault tolerance. We run two Starling servers for redundancy and if one goes down, we wanted the clients to transparently fail over to the other. All three bugs have been fixed in our <a href="http://github.com/fiveruns/memcache-client/tree/master">fiveruns/memcache-client</a> project. If you use our client, please let me know. I'd love to hear success stories!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2008\/05\/29\/starling-and-a-reliable-memcached-client\/';
+    var disqus_title = 'Starling and a reliable Memcached client';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2008\/05\/29\/starling-and-a-reliable-memcached-client\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

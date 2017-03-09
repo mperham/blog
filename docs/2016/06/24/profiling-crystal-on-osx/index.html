@@ -1,0 +1,163 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Profiling Crystal on OSX </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Profiling Crystal on OSX</h1>
+      <small class="post-meta">Jun 24, 2016</small>
+      <div class="post-content">
+        
+
+<p>How do I profile my program to determine where it is slow?</p>
+
+<p>This is one of the first questions any developer asks after building a
+non-toy program.  Crystal has a reputation for being quite fast but
+every language has <a href="http://crystal-lang.org/docs/guides/performance.html">tricks and optimizations</a> we miss.</p>
+
+<p>Since Crystal uses the LLVM compiler suite, we can reuse a lot of the
+infrastructure which knows about LLVM-compiled binaries. <strong>Net result:
+the OSX Developer Tools include a beautiful profiler that works with
+Crystal binaries out of the box - so awesome!</strong>  If you have XCode
+installed (and if you are reading this blog, it's very likely you do),
+you can profile a Crystal binary right now, here's how.</p>
+
+<h2 id="instruments">Instruments</h2>
+
+<p>Instruments.app is the OSX profiling tool.  We're going to instrument a
+command line run and then view the results in its GUI.  I assume you
+have Crystal installed; if not, run this:</p>
+
+<pre><code>brew update
+brew install crystal-lang
+</code></pre>
+
+<p>Now we need an app to profile.  Let's make a toy app that doesn't
+do much of anything; put this code in <code>app.cr</code>:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">def</span> <span style="color: #a6e22e">foo</span><span style="color: #f8f8f2">(i)</span>
+  <span style="color: #e6db74">&quot;mike&quot;</span> <span style="color: #f92672">+</span> <span style="color: #f8f8f2">i</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">to_s</span>
+<span style="color: #66d9ef">end</span>
+
+<span style="color: #ae81ff">10_000_000</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">times</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">x</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">foo(x)</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+<p>Compile and run in the profiler:</p>
+
+<pre><code>$ crystal compile app.cr
+$ instruments -t &quot;Time Profiler&quot; ./app
+Instruments Trace Complete (Duration : 4.458741s; Output : /Users/mike/instrumentscli0.trace)
+$ open instrumentscli0.trace/
+</code></pre>
+
+<p>You should now see a lovely UI with a totally rad tree view where you
+can drill down into the trace to see where your code spent its time.
+Looks like 80% of my app's time was spent in Int32#to_s and
+String#+, not exactly shocking but this is a toy example.</p>
+
+<p><img src="https://dl.dropboxusercontent.com/u/3425424/Blog/crystal_profiler.png" alt="crystal profiler" /></p>
+
+<p>Note that I didn't use <code>--release</code> flag with the compiler.  This was a
+choice I made for this blog post; the traces are a LOT easier to
+understand without release optimizations because LLVM doesn't inline
+method calls so it's easier to drill into the code execution.  You should
+profile with the --release flag when profiling your own non-trivial code
+so you are profiling the same binary as you run in production.</p>
+
+<p>Also note that Instruments supports a lot more modes that just the Time
+Profiler - it can track memory allocations, syscalls, and many other aspects.
+Play with it and see what modes are useful to you.</p>
+
+<p>In conclusion, profiling Crystal code is super easy due to Crystal leveraging the LLVM compiler.
+We can use LLVM-standard tools rather than needing custom profiling APIs and runtime support.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2016\/06\/24\/profiling-crystal-on-osx\/';
+    var disqus_title = 'Profiling Crystal on OSX';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2016\/06\/24\/profiling-crystal-on-osx\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

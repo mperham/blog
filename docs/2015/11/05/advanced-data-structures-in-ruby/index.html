@@ -1,0 +1,168 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Advanced Data Structures in Ruby </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Advanced Data Structures in Ruby</h1>
+      <small class="post-meta">Nov 5, 2015</small>
+      <div class="post-content">
+        
+
+<p>Ruby provides several complex data structures out of the box; hash, array, set,
+and queue are all I need 99% of the time.  However knowing about more
+advanced data structures means you know when to reach for something more
+esoteric.  Here's two examples I've used recently.</p>
+
+<h3 id="connectionpool-timedstack">ConnectionPool::TimedStack</h3>
+
+<p>My <code>connection_pool</code> gem implements a <a href="https://github.com/mperham/connection_pool/blob/master/lib/connection_pool/timed_stack.rb">thread-safe Stack</a> with a
+time-limited <code>pop</code> operation.  This can be very useful when coordinating
+time-sensitive operations between threads.  Recently I used it as an alternative
+to <code>sleep</code> so I could wake up a sleeping thread immediately:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">def</span> <span style="color: #a6e22e">initialize</span>
+  <span style="color: #f8f8f2">@done</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">false</span>
+  <span style="color: #f8f8f2">@sleeper</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">ConnectionPool</span><span style="color: #f92672">::</span><span style="color: #66d9ef">TimedStack</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+<span style="color: #66d9ef">end</span>
+
+<span style="color: #66d9ef">def</span> <span style="color: #a6e22e">terminate</span>
+  <span style="color: #f8f8f2">@done</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">true</span>
+  <span style="color: #f8f8f2">@sleeper</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #66d9ef">nil</span>
+<span style="color: #66d9ef">end</span>
+
+<span style="color: #66d9ef">def</span> <span style="color: #a6e22e">start</span>
+  <span style="color: #f8f8f2">@thread</span> <span style="color: #f92672">||=</span> <span style="color: #66d9ef">Thread</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span> <span style="color: #66d9ef">do</span>
+    <span style="color: #66d9ef">while</span> <span style="color: #f92672">!</span><span style="color: #f8f8f2">@done</span>
+      <span style="color: #f8f8f2">do_something</span>
+      <span style="color: #75715e"># normally we&#39;ll sleep 60 seconds.</span>
+      <span style="color: #75715e"># terminate will wake up the sleeper early so it can exit</span>
+      <span style="color: #75715e"># immediately.</span>
+      <span style="color: #66d9ef">begin</span>
+        <span style="color: #f8f8f2">@sleeper</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">pop(</span><span style="color: #ae81ff">60</span><span style="color: #f8f8f2">)</span>
+      <span style="color: #66d9ef">rescue</span> <span style="color: #66d9ef">Timeout</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Error</span>
+      <span style="color: #66d9ef">end</span>
+    <span style="color: #66d9ef">end</span>
+  <span style="color: #66d9ef">end</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<h3 id="the-algorithms-gem">The algorithms gem</h3>
+
+<p>Although somewhat misnamed, the <a href="https://github.com/kanwei/algorithms">algorithms</a> gem contains a large
+set of advanced data structures for use in Ruby code.  <a href="http://sidekiq.org">Sidekiq
+Enterprise</a>'s cron feature uses a <a href="https://github.com/kanwei/algorithms/blob/master/lib/containers/heap.rb">Heap</a> to store jobs
+in-memory, sorted based on their next occurrence; this makes checking
+for the next job to run a constant time operation, no matter how many
+jobs are defined.</p>
+
+<p>I'd suggest reading over the <a href="https://kanwei.github.io/algorithms/">API documentation</a>, this gem has a lot of
+good structures that can turbocharge your Ruby code: trees, deques, and
+many others.</p>
+
+<h3 id="time-complexity">Time Complexity</h3>
+
+<p>When should you use a Heap?  A Queue?  A Stack?  A Tree?</p>
+
+<p>Part of understanding advanced data structures is understanding the
+complexity of their operations: how long will it take to add an
+element, remove an element, change an element?  The time complexity of an operation can be
+constant (O(1), great), logarithmic (O(log N), good), linear (O(N), meh), or worse,
+where N is the number of elements in the data structure.
+Read more about <a href="https://en.wikipedia.org/wiki/Time_complexity">Time complexity</a> on Wikipedia.</p>
+
+<p>Knowing about more advanced data structures and time complexity will make you a better developer.
+If you understand the operations that your code will perform frequently
+and the expected data structure size, you can pick a structure which best
+suits your own needs.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2015\/11\/05\/advanced-data-structures-in-ruby\/';
+    var disqus_title = 'Advanced Data Structures in Ruby';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2015\/11\/05\/advanced-data-structures-in-ruby\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

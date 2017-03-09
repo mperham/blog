@@ -1,0 +1,162 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Inspeqtor 0.6.0 -- init.d, cron and statsd! </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Inspeqtor 0.6.0 -- init.d, cron and statsd!</h1>
+      <small class="post-meta">Oct 23, 2014</small>
+      <div class="post-content">
+        <p>Inspeqtor is my new take on application infrastructure monitoring. You use it to verify rules about your database, web server, caches, etc and if anything is wrong, Inspeqtor will alert you. After the initial release 3 weeks ago, I was distracted a bit by a DMCA takedown from a similar project but thankfully that went away quickly. Since then I've added several awesome new features!</p>
+
+<p><strong>What's new?</strong>
+</p>
+
+<h3 id="init-d-support">Init.d Support</h3>
+
+<p>I'll admit, I got this decision wrong. Init.d support was initially an Inspeqtor Pro feature but it's been pulled down into Inspeqtor and open sourced. Unfortunately there are many instances of core infrastructure (e.g. nginx) still distributing themselves with a dumb sysvinit script. Users can't control this and it's not fair to tell them I won't support it due to my own dislike of init.d.</p>
+
+<p>Inspeqtor can now monitor init.d-based services that use PID files. Follow the instructions on the Initd <a href="https://github.com/mperham/inspeqtor/wiki/Initd">wiki page</a> to ensure Inspeqtor can find the PID file for your service.</p>
+
+<h3 id="rate-support">Rate Support</h3>
+
+<p>You can now specify your rules in &quot;per second&quot; rates. Previously you had to give a raw number which implicitly depended on the 15 second cycle time. Now your threshold is clearer:</p>
+
+<pre>
+# /etc/inspeqtor/services.d/mysql.inq
+check service mysql
+  # before
+  if mysql:Queries &gt; 750 then alert
+  # now!
+  if mysql:Queries &gt; 50/sec then alert
+</pre>
+
+<h3 id="export-data">Export data</h3>
+
+<p>Use the new <code>inspeqtorctl export</code> command to dump the latest metric data in JSON format. There's a million things you can do once you have the raw data: your imagination is the only limit!</p>
+
+<p>Inspeqtor got a few new features and so did <a href="http://contribsys.com/inspeqtor">Inspeqtor Pro</a>.</p>
+
+<h3 id="pro-monitor-recurring-jobs">Pro -- Monitor recurring jobs</h3>
+
+<p>Cron jobs are special because they run in their own cron environment sandbox and are easy to misconfigure. At some point every developer has seen a cron job which works perfectly on their own machine but fails in production due to some environmental bug. With Inspeqtor Pro you give it a list of jobs in /etc/inspeqtor/jobs.d/*.inq along with how often they should &quot;check in&quot; and Inspeqtor will alert you if a job has not checked in within the given window.</p>
+
+<pre>
+# /etc/inspeqtor/jobs.d/whatever.inq
+check jobs
+  bank_transfer happens every 2 hours
+  warehouse_ftp happens every day
+</pre>
+
+<p>Each job calls inspeqtorctl to check in and tell Inspeqtor it finished successfully.</p>
+
+<pre>
+&gt; inspeqtorctl job_done warehouse_ftp
+OK
+</pre>
+
+<p>If Inspeqtor does not see a check in within the given period of time, it will fire an alert. <a href="https://github.com/mperham/inspeqtor/wiki/Pro-Recurring-Jobs">More detail in the wiki</a>.</p>
+
+<h3 id="pro-export-to-statsd">Pro -- Export to Statsd</h3>
+
+<p>Inspeqtor Pro can send collected metrics directly to your Statsd server, meaning you can graph and visualize them with Graphite, Librato, Datadog or others. The integration literally couldn't be simpler, requiring just a single line to your inspeqtor.conf:</p>
+
+<pre>
+# /etc/inspeqtor/inspeqtor.conf
+set statsd_location localhost:8125
+</pre>
+
+<p>Now you can see your metrics, like this:</p>
+
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/10/Screen-Shot-2014-10-22-at-10.49.24.png"><img src="../../../../wp-content/uploads/2014/10/Screen-Shot-2014-10-22-at-10.49.24.png" alt="Screen Shot 2014-10-22 at 10.49.24" width="623" height="203" class="alignnone size-full wp-image-1979" /></a></p>
+
+<p>That's 0.6.0 in a nutshell! If you aren't using Inspeqtor yet, <a href="https://github.com/mperham/inspeqtor/wiki">here's how to get started</a>.</p>
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2014\/10\/23\/inspeqtor-0-6-0-init-d-cron-and-statsd\/';
+    var disqus_title = 'Inspeqtor 0.6.0 -- init.d, cron and statsd!';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2014\/10\/23\/inspeqtor-0-6-0-init-d-cron-and-statsd\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

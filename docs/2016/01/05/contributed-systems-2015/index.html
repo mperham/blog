@@ -1,0 +1,186 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Contributed Systems: the 2015 wrapup </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Contributed Systems: the 2015 wrapup</h1>
+      <small class="post-meta">Jan 5, 2016</small>
+      <div class="post-content">
+        
+
+<p>In July 2014 I started my company Contributed Systems and work on Sidekiq full-time.
+Let's review how 2015 went.  The end of January will be Sidekiq's 4th
+birthday so here's some birthday numbers:</p>
+
+<p><style>
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #000;
+}</p>
+
+<p>th, td, caption {
+  border: 1px solid #000;
+  padding: 0.3em;
+}
+</style>
+<table width="100%">
+<tr><th>&nbsp;</th><th>1st Birthday</th><th>2nd Birthday</th><th>4th Birthday</th></tr>
+<tr><th>Downloads</th><td>214,300</td><td>1,192,259</td><td>5,505,145</td></tr>
+<tr><th>Stars</th><td>2144</td><td>3535</td><td>5846</td></tr>
+<tr><th>Closed Issues</th><td>663</td><td>1420</td><td>1887</td></tr>
+<tr><th>Forks</th><td>266</td><td>563</td><td>1003</td></tr>
+<tr><th>Closed PRs</th><td>228</td><td>380</td><td>836</td></tr>
+<tr><th>Versions</th><td>44</td><td>74</td><td>110</td></tr>
+<tr><th>Customers</th><td>25</td><td>200</td><td>675</td></tr>
+<tr><th>Employees</th><td>0</td><td>0</td><td>1</td></tr>
+</table>
+<br/></p>
+
+<h3 id="good-news">Good News</h3>
+
+<p>In 2015, I:</p>
+
+<ul>
+<li>released Sidekiq Pro 2.0 with nested batches and expiring jobs</li>
+<li>introduced Sidekiq Enterprise, with rate limiting, cron job and unique job features</li>
+<li>released Sidekiq 4.0 with a simpler and higher performance core</li>
+<li>released Sidekiq Pro 3.0 and Enterprise 1.0 major upgrades</li>
+<li>attended Railsconf and Rubyconf, passing out t-shirts and stickers</li>
+</ul>
+
+<p>As for business numbers, <strong>my revenue is up 2.6x YoY from 2014</strong>.
+Average sales price has doubled due to the introduction and demand for Sidekiq Enterprise.</p>
+
+<p>When I started Sidekiq and Sidekiq Pro in 2012, I had three goals I
+never mentioned to anyone to measure my own success:</p>
+
+<ol>
+<li>change the standard advice of &quot;use resque or DJ&quot; to &quot;use resque, sidekiq or DJ&quot;</li>
+<li>pass resque as the most popular job framework</li>
+<li>make $1 million from Sidekiq Pro by selling 2000 copies for $500 over five years.</li>
+</ol>
+
+<p>The latest <a href="http://blog.scoutapp.com/articles/2015/12/29/state-of-the-2016-rails-stack">State of the Rails Stack 2016</a> shows that I've blown away
+(1) and (2).  Sidekiq now has more market share than Resque and DJ
+combined.  Market leader achievement unlocked!</p>
+
+<p><img src="../../../../images/marketshare.png" alt="market share" /></p>
+
+<p>(3) has been a learning experience: note the slow down in customer
+growth from 1 -&gt; 2 -&gt; 4 years.  Like any business-focused niche software product,
+a small customer pool means a higher price is demanded (versus the original $500 price);
+it turns out to be easier to convert 500 customers at $2000 each.
+Given the amount of functionality in Pro and Enterprise, it doesn't take long
+for businesses to realize that the value is there:
+no engineering time and effort necessary to build and maintain their own
+gems, a steady stream of fixes and improvements, expert support only an email away, etc.</p>
+
+<p>(3) will be met: 2016 will be the year I pass $1 million in total revenue, right on schedule.</p>
+
+<h3 id="bad-news">Bad News</h3>
+
+<p>At the end of 2014 I introduced Inspeqtor and Inspeqtor Pro as a
+second product line for Contributed Systems with the vision of
+building a modern process monitoring system.</p>
+
+<p>I still believe the product is amazing -- it's the replacement for monit
+that I've always wanted -- but it's hard to argue with the facts:
+uptake and sales have been minimal.  What's there is stable and people
+are welcome to use it; I won't be adding any more features.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Sidekiq has been a success, Inspeqtor a failure.  In baseball, a .500 batting
+average is superhuman.  I'll take it.  I hope your 2015 went well and cheers to 2016!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2016\/01\/05\/contributed-systems-2015\/';
+    var disqus_title = 'Contributed Systems: the 2015 wrapup';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2016\/01\/05\/contributed-systems-2015\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,169 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Timeout: Ruby&#39;s Most Dangerous API </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Timeout: Ruby&#39;s Most Dangerous API</h1>
+      <small class="post-meta">May 8, 2015</small>
+      <div class="post-content">
+        
+
+<p>In the last 3 months, I've worked with a half dozen Sidekiq users plagued with mysterious stability problems.
+All were caused by the same thing: Ruby's terrible <code>Timeout</code> module.  I strongly urge everyone reading
+this to remove any usage of <code>Timeout</code> from your codebase; odds are very good you will see an increase
+in stability.</p>
+
+<figure style="float:right">
+  <img src="../../../../wp-content/uploads/2015/05/using-timeout.jpg" width="419">
+  <figcaption style="text-align: right"><i>You, using Timeout.</i></figcaption>
+</figure>
+
+<p>You might think I'm overreacting or hyping up the problem: I'm not.  Here's Charles Nutter, lead developer
+of JRuby, writing about how <a href="http://blog.headius.com/2008/02/rubys-threadraise-threadkill-timeoutrb.html">Timeout is fundamentally broken</a>
+and cannot be used safely <strong>in 2008</strong>.</p>
+
+<h3 id="the-problem">The Problem</h3>
+
+<p>Timeout is typically used to ensure a block of code executes within a given time.  It does this by
+raising an error within the Thread executing that block.  Relevant to Sidekiq: this will corrupt
+shared network connections.  Imagine this sequence of events:</p>
+
+<ol>
+<li>Code makes request A to Redis</li>
+<li>Timeout triggers, block stops executing</li>
+<li>Redis connection is returned to connection pool</li>
+<li>Network receives response A for request A</li>
+<li>Code checks out same connection and makes request B</li>
+<li>Code reads response A instead of waiting for response B!</li>
+</ol>
+
+<p>That shared Redis connection has been corrupted due to Timeout skipping response A handling.</p>
+
+<h3 id="the-solution">The Solution</h3>
+
+<p>The only safe timeouts to use are lower-level network timeouts.  The underlying operating system
+understands them and ensures everything is cleaned up properly.  All good network APIs will expose
+those timeouts so you can set them in your application code.  Here's a few examples:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e"># Sidekiq&#39;s redis connection pool</span>
+<span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">configure_server</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">redis</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span> <span style="color: #e6db74">:network_timeout</span> <span style="color: #f92672">=&gt;</span> <span style="color: #ae81ff">2</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:url</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">&#39;redis://localhost:3970/12&#39;</span> <span style="color: #f8f8f2">}</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e"># Generic redis-rb</span>
+<span style="color: #f8f8f2">$redis</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Redis</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #e6db74">:url</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">&#39;...&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:connect_timeout</span> <span style="color: #f92672">=&gt;</span> <span style="color: #ae81ff">5</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:timeout</span> <span style="color: #f92672">=&gt;</span> <span style="color: #ae81ff">5</span><span style="color: #f8f8f2">)</span>
+</pre></div>
+
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e"># Dalli</span>
+<span style="color: #f8f8f2">$memcached</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Dalli</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Client</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #e6db74">&#39;...&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:socket_timeout</span> <span style="color: #f92672">=&gt;</span> <span style="color: #ae81ff">5</span><span style="color: #f8f8f2">)</span>
+</pre></div>
+
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e"># Net::HTTP</span>
+<span style="color: #66d9ef">Net</span><span style="color: #f92672">::</span><span style="color: #66d9ef">HTTP</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">start(host,</span> <span style="color: #f8f8f2">port,</span> <span style="color: #e6db74">:open_timeout</span> <span style="color: #f92672">=&gt;</span> <span style="color: #ae81ff">5</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:read_timeout</span> <span style="color: #f92672">=&gt;</span> <span style="color: #ae81ff">5</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">http</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">http</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">request(</span><span style="color: #f92672">...</span><span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p>If your favorite network library does not document its timeout options, be a sport
+and open a new issue or send them a PR with updated documentation.  I just did that for
+<a href="https://github.com/redis/redis-rb/pull/528">Redis</a>.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Ruby's <code>Timeout</code> is a giant hammer and will only lead to a big mess.  Don't use it.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2015\/05\/08\/timeout-rubys-most-dangerous-api\/';
+    var disqus_title = 'Timeout: Ruby\x27s Most Dangerous API';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2015\/05\/08\/timeout-rubys-most-dangerous-api\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

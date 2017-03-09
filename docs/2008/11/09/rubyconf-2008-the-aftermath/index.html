@@ -1,0 +1,116 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> RubyConf 2008: The Aftermath </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>RubyConf 2008: The Aftermath</h1>
+      <small class="post-meta">Nov 9, 2008</small>
+      <div class="post-content">
+        <p>I got back to Austin last night after a great three days in Orlando at RubyConf. I thought my talk went well and the crowd had several interesting questions so I know someone was paying attention. :-)</p>
+
+<p>Given that my interests lie in server-side performance and scalability, I saw two linked trends developing:</p>
+
+<p><strong>Threads suck (on Ruby?)</strong></p>
+
+<p>They work reasonably well in Java but you should avoid them if humanly possible in Ruby. They have two fundamental drawbacks: 1) the programming model makes safe concurrency difficult to code and test; and 2) the various Ruby VMs have enough differences in their threading models that you can't get good, reliable concurrency even with well-written multi-threaded code. The current best practice is to move to an evented IO model, which allows a single process to handle many requests concurrently and will peg a single core on a modern processor. To peg all the cores, you should scale with multiple Ruby processes, a la the traditional pack of Mongrels with Rails.</p>
+
+<p><strong>Real concurrency requires a new language</strong></p>
+
+<p>Even if Ruby had Java's excellent VM and threading model, it still is not suited to developing scalable apps on many-core machines because of its more traditional, mutable state nature. Traditionally pure functional languages excel at concurrency because of their nature: they don't allow mutable state or &quot;side effects&quot; in the code. Guess what: these are the two things you need to synchronize when dealing with threads; programming in a good functional language means you don't ever need to worry about synchronization.</p>
+
+<p>A note: new languages should not build their own VM anymore. The Java VM is an incredible feat of engineering and recent languages have starting using it as their platform in order to get a good threading model, excellent garbage collection and a vast array of third-party libraries which can be accessed easily. Scala and Clojure, for example, are two functional languages which leverage the JVM. Clojure is my favorite of the two: it's more pure, doesn't have a compilation step (the compilation is done at runtime) and the syntax is much nicer.</p>
+
+<p>My takeaway was that I need to learn a functional programming language. FP and compilers were the two weaknesses I had when I graduated Cornell and it looks like being able to switch modes of thought from iterative to functional will be important to top notch engineers in the future. I'm going look at Clojure and see what I can do with it.</p>
+
+<p>The ideas in this post came from talks by several people: Jim Weirich, Ilya Grigorik and W. Idris Yasser. Kudos to them for excellent talks.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2008\/11\/09\/rubyconf-2008-the-aftermath\/';
+    var disqus_title = 'RubyConf 2008: The Aftermath';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2008\/11\/09\/rubyconf-2008-the-aftermath\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

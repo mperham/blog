@@ -1,0 +1,106 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> The Reconciliation Step </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>The Reconciliation Step</h1>
+      <small class="post-meta">May 27, 2014</small>
+      <div class="post-content">
+        <p>A lot of people ask me &quot;How can I guarantee that a batch of jobs finished successfully?&quot; Here's the sad fact: <strong>you can't</strong>. 99% of the time things go perfectly but there will always be some small percentage that fail for a myriad of reasons: hardware failure, software bug, thunderstorms in the cloud.<br />
+</p>
+
+<p>And this is true of business processes in general! Any type of asynchronous processing means you can never be sure of the outcome unless you also have a verification step: I call this step <strong>reconciliation</strong> and here's the dirty secret: <strong>anything critical to the operation of your business requires reconciliation</strong>. The entire Accounting industry is reconciliation: they verify via double-entry bookkeeping that a business's accounts payable and accounts receivable add up because <strong>MONEY</strong>.</p>
+
+<p>If you have a business process using async processing like Sidekiq, chances are you need to reconcile the output of that process. Typically you'll write jobs which process some records in a database and then a cron job which runs daily to look for &quot;strange&quot; records. In the case of an e-commerce vendor like <a href="http://theclymb.com/invite-from/mperham">The Clymb</a>, we have areas in our administration tool which look for lingering orders which haven't pushed to the warehouse, reconcile our merchant credit card charges with our bank statements and many other checks. Some of these are automated tools that send email if they detect anything odd, others are manual tools designed to be run by people.</p>
+
+<p>Reconciliation is the cost of doing business in an imperfect world and part of any executive's job is to ensure their team has put in place necessary reconciliation steps to verify critical operations. What does your business reconcile? How do you do it?</p>
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2014\/05\/27\/the-reconciliation-step\/';
+    var disqus_title = 'The Reconciliation Step';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2014\/05\/27\/the-reconciliation-step\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

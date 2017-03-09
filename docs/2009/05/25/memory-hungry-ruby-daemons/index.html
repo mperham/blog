@@ -1,0 +1,138 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Memory-hungry Ruby daemons </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Memory-hungry Ruby daemons</h1>
+      <small class="post-meta">May 25, 2009</small>
+      <div class="post-content">
+        <p>We've had a perplexing issue with our Ruby daemons at <a href="http://www.onespot.com">OneSpot</a>: they seem to grow to 300-400MB each within about 30 minutes, at which point our Monit scripts restart them. We suspected a memory leak and so upgraded from stock Ruby 1.8.5 shipped with CentOS to the latest REE 1.8.6 but nothing changed. I also saw a very similar issue at <a href="http://www.fiveruns.com">FiveRuns</a>. Why is this problem seemingly endemic, even with completely different source code? After some thought and research I think I understand the root clause of the problem: it's part of Ruby's history and design.</p>
+
+<p><strong>Memory Management in Ruby</strong></p>
+
+<p>Ruby uses 5 constants to control how it manages an application's heap, 3 of which are important to this discussion. From the <a href="http://www.rubyenterpriseedition.com/documentation.html#_garbage_collector_performance_tuning">REE user's guide</a>:</p>
+
+<blockquote>
+<ul>
+<li><strong>RUBY_HEAP_MIN_SLOTS</strong><br />
+This specifies the initial number of heap slots. The default is 10000.</li>
+
+<li><p><strong>RUBY_HEAP_SLOTS_INCREMENT</strong><br />
+The number of additional heap slots to allocate when Ruby needs to allocate new heap slots for the first time. The default is 10000.</p>
+For example, suppose that the default GC settings are in effect, and 10000 Ruby objects exist on the heap (= 10000 used heap slots). When the program creates another object, Ruby will allocate a new heap with 10000 heap slots in it. There are now 20000 heap slots in total, of which 10001 are used and 9999 are unused. </li></p>
+
+<ul>
+<li><p><strong>RUBY_HEAP_SLOTS_GROWTH_FACTOR</strong><br />
+Multiplicator used for calculating the number of new heaps slots to allocate next time Ruby needs new heap slots. The default is 1.8.</p>
+Take the program in the last example. Suppose that the program creates 10000 more objects. Upon creating the 10000th object, Ruby needs to allocate another heap. This heap will have 10000 * 1.8 = 18000 heap slots. There are now 20000 + 18000 = 38000 heap slots in total, of which 20001 are used and 17999 are unused.</p>
+
+<p>The next time Ruby needs to allocate a new heap, that heap will have 18000 * 1.8 = 32400 heap slots. </li> </ul> </blockquote>
+So MRI will initially allocate the application RUBY_HEAP_MIN_SLOTS or 10,000 slots. Let's assume for ease of math that this corresponds to 1MB of memory. Now Rails and our application code can't fit into anything less than 50MB so Ruby will need to allocate additional heaps for the necessary objects. It does this by using RUBY_HEAP_SLOTS_INCREMENT and RUBY_HEAP_SLOTS_GROWTH_FACTOR each time. So we allocate 1.8MB, 3.24, 5.83, 10.5, 18.9, 34, 61, 110, 198, ... where the size of the newest heap is expanded by 1.8x each time. As you can see, just to get us to our 50MB minimum, we're now allocating 34MB for the latest heap. Once the app starts actually processing data, we'll allocate 61 and then 110 MB!</p>
+
+<p>This is the core of the problem: loading Rails expands the Ruby process so much that additional memory allocation grows much larger than we actually need, due to the exponential growth factor. And since MRI never gives back unused memory, our daemon can easily be taking 300-400MB when it's only using 100-200.</p>
+
+<p>It's important to note that this is essentially by design. Ruby's history is mostly as a command line tool for text processing and therefore it values quick startup and a small memory footprint. It was not designed for long-running daemon/server processes. Java makes a similar tradeoff in its client and server VMs.</p>
+
+<p>Our solution was to move to <a href="http://www.rubyenterpriseedition.com">Ruby Enterprise Edition</a>. It allows those constants to be modified via environment variables, so that you can greatly increase MIN_SLOTS and greatly reduce GROWTH_FACTOR. Our settings:</p>
+
+<pre lang="sh">export RUBY_HEAP_MIN_SLOTS=800000
+export RUBY_HEAP_SLOTS_INCREMENT=100000
+export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
+</pre>
+        
+
+<p>That gives our daemon ~80MB to start and each heap is a fixed 10MB. Our daemon stabilizes at ~120MB and the memory usage doesn't change, even after hours of processing. My takeaway: if you own a Ruby daemon, you need to tune the heap to ensure it does not take too much memory!</p></li>
+</ul></li>
+</ul>
+</blockquote>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2009\/05\/25\/memory-hungry-ruby-daemons\/';
+    var disqus_title = 'Memory-hungry Ruby daemons';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2009\/05\/25\/memory-hungry-ruby-daemons\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

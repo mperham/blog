@@ -1,0 +1,241 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Sidekiq for Crystal </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Sidekiq for Crystal</h1>
+      <small class="post-meta">May 25, 2016</small>
+      <div class="post-content">
+        
+
+<p><a href="http://sidekiq.org">Sidekiq</a> is a popular job framework for Ruby.  Now we're bringing it to <a href="http://crystal-lang.org">Crystal</a>!</p>
+
+<figure style="float: right;">
+  <a href="http://crystal-lang.org"><img style="border: solid white 0px;" src="http://crystal-lang.org/images/icon.png" width="200px" /></a>
+</figure>
+<figure style="float: right;">
+  <a href="http://sidekiq.org"><img style="border: solid white 0px;" src="http://sidekiq.org/assets/kicker.svg" width="200px" /></a>
+</figure>
+
+<h2 id="why-crystal">Why Crystal?</h2>
+
+<p>I wanted to use a language that was a good complement to Ruby.  Its
+syntax is similar enough to Ruby that I can reuse a lot of code but it
+adds a huge leap in performance.  In summary:</p>
+
+<ul>
+<li>very similiar syntax to Ruby</li>
+<li>at least 3-5x faster than Ruby 2.3 on most code</li>
+<li>at least 3x smaller in memory footprint</li>
+<li>statically typed</li>
+<li>compiles to a single, 1MB binary! Deployment is easy.</li>
+<li>comes with a large, useful standard library</li>
+</ul>
+
+<p>In other words, Ruby is friendly, flexible and works for most usecases while Crystal is fast and
+efficient for those usecases where performance is paramount.  Use each where appropriate.</p>
+
+<p>How productive is it?  I started this project <strong>from scratch</strong> not knowing
+the language at all a week ago and had the core job processor running in 3 days.</p>
+
+<h2 id="gimme">Gimme!</h2>
+
+<p>The project resides at <a href="https://github.com/mperham/sidekiq.cr">mperham/sidekiq.cr</a>.  To get
+started:</p>
+
+<pre><code>brew update
+brew install crystal-lang
+# brew install redis
+git clone git://github.com/mperham/sidekiq.cr.git
+cd sidekiq.cr
+crystal deps
+make
+</code></pre>
+
+<p>If you have Redis and the <code>sidekiq</code> gem installed, you can run the benchmarks:</p>
+
+<pre><code>brew install redis
+gem install sidekiq
+make bench
+</code></pre>
+
+<p>This is the result for me: <strong>with zero optimization on my part, Crystal is 3.6x faster and 3x smaller</strong>.
+To process 100,000 noop jobs:</p>
+
+<table>
+<thead>
+<tr>
+<th>Runtime</th>
+<th>RSS</th>
+<th>Time</th>
+<th>Throughput</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>MRI 2.3.0</td>
+<td>50MB</td>
+<td>21.3</td>
+<td>4,600 jobs/sec</td>
+</tr>
+
+<tr>
+<td>MRI/hiredis</td>
+<td>55MB</td>
+<td>19.2</td>
+<td>5,200 jobs/sec</td>
+</tr>
+
+<tr>
+<td>Crystal 0.17</td>
+<td>18MB</td>
+<td>5.9</td>
+<td><strong>16,900 jobs/sec</strong></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="the-codebase-is-a-trainwreck-though-right">The codebase is a trainwreck though, right?</h2>
+
+<p>The code is shockingly similar to Ruby in many cases.  Take a gander at this testcase:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&quot;./spec_helper&quot;</span>
+
+<span style="color: #66d9ef">class</span> <span style="color: #a6e22e">MyWorker</span>
+  <span style="color: #66d9ef">include</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Worker</span>
+
+  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">perform</span><span style="color: #f8f8f2">(a</span> <span style="color: #f8f8f2">:</span> <span style="color: #66d9ef">Int64</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">b</span> <span style="color: #f8f8f2">:</span> <span style="color: #66d9ef">Int64</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">c</span> <span style="color: #f8f8f2">:</span> <span style="color: #f8f8f2">String)</span>
+    <span style="color: #75715e">#puts &quot;hello world!&quot;</span>
+  <span style="color: #66d9ef">end</span>
+<span style="color: #66d9ef">end</span>
+
+<span style="color: #f8f8f2">describe</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Worker</span> <span style="color: #66d9ef">do</span>
+  <span style="color: #f8f8f2">describe</span> <span style="color: #e6db74">&quot;client-side&quot;</span> <span style="color: #66d9ef">do</span>
+    <span style="color: #f8f8f2">it</span> <span style="color: #e6db74">&quot;can create a basic job&quot;</span> <span style="color: #66d9ef">do</span>
+      <span style="color: #f8f8f2">jid</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">MyWorker</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">async</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">perform(</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">_i64,</span> <span style="color: #ae81ff">2</span><span style="color: #f8f8f2">_i64,</span> <span style="color: #e6db74">&quot;3&quot;</span><span style="color: #f8f8f2">)</span>
+      <span style="color: #f8f8f2">jid</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">should</span> <span style="color: #f8f8f2">match</span> <span style="color: #e6db74">/[a-f0-9]{24}/</span>
+      <span style="color: #f8f8f2">pool</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Pool</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+      <span style="color: #f8f8f2">pool</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">redis</span> <span style="color: #f8f8f2">{</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">c</span><span style="color: #f92672">|</span> <span style="color: #f8f8f2">c</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">lpop(</span><span style="color: #e6db74">&quot;queue:default&quot;</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">}</span>
+    <span style="color: #66d9ef">end</span>
+
+    <span style="color: #f8f8f2">it</span> <span style="color: #e6db74">&quot;can schedule a basic job&quot;</span> <span style="color: #66d9ef">do</span>
+      <span style="color: #f8f8f2">jid</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">MyWorker</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">async</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">perform_in(</span><span style="color: #ae81ff">60</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">seconds,</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">_i64,</span> <span style="color: #ae81ff">2</span><span style="color: #f8f8f2">_i64,</span> <span style="color: #e6db74">&quot;3&quot;</span><span style="color: #f8f8f2">)</span>
+      <span style="color: #f8f8f2">jid</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">should</span> <span style="color: #f8f8f2">match</span> <span style="color: #e6db74">/[a-f0-9]{24}/</span>
+    <span style="color: #66d9ef">end</span>
+</pre></div>
+
+<p>With the exception of a few type hints, that's identical to Ruby.</p>
+
+<h2 id="cool-just-gonna-push-this-to-production">Cool, just gonna push this to production...</h2>
+
+<p>Whoa, this project is <strong>alpha</strong>.  Hold off porting your nuclear reactor controller code
+for another week or two, ok?  Major functionality is missing,
+(notably the data API and Web UI), the test suite is still baking, etc.  Take it for a test drive and <a href="https://github.com/mperham/sidekiq.cr/issues">let me
+know</a> how it goes for you.</p>
+
+<p>Looking for other libraries written in Crystal?  Check out the
+<a href="http://crystalshards.xyz/?sort=stars&amp;filter=">CrystalShards</a>
+listing.
+<a href="https://github.com/veelenga/awesome-crystal#awesome-crystal--">AwesomeCrystal</a>
+is another curated list of resources.
+You can find database drivers, web frameworks, etc.</p>
+
+<h2 id="what-about-sidekiq-enterprise">What about Sidekiq Enterprise?</h2>
+
+<p>Based on demand, I will port the Sidekiq Pro and Enterprise functionality to
+Crystal.  If you are interested, <a href="mailto:mike@contribsys.com">email me</a>.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Let's make <a href="https://github.com/mperham/sidekiq.cr">Sidekiq.cr</a> amazing, try it out and help us improve it!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2016\/05\/25\/sidekiq-for-crystal\/';
+    var disqus_title = 'Sidekiq for Crystal';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2016\/05\/25\/sidekiq-for-crystal\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

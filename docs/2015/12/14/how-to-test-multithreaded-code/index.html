@@ -1,0 +1,263 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> How to Test Multithreaded Code </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>How to Test Multithreaded Code</h1>
+      <small class="post-meta">Dec 14, 2015</small>
+      <div class="post-content">
+        
+
+<figure style="float: right;">
+  <img style="border: solid white 10px;" src="http://yourhigherlevellife.com/wp-content/uploads/2013/02/TangledMess.png" width="260px" />
+</figure>
+
+<p>Multithreaded code is hard to write and even harder to test.
+Since much of my work is dedicated to making Ruby
+threading easier for my users and customers, I thought some might be
+interested in the patterns I've developed to make multithreaded code as simple
+and testable as possible.</p>
+
+<h2 id="separate-threading-from-work">Separate Threading from Work</h2>
+
+<blockquote>
+<p>If you can't test a big block of code, break it into a set of smaller testable pieces.</p>
+</blockquote>
+
+<p><a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L24">Sidekiq::Processor</a> is an object which is designed to run in its own
+thread and doesn't have any public API aside from starting/stopping the
+thread.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">p</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Processor</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+<span style="color: #f8f8f2">p</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">start</span>
+</pre></div>
+
+
+<p>Interally it has quite a bit of complexity - think of it like an iceberg.
+In order to test those complex internals, I make its <a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L62">internal API public</a> so that the test suite has full
+access to the methods.  The <code>start</code> method spins up a thread which calls a very simple <code>run</code> loop similar this:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">def</span> <span style="color: #a6e22e">run</span>
+  <span style="color: #66d9ef">while</span> <span style="color: #f92672">!</span><span style="color: #f8f8f2">@done</span>
+    <span style="color: #f8f8f2">job</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">fetch</span>
+    <span style="color: #f8f8f2">process(job)</span> <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">job</span>
+  <span style="color: #66d9ef">end</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p>I've kept the run method as simple as possible since we can't call it in
+the test suite but we can call <code>fetch</code> and <code>process</code> in order to test them:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">def</span> <span style="color: #a6e22e">test_process_fake_job</span>
+  <span style="color: #f8f8f2">p</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Processor</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+  <span style="color: #f8f8f2">result</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">p</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">process(some_fake_job)</span>
+  <span style="color: #75715e"># asserts...</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p>In this case, I've kept the thread management code as simple as
+possible and pushed as much of the code complexity into separate methods
+which can be called directly by the test suite and deterministically
+verified.</p>
+
+<p>How do I test the thread management code?  Simple: in some cases I don't.  100% test
+coverage is for fundamentalists.  Keep the code simple, verify it
+manually and then don't change it.  Code complexity leads to churn which
+leads to bugs.  Since most of the complexity in Sidekiq::Processor is in the <code>process</code> and
+<code>fetch</code> methods, they are most likely to change so we test those methods directly.</p>
+
+<h2 id="use-callbacks">Use Callbacks</h2>
+
+<p>If you must test multithreaded code, you'll want to design testability
+into the API.  Ever seen or written a test littered with <code>sleep</code> calls?
+We've all been there but you can test threaded code without sleep calls, I swear!
+Generally the pattern is:</p>
+
+<ol>
+<li>Start the other thread</li>
+<li>Tell the other thread to process something</li>
+<li>Wait for the result</li>
+<li>Assert results</li>
+</ol>
+
+<p>Most people don't know how to do (3) properly so they use <code>sleep</code> as a
+hack.  Here's a complete example of how to do it in Ruby:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&#39;thread&#39;</span>
+
+<span style="color: #75715e"># We want to test Upcaser by exercising its full API,</span>
+<span style="color: #75715e"># including the internal threading.</span>
+<span style="color: #66d9ef">class</span> <span style="color: #a6e22e">Upcaser</span>
+  <span style="color: #66d9ef">Request</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Struct</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #e6db74">:args</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:block</span><span style="color: #f8f8f2">)</span>
+
+  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">initialize</span>
+    <span style="color: #f8f8f2">@queue</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Queue</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+  <span style="color: #66d9ef">end</span>
+
+  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">start</span>
+    <span style="color: #f8f8f2">@thread</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Thread</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">method(</span><span style="color: #e6db74">:run</span><span style="color: #f8f8f2">))</span>
+  <span style="color: #66d9ef">end</span>
+
+  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">process</span><span style="color: #f8f8f2">(</span><span style="color: #f92672">*</span><span style="color: #f8f8f2">args,</span> <span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">block)</span>
+    <span style="color: #f8f8f2">@queue</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #66d9ef">Request</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(args,</span> <span style="color: #f8f8f2">block)</span>
+    <span style="color: #66d9ef">true</span>
+  <span style="color: #66d9ef">end</span>
+
+  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">terminate</span>
+    <span style="color: #f8f8f2">@queue</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #66d9ef">nil</span>
+  <span style="color: #66d9ef">end</span>
+
+  <span style="color: #66d9ef">private</span>
+
+  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">run</span>
+    <span style="color: #66d9ef">loop</span> <span style="color: #66d9ef">do</span>
+      <span style="color: #f8f8f2">req</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">@queue</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">pop</span>
+      <span style="color: #66d9ef">break</span> <span style="color: #66d9ef">unless</span> <span style="color: #f8f8f2">req</span>
+      <span style="color: #75715e"># perform the actual work</span>
+      <span style="color: #f8f8f2">result</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">req</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">args</span><span style="color: #f92672">[</span><span style="color: #ae81ff">0</span><span style="color: #f92672">].</span><span style="color: #f8f8f2">upcase</span>
+      <span style="color: #75715e"># call the block with the result</span>
+      <span style="color: #f8f8f2">req</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">block</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">call(result)</span>
+    <span style="color: #66d9ef">end</span>
+  <span style="color: #66d9ef">end</span>
+<span style="color: #66d9ef">end</span>
+
+<span style="color: #66d9ef">def</span> <span style="color: #a6e22e">test_upcaser</span>
+  <span style="color: #f8f8f2">m</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Mutex</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+  <span style="color: #f8f8f2">cv</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">ConditionVariable</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+
+  <span style="color: #f8f8f2">a</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Upcaser</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+  <span style="color: #75715e"># Step 1</span>
+  <span style="color: #75715e"># tell Upcaser to start its internal thread</span>
+  <span style="color: #f8f8f2">a</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">start</span>
+
+  <span style="color: #f8f8f2">results</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">nil</span>
+
+  <span style="color: #75715e"># the main thread will lock the mutex so it can pass data</span>
+  <span style="color: #75715e"># to Upcaser and then wait for the results</span>
+  <span style="color: #f8f8f2">m</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">synchronize</span> <span style="color: #66d9ef">do</span>
+
+    <span style="color: #75715e"># Step 2</span>
+    <span style="color: #75715e"># pass &quot;something&quot; to Upcaser for its internal thread to process</span>
+    <span style="color: #75715e"># the internal thread must call the block with results when done</span>
+    <span style="color: #f8f8f2">a</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">process(</span><span style="color: #e6db74">&quot;something&quot;</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">res</span><span style="color: #f92672">|</span>
+      <span style="color: #f8f8f2">results</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">res</span>
+      <span style="color: #f8f8f2">m</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">synchronize</span> <span style="color: #66d9ef">do</span>
+        <span style="color: #f8f8f2">cv</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">signal</span>
+      <span style="color: #66d9ef">end</span>
+    <span style="color: #66d9ef">end</span>
+
+    <span style="color: #75715e"># Step 3</span>
+    <span style="color: #75715e"># the main thread will wait here for Upcaser&#39;s thread to finish.</span>
+    <span style="color: #f8f8f2">cv</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">wait(m)</span>
+  <span style="color: #66d9ef">end</span>
+
+  <span style="color: #75715e"># Step 4</span>
+  <span style="color: #75715e"># assert whatever you want about the results</span>
+  <span style="color: #f8f8f2">assert_equal</span> <span style="color: #e6db74">&quot;SOMETHING&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">results</span>
+
+  <span style="color: #75715e"># shut down Upcaser&#39;s internal thread</span>
+  <span style="color: #f8f8f2">a</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">terminate</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p>The &quot;trick&quot; is the callback block passed to the <code>process</code> method.  That callback
+will save the results and unlock the main thread once Upcaser's thread is finished processing.  If your API
+exposes a similar callback mechanism, it can be properly tested across threads.</p>
+
+<p>I hope this helps people untangle some of their messy threading.  Got any other
+patterns for making threading easier to manage?  Please link to them in
+the comments.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2015\/12\/14\/how-to-test-multithreaded-code\/';
+    var disqus_title = 'How to Test Multithreaded Code';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2015\/12\/14\/how-to-test-multithreaded-code\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

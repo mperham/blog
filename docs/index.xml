@@ -1,0 +1,1074 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mike Perham</title>
+    <link>http://www.mikeperham.com/index.xml</link>
+    <description>Latest content from Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
+    <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
+    <lastBuildDate>Mon, 06 Feb 2017 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Five Years</title>
+      <link>http://www.mikeperham.com/2017/02/06/five-years/</link>
+      <pubDate>Mon, 06 Feb 2017 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/02/06/five-years/</guid>
+      <description>
+
+&lt;p&gt;Five years ago, I published v0.5.0 of &lt;a href=&#34;http://sidekiq.org&#34;&gt;a little project&lt;/a&gt; I had great hopes for.
+Here we are five years later: I&#39;ve gone from selling $50 licenses to negotiating five-figure enterprise
+deals with the Fortune 500.  Five five five!&lt;/p&gt;
+
+&lt;h1 id=&#34;gimme-five&#34;&gt;Gimme Five!&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&#34;./images/highfive.jpg&#34; alt=&#34;five&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;by-the-numbers&#34;&gt;By The Numbers&lt;/h1&gt;
+
+&lt;p&gt;&lt;style&gt;
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #000;
+}&lt;/p&gt;
+
+&lt;p&gt;th, td, caption {
+  border: 1px solid #000;
+  padding: 0.3em;
+}
+&lt;/style&gt;
+&lt;table width=&#34;100%&#34;&gt;
+&lt;tr&gt;&lt;th&gt;&amp;nbsp;&lt;/th&gt;&lt;th&gt;1st Birthday&lt;/th&gt;&lt;th&gt;2nd Birthday&lt;/th&gt;&lt;th&gt;4th Birthday&lt;/th&gt;&lt;th&gt;5th Birthday&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;th&gt;Downloads&lt;/th&gt;&lt;td&gt;214,300&lt;/td&gt;&lt;td&gt;1,192,259&lt;/td&gt;&lt;td&gt;5,505,145&lt;/td&gt;&lt;td&gt;11,260,039&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;th&gt;Stars&lt;/th&gt;&lt;td&gt;2144&lt;/td&gt;&lt;td&gt;3535&lt;/td&gt;&lt;td&gt;5846&lt;/td&gt;&lt;td&gt;7087&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;th&gt;Closed
+Issues&lt;/th&gt;&lt;td&gt;663&lt;/td&gt;&lt;td&gt;1420&lt;/td&gt;&lt;td&gt;1887&lt;/td&gt;&lt;td&gt;2378&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;th&gt;Forks&lt;/th&gt;&lt;td&gt;266&lt;/td&gt;&lt;td&gt;563&lt;/td&gt;&lt;td&gt;1003&lt;/td&gt;&lt;td&gt;1247&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;th&gt;Closed PRs&lt;/th&gt;&lt;td&gt;228&lt;/td&gt;&lt;td&gt;380&lt;/td&gt;&lt;td&gt;836&lt;/td&gt;&lt;td&gt;938&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;th&gt;Versions&lt;/th&gt;&lt;td&gt;44&lt;/td&gt;&lt;td&gt;74&lt;/td&gt;&lt;td&gt;110&lt;/td&gt;&lt;td&gt;127&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;th&gt;Customers&lt;/th&gt;&lt;td&gt;25&lt;/td&gt;&lt;td&gt;200&lt;/td&gt;&lt;td&gt;675&lt;/td&gt;&lt;td&gt;726&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;th&gt;Employees&lt;/th&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br/&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;2016-year-in-review&#34;&gt;2016 Year in Review&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Sidekiq
+
+&lt;ul&gt;
+&lt;li&gt;Rails 5.0 support&lt;/li&gt;
+&lt;li&gt;Dropped Sinatra dependency&lt;/li&gt;
+&lt;li&gt;16 bug fix releases&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Sidekiq Pro
+
+&lt;ul&gt;
+&lt;li&gt;timed_fetch and super_fetch algorithms&lt;/li&gt;
+&lt;li&gt;17 bug fix releases&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Sidekiq Enterprise
+
+&lt;ul&gt;
+&lt;li&gt;Job data encryption&lt;/li&gt;
+&lt;li&gt;Multi-Process with memory monitoring&lt;/li&gt;
+&lt;li&gt;Web UI authorization&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;you-want-five&#34;&gt;You Want Five?&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/mperham/sidekiq/issues/3301&#34;&gt;Sidekiq 5.0 beta&lt;/a&gt; is now
+ready for testing in non-production environments.  The internals have
+been redesigned to work better with Rails 5.0.  It no longer supports
+older Rubies: Ruby 2.2.2+ only.  Read the &lt;a href=&#34;https://github.com/mperham/sidekiq/blob/5-0/5.0-Upgrade.md&#34;&gt;upgrade notes&lt;/a&gt; for more details.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;gem &#39;sidekiq&#39;, &#39;5.0.0.beta1&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I still believe Ruby is the most fun, most flexible, highest level language
+out there for building business applications and Sidekiq is the best
+framework for processing business transactions.  The two are a potent
+combination.&lt;/p&gt;
+
+&lt;p&gt;Here&#39;s to another great five years!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>What can I do?</title>
+      <link>http://www.mikeperham.com/2017/02/01/what-can-i-do/</link>
+      <pubDate>Wed, 01 Feb 2017 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/02/01/what-can-i-do/</guid>
+      <description>
+
+&lt;p&gt;Like many people, I&#39;ve been shaken by the events of the last week.
+I was raised to believe in freedom for all, the rule of law and the inalienable rights
+guaranteed to all Americans by the Constitution.  But ultimately the law
+and the Constitution are pieces of paper; it&#39;s up to every one of us to
+defend those rights against their erosion.&lt;/p&gt;
+
+&lt;p&gt;But what can I do?  Well, a couple of things:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Join the millions of others and protest.&lt;/li&gt;
+&lt;li&gt;Donate money to organizations which are defending our rights.&lt;/li&gt;
+&lt;li&gt;Donate my technical tools to those organizations.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&#34;non-profit-licensing&#34;&gt;Non-Profit Licensing&lt;/h1&gt;
+
+&lt;p&gt;I&#39;m offering a &lt;strong&gt;free&lt;/strong&gt; license for Sidekiq Enterprise to nation-wide 501(c)3 non-profits
+whose mission is to protect our civil rights or the environment.
+Please &lt;a href=&#34;mailto:mike&amp;amp;#64;contribsys.com&#34;&gt;email me&lt;/a&gt; if you are interested.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Public Relations Blast</title>
+      <link>http://www.mikeperham.com/2017/01/18/public-relations-blast/</link>
+      <pubDate>Wed, 18 Jan 2017 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/01/18/public-relations-blast/</guid>
+      <description>
+
+&lt;p&gt;Apologies, dear reader, it&#39;s been a while since I blogged; I&#39;ve been busy with many
+things for the last few months:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;We bought a house and moved, kid started kindergarten.&lt;/li&gt;
+&lt;li&gt;I rewrote Sidekiq Pro&#39;s reliable_fetch into super_fetch, feedback has been
+quite good with no bugs reported and nice performance
+improvements &lt;a href=&#34;https://twitter.com/scottymeuk/status/801828989258108932/&#34;&gt;noted by the Baremetrics team&lt;/a&gt;.
+&lt;img src=&#34;https://pbs.twimg.com/media/CyCq4_DW8AAhViR.jpg&#34; alt=&#34;metrics&#34; /&gt;&lt;/li&gt;
+&lt;li&gt;I&#39;ve pushed out 8 patch releases, trying to stabilize Sidekiq 4.2&#39;s
+new Rails 5 support.  Not my finest hour, but on the positive side I wrote an
+integration test suite to verify Sidekiq&#39;s job execution
+functionality with Rails 4/5 dev/prod.&lt;/li&gt;
+&lt;li&gt;I attended Rubyconf 2016 in Cincinnati, it was a high-quality conference as usual
+from the Ruby Cental folks.&lt;/li&gt;
+&lt;li&gt;I&#39;ve done 4-5 different interviews on my business and how it&#39;s grown
+over the last few years.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;business&#34;&gt;Business&lt;/h2&gt;
+
+&lt;p&gt;The last point wasn&#39;t really planned but snowballed.  I decided to
+interview with IndieHackers on a lark and it turns out that several others
+wanted to interview me based on my success so far.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.indiehackers.com/businesses/sidekiq&#34;&gt;IndieHackers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://itunes.apple.com/us/podcast/tsb004-mike-perham-turning/id1171237328?i=1000377741544&amp;amp;mt=2&#34;&gt;The SaaS Bootstrapper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/starting-sustaining/mike-perham-interview-8e98939284a5&#34;&gt;Starting and Sustaining&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://giantrobots.fm/219&#34;&gt;Thoughtbot&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The net takeaway is that Sidekiq sales are going very well, revenue grew
+about +75% in 2016, and Sidekiq is now the dominant background solution for Ruby, according to &lt;a href=&#34;https://infinum.co/the-capsized-eight/analyzing-rubygems-stats-v2016&#34;&gt;Infinum&#39;s Rubygems analysis&lt;/a&gt;.
+&lt;img src=&#34;./images/marketshare2016.png&#34; alt=&#34;numbers&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;what-s-next&#34;&gt;What&#39;s Next?&lt;/h2&gt;
+
+&lt;p&gt;Sidekiq 5.0!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Debugging stuck Ruby processes</title>
+      <link>http://www.mikeperham.com/2016/08/05/debugging-stuck-ruby-processes/</link>
+      <pubDate>Fri, 05 Aug 2016 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2016/08/05/debugging-stuck-ruby-processes/</guid>
+      <description>
+
+&lt;p&gt;My Ruby process has stopped doing any work, what&#39;s wrong?&lt;/p&gt;
+
+&lt;p&gt;This is an uncommon but occasional problem for many people, especially
+with large applications using lots of native extensions.&lt;/p&gt;
+
+&lt;h2 id=&#34;step-1-thread-backtraces&#34;&gt;Step 1 - Thread backtraces&lt;/h2&gt;
+
+&lt;p&gt;A Sidekiq process will print out the backtrace of every thread when
+you send it the TTIN signal.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;kill -TTIN &amp;lt;pid&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Side note: YMMV for other types of Ruby processes: resque, unicorn, puma, passenger, etc.  Check
+the gem documentation or open an issue with the maintainers if it&#39;s not clear how to get
+backtraces from your process.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Reading these backtraces will tell you what your threads are doing at
+that instant.  Here&#39;s an example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2016-08-04T16:16:13.535Z 96660 TID-oxpb26trs WARN: Thread TID-oxpbpcmn0
+2016-08-04T16:16:13.535Z 96660 TID-oxpb26trs WARN: /Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:82:in `select&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:82:in `rescue in _read_from_socket&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:78:in `_read_from_socket&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:70:in `gets&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:362:in `read&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:262:in `block in read&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:250:in `io&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:261:in `read&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:120:in `block in call&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:231:in `block (2 levels) in process&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:367:in `ensure_connected&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:221:in `block in process&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:306:in `logging&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:220:in `process&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:120:in `call&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:209:in `block in call_with_timeout&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:280:in `with_socket_timeout&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:208:in `call_with_timeout&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:1137:in `block in _bpop&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:58:in `block in synchronize&#39;
+/Users/mike/.rubies/ruby-2.3.0/lib/ruby/2.3.0/monitor.rb:214:in `mon_synchronize&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:58:in `synchronize&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:1134:in `_bpop&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:1179:in `brpop&#39;
+/Users/mike/src/sidekiq/lib/sidekiq/fetch.rb:36:in `block in retrieve_work&#39;
+/Users/mike/src/sidekiq/lib/sidekiq.rb:92:in `block in redis&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:64:in `block (2 levels) in with&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:63:in `handle_interrupt&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:63:in `block in with&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:60:in `handle_interrupt&#39;
+/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:60:in `with&#39;
+/Users/mike/src/sidekiq/lib/sidekiq.rb:89:in `redis&#39;
+/Users/mike/src/sidekiq/lib/sidekiq/fetch.rb:36:in `retrieve_work&#39;
+/Users/mike/src/sidekiq/lib/sidekiq/processor.rb:86:in `get_one&#39;
+/Users/mike/src/sidekiq/lib/sidekiq/processor.rb:96:in `fetch&#39;
+/Users/mike/src/sidekiq/lib/sidekiq/processor.rb:79:in `process_one&#39;
+/Users/mike/src/sidekiq/lib/sidekiq/processor.rb:68:in `run&#39;
+/Users/mike/src/sidekiq/lib/sidekiq/util.rb:17:in `watchdog&#39;
+/Users/mike/src/sidekiq/lib/sidekiq/util.rb:25:in `block in safe_thread&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Backtraces look like a big, scary blob of text because they are!  Reading
+a backtrace is hard and a learned skill: &lt;strong&gt;you will get better at it over
+time&lt;/strong&gt;.  Pop open a gem with &lt;code&gt;bundle open &amp;lt;gemname&amp;gt;&lt;/code&gt; and navigate to the
+line in the backtrace; getting comfortable with the code in the various
+gems will help your debugging skills a lot.  The key line is here:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/Users/mike/src/sidekiq/lib/sidekiq/fetch.rb:36:in `block in retrieve_work&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is a quiet Sidekiq thread that is waiting for a job from Redis.  It&#39;s paused,
+doing nothing, but that&#39;s perfectly normal.&lt;/p&gt;
+
+&lt;p&gt;Most often with stuck processes you&#39;ll see threads paused in the mysql or
+postgresql driver, waiting on query results or waiting for a lock.&lt;/p&gt;
+
+&lt;h2 id=&#34;step-2-gdb&#34;&gt;Step 2 - GDB&lt;/h2&gt;
+
+&lt;p&gt;If the Sidekiq process doesn&#39;t output anything when you send it a TTIN
+signal, that&#39;s a sign you&#39;ve got a deeper problem.  Almost always the
+cause is a native extension gem which is performing a long operation
+without releasing the GVL.&lt;/p&gt;
+
+&lt;p&gt;This means Ruby can&#39;t help - we have to drop down into the bowels of
+the process to understand what is wrong using the GDB debugger.  You can attach
+GDB to a running process like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo gdb /path/to/ruby/binary [PID]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now to get the thread backtraces dumped to a text file, run these
+commands:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;(gdb) set logging file gdb_output.txt
+(gdb) set logging on
+(gdb) set height 10000
+(gdb) t a a bt
+(gdb) quit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A Sidekiq Enterprise customer recently sent me a GDB dump that I will
+use as an example.  Here&#39;s the first thread:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Thread 32 (Thread 0x3703 of process 40990):
+#0  0x00007fff94b87db6 in __psynch_cvwait () from /usr/lib/system/libsystem_kernel.dylib
+#1  0x00007fff98cab728 in _pthread_cond_wait () from /usr/lib/system/libsystem_pthread.dylib
+#2  0x0000000102dbd5b3 in gvl_acquire_common ()
+#3  0x0000000102db7471 in rb_thread_call_without_gvl ()
+#4  0x00000001031feda1 in rsock_ipaddr () from /Users/user/.rbenv/versions/2.2.4/lib/ruby/2.2.0/x86_64-darwin15/socket.bundle
+#5  0x00000001031f5c4a in sock_s_getaddrinfo () from /Users/user/.rbenv/versions/2.2.4/lib/ruby/2.2.0/x86_64-darwin15/socket.bundle
+#6  0x0000000102dadee3 in vm_call_cfunc ()
+#7  0x0000000102d927c9 in vm_exec_core ()
+#8  0x0000000102da16d6 in vm_exec ()
+#9  0x0000000102da6b03 in invoke_block_from_c ()
+#10 0x0000000102d9da80 in rb_yield ()
+#11 0x0000000102dbbf0c in rb_thread_s_handle_interrupt ()
+#12 0x0000000102dadee3 in vm_call_cfunc ()
+#13 0x0000000102d925f4 in vm_exec_core ()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that this is a C-level backtrace.  We&#39;re lower-level and have less
+info available but experience helps fill in the gaps.  The thread is
+calling &lt;code&gt;sock_s_getaddrinfo&lt;/code&gt; which is a DNS lookup.  It looks like it
+has finished the DNS lookup and is now calling &lt;code&gt;gvl_acquire_common&lt;/code&gt; to
+get the GVL in order to continue executing Ruby code.  It is normal
+for some threads to block, waiting for the GVL, but it is not normal for
+most threads to be waiting for the GVL. This was the case: dozens of
+threads were blocked with that exact same backtrace.&lt;/p&gt;
+
+&lt;p&gt;When this happens, look for the odd threads.  20+ threads were blocked with the same
+backtrace as above - you can ignore those.  But one or more threads will be
+doing something else, and indeed there was this backtrace which was
+completely different:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Thread 10 (Thread 0x2103 of process 40990):
+#0  0x00007fff94b892a2 in poll () from /usr/lib/system/libsystem_kernel.dylib
+#1  0x00000001035c892d in pqSocketCheck () from /usr/local/opt/postgresql/lib/libpq.5.dylib
+#2  0x00000001035c87f9 in pqWaitTimed () from /usr/local/opt/postgresql/lib/libpq.5.dylib
+#3  0x00000001035c5fd8 in PQgetResult () from /usr/local/opt/postgresql/lib/libpq.5.dylib
+#4  0x00000001035c62be in PQexecFinish () from /usr/local/opt/postgresql/lib/libpq.5.dylib
+#5  0x00000001035c31bc in PQsetClientEncoding () from /usr/local/opt/postgresql/lib/libpq.5.dylib
+#6  0x000000010359d2a7 in pgconn_set_default_encoding () from /Users/user/.rbenv/versions/2.2.4/gemsets/xxx-v1.1/extensions/x86_64-darwin-15/2.2.0-static/pg-0.18.4/pg_ext.bundle
+#7  0x00000001035990b7 in pgconn_init () from /Users/user/.rbenv/versions/2.2.4/gemsets/xxx-v1.1/extensions/x86_64-darwin-15/2.2.0-static/pg-0.18.4/pg_ext.bundle
+#8  0x0000000102daa929 in vm_call0_body ()
+#9  0x0000000102da9d82 in rb_call0 ()
+#10 0x0000000102cbc969 in rb_class_new_instance ()
+#11 0x0000000102dadee3 in vm_call_cfunc ()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note the long pathnames at the end of the middle lines - they indicate
+we&#39;re executing within a native extension: the &lt;code&gt;pg&lt;/code&gt; gem which then calls
+into &lt;code&gt;libpq&lt;/code&gt;, postgresql&#39;s native C API.  The &lt;code&gt;pg&lt;/code&gt; gem is calling &lt;code&gt;PQsetClientEncoding&lt;/code&gt;
+which looks like it is making a network call since I see terms like &amp;quot;Socket&amp;quot; and &amp;quot;poll&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;Now we find the root issue: there&#39;s no GVL release in the backtrace.  MRI&#39;s API is
+excellent in this regard: you should see &lt;code&gt;rb_thread_call_without_gvl&lt;/code&gt; in
+the backtrace to indicate that the thread is not holding the GVL.
+Until that network call finishes, the entire process is locked up and
+can&#39;t do anything.  Most of the time you won&#39;t notice because the network is
+usually pretty fast but in the case where the network is stalled, work
+grinds to a halt.&lt;/p&gt;
+
+&lt;p&gt;All of this assumes you can use GDB in your production environment.  If you&#39;re on
+Heroku or a similar PaaS, try to reproduce the issue on your local machine or a
+Linux VM.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Performing a network operation while holding the GVL is a huge bug and should be fixed.
+This is a current &lt;a href=&#34;https://bitbucket.org/ged/ruby-pg/issues/245/pg-0184&#34;&gt;pg bug in &amp;lt;= 0.18.4&lt;/a&gt;, filed and acknowledged.&lt;/p&gt;
+
+&lt;p&gt;Getting thread dumps from a stuck process is critical to diagnosing the root cause.
+Reading and understanding those backtraces, both in Ruby and in GDB, is a useful skill to have
+when debugging issues.  As you read more code, you&#39;ll get better and
+faster at diagnosing problems.  It took me about 30 seconds to determine
+the problem in the GDB dump above.&lt;/p&gt;
+
+&lt;p&gt;If you are a Sidekiq Pro or Enterprise customer and seeing stuck processes, don&#39;t be
+afraid to gist me your GDB dumps - I&#39;d be happy to help diagnose.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Profiling Crystal on OSX</title>
+      <link>http://www.mikeperham.com/2016/06/24/profiling-crystal-on-osx/</link>
+      <pubDate>Fri, 24 Jun 2016 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2016/06/24/profiling-crystal-on-osx/</guid>
+      <description>
+
+&lt;p&gt;How do I profile my program to determine where it is slow?&lt;/p&gt;
+
+&lt;p&gt;This is one of the first questions any developer asks after building a
+non-toy program.  Crystal has a reputation for being quite fast but
+every language has &lt;a href=&#34;http://crystal-lang.org/docs/guides/performance.html&#34;&gt;tricks and optimizations&lt;/a&gt; we miss.&lt;/p&gt;
+
+&lt;p&gt;Since Crystal uses the LLVM compiler suite, we can reuse a lot of the
+infrastructure which knows about LLVM-compiled binaries. &lt;strong&gt;Net result:
+the OSX Developer Tools include a beautiful profiler that works with
+Crystal binaries out of the box - so awesome!&lt;/strong&gt;  If you have XCode
+installed (and if you are reading this blog, it&#39;s very likely you do),
+you can profile a Crystal binary right now, here&#39;s how.&lt;/p&gt;
+
+&lt;h2 id=&#34;instruments&#34;&gt;Instruments&lt;/h2&gt;
+
+&lt;p&gt;Instruments.app is the OSX profiling tool.  We&#39;re going to instrument a
+command line run and then view the results in its GUI.  I assume you
+have Crystal installed; if not, run this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew update
+brew install crystal-lang
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we need an app to profile.  Let&#39;s make a toy app that doesn&#39;t
+do much of anything; put this code in &lt;code&gt;app.cr&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;foo&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(i)&lt;/span&gt;
+  &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;mike&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;to_s&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #ae81ff&#34;&gt;10_000_000&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;times&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;x&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;foo(x)&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Compile and run in the profiler:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ crystal compile app.cr
+$ instruments -t &amp;quot;Time Profiler&amp;quot; ./app
+Instruments Trace Complete (Duration : 4.458741s; Output : /Users/mike/instrumentscli0.trace)
+$ open instrumentscli0.trace/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You should now see a lovely UI with a totally rad tree view where you
+can drill down into the trace to see where your code spent its time.
+Looks like 80% of my app&#39;s time was spent in Int32#to_s and
+String#+, not exactly shocking but this is a toy example.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dl.dropboxusercontent.com/u/3425424/Blog/crystal_profiler.png&#34; alt=&#34;crystal profiler&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note that I didn&#39;t use &lt;code&gt;--release&lt;/code&gt; flag with the compiler.  This was a
+choice I made for this blog post; the traces are a LOT easier to
+understand without release optimizations because LLVM doesn&#39;t inline
+method calls so it&#39;s easier to drill into the code execution.  You should
+profile with the --release flag when profiling your own non-trivial code
+so you are profiling the same binary as you run in production.&lt;/p&gt;
+
+&lt;p&gt;Also note that Instruments supports a lot more modes that just the Time
+Profiler - it can track memory allocations, syscalls, and many other aspects.
+Play with it and see what modes are useful to you.&lt;/p&gt;
+
+&lt;p&gt;In conclusion, profiling Crystal code is super easy due to Crystal leveraging the LLVM compiler.
+We can use LLVM-standard tools rather than needing custom profiling APIs and runtime support.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Test Driving Sidekiq and Crystal</title>
+      <link>http://www.mikeperham.com/2016/06/14/test-driving-sidekiq-and-crystal/</link>
+      <pubDate>Tue, 14 Jun 2016 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2016/06/14/test-driving-sidekiq-and-crystal/</guid>
+      <description>
+
+&lt;p&gt;It&#39;s alive!  I&#39;ve finished the initial port of the three core pieces of Sidekiq, the
+client API, the job execution engine and the Web UI, to
+&lt;a href=&#34;http://crystal-lang.org&#34;&gt;Crystal&lt;/a&gt;.  Let&#39;s
+assume we have a Ruby app using Sidekiq.rb and integrate Sidekiq.cr to run
+beside it.&lt;/p&gt;
+
+&lt;figure style=&#34;float: right;&#34;&gt;
+  &lt;a href=&#34;http://crystal-lang.org&#34;&gt;&lt;img style=&#34;border: solid white 0px;&#34; src=&#34;http://crystal-lang.org/images/icon.png&#34; width=&#34;200px&#34; /&gt;&lt;/a&gt;
+&lt;/figure&gt;
+&lt;figure style=&#34;float: right;&#34;&gt;
+  &lt;a href=&#34;http://sidekiq.org&#34;&gt;&lt;img style=&#34;border: solid white 0px;&#34; src=&#34;http://sidekiq.org/assets/kicker.svg&#34; width=&#34;200px&#34; /&gt;&lt;/a&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h2&gt;
+
+&lt;p&gt;Sidekiq.cr has a &lt;a href=&#34;https://github.com/mperham/sidekiq.cr/wiki/Getting-Started&#34;&gt;Getting Started&lt;/a&gt; wiki page which
+walks you through the basics of setting up a new Crystal app.  Follow
+those directions.  Once complete, you should have a Worker named &lt;code&gt;Sample::MyWorker&lt;/code&gt;
+that we can call.  We&#39;re going to build the Sidekiq.cr binary and run it
+with &lt;code&gt;./sidekiq -q crystal&lt;/code&gt;.  Sidekiq.cr is now listening for jobs on
+the &lt;code&gt;crystal&lt;/code&gt; queue only.  Any Ruby-based jobs should use other queues
+so the Crystal worker will never see them - exactly what we want.&lt;/p&gt;
+
+&lt;p&gt;We&#39;ve defined one Worker in the Crystal app:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Sample&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;MyWorker&lt;/span&gt;
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Worker&lt;/span&gt;
+
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;perform&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(name&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;count&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Int64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;times&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
+        &lt;span style=&#34;color: #f8f8f2&#34;&gt;logger&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;info&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Hello, #{&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;}!&amp;quot;&lt;/span&gt;
+      &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Open up an IRB console and run this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;sidekiq&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Client&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;push(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;class&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Sample::MyWorker&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;args&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Ruby&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;queue&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;crystal&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Immediately you should see Sidekiq.cr print out three lines:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Start
+2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
+2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
+2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
+2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Done: 0.000121 sec
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nearly identical to Sidekiq.rb but look at that execution time: &lt;strong&gt;121µs&lt;/strong&gt;!
+In real world code, I&#39;m seeing Crystal execute 5-10x faster than MRI.&lt;/p&gt;
+
+&lt;p&gt;So... got tons of little jobs?  Got compute-heavy jobs?  Crystal and
+Sidekiq.cr might be the solution you&#39;re looking for!  Got questions?
+Find a bug?  &lt;a href=&#34;https://github.com/mperham/sidekiq.cr/issues&#34;&gt;Open an issue&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Sidekiq for Crystal</title>
+      <link>http://www.mikeperham.com/2016/05/25/sidekiq-for-crystal/</link>
+      <pubDate>Wed, 25 May 2016 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2016/05/25/sidekiq-for-crystal/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;http://sidekiq.org&#34;&gt;Sidekiq&lt;/a&gt; is a popular job framework for Ruby.  Now we&#39;re bringing it to &lt;a href=&#34;http://crystal-lang.org&#34;&gt;Crystal&lt;/a&gt;!&lt;/p&gt;
+
+&lt;figure style=&#34;float: right;&#34;&gt;
+  &lt;a href=&#34;http://crystal-lang.org&#34;&gt;&lt;img style=&#34;border: solid white 0px;&#34; src=&#34;http://crystal-lang.org/images/icon.png&#34; width=&#34;200px&#34; /&gt;&lt;/a&gt;
+&lt;/figure&gt;
+&lt;figure style=&#34;float: right;&#34;&gt;
+  &lt;a href=&#34;http://sidekiq.org&#34;&gt;&lt;img style=&#34;border: solid white 0px;&#34; src=&#34;http://sidekiq.org/assets/kicker.svg&#34; width=&#34;200px&#34; /&gt;&lt;/a&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;why-crystal&#34;&gt;Why Crystal?&lt;/h2&gt;
+
+&lt;p&gt;I wanted to use a language that was a good complement to Ruby.  Its
+syntax is similar enough to Ruby that I can reuse a lot of code but it
+adds a huge leap in performance.  In summary:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;very similiar syntax to Ruby&lt;/li&gt;
+&lt;li&gt;at least 3-5x faster than Ruby 2.3 on most code&lt;/li&gt;
+&lt;li&gt;at least 3x smaller in memory footprint&lt;/li&gt;
+&lt;li&gt;statically typed&lt;/li&gt;
+&lt;li&gt;compiles to a single, 1MB binary! Deployment is easy.&lt;/li&gt;
+&lt;li&gt;comes with a large, useful standard library&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In other words, Ruby is friendly, flexible and works for most usecases while Crystal is fast and
+efficient for those usecases where performance is paramount.  Use each where appropriate.&lt;/p&gt;
+
+&lt;p&gt;How productive is it?  I started this project &lt;strong&gt;from scratch&lt;/strong&gt; not knowing
+the language at all a week ago and had the core job processor running in 3 days.&lt;/p&gt;
+
+&lt;h2 id=&#34;gimme&#34;&gt;Gimme!&lt;/h2&gt;
+
+&lt;p&gt;The project resides at &lt;a href=&#34;https://github.com/mperham/sidekiq.cr&#34;&gt;mperham/sidekiq.cr&lt;/a&gt;.  To get
+started:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew update
+brew install crystal-lang
+# brew install redis
+git clone git://github.com/mperham/sidekiq.cr.git
+cd sidekiq.cr
+crystal deps
+make
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you have Redis and the &lt;code&gt;sidekiq&lt;/code&gt; gem installed, you can run the benchmarks:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew install redis
+gem install sidekiq
+make bench
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is the result for me: &lt;strong&gt;with zero optimization on my part, Crystal is 3.6x faster and 3x smaller&lt;/strong&gt;.
+To process 100,000 noop jobs:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Runtime&lt;/th&gt;
+&lt;th&gt;RSS&lt;/th&gt;
+&lt;th&gt;Time&lt;/th&gt;
+&lt;th&gt;Throughput&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;MRI 2.3.0&lt;/td&gt;
+&lt;td&gt;50MB&lt;/td&gt;
+&lt;td&gt;21.3&lt;/td&gt;
+&lt;td&gt;4,600 jobs/sec&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;MRI/hiredis&lt;/td&gt;
+&lt;td&gt;55MB&lt;/td&gt;
+&lt;td&gt;19.2&lt;/td&gt;
+&lt;td&gt;5,200 jobs/sec&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Crystal 0.17&lt;/td&gt;
+&lt;td&gt;18MB&lt;/td&gt;
+&lt;td&gt;5.9&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;16,900 jobs/sec&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&#34;the-codebase-is-a-trainwreck-though-right&#34;&gt;The codebase is a trainwreck though, right?&lt;/h2&gt;
+
+&lt;p&gt;The code is shockingly similar to Ruby in many cases.  Take a gander at this testcase:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;./spec_helper&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;MyWorker&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Worker&lt;/span&gt;
+
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;perform&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(a&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Int64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Int64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String)&lt;/span&gt;
+    &lt;span style=&#34;color: #75715e&#34;&gt;#puts &amp;quot;hello world!&amp;quot;&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;describe&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Worker&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;describe&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;client-side&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;it&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;can create a basic job&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;jid&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;MyWorker&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;async&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;perform(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;_i64,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;_i64,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;3&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;jid&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;should&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;/[a-f0-9]{24}/&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;pool&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Pool&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;new&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;pool&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;lpop(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;queue:default&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;it&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;can schedule a basic job&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;jid&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;MyWorker&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;async&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;perform_in(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;60&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;seconds,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;_i64,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;_i64,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;3&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+      &lt;span style=&#34;color: #f8f8f2&#34;&gt;jid&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;should&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;match&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;/[a-f0-9]{24}/&lt;/span&gt;
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;With the exception of a few type hints, that&#39;s identical to Ruby.&lt;/p&gt;
+
+&lt;h2 id=&#34;cool-just-gonna-push-this-to-production&#34;&gt;Cool, just gonna push this to production...&lt;/h2&gt;
+
+&lt;p&gt;Whoa, this project is &lt;strong&gt;alpha&lt;/strong&gt;.  Hold off porting your nuclear reactor controller code
+for another week or two, ok?  Major functionality is missing,
+(notably the data API and Web UI), the test suite is still baking, etc.  Take it for a test drive and &lt;a href=&#34;https://github.com/mperham/sidekiq.cr/issues&#34;&gt;let me
+know&lt;/a&gt; how it goes for you.&lt;/p&gt;
+
+&lt;p&gt;Looking for other libraries written in Crystal?  Check out the
+&lt;a href=&#34;http://crystalshards.xyz/?sort=stars&amp;amp;filter=&#34;&gt;CrystalShards&lt;/a&gt;
+listing.
+&lt;a href=&#34;https://github.com/veelenga/awesome-crystal#awesome-crystal--&#34;&gt;AwesomeCrystal&lt;/a&gt;
+is another curated list of resources.
+You can find database drivers, web frameworks, etc.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-about-sidekiq-enterprise&#34;&gt;What about Sidekiq Enterprise?&lt;/h2&gt;
+
+&lt;p&gt;Based on demand, I will port the Sidekiq Pro and Enterprise functionality to
+Crystal.  If you are interested, &lt;a href=&#34;mailto:mike@contribsys.com&#34;&gt;email me&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Let&#39;s make &lt;a href=&#34;https://github.com/mperham/sidekiq.cr&#34;&gt;Sidekiq.cr&lt;/a&gt; amazing, try it out and help us improve it!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Serving your own Commercial Rubygems</title>
+      <link>http://www.mikeperham.com/2016/05/17/commercial-gems/</link>
+      <pubDate>Tue, 17 May 2016 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2016/05/17/commercial-gems/</guid>
+      <description>
+
+&lt;p&gt;It&#39;s not well known but with Rubygems and Bundler, you can distribute access-controlled commercial Rubygems.  My gems, &lt;a href=&#34;http://sidekiq.org&#34;&gt;Sidekiq Pro and Sidekiq Enterprise&lt;/a&gt;, are the most well known example but I&#39;m not a wizard: anyone can distribute gems to a limited set of customers.  Here&#39;s how I do it.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A $5/mo DigitalOcean instance running Apache.  No database, no app server.  I have a set of bash scripts which can build a server in 5 minutes.&lt;/li&gt;
+&lt;li&gt;To serve gems, you need to have Apache serve a directory of static files.  You&#39;ll need a VirtualHost entry with something like this:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;  &amp;lt;VirtualHost *:443&amp;gt;
+    ServerName my-server.com
+    DocumentRoot /var/www/gems
+
+    SSLEngine on
+
+    &amp;lt;Location /&amp;gt;
+      AuthType basic
+      AuthName &amp;quot;private area&amp;quot;
+      AuthBasicProvider file
+      AuthUserFile /var/www/gems-passwd
+      Require valid-user
+    &amp;lt;/Location&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To control access to those gems, you need a &lt;code&gt;/var/www/gems-passwd&lt;/code&gt; file which contains your user / password pairs.  The username / passwords are a hash based on the customer&#39;s email address.  The contents look like this:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;1a7fe3bd:$apr1$0RtyG.1v$D/o5n25i2YmPiTOGAPPI21
+d41be46c:$apr1$.dFnnB5F$Ne2YtTP12q9iM9/ZQvoL01
+09120f77:$apr1$ERLqbLvS$El2Llj6MJlWDWQnJKcrR80
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The command to generate an entry is &lt;code&gt;htpasswd -nb user pwd&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I have a &lt;code&gt;/var/www/gems&lt;/code&gt; directory which looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pwd
+/var/www/gems
+$ ls -l
+total 36
+drwxrwxr-x 2 mike adm  4096 Apr  5 16:25 gems
+-rw-rw-r-- 1 mike mike   65 Apr  5 16:25 latest_specs.4.8
+-rw-rw-r-- 1 mike mike   82 Apr  5 16:25 latest_specs.4.8.gz
+-rw-rw-r-- 1 mike mike   98 Apr  5 16:25 prerelease_specs.4.8
+-rw-rw-r-- 1 mike mike  100 Apr  5 16:25 prerelease_specs.4.8.gz
+drwxrwxr-x 3 mike adm  4096 Apr  5 16:25 quick
+-rw-rw-r-- 1 mike mike 1307 Apr  5 16:25 specs.4.8
+-rw-rw-r-- 1 mike mike  251 Apr  5 16:25 specs.4.8.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;When you buy Sidekiq Pro, Stripe sends my server a webhook.  I have a rake task which looks up the new customer&#39;s email address, adds a new user/pwd to the end of the gems-passwd file and then sends them an email with directions to access the Sidekiq Pro gem:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;Put this in your Gemfile:
+
+    source &amp;quot;https://my-server.com&amp;quot; do
+      gem &amp;quot;sidekiq-pro&amp;quot;
+    end
+
+Run this bundle command:
+
+    bundle config my-server.com username:password
+
+Run `bundle install` and you&#39;re done!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;In addition to the passwd file, the server has a CSV file with &lt;code&gt;email,username,password&lt;/code&gt; so I can look up the Apache username for a customer&#39;s email and regenerate the passwd file from scratch if necessary.&lt;/li&gt;
+&lt;li&gt;If a subscription runs out, Stripe sends the opposite webhook; the server removes them from the CSV and passwd so they can no longer access the gem server.&lt;/li&gt;
+&lt;li&gt;I have rake tasks which can push a new gem version, add/remove a customer, send email, etc.&lt;/li&gt;
+&lt;li&gt;Pushing a new gem version looks like this, note the &lt;code&gt;generate_index&lt;/code&gt; call:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;task&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;:push&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;:release&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;net/ssh&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;net/scp&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;sidekiq/pro/version&amp;#39;&lt;/span&gt;
+
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;ver&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;ENV&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;VERSION&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Pro&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;VERSION&lt;/span&gt;
+
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;Net&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;SCP&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;start(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;my-server.com&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;user&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;scp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;scp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;upload!(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;pkg/sidekiq-pro-#{&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ver&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;}.gem&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;/var/www/gems/gems&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;Net&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;SSH&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;start(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;my-server.com&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ssh&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ssh&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;exec!(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;gem generate_index --directory /var/www/gems&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Released Sidekiq Pro #{&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ver&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;}&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The Stripe webhook integration is really nice as it automates 90% of my business BUT don&#39;t bother until you have sufficient sales to make it worth your while.  For the first two years, I added customers manually when I got the &amp;quot;You just got a sale!&amp;quot; email.  The hard part is dealing with churn - Stripe doesn&#39;t email when a subscription ends so you&#39;ll need to automate that or at least send yourself email upon that webhook.&lt;/li&gt;
+&lt;li&gt;For redundancy, I run two servers at a time so a replica is always available.  I switch out servers every six months so software versions on the server stay reasonably current: create new replica, old replica is promoted to primary, old primary is killed.  The servers are sync&#39;d with BitTorrent Sync, which is the only &amp;quot;shiny&amp;quot; tech I use but I&#39;ve found nothing better to keep a directory in sync between two servers in near real-time.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;end-result&#34;&gt;End Result&lt;/h3&gt;
+
+&lt;p&gt;When I get a sale, my &amp;quot;Sidekiqbot&amp;quot; script sends me an email that the customer was set up.  It feels pretty awesome to know the onboarding is completely automated.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;./images/sale.png&#34; alt=&#34;sale&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That&#39;s it: Apache, CSV and some basic Linux/Ruby scripting.  It took me weeks to develop all of this but there&#39;s nothing super difficult about it.  I try to keep the server as simple as possible so I can focus on Sidekiq development and support, not operations.  After all, you&#39;re buying what&#39;s &lt;strong&gt;in&lt;/strong&gt; the gems, not what serves them.  This simplicity has real benefits: it&#39;s cheap ($10/mo for two servers), easy to maintain and reliable.  If you are thinking about following in my footsteps, I hope this blog post helps light the way.&lt;/p&gt;
+
+&lt;p&gt;This article is part of a larger group on the technical nitty gritty of a software business.  Related articles are &lt;a href=&#34;./2015/11/23/how-to-charge-for-your-open-source/&#34;&gt;Charging for your Open Source&lt;/a&gt; (discussion on the money and legal aspects) and &lt;a href=&#34;./2015/01/05/cgi-rubys-bare-metal/&#34;&gt;CGI: Ruby&#39;s bare metal&lt;/a&gt; (discussion on handling Stripe webhooks).&lt;/p&gt;
+
+&lt;h3 id=&#34;postscript&#34;&gt;Postscript&lt;/h3&gt;
+
+&lt;p&gt;I became a member of &lt;a href=&#34;https://rubytogether.org&#34;&gt;Ruby Together&lt;/a&gt; because I rely on Bundler and the Rubygems infrastructure.
+The fact that we can do this at all is the beauty of Bundler and Rubygems: they are easily federated using HTTP and static files only.  As an alternative, consider npm; it requires CouchDB, a full copy of the npm dataset to serve and only supports a single package server.  This design is much more complex, requiring a much heavier server, and makes it effectively impossible for an individual to run an npm server due to the operational costs and maintenance required.  I encourage anyone whose business depends on Ruby to join.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Distributed Locking with Redis and Ruby</title>
+      <link>http://www.mikeperham.com/2016/04/25/distributed-locking/</link>
+      <pubDate>Mon, 25 Apr 2016 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2016/04/25/distributed-locking/</guid>
+      <description>
+
+&lt;figure style=&#34;float: right;&#34;&gt;
+  &lt;img style=&#34;border: solid white 0px;&#34; src=&#34;./images/distributedlock.png&#34; width=&#34;400px&#34; /&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;It can happen: sometimes you need to severely curtail access to a
+resource.  Maybe you use a 3rd party API where you can only make one call at a
+time.  To handle this extreme case, you need an extreme tool: a
+distributed lock.&lt;/p&gt;
+
+&lt;p&gt;Distributed locks are dangerous: hold the lock for too long and your
+system throughput plummets. They can easy become a major chokepoint for
+your app&#39;s performance and scalability.&lt;/p&gt;
+
+&lt;p&gt;Recently a blog post talked about using Redis for
+distributed locking with Sidekiq.  I tried the code and &lt;strong&gt;it didn&#39;t even
+work&lt;/strong&gt;. It did however give me the idea to test &lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Ent-Rate-Limiting&#34;&gt;Sidekiq Enterprise&#39;s Rate Limiting
+API&lt;/a&gt;, which provides a flexible &amp;quot;concurrent&amp;quot; limiter,
+against other rubygems which provide a similar lock.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Please Note&lt;/strong&gt;: I&#39;m not talking about &lt;a href=&#34;http://redis.io/topics/distlock&#34;&gt;Redlock&lt;/a&gt; and other algorithms that
+provide fault-tolerant locking via distributed consensus.  Those
+algorithms are slower and &lt;strong&gt;much&lt;/strong&gt; harder to get correct; I would never trust
+myself to write one (or anyone else that&#39;s not a Computer Science Ph.D).
+In this post, I&#39;m talking about using a single Redis instance to
+coordinate many worker processes distributed across many machines.
+This is sufficiently safe and robust for most businesses.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;the-setup&#34;&gt;The Setup&lt;/h3&gt;
+
+&lt;p&gt;I tested four different distributed lock gems, including sidekiq-ent.
+With any of them we can create a distributed lock which
+ensures our system executes a block of code exclusively, even with dozens
+of processes.  One thing to understand: &lt;strong&gt;sidekiq-ent&#39;s Rate Limiting API does
+not need to run within a Sidekiq process&lt;/strong&gt; - it can be used in any Ruby
+process: puma, unicorn, passenger, sidekiq, etc.&lt;/p&gt;
+
+&lt;p&gt;All locking libraries provide similar semantics. You define:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;how long should the code wait for the lock before giving up?&lt;/li&gt;
+&lt;li&gt;how long before the lock times out?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The lock has to have a timeout as that&#39;s the only way to recover from a
+process crash while holding a lock.  Libraries &amp;quot;wait&amp;quot; in two different
+ways: redis-semaphore and sidekiq-ent block, efficiently waiting to be
+notified when they can take the lock, the other two gems poll regularly,
+forcing an unfortunate tradeoff: polling more often means slamming Redis
+with unnecessary work.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-test&#34;&gt;The Test&lt;/h3&gt;
+
+&lt;p&gt;I created a benchmark exercising all four APIs.
+The code executes 100 &amp;quot;jobs&amp;quot; using 25 threads.  Each job sleeps for 0.1
+sec while holding the lock, meaning that a perfect run will take 10.0
+sec.  &lt;a href=&#34;https://gist.github.com/mperham/e0248bfb727ebf02ffd6b09172a85301&#34;&gt;Gist of the actual benchmark code here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sidekiq-ent
+  0.110000   0.100000   0.210000 ( 10.433794)
+redis-semaphore
+  0.150000   0.150000   0.300000 ( 10.487963)
+pmckee11-redis-lock
+  0.460000   0.550000   1.010000 ( 10.718958)
+ruby_redis_lock
+  0.280000   0.250000   0.530000 ( 11.655952)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The third column shows you the number of seconds actually running on the
+CPU; sidekiq-ent&#39;s limiter used 0.21 seconds of CPU time, the
+others varied from 0.3 to 1.0 seconds.&lt;/p&gt;
+
+&lt;p&gt;The theoretical perfect runtime is 10 sec, 100 jobs * 0.1 sec sleep
+so sidekiq-ent adds about 4% overhead.  The latter two gems added notably more overhead.
+Note in the gist, I had to modify &lt;code&gt;pmckee11-redis-lock&lt;/code&gt; to disable exponential
+backoff, otherwise it would die with a timeout after several minutes.&lt;/p&gt;
+
+&lt;h3 id=&#34;metrics&#34;&gt;Metrics&lt;/h3&gt;
+
+&lt;p&gt;Unfortunately the other three libraries give you no insight into actual lock usage while
+sidekiq-ent&#39;s concurrent limiter offers real-time metrics so you can
+understand how the lock is performing -- it can answer questions like:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;how heavily is this lock contended?&lt;/li&gt;
+&lt;li&gt;is the lock ever timing out?&lt;/li&gt;
+&lt;li&gt;how often is the lock granted immediately vs forcing your code to wait?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can read the &lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Ent-Rate-Limiting#concurrent-metrics&#34;&gt;metric definitions in the wiki&lt;/a&gt;.  Here&#39;s the UI:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/mperham/sidekiq/master/examples/ent-concurrent.png&#34; alt=&#34;Limiter Web UI&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;what-have-we-learned&#34;&gt;What have we learned?&lt;/h3&gt;
+
+&lt;p&gt;The other libraries give you the basics of a distributed lock but two
+are lacking in performance and all are missing the metrics necessary to
+debug problems.  Some good things about Sidekiq Enterprise&#39;s concurrent limiter:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it provides the highest performance distributed lock for Redis&lt;/li&gt;
+&lt;li&gt;it blocks, it does not poll or sleep, so it won&#39;t slam Redis with superfluous requests or burn CPU&lt;/li&gt;
+&lt;li&gt;it can limit access to N callers, not just 1&lt;/li&gt;
+&lt;li&gt;it provides much better visibility with real-time metrics about limiter usage&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If you are using Sidekiq today, the Enterprise upgrade will drop right in.
+&lt;a href=&#34;https://enterprise.contribsys.com/quote.html&#34;&gt;Sidekiq Enterprise starts at $1950/yr, get a quote in seconds here.&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Kill Your Dependencies</title>
+      <link>http://www.mikeperham.com/2016/02/09/kill-your-dependencies/</link>
+      <pubDate>Tue, 09 Feb 2016 00:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2016/02/09/kill-your-dependencies/</guid>
+      <description>
+
+&lt;figure style=&#34;float: right;&#34;&gt;
+  &lt;img style=&#34;border: solid white 0px;&#34; src=&#34;http://wookiehangover.github.io/dependency-injection-for-fun-and-profit/img/dependency-graph2.png&#34; width=&#34;400px&#34; /&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;This post talks about Ruby but it&#39;s true of every language community: Python, JavaScript, Java, etc.  The scourge of dependencies spares no one.&lt;/p&gt;
+
+&lt;p&gt;This is a dependency visualization of every Rails app I&#39;ve ever used.  Does any of this
+sound familiar:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Gemfile with 100s of entries.&lt;/li&gt;
+&lt;li&gt;Test gems loading in production.&lt;/li&gt;
+&lt;li&gt;Each Rails process takes 100s of megabytes of RAM.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The Rubygems system is commendable for how easy it makes packaging up
+Ruby for others to reuse.  But that very ease means it&#39;s also quite easy for
+those gems to pull in other gems transitively, leading to Rails apps
+which &amp;quot;download the Internet&amp;quot; and have hundreds of dependencies.&lt;/p&gt;
+
+&lt;p&gt;When you publish a Rubygem, every one of your dependencies transitively
+becomes a dependency for any app using your gem.  This multiplies the
+impact of bugs in those gems.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-curious-case-of-mime-types&#34;&gt;The curious case of mime-types&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code&gt;mime-types&lt;/code&gt; gem &lt;a href=&#34;https://github.com/mime-types/ruby-mime-types/issues/94&#34;&gt;recently optimized its memory usage&lt;/a&gt;
+and saved megabytes of RAM.
+Literally every Rails app in existence can benefit from this optimization because Rails depends on
+the mime-types gem transitively: &lt;code&gt;rails -&amp;gt; actionmailer -&amp;gt; mail -&amp;gt; mime-types&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In other words, this gem wasn&#39;t used by your app.  It wasn&#39;t used by Rails
+directly.  It wasn&#39;t used by ActionMailer directly.  It was used deep in the bowels of the ActionMailer
+implementation &lt;strong&gt;and it was using far too much memory&lt;/strong&gt;.  Every single
+Rails app in existence was using 10MB too much due to this issue.&lt;/p&gt;
+
+&lt;h2 id=&#34;app-developers-listen-up&#34;&gt;App Developers, Listen Up!&lt;/h2&gt;
+
+&lt;p&gt;Every dependency in your application has the potential to bloat your
+app, to destabilize your app, to inject odd behavior via monkeypatching
+or buggy native code.
+When you are considering adding a dependency to your Rails app, it&#39;s a
+good idea to do a quick sanity check, in order of preference:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Do I really need this at all?  Kill it.&lt;/li&gt;
+&lt;li&gt;Can I implement the required minimal functionality myself?  Own it.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;If you need a gem:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Does the gem have a native extension?  Look for pure ruby alternatives.&lt;/li&gt;
+&lt;li&gt;Does the gem transitively pull in a lot of other gems?  Look for
+simpler alternatives.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Gems with native extensions can destabilize your system; they can be
+the source of mysterious bugs and crashes.  Avoid gems which pull in more
+dependencies than their value warrants.  Example of a bad gem: the
+&lt;code&gt;fog&lt;/code&gt; gem which pulls in 39 gems, more dependencies than rails itself
+and most of which are unnecessary.&lt;/p&gt;
+
+&lt;p&gt;Lastly, make sure you only load the gem when necessary.  Use Bundler&#39;s
+group support to disable test gems when not testing:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;group&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;:test&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;gem&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;rspec&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;gem&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;timecop&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color: #75715e&#34;&gt;# etc&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;gem-developers-listen-up&#34;&gt;Gem Developers, Listen Up!&lt;/h2&gt;
+
+&lt;p&gt;Part of your job as a library author is to treat your user and their
+application with respect.  You should make an effort to minimize your
+own dependencies so they don&#39;t load unnecessary code or cause issues in the user&#39;s application.
+You control your own code but you don&#39;t control your dependencies.  Any
+bug in a dependency of yours becomes a bug that causes stress for your user and
+their application.&lt;/p&gt;
+
+&lt;p&gt;As a gem developer, for each of your gem dependencies do you:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;know how much memory each takes?&lt;/li&gt;
+&lt;li&gt;know how long each takes to require?&lt;/li&gt;
+&lt;li&gt;know whether it performs any monkeypatching outside of its own module?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Sidekiq, with all of its functionality, has only 3 runtime dependencies:
+&lt;code&gt;concurrent-ruby&lt;/code&gt;, &lt;code&gt;connection_pool&lt;/code&gt; and &lt;code&gt;redis&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;die-json-die-german-for-the-json-the&#34;&gt;Die json, die (German for &amp;quot;The json, the&amp;quot;)&lt;/h3&gt;
+
+&lt;p&gt;&lt;figure style=&#34;float: right;&#34;&gt;
+  &lt;img style=&#34;border: solid white 10px;&#34; src=&#34;http://41.media.tumblr.com/tumblr_lh4z0xSXsx1qbohddo1_500.jpg&#34; width=&#34;320px&#34; /&gt;
+&lt;/figure&gt;
+So many gems declare a dependency on json, oj, multi_json, or yajl-ruby.
+There&#39;s so many ossified layers of cruft around JSON
+processing that only one course of action makes sense: remove it all.
+JSON has been in the stdlib since 1.9, you don&#39;t need to declare any dependencies at all.
+Just &lt;code&gt;require &#39;json&#39;&lt;/code&gt; and let Ruby deal with it.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/rails/rails/pull/23453&#34;&gt;Rails did it&lt;/a&gt;, so can you!&lt;/p&gt;
+
+&lt;h3 id=&#34;why-choose-an-http-client-when-you-can-have-them-all&#34;&gt;Why choose an HTTP client when you can have them all?&lt;/h3&gt;
+
+&lt;p&gt;Every Rails app pulls in a half dozen different HTTP clients: faraday, rest-client,
+httparty, excon, typhoeus, curb, etc.  This is because various gems use them internally.
+&lt;strong&gt;A Rubygem should never use anything but Net::HTTP internally!&lt;/strong&gt;
+Learn the Net:HTTP API, kill those dependencies and stop forcing extra HTTP client gems on your users.&lt;/p&gt;
+
+&lt;p&gt;Let&#39;s say you want to offer an optimized version using curb: ok, but make it
+optional.  Allow the application developer to opt into using curb but
+net/http should always be the default.&lt;/p&gt;
+
+&lt;h3 id=&#34;optimizing-rails-5-0&#34;&gt;Optimizing Rails 5.0&lt;/h3&gt;
+
+&lt;p&gt;For the last few weeks, I&#39;ve been working (in tandem with several other
+developers, hi @_matthewd, @applerebel!) on minimizing gem dependencies
+in Rails 5.0.  Rails 4.2.5 requires 34 gems.  Rails 5.0b1 required 55 gems.
+Rails 5.0b2 required 39 gems.  I expect Rails 5.0 to require 37 gems or
+less.  So far we&#39;ve removed Celluloid, EventMachine, thread_safe, and json.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately there&#39;s no more low-hanging fruit.  I&#39;d love to drop
+Nokogiri, it&#39;s such a huge dependency with a massive native extension component,
+but there are some &lt;a href=&#34;https://github.com/flavorjones/loofah/issues/100&#34;&gt;non-trivial dependencies&lt;/a&gt; on it.
+&lt;a href=&#34;https://github.com/YorickPeterse/oga&#34;&gt;Oga&lt;/a&gt; is a nice, simpler alternative.  If you
+ship a gem which depends on Nokogiri, consider making it optional and defaulting to REXML (I know, but
+at least it&#39;s in stdlib) or Oga instead.&lt;/p&gt;
+
+&lt;h3 id=&#34;be-part-of-the-solution&#34;&gt;Be Part of the Solution&lt;/h3&gt;
+
+&lt;p&gt;I can help with Rails 5.0 but I can&#39;t fix every gem.  If you are a gem developer,
+audit your own dependencies and remove as many as you can.
+If you&#39;re an app developer, take a look in your
+Gemfile and see if you can find a gem or two to remove.
+Simplify, simplify, simplify.&lt;/p&gt;
+
+&lt;p&gt;As an example, I think it&#39;s possible for the &lt;a href=&#34;https://github.com/stripe/stripe-ruby/blob/master/stripe.gemspec#L16&#34;&gt;Stripe gem&lt;/a&gt; to remove both of its runtime dependencies.&lt;/p&gt;
+
+&lt;h3 id=&#34;rules-to-remember&#34;&gt;Rules to Remember&lt;/h3&gt;
+
+&lt;p&gt;Some software engineering rules:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;No code runs faster than no code.&lt;/li&gt;
+&lt;li&gt;No code has fewer bugs than no code.&lt;/li&gt;
+&lt;li&gt;No code uses less memory than no code.&lt;/li&gt;
+&lt;li&gt;No code is easier to understand than no code.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Kill those dependencies.  Your gems and apps will be better for it.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

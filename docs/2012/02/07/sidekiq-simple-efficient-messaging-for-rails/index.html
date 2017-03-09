@@ -1,0 +1,121 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Sidekiq -- simple, efficient messaging for Rails </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Sidekiq -- simple, efficient messaging for Rails</h1>
+      <small class="post-meta">Feb 7, 2012</small>
+      <div class="post-content">
+        <p>I introduced my latest project, <a href="http://mperham.github.com/sidekiq">Sidekiq</a>, this morning. Sidekiq is the culmination of several years of research and development into message processing with Ruby. I first wrote a single-threaded mysql-backed queue called QBert for FiveRuns in 2008 before delayed_job was introduced. Next I wrote a single-threaded SQS-based processor called Jobber and then a Fiber-based, RabbitMQ-backed processor called Qanat for OneSpot. Most recently I wrote <a href="http://mperham.github.com/girl_friday">girl_friday</a>, an Actor-based, redis-backed processor and a custom multi-threaded version of Resque for a Carbon Five client.</p>
+
+<p>So yeah, messaging and I have a history but I think that's because Ruby still doesn't have a simple, scalable option for message processing. Sidekiq is my attempt to solve that need.</p>
+
+<p><strong>Simple</strong></p>
+
+<p>Sidekiq integrates tightly with Rails 3 so your application's worker code is nearby and easy for Sidekiq to find and load. I'd like to support plain Ruby applications but I need a replacement for the nice integration Rails 3 gives me.</p>
+
+<p><strong>Efficient</strong></p>
+
+<p>Sidekiq uses multiple threads so you can process hundreds of messages in parallel if you desire without the overhead of hundreds of processes. Internally Sidekiq uses the Celluloid actor library to make threading easier and safer to manage.</p>
+
+<p><strong>Developer Friendly</strong></p>
+
+<p>I've tried to make Sidekiq developer friendly in two ways:</p>
+
+<ul>
+<li>Resque-compatible -- I love conventions, why reinvent the wheel when you can stick closely to what someone else has done and leverage that work? I aim to make Sidekiq easy to integrate into an existing Resque project and monitorable via resque-ui.</li>
+<li>Middleware -- Sidekiq pulls in a middleware API similar to Rack for running code before/after/around a processed message and ships with middleware that helps with ActiveRecord and Airbrake.</li>
+</ul>
+
+<p>Please let me know how you like Sidekiq -- I love hearing stories about how people are using it.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2012\/02\/07\/sidekiq-simple-efficient-messaging-for-rails\/';
+    var disqus_title = 'Sidekiq -- simple, efficient messaging for Rails';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2012\/02\/07\/sidekiq-simple-efficient-messaging-for-rails\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,151 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Tokyo Cabinet vs Memcached </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Tokyo Cabinet vs Memcached</h1>
+      <small class="post-meta">Mar 8, 2009</small>
+      <div class="post-content">
+        <p><a href="http://www.igvita.com/2009/02/13/tokyo-cabinet-beyond-key-value-store/">Tokyo Cabinet</a> bills itself as a next-generation DBM. Like BerkeleyDB, TC gives you low-level database operations and allows you to build your own very fast data access operations. Unlike BDB, TC has several functional layers on top of TC which provide network access, schema-less document-oriented storage (a la CouchDB) and supported bindings for many languages. This project is an infrastructure nerd's dream!</p>
+
+<p>One interesting feature of its network access layer, Tokyo Tyrant, is support for the memcached protocol, which means we can access it via memcache-client! I downloaded tokyocabinet and tokyotyrant and built and installed them. I then started a tyrant server like so:</p>
+
+<pre>ttserver -port 45000 data.tch
+</pre>
+
+<p>Let's try some simple benchmarks:</p>
+
+<pre lang="ruby">require 'rubygems'
+require 'benchmark'
+
+gem 'memcache-client', '1.7.0'
+require 'memcache'
+
+memcached = MemCache.new(['localhost:11211'], :timeout => nil)
+tokyo = MemCache.new(['localhost:45000'], :timeout => nil)
+
+Benchmark.bm(20) do |b|
+  b.report 'memcached-write' do
+    10000.times do |idx|
+      memcached.set idx.to_s, idx.to_s*100, 120, true
+    end
+  end
+  b.report 'tokyo-write' do
+    10000.times do |idx|
+      tokyo.set idx.to_s, idx.to_s*100
+    end
+  end
+  b.report 'memcached-read' do
+    10_000.times do
+      memcached.get(rand(100).to_s, true)
+    end
+  end
+  b.report 'tokyo-read' do
+    10_000.times do
+      tokyo.get(rand(100).to_s)
+    end
+  end
+end
+</pre>
+
+<p>Results:</p>
+
+<pre>user     system      total        real
+memcached-write       0.380000   0.200000   0.580000 (  1.308354)
+tokyo-write           0.470000   0.200000   0.670000 (  1.663922)
+memcached-read        0.410000   0.170000   0.580000 (  1.354334)
+tokyo-read            0.470000   0.180000   0.650000 (  1.688558)
+</pre>
+
+<p>Not too shabby at all! Keep in mind that TC doesn't support time-based key expiration and is persistent. Memcached is designed to be a memory-only cache, so while the underlying semantics of the two are somewhat different, the same basic operations are available to memcache-client. In fact, you can even theoretically use TC as your Rails cache by configuring the mem_cache_store to point to your Tokyo Tyrant server instead of memcached!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2009\/03\/08\/tokyo-cabinet-vs-memcached\/';
+    var disqus_title = 'Tokyo Cabinet vs Memcached';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2009\/03\/08\/tokyo-cabinet-vs-memcached\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

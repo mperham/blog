@@ -1,0 +1,146 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> 12 Gems of Christmas #4 -- mailcatcher and mail_view </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>12 Gems of Christmas #4 -- mailcatcher and mail_view</h1>
+      <small class="post-meta">Dec 9, 2012</small>
+      <div class="post-content">
+        <p>Surprise, today's blog posting is a double header!</p>
+
+<p>Testing email can be painful, verifying delivery and look and feel quickly becomes tedious. <a href="http://mailcatcher.me">mailcatcher</a> and <a href="https://github.com/37signals/mail_view">mail_view</a> are my go-to tools for dealing with email.</p>
+
+<p><strong>mailcatcher</strong></p>
+
+<p>With mailcatcher, you install the gem and then run the <code>mailcatcher</code> binary to start the mailcatcher daemon in the background. Now you have an SMTP server running on port 1025 and an inbox available at <a href="http://localhost:1080">http://localhost:1080</a>. I configured <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> Rails app to automatically use mailcatcher if it's running:</p>
+
+<pre lang="ruby"># config/initializers/email.rb
+begin
+  sock = TCPSocket.new("localhost", 1025)
+  sock.close
+  catcher = true
+rescue
+  catcher = false
+end
+
+ActionMailer::Base.smtp_settings = if Rails.env.development? &#038;&#038; catcher
+  { :host => "localhost", :port => '1025', }
+else
+  { } # normal SMTP config
+end
+</pre>
+
+<p>Now you can test email via <a href="http://localhost:1080">http://localhost:1080</a> and not have to use gmail, hotmail, etc.</p>
+
+<p><strong>mail_view</strong></p>
+
+<p><a href="https://github.com/37signals/mail_view">mail_view</a> is awesome for rapidly testing UI changes in email. The trick is to render the email as a webpage directly in your Rails app so you can see changes immediately with Cmd+R just like any normal webpage. You just need to set up the email to be rendered with some data; in our case we just pull random data from the database since we all work with production database snapshots.</p>
+
+<pre lang="ruby">class Preview &lt; MailView
+  def order_receipt
+    cart = Cart.where(:state => 'pushed').order(:id).last
+    Emails.order_receipt(cart.id)
+  end
+end
+</pre>
+
+<p>Of course, we need to mount the mail_view engine itself:</p>
+
+<pre lang="ruby"># config/routes.rb
+mount MailPreview => 'mail_view' if Rails.env.development?
+</pre>
+
+<p>Now we can go to <a href="http://localhost:3000/mail_view/order_receipt">http://localhost:3000/mail_view/order_receipt</a> and immediately see what our order_receipt email looks like, no email required!</p>
+
+<p>With mailcatcher and mail_view at your side, email development and testing goes from tedious to stupendous! Tomorrow we'll cover a gem designed to build better command line scripts in Ruby...</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2012\/12\/09\/12-gems-of-christmas-4-mailcatcher-and-mail_view\/';
+    var disqus_title = '12 Gems of Christmas #4 -- mailcatcher and mail_view';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2012\/12\/09\/12-gems-of-christmas-4-mailcatcher-and-mail_view\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

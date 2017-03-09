@@ -1,0 +1,112 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> 12 Gems of Christmas #1 -- puma </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>12 Gems of Christmas #1 -- puma</h1>
+      <small class="post-meta">Dec 12, 2012</small>
+      <div class="post-content">
+        <p>I've spent the last few years working to advance and improve Ruby's efficiency through concurrency, first with EventMachine and fibers and now with Actors and multithreading so it shouldn't surprise you that my #1 pick is <a href="http://puma.io">puma</a>. It's my belief that puma and <a href="http://sidekiq.org">sidekiq</a> are a new breed of Ruby infrastructure that can dramatically improve your application's efficiency &mdash; should you decide to take advantage of them.</p>
+
+<p>puma is a pure Ruby, Rack-based web server and drops right in as a replacement for thin or unicorn. Unlike unicorn or thin, puma is designed to run multithreaded by default so you get far better memory efficiency. A typical single threaded Rails unicorn process takes 250MB. puma defaults to a maximum of 16 threads per process so one puma process can replace 16 unicorn processes taking 4GB of RAM! puma, like all multithreaded libraries, works best in a truly concurrent Ruby VM like JRuby or Rubinius but you'll still get a big win running on MRI.</p>
+
+<p>To test this, I ran 50 concurrent requests 20 times for a total of 1000 requests against a non-trivial endpoint on <a href="http://theclymb.com/invite-from/mperham">TheClymb.com</a> Rails application. config.threadsafe! was enabled, a database pool size of 10 and puma's default of 16 threads. Each request makes two database queries and renders a slim-based template.</p>
+
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2012/12/Screen-Shot-2012-12-04-at-9.56.49-PM.png"><img src="http://www.mikeperham.com/wp-content/uploads/2012/12/Screen-Shot-2012-12-04-at-9.56.49-PM.png" alt="" title="Screen Shot 2012-12-04 at 9.56.49 PM" width="612" height="227" class="aligncenter size-full wp-image-1070" /></a></p>
+
+<p>Unicorn/MRI 1.9.3 is the baseline: single-threaded, it runs the 1000 requests in 19 seconds. Puma/MRI manages to speed up a bit but is still hampered by the GIL and runs in 15 seconds. Puma/JRuby unlocks the second core on my MacBook Air and runs in under 9 seconds!</p>
+
+<p>What this means is simple: threading with puma will get you better performance than Unicorn, even on MRI, and jumping to <a href="http://jruby.org">JRuby</a> gets you a significantly bigger boost by giving you truly parallel threads. It took me about one hour to get our Rails app, which has always run on MRI, working with JRuby. Give JRuby a try some weekend and you might be surprised how well it works!</p>
+
+<p>I hope you enjoyed my 12 Gems of Christmas series and found a few gems that were worthy of further study.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2012\/12\/12\/12-gems-of-christmas-1-puma\/';
+    var disqus_title = '12 Gems of Christmas #1 -- puma';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2012\/12\/12\/12-gems-of-christmas-1-puma\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

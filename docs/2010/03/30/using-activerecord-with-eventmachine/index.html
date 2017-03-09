@@ -1,0 +1,126 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Using ActiveRecord with EventMachine </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Using ActiveRecord with EventMachine</h1>
+      <small class="post-meta">Mar 30, 2010</small>
+      <div class="post-content">
+        <p>Given all my work with Fibers and EventMachine over the last three months, it should come as no surprise that I've been working on infrastructure based on Fibers and EventMachine to get maximum scalability without the callback style of code which I dislike for many reasons. <a href="../../../../2010/01/27/scalable-ruby-processing-with-eventmachine/">Watch my talk on scaling with EventMachine</a> if you need more background on the problem.</p>
+
+<p>Now that I have RabbitMQ, Cassandra, Solr and the Amazon AWS services evented, the only holdup was ActiveRecord. Some people may advocate using another ORM layer but when you have 2-3 other Rails apps, all sharing 100+ models, you can't afford to maintain two separate ORM layers. Plus, frankly I like the Rails stack: it works pretty well, is thoroughly documented and every Ruby developer is familiar with it.</p>
+
+<p>So what do we need to do to get AR working event-style? At a high level, there's two things required:</p>
+
+<ul>
+<li>The database driver itself must be modified to send SQL asynchronously. The postgresql driver, for instance, calls the <code>exec(sql)</code> method for all traffic to the database. So we just need to provide an exec method which uses Fibers under the covers to work asynchronously.</li>
+<li>AR's connection pooling needs to be Fiber-safe. Out of the box, it is Thread-safe. Since we are using an execution model based on a single Thread with multiple Fibers, all the Fibers would try to use the same connection, with disastrous consequences.</li>
+</ul>
+
+<p>These are the things that em_postgresql does.</p>
+
+<ul>
+<li><p><a href="http://github.com/mperham/em_postgresql/blob/master/lib/postgres_connection.rb">postgres_connection</a> is a basic, EM-aware Postgres driver. It provides the Fibered <code>exec()</code> method which makes the whole thing asynchronous.</p>
+
+<ul>
+<li><a href="http://github.com/mperham/em_postgresql/blob/master/lib/active_record/connection_adapters/em_postgresql_adapter.rb">em_postgresql_adapter.rb</a> wraps postgres_connection to make it a proper ActiveRecord driver.</li>
+<li><a href="http://github.com/mperham/em_postgresql/blob/master/lib/active_record/patches.rb">patches.rb</a> overrides a bunch of AR's internal connection pooling to make it Fiber-friendly.</ul>
+Unfortunately the latter makes one hack necessary -- we have to have a list of current Fibers to release any lingering connections associated with those Fibers. The Threaded version can use <code>Thread.list</code> but Ruby does not provide an equivalent method for Fibers. Instead I require the application to register a FiberPool with AR to clear stale connections.
+<br /></li>
+</ul>
+
+<p>So what does it all mean? Well, here's <a href="http://github.com/mperham/em_postgresql/blob/master/examples/app.rb">a Sinatra application</a> that uses plain old ActiveRecord and <strong>is completely asynchronous</strong>! Try <code>ab -n 100 -c 20 http://localhost:9292/test</code> to hit the app with 20 concurrent connections; it will process them all in parallel, without any painful threading issues (autoloading, misbehaving extensions, etc). Awesome!</p>
+
+<p>You should guess what's next. Coming soon: the whole Rails stack, running asynchronously...</p></li>
+</ul>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2010\/03\/30\/using-activerecord-with-eventmachine\/';
+    var disqus_title = 'Using ActiveRecord with EventMachine';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2010\/03\/30\/using-activerecord-with-eventmachine\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

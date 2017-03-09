@@ -1,0 +1,187 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Sidekiq and Upstart </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Sidekiq and Upstart</h1>
+      <small class="post-meta">Jul 16, 2015</small>
+      <div class="post-content">
+        
+
+<p>The best and most reliable way to manage multiple Sidekiq processes is with Upstart.
+Many developers know little to nothing about Upstart so I wanted to write up how to
+integrate Sidekiq with Upstart.  With Upstart doing the hard work, it becomes easy
+to manage deployments with Capistrano or another similar tool.</p>
+
+<h2 id="starting-sidekiq">Starting Sidekiq</h2>
+
+<p>The Sidekiq repo has <a href="https://github.com/mperham/sidekiq/tree/master/examples/upstart">example .conf files</a> you can use as a template to create your
+own services.  Customize the .conf files as necessary and place them in <code>/etc/init</code>;
+they tell Upstart when and how to start the associated processes.</p>
+
+<p>The <code>workers</code> service is a &quot;fake&quot; service which knows how to start/stop N sidekiq
+processes.  Upon machine boot, Upstart will start <code>workers</code> which will start those N
+processes.  Within <code>workers.conf</code> we've declared how many processes we want to start:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">env</span> <span style="color: #66d9ef">NUM_WORKERS</span><span style="color: #f92672">=</span><span style="color: #ae81ff">2</span>
+</pre></div>
+
+
+<p>If you want to quickly shut down all Sidekiq processes, run <code>stop workers</code>. Start
+them back up with <code>start workers</code>.  Of course you can do both with <code>restart workers</code>.
+It literally can't be any easier!</p>
+
+<p>The <code>sidekiq</code> service is an &quot;instance&quot; service, allowing you to create N processes.
+It requires an index parameter to define which instance you are controlling:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>$ start sidekiq <span style="color: #f8f8f2">index</span><span style="color: #f92672">=</span><span style="color: #ae81ff">0</span>
+$ start sidekiq <span style="color: #f8f8f2">index</span><span style="color: #f92672">=</span><span style="color: #ae81ff">1</span>
+$ stop sidekiq <span style="color: #f8f8f2">index</span><span style="color: #f92672">=</span><span style="color: #ae81ff">2</span>
+etc...
+</pre></div>
+
+
+<h2 id="deployment">Deployment</h2>
+
+<p>Deployment should do two things: quiet Sidekiq as early as possible and restart
+as late as possible.</p>
+
+<h3 id="quieting-sidekiq">Quieting Sidekiq</h3>
+
+<p>During a deployment, we want to signal Sidekiq to stop processing jobs as early as possible so
+Sidekiq has as much time as possible to finish any jobs in progress.  We do this by sending
+each process the USR1 signal, here's a Capistrano task which does that:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">task</span> <span style="color: #e6db74">:quiet</span> <span style="color: #66d9ef">do</span>
+  <span style="color: #f8f8f2">on</span> <span style="color: #f8f8f2">roles(</span><span style="color: #e6db74">:worker</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">do</span>
+    <span style="color: #f8f8f2">puts</span> <span style="color: #f8f8f2">capture(</span><span style="color: #e6db74">&quot;sudo pgrep -f &#39;sidekiq&#39; | xargs kill -USR1&quot;</span><span style="color: #f8f8f2">)</span>
+  <span style="color: #66d9ef">end</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p>Note that <code>workers</code> does not support reload since it doesn't map to a single process so we have to
+use that pgrep hack.</p>
+
+<p>You can use Upstart's <code>reload</code> command to quiet a specific instance:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>$ reload sidekiq <span style="color: #f8f8f2">index</span><span style="color: #f92672">=</span>X
+</pre></div>
+
+
+<h3 id="restarting-sidekiq">Restarting Sidekiq</h3>
+
+<p>Restarting is easy: <code>restart workers</code>.  This will actually stop and then start the processes.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">task</span> <span style="color: #e6db74">:restart</span> <span style="color: #66d9ef">do</span>
+  <span style="color: #f8f8f2">on</span> <span style="color: #f8f8f2">roles(</span><span style="color: #e6db74">:worker</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">do</span>
+    <span style="color: #f8f8f2">puts</span> <span style="color: #f8f8f2">capture(</span><span style="color: #e6db74">&quot;sudo restart workers&quot;</span><span style="color: #f8f8f2">)</span>
+  <span style="color: #66d9ef">end</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<h2 id="notes">Notes</h2>
+
+<ul>
+<li>We don't need to daemonize.  Modern daemons should never daemonize themselves.</li>
+<li>We don't need PID files.  PID files are legacy from years ago and their use should
+signal that something is wrong.</li>
+<li>We don't need to specify our own log files.  Sidekiq will output to stdout; Upstart will direct stdout to
+a file within <code>/var/log/upstart/</code> <strong>and</strong> automatically rotate those log files
+for you - no logrotate setup necessary!</li>
+</ul>
+
+<p>In other words, stop reinventing the wheel and let the operating system do the hard work for you!
+I hope this makes your Sidekiq deployment cleaner and more stable.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2015\/07\/16\/sidekiq-and-upstart\/';
+    var disqus_title = 'Sidekiq and Upstart';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2015\/07\/16\/sidekiq-and-upstart\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

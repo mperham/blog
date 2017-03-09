@@ -1,0 +1,135 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Sustainable OSS Meeting Notes </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Sustainable OSS Meeting Notes</h1>
+      <small class="post-meta">Jun 23, 2013</small>
+      <div class="post-content">
+        <p>André Arko (@indirect, Bundler), Erik Michaels-Ober (@sferik, t/rails_admin/multi_json) and myself had a hangout this afternoon to talk about our struggles as Open Source developers and project leads. Here's my notes, as I recollect:</p>
+
+<p>Erik:</p>
+
+<p>Enjoys working on his twitter gem, doesn't enjoy rails_admin anymore. There's a fair amount of design/theme work in rails_admin that he's not good at and really needs to be abstracted out but would require a lot more time than he wants to invest. Features of rails_admin were merged in but made it hard to maintain (e.g. mongodb support because he doesn't use Mongo personally). Thought for a while how to make rails_admin into a full time job.</p>
+
+<p>André:</p>
+
+<p>Bundler has tried to bring new people into the project where possible. Managing these people and getting them to commit to work is difficult when you don't have any real authority over them. Ruby Central has given him a grant to work on Rubygems and Bundler.</p>
+
+<p>Mike:</p>
+
+<p>I wanted Sidekiq to be better than the status quo but was scared to death of the amount of time needed to support it over the next 5 years if it took off. I had two strategies from the start:</p>
+
+<ol>
+<li>Be very picky about the features I accept and how they're implemented</li>
+</ol>
+
+<p>It's my project so I have to support every line of code in it. Features that I know will cause support issues are redesigned or denied. For example, I won't allow any features that require locking or distributed coordination. This keeps the codebase enjoyable.</p>
+
+<ol>
+<li>Offer users a way to support the project financially</li>
+</ol>
+
+<p>OSS is hard work, given away for free. I had no real desire to start a services/consulting company as I enjoy my day job. Selling a &quot;support plan&quot; is a disincentive to product quality: if your product is easy to use and well documented, you suffer financially. My initial plan to sell commercial licenses brought in beer money, no more. I decided to build a <a href="http://sidekiq.org/pro">value-added product</a> on top of the OSS core (who else does this?) which has been very successful so far.</p>
+
+<p><strong>Conclusions</strong></p>
+
+<p>Projects can differ radically in how to sustain them.</p>
+
+<ul>
+<li>Learning can be a huge personal incentive to start and implement a project but doesn't necessarily help support the project over months and years.</li>
+<li>Help from others and thanks can go a long way. Managing volunteers has its own challenges.</li>
+<li>Keep the codebase clean and enjoyable to work on, refactoring to improve your enjoyment of the code can be a great idea. Prune features which are support hotspots.</li>
+<li>If you want to earn anything more than beer money for your efforts, explicitly consider a business model appropriate to you and your project.</li>
+</ul>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2013\/06\/23\/sustainable-oss-meeting-notes\/';
+    var disqus_title = 'Sustainable OSS Meeting Notes';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2013\/06\/23\/sustainable-oss-meeting-notes\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

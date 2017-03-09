@@ -1,0 +1,160 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Converting a MySQL database from Latin1 to UTF8 </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Converting a MySQL database from Latin1 to UTF8</h1>
+      <small class="post-meta">Mar 31, 2012</small>
+      <div class="post-content">
+        <p>We had a problem at <a href="http://www.theclymb.com/invite-from/mperham">TheClymb</a>: our database and tables were created with the default Latin1 encoding. Now all of the data in those tables is actually UTF8 because it was all imported via the web browser (which defaults to UTF8) and MySQL doesn't actually validate or convert data encoding when inserting.</p>
+
+<p>A suggestion was to just set this in an initializer:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">Mysql2</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Client</span><span style="color: #f92672">::</span><span style="color: #66d9ef">CHARSET_MAP</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;latin1&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Encoding</span><span style="color: #f92672">::</span><span style="color: #66d9ef">UTF_8</span>
+</pre></div>
+
+
+<p>This will solve your problems in Ruby but will not solve your problems in the database: MySQL will still sort and compare strings thinking they are latin1 and thus do so incorrectly. Here's an example:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">create</span> <span style="color: #66d9ef">table</span> <span style="color: #f8f8f2">names_latin1</span> <span style="color: #f8f8f2">(name</span> <span style="color: #f8f8f2">varchar(</span><span style="color: #ae81ff">32</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">character</span> <span style="color: #66d9ef">set</span> <span style="color: #f8f8f2">latin1);</span>
+<span style="color: #66d9ef">insert</span> <span style="color: #66d9ef">into</span> <span style="color: #f8f8f2">names_latin1</span> <span style="color: #66d9ef">values</span> <span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;Martin Strauße&#39;</span><span style="color: #f8f8f2">);</span>
+<span style="color: #66d9ef">insert</span> <span style="color: #66d9ef">into</span> <span style="color: #f8f8f2">names_latin1</span> <span style="color: #66d9ef">values</span> <span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;Martin Straure&#39;</span><span style="color: #f8f8f2">);</span>
+<span style="color: #66d9ef">insert</span> <span style="color: #66d9ef">into</span> <span style="color: #f8f8f2">names_latin1</span> <span style="color: #66d9ef">values</span> <span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;Martin Strausse&#39;</span><span style="color: #f8f8f2">);</span>
+<span style="color: #66d9ef">insert</span> <span style="color: #66d9ef">into</span> <span style="color: #f8f8f2">names_latin1</span> <span style="color: #66d9ef">values</span> <span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;Martin Straute&#39;</span><span style="color: #f8f8f2">);</span>
+
+<span style="color: #66d9ef">create</span> <span style="color: #66d9ef">table</span> <span style="color: #f8f8f2">names_utf8</span> <span style="color: #f8f8f2">(name</span> <span style="color: #f8f8f2">varchar(</span><span style="color: #ae81ff">32</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">character</span> <span style="color: #66d9ef">set</span> <span style="color: #f8f8f2">utf8);</span>
+<span style="color: #66d9ef">insert</span> <span style="color: #66d9ef">into</span> <span style="color: #f8f8f2">names_utf8</span> <span style="color: #66d9ef">values</span> <span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;Martin Strauße&#39;</span><span style="color: #f8f8f2">);</span>
+<span style="color: #66d9ef">insert</span> <span style="color: #66d9ef">into</span> <span style="color: #f8f8f2">names_utf8</span> <span style="color: #66d9ef">values</span> <span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;Martin Straure&#39;</span><span style="color: #f8f8f2">);</span>
+<span style="color: #66d9ef">insert</span> <span style="color: #66d9ef">into</span> <span style="color: #f8f8f2">names_utf8</span> <span style="color: #66d9ef">values</span> <span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;Martin Strausse&#39;</span><span style="color: #f8f8f2">);</span>
+<span style="color: #66d9ef">insert</span> <span style="color: #66d9ef">into</span> <span style="color: #f8f8f2">names_utf8</span> <span style="color: #66d9ef">values</span> <span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;Martin Straute&#39;</span><span style="color: #f8f8f2">);</span>
+</pre></div>
+
+
+<p>I'm not a linguist but to the best of my knowledge the German ß is essentially &quot;ss&quot;. When we ask MySQL to sort our names, you can see that the UTF-8 results put the ß character between &quot;r&quot; and &quot;ss&quot; but the Latin1 results don't. If a German were to see this, they would be enraged due to your culturally insensitive code!</p>
+
+<pre>
+> select * from names_latin1 order by name;
++-----------------+
+| name            |
++-----------------+
+| Martin Straure  |
+| Martin Strausse |
+| Martin Straute  |
+| Martin Strauße  |
++-----------------+
+</pre>
+
+<pre>
+> select * from names_utf8 order by name;
++-----------------+
+| name            |
++-----------------+
+| Martin Straure  |
+| Martin Strauße  |
+| Martin Strausse |
+| Martin Straute  |
++-----------------+
+</pre>
+
+<p>We need to update the CHARACTER SET without doing any conversion of the data. This is simple to do: you convert the columns to a blob format and then convert them back to a string format with the proper encoding declared; MySQL will not do any conversion of raw binary data. For example:</p>
+
+<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">ALTER</span> <span style="color: #66d9ef">TABLE</span> <span style="color: #f8f8f2">categories</span> <span style="color: #f8f8f2">CHARACTER</span> <span style="color: #66d9ef">SET</span> <span style="color: #f8f8f2">utf8</span> <span style="color: #66d9ef">COLLATE</span> <span style="color: #f8f8f2">utf8_unicode_ci,</span> <span style="color: #f8f8f2">CHANGE</span> <span style="color: #f8f8f2">title</span> <span style="color: #f8f8f2">title</span> <span style="color: #f8f8f2">VARBINARY(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">ALTER</span> <span style="color: #66d9ef">TABLE</span> <span style="color: #f8f8f2">categories</span> <span style="color: #f8f8f2">CHANGE</span> <span style="color: #f8f8f2">title</span> <span style="color: #f8f8f2">title</span> <span style="color: #f8f8f2">VARCHAR(</span><span style="color: #ae81ff">255</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">CHARACTER</span> <span style="color: #66d9ef">SET</span> <span style="color: #f8f8f2">utf8</span> <span style="color: #66d9ef">COLLATE</span> <span style="color: #f8f8f2">utf8_unicode_ci</span>
+</pre></div>
+</p>
+
+<p>With this in mind, I wrote a rake task to convert our application's database. Here's the full script in a <a href="https://gist.github.com/2045565">Github Gist</a>. You'll need to run it with a <code>DOIT</code> parameter to actually make the changes otherwise it will just print the SQL it will run to the terminal. The script will take a long time for large databases since it has to ALTER TABLE, which means MySQL will write out the table to disk in full; the script does minimize the number of ALTER TABLEs it runs to two per table.
+<code>rake convert_to_utf8 DOIT=1</code></p>
+
+<p>So please think of the Germans and the rest of our international friends: converting the character set of your database to the proper value is important to get correct sorting of results.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2012\/03\/31\/converting-a-mysql-database-from-latin1-to-utf8\/';
+    var disqus_title = 'Converting a MySQL database from Latin1 to UTF8';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2012\/03\/31\/converting-a-mysql-database-from-latin1-to-utf8\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

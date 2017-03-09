@@ -1,0 +1,158 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Test Driving Sidekiq and Crystal </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Test Driving Sidekiq and Crystal</h1>
+      <small class="post-meta">Jun 14, 2016</small>
+      <div class="post-content">
+        
+
+<p>It's alive!  I've finished the initial port of the three core pieces of Sidekiq, the
+client API, the job execution engine and the Web UI, to
+<a href="http://crystal-lang.org">Crystal</a>.  Let's
+assume we have a Ruby app using Sidekiq.rb and integrate Sidekiq.cr to run
+beside it.</p>
+
+<figure style="float: right;">
+  <a href="http://crystal-lang.org"><img style="border: solid white 0px;" src="http://crystal-lang.org/images/icon.png" width="200px" /></a>
+</figure>
+<figure style="float: right;">
+  <a href="http://sidekiq.org"><img style="border: solid white 0px;" src="http://sidekiq.org/assets/kicker.svg" width="200px" /></a>
+</figure>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>Sidekiq.cr has a <a href="https://github.com/mperham/sidekiq.cr/wiki/Getting-Started">Getting Started</a> wiki page which
+walks you through the basics of setting up a new Crystal app.  Follow
+those directions.  Once complete, you should have a Worker named <code>Sample::MyWorker</code>
+that we can call.  We're going to build the Sidekiq.cr binary and run it
+with <code>./sidekiq -q crystal</code>.  Sidekiq.cr is now listening for jobs on
+the <code>crystal</code> queue only.  Any Ruby-based jobs should use other queues
+so the Crystal worker will never see them - exactly what we want.</p>
+
+<p>We've defined one Worker in the Crystal app:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">module</span> <span style="color: #f8f8f2">Sample</span>
+  <span style="color: #66d9ef">class</span> <span style="color: #a6e22e">MyWorker</span>
+    <span style="color: #66d9ef">include</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Worker</span>
+
+    <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">perform</span><span style="color: #f8f8f2">(name</span> <span style="color: #f8f8f2">:</span> <span style="color: #f8f8f2">String,</span> <span style="color: #f8f8f2">count</span> <span style="color: #f8f8f2">:</span> <span style="color: #66d9ef">Int64</span><span style="color: #f8f8f2">)</span>
+      <span style="color: #f8f8f2">count</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">times</span> <span style="color: #66d9ef">do</span>
+        <span style="color: #f8f8f2">logger</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">info</span> <span style="color: #e6db74">&quot;Hello, #{</span><span style="color: #f8f8f2">name</span><span style="color: #e6db74">}!&quot;</span>
+      <span style="color: #66d9ef">end</span>
+    <span style="color: #66d9ef">end</span>
+  <span style="color: #66d9ef">end</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+<p>Open up an IRB console and run this:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&quot;sidekiq&quot;</span>
+<span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Client</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">push(</span><span style="color: #e6db74">&quot;class&quot;</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">&quot;Sample::MyWorker&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;args&quot;</span> <span style="color: #f92672">=&gt;</span> <span style="color: #f92672">[</span><span style="color: #e6db74">&quot;Ruby&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #ae81ff">3</span><span style="color: #f92672">]</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;queue&quot;</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">&quot;crystal&quot;</span><span style="color: #f8f8f2">)</span>
+</pre></div>
+
+<p>Immediately you should see Sidekiq.cr print out three lines:</p>
+
+<pre><code>2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Start
+2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
+2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
+2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
+2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Done: 0.000121 sec
+</code></pre>
+
+<p>Nearly identical to Sidekiq.rb but look at that execution time: <strong>121µs</strong>!
+In real world code, I'm seeing Crystal execute 5-10x faster than MRI.</p>
+
+<p>So... got tons of little jobs?  Got compute-heavy jobs?  Crystal and
+Sidekiq.cr might be the solution you're looking for!  Got questions?
+Find a bug?  <a href="https://github.com/mperham/sidekiq.cr/issues">Open an issue</a>.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2016\/06\/14\/test-driving-sidekiq-and-crystal\/';
+    var disqus_title = 'Test Driving Sidekiq and Crystal';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2016\/06\/14\/test-driving-sidekiq-and-crystal\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,148 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Expression Rescue is Evil </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Expression Rescue is Evil</h1>
+      <small class="post-meta">Apr 1, 2008</small>
+      <div class="post-content">
+        <p>One of the cleaner syntax options Ruby gives you is what I call expression rescues.  Take this:<br />
+<code>&lt;br /&gt;
+&lt;%= @item.parent.name rescue 'None' %&gt;&lt;br /&gt;
+</code><br />
+This code is an example of a pretty standard requirement: printing out the name of the parent of an item. If the item does not have a parent, it will print 'None'. Under the covers, the following is happening:</p>
+
+<ol>
+<li>Ruby calls the parent method on @item</li>
+<li>Ruby calls the name method on the result</li>
+<li>Since the parent is nil, an 'undefined method `name' for nil' error will be raised</li>
+<li>This error is caught by the rescue clause and the rescue expression evaluated</li>
+<li>The result of the rescue expression is returned as the result of the overall expression</li>
+</ol>
+
+<p>So what's the problem? There's several in my experience:</p>
+
+<p><strong>You often can't tell why the rescue is needed.</strong> In the case above, the usage is straightforward. In other cases, it's much less obvious. Take this code:<br />
+``</p>
+
+<pre>(@client.plugin_configurations.detector.configuration['paths'].inject('') {|output, path| output &lt;&lt; "#{h(path)}rn"} rescue '')</pre>
+
+<p>Why is this rescue needed? There's no way to know and the complexity of the expression implies exasperation: &quot;I give up trying to handle all these edge cases cleanly. Let's just throw in a rescue.&quot; So edge cases and bugs are swept under the proverbial rug.</p>
+
+<p><strong>They are a performance hit.</strong> Rescues are activated by raising errors. This involves creating a backtrace and this is one of the slowest operations you can perform. One raise is not going to kill you but if you are printing out 100 items, the costs will add up quickly. Here's some benchmark code:<br />
+``</p>
+
+<pre>require 'benchmark'
+
+puts Benchmark.measure {
+  100000.times {
+    item = nil
+    item.name rescue 'None' # Use rescue
+  }
+}
+puts Benchmark.measure {
+  100000.times {
+    item = nil
+    item ? item.name : 'None' # Use tertiary logic
+  }
+}</pre>
+
+<p>And the results:</p>
+
+<pre>1.120000   0.110000   1.230000 (  1.225845)
+  0.030000   0.000000   0.030000 (  0.034895)</pre>
+
+<p>Rescuing is 30x slower than the equivalent ternary logic expression on Leopard's ruby 1.8.6.</p>
+
+<p>Conclusion? While performance is important, I'd argue that code readability is more important. When you perform a ternary check, as in the benchmark above, it tells the code reader that this item could be nil. Using the equivalent rescue just tells them this expression could fail for some reason. Nuance, edge cases, newly created bugs... All are swept under the rug by the evil rescue.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2008\/04\/01\/expression-rescue-is-evil\/';
+    var disqus_title = 'Expression Rescue is Evil';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2008\/04\/01\/expression-rescue-is-evil\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

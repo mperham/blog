@@ -1,0 +1,122 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> The Three Best Debugging Tools </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>The Three Best Debugging Tools</h1>
+      <small class="post-meta">Sep 12, 2013</small>
+      <div class="post-content">
+        <p><strong>1. Your Coworker</strong></p>
+
+<p>It's happened to me over and over: I'll spend hours trying to track down a problem. In frustration, I'll ask a coworker to look at the code and frequently they will point out the problem in seconds. It's called situational blindness and it means that you will often overlook the bug right in front of your eyes because you've looked at it so much, your mind has started to ignore it.</p>
+
+<p>Your coworker has another valuable trait: they are different than you. They think differently and have a different set of knowledge. A hard bug for you to find might be easy for them. Next time you're frustrated, call over a coworker and see what happens.</p>
+
+<p><strong>2. Your Creative Side</strong></p>
+
+<p>It's happened to me over and over: I'll build something with a flaw that doesn't quite work right. I'll go to sleep frustrated and wake up the next morning knowing exactly what the problem is.</p>
+
+<p>It's well known that we think in two different manners: creatively and logically. When focused on details (such as debugging a problem), we're 100% logical as we jump from thought A to B to C. But it's your creative side that can jump from thought A to thought Z via intuition. Like your coworker, your creative brain thinks differently from your logical brain. By going to sleep, you're calling over that &quot;creative coworker&quot; and asking for help.</p>
+
+<p><strong>3. Your Mental Model of the System</strong></p>
+
+<p>If you don't know the software tools and APIs you are using to solve problems really well, you'll find yourself endlessly debugging. When learning a system like Ruby on Rails for the first few years, debugging is often really just learning how the system works. Software is insanely complex and <strong>every level of the stack is insanely complex</strong>. Abstractions hide much of the complexity and understanding those abstractions well allows you to fit it all within your head.</p>
+
+<p>Malcom Gladwell's maxim that expertise comes with 10,000 hours of practice holds here too. After 5 years of full-time experience (40hrs/wk * 50 wk/yr * 5), you'll have a very strong understanding of your system of choice. That knowledge is very valuable.</p>
+
+<p><strong>Pro tip</strong>: read the documentation for a library that you are going to use, implement your first attempt at using that library, <strong>and then read the documentation again</strong>. The first time will give you an overview and things to look for but frequently you won't comprehend certain aspects due to your inexperience with the library. You almost certainly will comprehend more when you read it the second time.</p>
+
+<p><strong>Conclusion</strong></p>
+
+<p>All of these things have one thing in common: thought. Debugging is thinking through the execution of code <strong>in your head</strong>. By improving your knowledge and looking at the problem from different angles, you can much more effectively debug those hard problems that can be so frustrating.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2013\/09\/12\/the-three-best-debugging-tools\/';
+    var disqus_title = 'The Three Best Debugging Tools';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2013\/09\/12\/the-three-best-debugging-tools\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

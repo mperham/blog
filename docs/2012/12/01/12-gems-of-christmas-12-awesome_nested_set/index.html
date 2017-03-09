@@ -1,0 +1,139 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> 12 Gems of Christmas #12 -- awesome_nested_set </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>12 Gems of Christmas #12 -- awesome_nested_set</h1>
+      <small class="post-meta">Dec 1, 2012</small>
+      <div class="post-content">
+        <p>Category trees are standard e-commerce functionality, allowing the user to filter their results when searching for products. Here's a category tree from Amazon.com:</p>
+
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2012/11/Screen-Shot-2012-11-19-at-7.59.46-PM.png"><img src="http://www.mikeperham.com/wp-content/uploads/2012/11/Screen-Shot-2012-11-19-at-7.59.46-PM.png" alt="" title="Screen Shot 2012-11-19 at 7.59.46 PM" width="197" height="208" class="alignleft size-full wp-image-941" /></a></p>
+
+<p>So if you have a table which holds those categories, how do you write a SQL query which loads a given category PLUS all child categories below it? The answer is that it's extremely difficult/impossible with standard SQL. Oracle can do it with their SQL &quot;connect by&quot; extension or you can change your tree structure into a <a href="https://en.wikipedia.org/wiki/Nested_set_model" title="nested set">nested set</a>.</p>
+
+<p>The <a href="https://github.com/collectiveidea/awesome_nested_set" title="awesome_nested_set">awesome_nested_set</a> gem adds really useful tree functionality to your category table. Need to query for all products in a given category or below in the category tree?</p>
+
+<pre lang="ruby">class Category &lt; ActiveRecord::Base
+  acts_as_nested_set
+  has_many :products
+  belongs_to :parent, :class_name => 'Category'
+  attr_accessible :name, :parent_id, :parent
+end
+
+class Product &lt; ActiveRecord::Base
+  belongs_to :category
+  attr_accessible :category_id, :name, :category
+end
+
+cat = Category.find_by_name("Electronics")
+# look up all children in one query
+subcats = cat.self_and_descendants
+
+# Find all products within Electronics subtree with one query.
+# A bit messy.
+products = Product.active.joins(:category).where('categories.lft > ? and categories.lft &lt;= ?', cat.lft, cat.rgt)
+</pre>
+
+<p>awesome_nested_set is missing some critical documentation, the README explains how to set it up but doesn't cover queries and scopes at all. I couldn't find a way to do something cleaner like so without rolling my own scope:</p>
+
+<pre lang="ruby">cat = Category.find_by_name("Electronics")
+products = Product.active.within_category(cat)
+</pre>
+
+<p>Is this possible? Could the category association provide some built-in nested set scopes? Nevertheless, adding a few custom scopes is a small price to pay: nested sets turn a very hard SQL problem into something easily solved.</p>
+
+<p>UPDATE: I learned of two nice alternatives to awesome_nested_set: <a href="https://github.com/stefankroes/ancestry">ancestry</a> and <a href="https://github.com/mceachen/closure_tree">closure_tree</a>.</p>
+
+<p>Tomorrow I'll show you a great little gem for adding metrics to your Ruby code.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2012\/12\/01\/12-gems-of-christmas-12-awesome_nested_set\/';
+    var disqus_title = '12 Gems of Christmas #12 -- awesome_nested_set';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2012\/12\/01\/12-gems-of-christmas-12-awesome_nested_set\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

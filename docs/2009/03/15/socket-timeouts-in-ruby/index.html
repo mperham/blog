@@ -1,0 +1,158 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Socket Timeouts in Ruby </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Socket Timeouts in Ruby</h1>
+      <small class="post-meta">Mar 15, 2009</small>
+      <div class="post-content">
+        <p>One of Ruby's weaknesses is its poor networking performance. Much of that has to do with the net/http implementation, which uses Ruby's awful Timeout library. The issues with Timeout are <a href="http://blog.headius.com/2008/02/rubys-threadraise-threadkill-timeoutrb.html">well documented</a>. <a href="http://ph7spot.com/articles/system_timer">SystemTimer</a> provides a reliable alternative that also performs better.</p>
+
+<p>However I started today wondering if there was a better way. Enabling timeouts has a huge performance hit on my memcache-client library and reducing the overhead would go a long way to making it perform safely <strong>and</strong> quickly. Since C programs need socket timeouts also, I figured there had to be a low-level alternative, and indeed there is: the <code>SO_SNDTIMEO</code> and <code>SO_RCVTIMEO</code> socket options. It's a bit involved to create a proper socket with these options but possible:</p>
+
+<pre lang="ruby">def connect_to(host, port, timeout=nil)
+      addr = Socket.getaddrinfo(host, nil)
+      sock = Socket.new(Socket.const_get(addr[0][0]), Socket::SOCK_STREAM, 0)
+
+      if timeout
+        secs = Integer(timeout)
+        usecs = Integer((timeout - secs) * 1_000_000)
+        optval = [secs, usecs].pack("l_2")
+        sock.setsockopt Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, optval
+        sock.setsockopt Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, optval
+      end
+      sock.connect(Socket.pack_sockaddr_in(port, addr[0][3]))
+      sock
+    end
+</pre>
+
+<p>There are a few complexities in the code:</p>
+
+<ul>
+<li>We use the low-level operations, <code>Socket.new</code> and <code>connect</code> rather than just <code>TCPSocket.new(host, port)</code> because otherwise we can't set the socket options before the connection is attempted; we want to ensure the connection attempt itself is timed out also.</li>
+<li>We have to look up the host via DNS by hand as some systems (*cough*, OSX) can return either IPv6 or IPv4 addresses and the address family constant used in Socket.new must match the address used in the connect statement.</li>
+<li>The <code>setsockopt</code> method takes a native C struct so we need to construct it using the <code>Array#pack</code> method.</li>
+</ul>
+
+<p>Here's the results, from worst to best:</p>
+
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, normal Ruby timeouts
+                                     user     system      total        real
+mixed:ruby:memcache-client      14.240000   7.470000  21.710000 ( 22.173267)
+</pre>
+
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, SystemTimer 1.1.1
+                                     user     system      total        real
+mixed:ruby:memcache-client      12.400000   1.960000  14.360000 ( 14.857924)
+</pre>
+
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, raw socket timeouts
+                                     user     system      total        real
+mixed:ruby:memcache-client       2.750000   0.620000   3.370000 (  5.841545)
+</pre>
+
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, no socket timeouts
+                                     user     system      total        real
+mixed:ruby:memcache-client       2.760000   0.620000   3.380000 (  5.902549)</pre>
+
+<p>Awesome. <strong>With raw socket timeouts, there is no performance impact!</strong> SystemTimer provides an excellent replacement for Timeout if you want to guarantee a ceiling on the time spent in an arbitrary block, but if you just need timeouts for low-level socket operations, nothing beats the operating system's native socket timeout support.</p>
+
+<p>There is a caveat in the paragraph above: <strong>low-level</strong> socket operations. memcache-client uses three IO methods: read, write and gets. The first two are low-level and time out properly, but gets is built on the low-level read operation; it has to ignore the EAGAIN error in order to ensure it returns a full line of text. So we use a hybrid approach, read and write will use the raw socket timeouts and gets will use SystemTimer. It's not quite as fast as with no/raw timeouts but it's definitely an improvement:</p>
+
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, raw socket timeouts and SystemTimer
+                                     user     system      total        real
+mixed:ruby:memcache-client       7.490000   1.270000   8.760000 (  9.361547)
+</pre>
+
+<p>So we've gone from 22 sec with Timeout to 15 sec with SystemTimer to 9 sec using raw socket timeouts where possible (<a href="http://github.com/mperham/memcache-client/commit/9f5201b77ccb6ef0d021e741cab8468151f2535d">Github commit</a>). For my next trick, I figure I'll rewrite <code>gets</code> to use read so I can remove the need for SystemTimer and Timeout altogether.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2009\/03\/15\/socket-timeouts-in-ruby\/';
+    var disqus_title = 'Socket Timeouts in Ruby';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2009\/03\/15\/socket-timeouts-in-ruby\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

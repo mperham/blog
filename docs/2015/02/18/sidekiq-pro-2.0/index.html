@@ -1,0 +1,167 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Sidekiq Pro 2.0! </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Sidekiq Pro 2.0!</h1>
+      <small class="post-meta">Feb 18, 2015</small>
+      <div class="post-content">
+        
+
+<figure style="float:right">
+  <img src="../../../../wp-content/uploads/2015/02/sidekiq-pro.png" width="303" height="74"/>
+</figure>
+
+<p>I'm happy to announce that <strong><a href="http://sidekiq.org/pro">Sidekiq Pro</a></strong> 2.0 is ready for general use.  There's two major features
+and some refactoring you need to know about.</p>
+
+<h3 id="batches">Batches</h3>
+
+<p>Sidekiq allows you to fire off a set of jobs to process asynchronously but you don't know when the whole set of jobs are complete:</p>
+
+<p><img src="../../../../wp-content/uploads/2015/02/sidekiq.png" alt="no job workflow" /></p>
+
+<p>Sidekiq Pro provides the <strong>Batch</strong> abstraction, it represents a set of jobs; you can attach callbacks
+to be fired when the set of jobs has finished.  This allows more complex job workflows:</p>
+
+<p><img src="../../../../wp-content/uploads/2015/02/pro1.png" alt="simple job workflow" /></p>
+
+<p>For 2.0, the Batch implementation and data model was overhauled for higher performance, much smaller size
+and <strong>Batches can now be nested</strong>: a job within a Batch can itself create a child Batch of jobs.  The callbacks for
+the parent batch will only be fired once the child batch callbacks have finished.</p>
+
+<p><img src="../../../../wp-content/uploads/2015/02/pro2.png" alt="complex job workflow" /></p>
+
+<p>This was some of the hardest code I've ever written (it requires a bag of buzzwords: asynchronous, distributed,
+transactional, threadsafe and fast!) but I'm really proud of the outcome.  Sidekiq Pro should be
+able to handle job workflows of any depth now.</p>
+
+<p>As part of 2.0, the batch data model changed significantly but have no fear: existing 1.x batches will process as normal.</p>
+
+<h3 id="scheduler">Scheduler</h3>
+
+<p>Sidekiq's scheduler scans the scheduler set for jobs to perform.  Unfortunately the way it scans and enqueues jobs is not atomic.
+There is a very very small but real chance a scheduled job could be lost.</p>
+
+<p>For 2.0, I've written a Lua-based scheduler which is atomic and enqueues 50-100x faster than the existing scheduler since it does
+not require any network round trips.  It's very easy to enable:</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">configure_server</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">reliable_scheduler!</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p>It's optional because it does require Redis 2.6.</p>
+
+<h3 id="miscellaneous-changes">Miscellaneous Changes</h3>
+
+<ul>
+<li>Various deprecated APIs were removed</li>
+<li>Reliability features are now enabled via methods, not <code>require</code>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Client</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">reliable_push!</span>
+
+<span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">configure_server</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">reliable_fetch!</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Here's the <a href="https://github.com/mperham/sidekiq/blob/master/Pro-2.0-Upgrade.md">Sidekiq Pro 2.0 Upgrade Notes</a>.
+If you're not a Sidekiq Pro customer yet, <a href="http://sidekiq.org/pro/">you can buy Sidekiq Pro here</a>.  Enjoy!</p>
+
+<p>Diagrams courtesy of the very nifty <a href="http://draw.io">draw.io</a>.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2015\/02\/18\/sidekiq-pro-2.0\/';
+    var disqus_title = 'Sidekiq Pro 2.0!';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2015\/02\/18\/sidekiq-pro-2.0\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

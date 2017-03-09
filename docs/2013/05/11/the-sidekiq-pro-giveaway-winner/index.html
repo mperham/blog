@@ -1,0 +1,116 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> The Sidekiq Pro Giveaway Winner! </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>The Sidekiq Pro Giveaway Winner!</h1>
+      <small class="post-meta">May 11, 2013</small>
+      <div class="post-content">
+        <p>I'm happy to announce the winner of my <a href="http://sidekiq.org/pro">Sidekiq Pro</a> 1.0 license giveaway is Libin Pan, whose company already uses Sidekiq pretty heavily, having run <strong>billions</strong> of jobs through Sidekiq in the last year. Let's hear his story:<br />
+</p>
+
+<blockquote>
+<p>I work for Demandbase, a B2B marketing company, we help our client to identify the companies who visited their online properties.</p>
+
+<p>We were using resque before, because of the nature of forking, the memory and compute power is a big cost for us. So we switched to sidekiq soon after you released it. And we love it.</p>
+
+<p><img src="http://www.mikeperham.com/wp-content/uploads/2013/05/BJzXcEFCcAE-8a2.jpg" alt="BJzXcEFCcAE-8a2" width="658" height="178" class="aligncenter size-full wp-image-1339" /></p>
+
+<p>We're using it in several projects, this screenshot is just one of them, a larger one of course. This sidekiq cluster handles the aggregation of realtime traffic for some clients. There're two major sidekiq workers, one normalizes the traffic, another one updates all the aggregation counts. Every task is very small and fast, and sidekiq is a perfect tool for it.</p>
+
+<p>There're 4 sidekiq worker servers, and every one has 4 processes which every one has 25 workers. As we are all on EC2, we use spot instances for part of the cluster so we can add more workers as needed, so it could grow up from 400 to 800 or more.</p>
+
+<p>The technology is nothing special but solid, Rails + Redis + Sharded MySQL.</p>
+</blockquote>
+
+<p>Thanks Libin and everyone else who entered. I hope Sidekiq Pro makes your system even better!</p>
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2013\/05\/11\/the-sidekiq-pro-giveaway-winner\/';
+    var disqus_title = 'The Sidekiq Pro Giveaway Winner!';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2013\/05\/11\/the-sidekiq-pro-giveaway-winner\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

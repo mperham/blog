@@ -1,0 +1,120 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Background Processing vs Message Queueing </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Background Processing vs Message Queueing</h1>
+      <small class="post-meta">May 4, 2011</small>
+      <div class="post-content">
+        <p>One common simplification I see engineers make is equating message queueing with background processing. This is what they are missing: <strong>message queueing is a superset of background processing</strong>. All message processing is done in the background but background processing does not have to be done via message queues.</p>
+
+<p>Take a simple use case: &quot;I want to send a welcome email when a user registers&quot;. Commonly you want to send this email in the background so it does not impact the user's experience. Do you need to install ActiveMQ, RabbitMQ or Resque to do this? Certainly not.</p>
+
+<p>Message queueing is a fundamental architectural pattern when building complex systems. Your various system components might be written by different teams but they communicate through messages sent via queues. One component can send a message to another component, saying &quot;please send this email&quot;. But message queueing systems have their cost: they are complex because they are designed to be the foundation of your distributed system. They must be deployed and monitored like the rest of your infrastructure; they must be reliable and highly available.</p>
+
+<p>I think that a lot of people install a message queue to perform simple background processing; it doesn't need to be that complicated. The fundamental question to me is, &quot;Am I communicating between different subsystems or just trying to spin off some work?&quot; The registration email use case comes up almost immediately when building nearly every website. Consider also the case where you want to perform some action that might take 30-60 seconds and have the user's browser poll for the result. Spinning off a separate thread to perform this work is entirely sufficient and much simpler. This is the reasoning behind my <a href="https://github.com/mperham/girl_friday">girl_friday</a> project. I want a simple and reliable way to perform background processing without needing the complexity of an MQ system. Let's examine a few characteristics of girl_friday:</p>
+
+<ul>
+<li>In-process -- your background processor is part of your Ruby application and has access to the exact same codebase as your webapp. No need to share ActiveRecord models across projects via git or filesystem trickery. No need to deploy or monitor a separate set of processes.</li>
+<li>Threaded -- huge memory savings because you don't have to spin up other processes which load the exact same code. Threads are notoriously tricky to get correct so girl_friday uses Actors for the equivalent behavior in a simpler and safer API.</li>
+</ul>
+
+<p>I have issues with the other contenders in the space:</p>
+
+<ul>
+<li>delayed_job -- stores jobs in your RDBMS and polls for jobs which is a terribly unscalable idea. Spins off processes instead of threads.</li>
+<li>resque -- forks a new process for every message. Safe but memory hungry.</li>
+</ul>
+
+<p>The biggest caveat with girl_friday is threading, of course. Typical Ruby deployments aren't thread-friendly but I'd like to help change that. Rainbows! is thread-friendly, as are all the JRuby app servers. The <a href="http://github.com/mperham/girl_friday/wiki">girl_friday wiki</a> gives more specifics about features and usage. Are there any other dimensions to the problem that I'm missing? Any other projects that solve a similar problem? Post a comment and let me know!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2011\/05\/04\/background-processing-vs-message-queueing\/';
+    var disqus_title = 'Background Processing vs Message Queueing';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2011\/05\/04\/background-processing-vs-message-queueing\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

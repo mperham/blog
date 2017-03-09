@@ -1,0 +1,131 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Cassandra Internals -- Reading </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Cassandra Internals -- Reading</h1>
+      <small class="post-meta">Mar 17, 2010</small>
+      <div class="post-content">
+        <p><img src="http://incubator.apache.org/cassandra/media/img/cassandra_logo.png" alt="Cassandra logo" /></p>
+
+<p>In my <a href="../../../../2010/03/13/cassandra-internals-writing/">previous post</a>, I discussed how writes happen in Cassandra and why they are so fast. Now we'll look at reads and learn why they are slow.</p>
+
+<p><strong>Reading and Consistency</strong></p>
+
+<p>One of the fundamental thereoms in distributed systems is <a href="http://en.wikipedia.org/wiki/CAP_theorem">Brewer's CAP theorem</a>: distributed systems can have Consistency, Availability and Partition-tolerance properties but can only guarantee two. In the case of Cassandra, they guarantee AP and loosen consistency to what is known as <em>eventual consistency</em>. Consider a write and a read that are very close together in time. Let's say you have a key &quot;A&quot; with a value of &quot;123&quot; in your cluster. Now you update &quot;A&quot; to be &quot;456&quot;. The write is sent to N different nodes, each of which takes some time to write the value. Now you ask for a read of &quot;A&quot;. Some of those nodes might still have &quot;123&quot; for the value while others have &quot;456&quot;. They will all eventually return &quot;456&quot; but it is not guaranteed when (in practice, usually just a few milliseconds). You'll see why this is important in a second.</p>
+
+<p>Reads are similar to writes in that your client makes a read request to a single random node in the Cassandra cluster (aka the Storage Proxy). The proxy determines the nodes in the ring (based on the replica placement strategy) that hold the N copies of the data to be read and makes a read request to each node. Because of the eventual consistency limitations, Cassandra allows the client select the strength of the read consistency:</p>
+
+<ul>
+<li>Single read -- the proxy returns the first response it gets. Can easily return stale data.</li>
+<li>Quorum read -- the proxy <strong>waits for a majority to respond with the same value</strong>. This makes it much more difficult to get stale data (nodes would have to go down) but slower.</li>
+</ul>
+
+<p>In the background, the proxy also performs <em>read repair</em> on any inconsistent responses. The proxy will send a write request to any nodes returning older values to ensure that the nodes return the latest value in the future. There are a number of edge cases here that I'm not clear how Cassandra deals with:</p>
+
+<ul>
+<li>What if an even number of nodes reply, with half returning a value of &quot;X&quot; and the other half returning a value of &quot;Y&quot;? Since each column value is timestamped, presumably it will use the timestamp as a tie breaker.</li>
+<li>What if two nodes return &quot;X&quot; with an old timestamp and one node returns &quot;Y&quot; with a newer timestamp? Does quorum override the clock?</li>
+<li>What if the clocks on the cluster nodes are out of sync?</li>
+</ul>
+
+<p><strong>Scanning ranges</strong></p>
+
+<p>Cassandra works fine as a key/value store: you give it the key and it will return the value for that key. But this is often not enough to answer critical questions: what if I want to read all users whose last name starts with Z? Or read all orders placed between 2010-02-01 and 2010-03-01? To do this, Cassandra must know how to determine the nodes which hold the corresponding values. This is done with a <em>partitioner</em>. By default, Cassandra uses a <em>RandomPartitioner</em> which is guaranteed to spread the load evenly across your cluster but cannot be used for range scanning. Instead a ColumnFamily can be configured to use an <em>OrderPreservingPartitioner</em>, which knows how to map a range of keys directly onto one or more nodes. In essence, it knows which node(s) hold the data for your alphabetically-challanged users and for February's orders.</p>
+
+<p><strong>Reading on an Individual Node</strong></p>
+
+<p>So all of that distributed system nonsense aside, what does each node do when performing a read? Recall that Cassandra has two levels of storage: Memtable and SSTable. The Memtable read is relatively painless -- we are operating in memory so the data is relatively small and iterating through the contents is fast as possible. To scan the SSTable, Cassandra uses a row-level column index and bloom filter to find the necessary blocks on disk, deserializes them and determines the actual data to return. There's a lot of disk IO here which ultimately makes the read latency higher than a similar DBMS. Cassandra does provide some row caching which solves much of that latency.</p>
+
+<p>That's a whirlwind tour of Cassandra's read path. Take a look at the <a href="http://wiki.apache.org/cassandra/StorageConfiguration">StorageConfiguration</a> wiki page for much more content on this subject. Next up, I'll discuss some of the various &quot;tricks&quot; Cassandra uses to solve the myriad of edge cases inherent in distributed systems.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2010\/03\/17\/cassandra-internals-reading\/';
+    var disqus_title = 'Cassandra Internals -- Reading';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2010\/03\/17\/cassandra-internals-reading\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

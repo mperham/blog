@@ -1,0 +1,195 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> MiniTest -- Ruby 1.9&#39;s test framework </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>MiniTest -- Ruby 1.9&#39;s test framework</h1>
+      <small class="post-meta">Sep 25, 2012</small>
+      <div class="post-content">
+        
+
+<p>(this is a classic post I wrote two years ago for another site which is shutting down, saving here since it's still very useful)</p>
+
+<p>Aaron Patterson gave a talk at GoGaRuCo 2010 about the latest changes in Ruby 1.9.2's standard library and one of the topics he spoke on was MiniTest. The Ruby community has been particularly innovative in the world of testing and Ruby 1.8's Test::Unit library is circa 2003, providing nothing but the most basic testing API. Every Ruby project I've ever worked on has skipped Test::Unit and pulled in many different test gems (e.g. rspec, shoulda, mocha, flexmock) to provide a modern test infrastructure.</p>
+
+<h2 id="test-unit-refresher">Test::Unit Refresher</h2>
+
+<p>With Test::Unit, you just subclass Test::Unit::TestCase, name your methods starting with 'test' and include one or more assertions to verify:</p>
+
+<pre lang="ruby">class TestSomething &lt; Test::Unit::TestCase
+  def test_foo
+    foo = Foo.new
+    assert foo
+    bar = nil
+    assert_nil bar
+  end
+end
+</pre>
+
+<p>Believe it or not, Test::Unit is actually rather slow and bloated. It includes a number of GUIs (GTk v1, GTk v2, FxRuby) that are rarely if ever used. A revamp was needed...</p>
+
+<h2 id="enter-minitest">Enter MiniTest</h2>
+
+<p>Ruby 1.9 includes an updated version of the venerable Test::Unit which removes a lot of the more esoteric features, called <a href="http://bfts.rubyforge.org/minitest/">MiniTest</a>. You don't need to do anything to use MiniTest in 1.9, it replaces Test::Unit and provides a backwards compatible API that provides the 90% of Test::Unit that people were using often. You can even use minitest on Ruby 1.8 by installing the `minitest` gem. Aside from the Test::Unit API, several improvements over Test::Unit are included:</p>
+
+<p><strong>Randomization</strong></p>
+
+<p>When you run your test suite, you might notice this at the bottom:</p>
+
+<pre>Test run options: --seed 1261
+</pre>
+
+<p>This is because MiniTest by default runs your tests in random order. This is a good thing because it prevents your tests from accidentally becoming order-dependent due to &quot;state leakage&quot;. If you find that your tests are breaking randomly, it is most likely due to this state leakage. You can run your tests with the same seed to reproduce the problem:</p>
+
+<pre>rake TESTOPTS="--seed=1261"
+</pre>
+
+<p><strong>Skip Tests</strong></p>
+
+<p>MiniTest allows you to easily skip tests that are not working with the `skip` method:</p>
+
+<pre lang="ruby">def test_foo
+  skip("Need to debug this...")
+  assert_equal false, true
+end
+</pre>
+
+<p>which results in this:</p>
+
+<pre>83 tests, 106 assertions, 0 failures, 0 errors, 1 skips
+</pre>
+
+<p><strong>Verbosity</strong></p>
+
+<p>MiniTest also has a '-v' flag which will print out the time each test takes - excellent for determining those tests which are slowing down your test suite:</p>
+
+<pre>rake TESTOPTS="-v"
+</pre>
+
+<p>which emits a line for each test. It's too bad it doesn't have an option for sorting or a minimum time (like 0.1 sec); this would be useful for suites which have thousands of tests.</p>
+
+<pre>TestMemCache#test_check_size_off: 0.02 s: .
+TestMemCache#test_check_size_on: 0.01 s: .
+TestMemCache#test_consistent_hashing: 0.11 s: .
+TestMemCache#test_crazy_multithreaded_access: 0.00 s: S
+TestMemCache#test_custom_encoding: 0.00 s: .
+TestMemCache#test_decr: 0.00 s: .
+</pre>
+
+<p><strong>BDD DSL</strong></p>
+
+<p>MiniTest also includes a basic BDD DSL like RSpec:</p>
+
+<pre lang="ruby">require 'minitest/spec'
+
+describe Meme do
+  before do
+    @meme = Meme.new
+  end
+
+  describe "when asked about cheeseburgers" do
+    it "should respond positively" do
+      @meme.i_can_has_cheezburger?.must_equal "OHAI!"
+    end
+  end
+
+  describe "when asked about blending possibilities" do
+    it "won't say no" do
+      @meme.does_it_blend?.wont_match /^no/i
+    end
+  end
+end
+</pre>
+
+<p>It even includes a basic mocking API which you can read about in the <a href="http://bfts.rubyforge.org/minitest/">MiniTest documentation</a>. These changes are a great step forward for Ruby's standard test library. Personally I'm going to use MiniTest on my next project and see if I can slim down my test dependencies. Happy coding!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2012\/09\/25\/minitest-ruby-1-9s-test-framework\/';
+    var disqus_title = 'MiniTest -- Ruby 1.9\x27s test framework';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2012\/09\/25\/minitest-ruby-1-9s-test-framework\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

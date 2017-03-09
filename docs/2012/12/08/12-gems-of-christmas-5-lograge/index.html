@@ -1,0 +1,130 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> 12 Gems of Christmas #5 -- lograge </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>12 Gems of Christmas #5 -- lograge</h1>
+      <small class="post-meta">Dec 8, 2012</small>
+      <div class="post-content">
+        <p>Rails has a problem: its production logging is somewhat lacking. By default, Rails will emit a bunch of lines for each request, which makes grepping the output tougher than it should be. Look at this, it's nice to look at but painful to aggregate:</p>
+
+<pre>Started GET "/" for 127.0.0.1 at 2012-03-10 14:28:14 +0100
+Processing by HomeController#index as HTML
+  Rendered text template within layouts/application (0.0ms)
+  Rendered layouts/_assets.html.erb (2.0ms)
+  Rendered layouts/_top.html.erb (2.6ms)
+  Rendered layouts/_about.html.erb (0.3ms)
+  Rendered layouts/_google_analytics.html.erb (0.4ms)
+Completed 200 OK in 79ms (Views: 78.8ms | ActiveRecord: 0.0ms)
+</pre>
+
+<p><a href="https://github.com/roidrage/lograge">Lograge</a> 'tames' Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here's some output from <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> production logging with lograge enabled:</p>
+
+<pre>Nov 24 13:31:27 app-1 rails[22622]: method=GET path=/brand-event/2818/show-product/183537?f=mi format=html controller=presentations action=show_product status=200.00 duration=237.54 view=206.14 db=17.12
+Nov 24 13:31:28 app-1 rails[22630]: method=GET path=/brand-event/2818/show-product/183539?f=mi format=html controller=presentations action=show_product status=200.00 duration=125.37 view=94.05 db=17.59
+Nov 24 13:31:28 app-1 rails[22622]: method=GET path=/brand-event/2818/show-product/183541?f=mi format=html controller=presentations action=show_product status=200.00 duration=117.47 view=86.00 db=16.79
+Nov 24 13:31:28 app-1 rails[22630]: method=GET path=/brand-event/2818/show-product/183548?f=mi format=html controller=presentations action=show_product status=200.00 duration=132.09 view=97.69 db=20.69
+Nov 24 13:31:28 app-1 rails[22622]: method=GET path=/brand-event/2818/show-product/183554?f=mi format=html controller=presentations action=show_product status=200.00 duration=119.36 view=84.44 db=18.87
+Nov 24 13:31:29 app-1 rails[22622]: method=GET path=/basket/tracking_pixels format=html controller=baskets action=tracking_pixels status=200.00 duration=71.47 view=41.00 db=23.65
+</pre>
+
+<p>Ah, much cleaner! (and notice the HTTP status value is a float. :-) This format gives us the critical request information required for performance tuning and is easily digestible by simple scripts. Enabling it is trivial:</p>
+
+<pre lang="ruby"># config/environments/production.rb
+MyApp::Application.configure do
+  config.lograge.enabled = true
+end
+</pre>
+
+<p>Much happier logs lead to much happier developers. Happy logging! Tomorrow I'll cover a gem (or two!?) designed to make email development happier...</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2012\/12\/08\/12-gems-of-christmas-5-lograge\/';
+    var disqus_title = '12 Gems of Christmas #5 -- lograge';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2012\/12\/08\/12-gems-of-christmas-5-lograge\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

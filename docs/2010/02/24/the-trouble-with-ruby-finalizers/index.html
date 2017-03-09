@@ -1,0 +1,129 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> The Trouble with Ruby Finalizers </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>The Trouble with Ruby Finalizers</h1>
+      <small class="post-meta">Feb 24, 2010</small>
+      <div class="post-content">
+        <p>I was test driving <a href="http://banisterfiend.wordpress.com/2009/10/14/the-devil-image-library-for-ruby/">Devil</a>, the developer's image library, recently to see if it would work for us in a long-living daemon. Task #1 to that end is to verify the absence of memory leaks, which seem to be common in image libraries. It was almost immediately apparent that Devil contained a large memory leak. So I worked with John Mair to fix the issue.</p>
+
+<p>Devil has a Devil::Image class which uses a finalizer to delete native resources when the image is garbage collected. The problem is that Ruby finalizers are notoriously difficult to use properly so often times they aren't actually run. Here's why:</p>
+
+<pre lang="ruby">class Devil::Image
+    attr_reader :name, :file
+
+    def initialize(name, file)
+        @name = name
+        @file = file
+
+        ObjectSpace.define_finalizer( self, proc { IL.DeleteImages(1, [name]) } )
+    end
+end
+</pre>
+
+<p>So what's wrong with this code? The issue is that the finalizer proc is a closure which holds a reference to it's <code>self</code>, thus making it impossible for the image object to ever be garbage collected. When creating a finalizer proc, you should always use a class method to create the proc so that it does not hold a reference to the corresponding instance, like so:</p>
+
+<pre lang="ruby">def initialize(name, file)
+      @name = name
+      @file = file
+
+      ObjectSpace.define_finalizer( self, self.class.finalize(name) )
+  end
+  def self.finalize(name)
+    proc { IL.DeleteImages(1, [name]) }
+  end
+</pre>
+
+<p>A subtle and evil bug, just like its namesake!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2010\/02\/24\/the-trouble-with-ruby-finalizers\/';
+    var disqus_title = 'The Trouble with Ruby Finalizers';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2010\/02\/24\/the-trouble-with-ruby-finalizers\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

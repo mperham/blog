@@ -1,0 +1,230 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> How to Charge for your Open Source </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>How to Charge for your Open Source</h1>
+      <small class="post-meta">Nov 23, 2015</small>
+      <div class="post-content">
+        
+
+<figure style="float: right;">
+  <img style="border: solid white 10px;" src="http://www.slate.com/content/dam/slate/blogs/moneybox/2014/10/24/find_unclaimed_property_check_these_sites_to_see_if_somebody_owes_you_money/109471093-currency-is-seen-in-this-january-30-2001-image-afp.jpg.CROP.promo-mediumlarge.jpg" width="260px" />
+</figure>
+
+<p>Every month or so we hear of another high profile open source developer
+who flips the table and rages about open source because of burnout, most recently <a href="http://www.coglib.com/~icordasc/blog/2015/11/corporations-and-oss-do-not-mix.html">Ian Cordasco</a> and <a href="http://ryanbigg.com/2015/11/open-source-work/">Ryan Bigg</a>.
+Does this sound familiar?</p>
+
+<ol>
+<li>Spend many hours writing software.</li>
+<li>Spend many hours supporting users and solving their problems.</li>
+<li>Make $0.</li>
+</ol>
+
+<p>If you were a freelancer and did that with clients, you'd be:</p>
+
+<ol>
+<li>Overwhelmed with people asking for your help.</li>
+<li>Quickly starve with an empty bank account.</li>
+</ol>
+
+<p>So why is it noble for OSS developers to do it?  If a library would cost
+a client $5000 in your time to develop, why not sell the library as a product
+and charge each user one hour of your time, say $150?  Money doesn't
+solve burnout but think of it this way: almost every issue email you get is a
+net negative on your mental health, almost every sale email you get is a net
+positive.</p>
+
+<p>&quot;Corporations need to step up.&quot;</p>
+
+<p>99% of corporations will do what they are legally obligated to do, no more or less.
+So make them do something!  <strong>The easiest way to make someone value your time and software is to charge for it.</strong>
+The goal of this blog post is not to rant about hypotheticals but rather
+<strong>show you how easy it is to charge for your work</strong>.</p>
+
+<h2 id="sidenote">Sidenote</h2>
+
+<p>I don't want to argue freedom and capitalism in the comments.  If software freedom comes at
+the expense of burning out software developers, that's not freedom,
+that's <a href="https://en.wikipedia.org/wiki/Tragedy_of_the_commons">tragedy of the commons</a>.
+By charging for your work, you stop its exploitation.</p>
+
+<h2 id="legal">Legal</h2>
+
+<p>Remember: <strong>Open Source != Free Software</strong>.  The source may be viewable
+on GitHub but that doesn't mean anyone can use it for any purpose.
+There's no reason you can't make your source code accessible but also
+charge to use it.  <strong>As long as you are the owner of the code, you have
+the right to license it however you want.</strong></p>
+
+<ol>
+<li>Make sure your project documents the fact that <strong>contributors must
+assign all rights to you.</strong> This allows you to accept pull requests.  Some
+projects require a <a href="http://oss-watch.ac.uk/resources/cla">CLA</a>; I
+think that's overly conservative but IANAL.</li>
+<li>License the project as AGPL by default by adding a <code>LICENSE</code> file with
+the AGPL in it.  The AGPL requires users to open source any software
+which uses your library; businesses will pay to avoid it.  This is exactly what we want.</li>
+<li>Add an MIT license in a <code>COMM-LICENSE</code> file.</li>
+<li>Note in your README that the licensing is AGPL by default but an MIT
+license is available for purchase.</li>
+</ol>
+
+<p>Note this is the simplest thing that might work, not what I do.  MIT contains a number
+of serious problems for commercial software; a real business would want to use a custom license which
+forbids redistribution and sublicensing.</p>
+
+<h2 id="commerce">Commerce</h2>
+
+<p>This assumes you are in the United States.</p>
+
+<ol>
+<li>Open a <a href="https://plasso.co/">Plasso account</a>.  You'll also open a
+Stripe account as part of the signup, connected to your bank account.
+(I have no connection with Plasso aside from being familiar with
+their platform as I use it to sell Sidekiq Pro.  I've also seen
+people use Wufoo or FastSpring.)</li>
+<li>Determine your pricing.  Decide if you want to charge one-time or
+as a subscription.  More complex projects can easily justify
+ongoing payment.  You can also charge per major version,
+like books do with first edition, second edition, etc.
+For small libraries with no guaranteed support, I think charging your
+hourly rate per major version is entirely reasonable.</li>
+<li>Once you have created a product page in Plasso, put the link in your README.
+Here's <a href="https://plasso.co/s/YSeEjhi5ga">Sidekiq Pro's product page</a> on Plasso for example.</li>
+<li>Money will appear in your bank account two days after purchase.
+You'll get an annual 1099-K from Stripe which (IIRC) you report as
+miscellaneous income on your annual tax return.</li>
+</ol>
+
+<p>That's it!  Upon purchase, the customer gets an email receipt from Plasso that says they
+bought the commercial license option for their records.</p>
+
+<p>Well done, you just became a professional open source developer
+and thought leader in our industry.  Tweet at @mperham so I can congratulate
+you personally!</p>
+
+<p>Just because you charge for something doesn't guarantee you will
+make any money.  <strong>But if you don't charge for it, I guarantee you will make no
+money.</strong></p>
+
+<h2 id="denouement">Denouement</h2>
+
+<p>Consider what we've done here: your project is still Open Source but
+we've added a method for grateful users to support you and a legal mechanism forcing
+businesses to pay if they want to use your library and not open
+source their application due to the AGPL.</p>
+
+<p>Now it's up to you how much time and effort you want to spend evangelizing and
+supporting your work.  If you think having users feels good, just wait until you get a few
+customers and can pay for a vacation each year with your OSS work. Good luck!</p>
+
+<h2 id="notes">Notes</h2>
+
+<ul>
+<li>&quot;But what about...&quot; Money doesn't solve all problems.  This won't work for
+every developer, every library or every project.  The world is complex and your mileage may vary.</li>
+<li>Having unpaid collaborators can feel a little weird at first but reality is
+most smaller OSS projects have a single person doing 95% of the work.
+If this is true, be grateful for unpaid help but don't feel guilty about keeping 100% of the income.</li>
+<li>&quot;Then users will just use some other free library&quot; - and you just
+reduced your support load.  <strong>You don't want free users who don't value your effort.</strong>
+Let someone else deal with them and suffer the burnout.
+Focus on making the best, most useful library you can that solves your
+own need.</li>
+<li>&quot;Great, now I've got two jobs!&quot; You have just as much
+commitment as you had when building a free library. You aren't
+guaranteeing any support.</li>
+</ul>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2015\/11\/23\/how-to-charge-for-your-open-source\/';
+    var disqus_title = 'How to Charge for your Open Source';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2015\/11\/23\/how-to-charge-for-your-open-source\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

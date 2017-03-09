@@ -1,0 +1,128 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Using memcache-client 1.6.x in Rails &amp;lt; 2.3 </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Using memcache-client 1.6.x in Rails &amp;lt; 2.3</h1>
+      <small class="post-meta">Mar 3, 2009</small>
+      <div class="post-content">
+        <p>Jemery Kemper <a href="http://github.com/rails/rails/commit/e56b3e4c0b60b2b86f5ca9c5e5a0b22fa34d37ab">recently upgraded</a> Rails 2.3's vendored copy of memcache-client to the 1.6.4 release. But what do you do if you are running Rails 2.1/2.2 and want to take advantage of the massive speedup in 1.6.x? You write some really ugly code that performs brain surgery on the Ruby environment to override ActiveSupport. Create <code>config/initializers/memcache-client-upgrade.rb</code> with this code:</p>
+
+<pre lang="ruby">require 'rubygems'
+
+# Brain surgery to use our own version of memcache-client without
+# having to modify activesupport directly.
+# Unload any previous instance of the class
+if Object.const_defined? :MemCache
+  Object.instance_eval { remove_const :MemCache }
+end
+# Pull in the exact version we want
+gem 'memcache-client', '1.6.5'
+# Ensure that the memcache-client path is at the front of the loadpath
+$LOAD_PATH.each do |path|
+  if path =~ /memcache-client/
+    $LOAD_PATH.delete(path)
+    $LOAD_PATH.unshift(path)
+  end
+end
+# If Ruby thinks it's already loaded memcache.rb, force
+# a reload otherwise just require.
+if $".find { |file| file =~ /Amemcache.rbZ/ }
+  load 'memcache.rb'
+else
+  require 'memcache'
+end
+</pre>
+
+<p>If someone knows of a cleaner way to do this, please let me know.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2009\/03\/03\/using-memcache-client-16x-in-rails-23\/';
+    var disqus_title = 'Using memcache-client 1.6.x in Rails \x26lt; 2.3';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2009\/03\/03\/using-memcache-client-16x-in-rails-23\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

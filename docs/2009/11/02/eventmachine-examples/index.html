@@ -1,0 +1,108 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> EventMachine Examples </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>EventMachine Examples</h1>
+      <small class="post-meta">Nov 2, 2009</small>
+      <div class="post-content">
+        <p>I needed to create a simple, but IO-intensive, thumbnailing service for OneSpot last week. This service acts as a proxy to S3 and so a blocking implementation would not scale well, even if threaded. I wanted to use EventMachine instead. Lessons learned:</p>
+
+<ul>
+<li>The programming model is a mind twist and takes a long time to understand. The sprinkling of implementation at various layers makes it harder. I've spent several days now reading through EventMachine, Thin, Rack and em-http-request source code.</li>
+<li>There's <strong>no</strong> non-trivial examples out there. It seems like every example is 10 lines of &quot;Hello World&quot; code with no samples of how to integrate multiple pieces. Ok, here's a 10 line async web server. Now how do I integrate an async call to the DB? How do I make an async 3rd party web service call?</li>
+<li>There's <strong>no</strong> testing support. No libraries for doing async testing and no best practices or suggestions on how to test.</li>
+</ul>
+
+<p>So how can we make things better rather than just complain? I'm going to show you a non-trivial example. In return, I want you to send me more examples. <a href="http://github.com/mperham/evented">Evented</a> is my new Github repository for EventMachine examples. The first example is that big chunk of code that I puzzled over for the last few days which implements the thumbnailing service using Thin, S3, image_science and em-http-request. But I want more examples and I'd love to hear ideas on how to test this type of code. Leave a comment, send a pull request, and help me help you!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2009\/11\/02\/eventmachine-examples\/';
+    var disqus_title = 'EventMachine Examples';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2009\/11\/02\/eventmachine-examples\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

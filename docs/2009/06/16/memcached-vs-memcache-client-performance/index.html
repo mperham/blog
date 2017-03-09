@@ -1,0 +1,127 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> memcached vs memcache-client Performance </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>memcached vs memcache-client Performance</h1>
+      <small class="post-meta">Jun 16, 2009</small>
+      <div class="post-content">
+        <p><a href="http://github.com/fauna/memcached">memcached</a> is Evan Weaver's Ruby wrapper around the libmemcached C library and widely regarded as quite fast. After an hour of trying, I finally got a build of memcached to actually compile and install on my machine (the trick: you need to download the custom packages Evan links on his blog, nothing else seems to work). Here's the results:</p>
+
+<pre>== memcached 0.13 + libmemcached 0.25.4 versus memcache-client 1.7.4
+
+                                     user     system      total        real
+set:plain:noblock:memcached      0.090000   0.030000   0.120000 (  0.277929)
+set:plain:memcached              0.220000   0.270000   0.490000 (  1.251547)
+set:plain:memcache-client        0.610000   0.270000   0.880000 (  1.670718)
+set:ruby:noblock:memcached       0.150000   0.020000   0.170000 (  0.309201)
+set:ruby:memcached               0.300000   0.290000   0.590000 (  1.390354)
+set:ruby:memcache-client         0.670000   0.270000   0.940000 (  1.713558)
+get:plain:memcached              0.240000   0.270000   0.510000 (  1.169909)
+get:plain:memcache-client        0.850000   0.270000   1.120000 (  1.885270)
+get:ruby:memcached               0.270000   0.280000   0.550000 (  1.229705)
+get:ruby:memcache-client         0.890000   0.260000   1.150000 (  1.861660)
+multiget:ruby:memcached          0.190000   0.090000   0.280000 (  0.396264)
+multiget:ruby:memcache-client    0.530000   0.100000   0.630000 (  0.901016)
+missing:ruby:memcached           0.280000   0.290000   0.570000 (  1.254400)
+missing:ruby:memcached:inline    0.300000   0.290000   0.590000 (  1.235122)
+missing:ruby:memcache-client     0.570000   0.250000   0.820000 (  1.461293)
+mixed:ruby:noblock:memcached     0.540000   0.620000   1.160000 (  2.429200)
+mixed:ruby:memcached             0.580000   0.570000   1.150000 (  2.610819)
+mixed:ruby:memcache-client       1.580000   0.540000   2.120000 (  3.632775)
+</pre>
+
+<p>In most cases, memcache-client is within 33-50% of the performance of memcached. This is amazing for a (mostly) pure Ruby library performing a lot of network IO against a C library which has been tuned for speed! I hope that puts to bed any lingering doubts that memcache-client is slow.</p>
+
+<p>Remember: if you are using Rails 2.3, just &quot;gem install memcache-client&quot; and Rails will pick up the latest version with all these performance improvements.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2009\/06\/16\/memcached-vs-memcache-client-performance\/';
+    var disqus_title = 'memcached vs memcache-client Performance';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2009\/06\/16\/memcached-vs-memcache-client-performance\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

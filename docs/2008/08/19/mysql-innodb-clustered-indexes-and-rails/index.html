@@ -1,0 +1,108 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> MySQL InnoDB Clustered Indexes and Rails </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>MySQL InnoDB Clustered Indexes and Rails</h1>
+      <small class="post-meta">Aug 19, 2008</small>
+      <div class="post-content">
+        <p>Joe has written an excellent post about one of the more arcane scalability changes you can make to your ActiveRecord schema.  In essence, the performance problem is this: mysql tries to write rows in order of the primary key index and ActiveRecord creates an artificial PK called ID.  So if I write rows #19 and #20, they will be right next to each other on disk, which is fine if 19 and 20 are related.  If they have no relation, their proximity is useless.</p>
+
+<p>In practice, this is not a big problem for most tables.  Where it becomes an issue is with tables having millions of rows where looking for 5000 rows might mean 5000 seeks of a disk head, or 10 seconds of wall clock time.  These seeks are necessary because we aren't looking for rows based on ID but rather based on some other application criteria.</p>
+
+<p>Instead what we need to do is make sure MySQL uses a composite key which is related to the WHERE clause we will use to query the rows.  In the case of FiveRuns, we collect metric data from many different clients and write those values to a table.  Since the clients report constantly, row #100 might be for client #1 and row #101 might be for client #2.  But realize that when we fetch the data, we always add &quot;WHERE client_id = 2&quot; to our metric data query.  So what we need to do is create a <a href="http://compositekeys.rubyforge.org/">composite primary key</a> based the constraints we use frequently: (client_id, metric_id, collected_at).  Now MySQL will use a clustered index for those columns so that <em>the rows for each client and metric will be clustered together on disk</em>.  What was potentially 5000 disk seeks before might now be 5 disk seeks.</p>
+
+<p>As I said before, this is an advanced tweak -- ActiveRecord does not like not having an ID column -- and really only justified if you have millions and millions of rows and a predictable set of constraints.  But if you do, reworking your table's primary key to be application-specific and not artifical can provide tremendous performance benefits.</p>
+
+<p><a href="http://www.joehruska.com/?p=6">Joe Hruska.com » MySQL InnoDB Clustered Indexes and Rails</a></p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2008\/08\/19\/mysql-innodb-clustered-indexes-and-rails\/';
+    var disqus_title = 'MySQL InnoDB Clustered Indexes and Rails';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2008\/08\/19\/mysql-innodb-clustered-indexes-and-rails\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

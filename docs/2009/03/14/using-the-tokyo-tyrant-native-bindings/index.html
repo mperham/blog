@@ -1,0 +1,128 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Using the Tokyo Tyrant native bindings </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Using the Tokyo Tyrant native bindings</h1>
+      <small class="post-meta">Mar 14, 2009</small>
+      <div class="post-content">
+        <p>My previous examination of Tokyo Tyrant's memcache protocol support showed how you can use memcache-client directly with TT. John Mettraux has created <a href="http://github.com/jmettraux/rufus-tokyo">Ruby bindings</a> for TT's own native client for ultimate speed. Let's take a look at how this affects performance:</p>
+
+<pre lang="ruby">require 'rufus/tokyo/tyrant'
+
+db = Rufus::Tokyo::Tyrant.new('localhost', 1978)
+Benchmark.bm(20) do |b|
+  b.report 'native-write' do
+    10_000.times do |idx|
+      db[idx.to_s] = idx.to_s*100
+    end
+  end
+  b.report 'native-read' do
+    10_000.times do
+      db[rand(100).to_s]
+    end
+  end
+end
+</pre>
+
+<pre>user     system      total        real
+native-write             0.150000   0.220000   0.370000 (  1.079804)
+native-read              0.160000   0.210000   0.370000 (  1.093927)
+memcache186-write        0.530000   0.210000   0.740000 (  1.750988)
+memcache186-read         0.580000   0.200000   0.780000 (  1.830207)
+memcache191-write        0.430000   0.230000   0.660000 (  1.528519)
+memcache191-read         0.410000   0.220000   0.630000 (  1.591678)
+</pre>
+
+<p>I've included the memcache protocol times right after for comparision. Notice the system time is basically unchanged but the user time is dramatically lower. This is the overhead of the memcache-client's pure Ruby networking layer. Ruby is a great language but its networking implementation is not blindingly fast. There's definite improvement in Ruby 1.9.1 but still nowhere near bare metal.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2009\/03\/14\/using-the-tokyo-tyrant-native-bindings\/';
+    var disqus_title = 'Using the Tokyo Tyrant native bindings';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2009\/03\/14\/using-the-tokyo-tyrant-native-bindings\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

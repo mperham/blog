@@ -1,0 +1,128 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Cassandra Internals -- Writing </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Cassandra Internals -- Writing</h1>
+      <small class="post-meta">Mar 13, 2010</small>
+      <div class="post-content">
+        <p><img src="http://incubator.apache.org/cassandra/media/img/cassandra_logo.png" alt="Cassandra logo" /></p>
+
+<p>We've started using Cassandra as our next-generation data storage engine at <a href="http://www.onespot.com">OneSpot</a> (replacing a very large Postgresql machine with a cluster of EC2 machines) and so I've been using it for the last few weeks. As I'm an infrastructure nerd and a big believer in understanding the various layers in the stack, I've been reading up a bit on how Cassandra works and wanted to write a summary for others to benefit from. Since Cassandra is known to have very good write performance, I thought I would cover that first.</p>
+
+<p>First thing to understand is that Cassandra wants to run on many machines. From what I've heard, Twitter uses a cluster of 45 machines. It doesn't make a lot of sense to run Cassandra on a single machine as you are losing the benefits of a system with no single point of failure.</p>
+
+<p>Your client sends a write request to a single, random Cassandra node. This node acts as a proxy and writes the data to the cluster. The cluster of nodes is stored as a &quot;ring&quot; of nodes and writes are replicated to N nodes using a <em>replication placement strategy</em>. With the RackAwareStrategy, Cassandra will determine the &quot;distance&quot; from the current node for reliability and availability purposes where &quot;distance&quot; is broken into three buckets: same rack as current node, same data center as current node, or a different data center. You configure Cassandra to write data to N nodes for redundancy and it will write the first copy to the primary node for that data, the second copy to the next node in the ring <em>in another data center</em>, and the rest of the copies to machines in the same data center as the proxy. This ensures that a single failure does not take down the entire cluster and the cluster will be available even if an entire data center goes offline.</p>
+
+<p>So the write request goes from your client to a single random node, which sends the write to N different nodes according to the replication placement strategy. There are many edge cases here (nodes are down, nodes being added to the cluster, etc) which I won't go into but the node waits for the N successes and then returns success to the client.</p>
+
+<p>Each of those N nodes gets that write request in the form of a &quot;RowMutation&quot; message. The node performs two actions for this message:</p>
+
+<ul>
+<li>Append the mutation to the commit log for transactional purposes</li>
+<li>Update an in-memory Memtable structure with the change</li>
+</ul>
+
+<p>And it's done. This is why Cassandra is so fast for writes: the slowest part is appending to a file. Unlike a database, Cassandra does not update data in-place on disk, nor update indices, so there's no intensive <em>synchronous</em> disk operations to block the write.</p>
+
+<p>There are several asynchronous operations which occur regularly:</p>
+
+<ul>
+<li>A &quot;full&quot; Memtable structure is written to a disk-based structure called an SSTable so we don't get too much data in-memory only.</li>
+<li>The set of temporary SSTables which exist for a given ColumnFamily are merged into one large SSTable. At this point the temporary SSTables are old and can be garbage collected at some point in the future.</li>
+</ul>
+
+<p>There are lots of edge cases and complications beyond what I've talked about so far. I highly recommend reading the Cassandra wiki pages for <a href="http://wiki.apache.org/cassandra/ArchitectureInternals">ArchitectureInternals</a> and <a href="http://wiki.apache.org/cassandra/Operations">Operations</a> at the very least. Distributed systems are hard and Cassandra is no different.</p>
+
+<p>Please leave a comment if you have a correction or want to add detail -- I'm not a Cassandra developer so I'm sure there's a mistake or two hidden up there.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2010\/03\/13\/cassandra-internals-writing\/';
+    var disqus_title = 'Cassandra Internals -- Writing';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2010\/03\/13\/cassandra-internals-writing\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

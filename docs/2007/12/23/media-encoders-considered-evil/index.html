@@ -1,0 +1,108 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Media Encoders Considered Evil </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Media Encoders Considered Evil</h1>
+      <small class="post-meta">Dec 23, 2007</small>
+      <div class="post-content">
+        <p>I'm always re-amazed (about once per year) at how crappy the open source media encoding applications are.  I'm talking about LAME, VLC, ffmpeg, et al.  I'm sure their code is sparkling clean and their compression tight but their usability is a disaster.  There is an entire cottage industry around putting simplification layers on top of these libraries in order to make them usable by mere humans.</p>
+
+<p>I bought a new Sansa Clip mp3 this weekend and the thing is awesome: super tiny, FM receiver, voice and FM recording, shows up as a USB drive and works with my MacBook.  So I recorded some <a href="http://www.jazzandblues.org/">KJAZZ</a> (the best Jazz radio station in the US and the thing I miss most about LA) and the Clip saved it as a WAV file internally.</p>
+
+<p>So now I want to convert this WAV file into an MP3.  How do you do it?  Well, in VLC you go through a complex wizard which offers way too many unexplained choices.  &quot;Encapsulation format&quot;?  Huh?  I've got plenty of Internet street cred and I've never even heard of this term.</p>
+
+<p><strong>Make a few common use-cases easy!!!</strong>  Converting audio from XXX to MP3 is a very standard need.  You don't need to dumb down the tool but provide a wrapper script &quot;tomp3 <in> <out>&quot; which sets all the command line switches automatically.  The script covers a major use-case AND it provides a great example for customization if the user wants better control -- e.g. a user would know to just edit the file and change 128 to 192 if you want higher-quality MP3s.</p>
+
+<p>Providing a few samples of how to perform typical encoding needs would go a long way towards making these tools friendlier for technical users who don't want to spend hours googling and parsing man pages.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2007\/12\/23\/media-encoders-considered-evil\/';
+    var disqus_title = 'Media Encoders Considered Evil';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2007\/12\/23\/media-encoders-considered-evil\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,176 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> CGI: Ruby&#39;s Bare Metal </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>CGI: Ruby&#39;s Bare Metal</h1>
+      <small class="post-meta">Jan 5, 2015</small>
+      <div class="post-content">
+        
+
+<p><strong>How simple can you make a web request?</strong></p>
+
+<p>Happy 2015 everyone!  For 2015, I wanted to spend some time documenting and automating my
+business as much as possible.  Ezra Z's and James Golick's recent passing was a reminder to
+myself about life: <em>hope for the best but plan for the worst</em>.</p>
+
+<p>My biggest technical task was then to automate the onboarding of a new <a href="http://sidekiq.org/pro/">Sidekiq Pro</a> customer.  If I
+pass away next week, I want people to still be able to purchase and renew their subscription
+so my wife and child have recurring income they can count on for the next few years.  Essentially
+I want to automate day-to-day operations.</p>
+
+<p>My Sidekiq Pro server is as simple as humanly possible: it's running only Apache.  Perfect for serving
+static files but how do I handle an arbitrary request?  That's when
+I asked myself: <strong>How simple can you make a web request?</strong>  The requirements are straightforward: Stripe
+will call my server with a subscription event when someone starts or stops their Sidekiq Pro
+subscription.  I need a script to perform the magic to grant/revoke access and send the customer an email
+with access details.  This call will only happen a few times a day, max.</p>
+
+<p>This is a perfect case for going down to the <a href="http://www.boblee.com/images/bear_guitar.jpg">bare metal</a> and using the oldest web technology: <a href="http://www.ruby-doc.org/stdlib-2.2.0/libdoc/cgi/rdoc/CGI.html">CGI</a>.</p>
+
+<p><strong>Common Gateway Interface</strong></p>
+
+<p>CGI was the first standard for tying Unix and the Web together.  The Unix programming model says a process
+should take input on STDIN and output on STDOUT.  CGI allows a webserver like Apache to call an external
+script with the details of a web request as STDIN.  The script then outputs the HTTP response back as STDOUT.
+Ruby's <code>cgi</code> library will parse the request coming from STDIN and provides some response output helpers
+your code can use to generate HTML responses.</p>
+
+<p>In my case, Stripe POSTs a blob of JSON in the request body. Since I'm responding to the Stripe robot, it only
+needs to see a 200 OK response &mdash; no fancy view rendering layer required.</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e">#!/usr/bin/env ruby</span>
+<span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&#39;json&#39;</span>
+<span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&#39;cgi&#39;</span>
+
+<span style="color: #f8f8f2">cgi</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">CGI</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
+<span style="color: #75715e"># CGI tries to parse the request body as form parameters so a</span>
+<span style="color: #75715e"># blob of JSON awkwardly ends up as the one and only parameter key.</span>
+<span style="color: #f8f8f2">stripe_event</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">JSON</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">parse(cgi</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">params</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">keys</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">first)</span>
+
+<span style="color: #f8f8f2">do_the_magic(stripe_event)</span> <span style="color: #75715e"># magic happens right here</span>
+
+<span style="color: #f8f8f2">cgi</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">out(</span><span style="color: #e6db74">&quot;status&quot;</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">&quot;OK&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;type&quot;</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">&quot;text/plain&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;connection&quot;</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">&quot;close&quot;</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">do</span>
+  <span style="color: #e6db74">&quot;Success&quot;</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+
+<p>I configured Apache to know to execute my CGI script by adding this inside the vhost configuration:</p>
+
+
+ScriptAlias /stripe/ /opt/stripe/
+
+<Directory /opt/stripe/>
+  Require all granted
+</Directory>
+
+
+<p>Now if I request <code>http://server/stripe/event.rb</code>, Apache will call <code>/opt/stripe/event.rb</code>.</p>
+
+<p>Look at what I'm not running: puma or unicorn, rails or sinatra, redis or memcached, postgres or mysql, bundler,
+capistrano, etc.
+The real thing is using 3-4 gems.  That's it.  The script runs in a few seconds and then exits.  Nothing
+to keep running 24/7 and nothing to monitor. Deployment means using <code>scp</code> to copy the .rb file to the server.  I
+don't even have to restart anything upon deploy because nothing was running in the first place!</p>
+
+<h2 id="reality-check">Reality Check</h2>
+
+<p>CGI certainly isn't the right solution for every problem: each request starts a new Ruby process so there's a
+small bit of overhead but for systems which expect little traffic but require maximum reliability, it's
+something worth considering.  There's a higher performance variant of CGI called <a href="http://www.fastcgi.com/">FastCGI</a> which
+solves the performance overhead by keeping a process running 24/7.</p>
+
+<p>Ultimately plain old CGI solved my requirements: only Apache is running 24/7 and new Sidekiq Pro customers
+now get their license information within seconds of purchase, making everyone happy!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2015\/01\/05\/cgi-rubys-bare-metal\/';
+    var disqus_title = 'CGI: Ruby\x27s Bare Metal';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2015\/01\/05\/cgi-rubys-bare-metal\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,131 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Why Go? </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Why Go?</h1>
+      <small class="post-meta">Oct 8, 2014</small>
+      <div class="post-content">
+        <p>When I decided to build <a href="https://github.com/mperham/inspeqtor">Inspeqtor</a>, I had a fundamental choice: what language should I build it in? I've worked in Ruby for the last 8 years so it was a natural choice: &quot;use the tool you know best&quot; is never a bad choice when solving your own problem.</p>
+
+<p>However I'm not building something for myself: I'm building a product that will be used by thousands of others. Since Inspeqtor is an infrastructure monitoring tool, it needs to run 24/7 efficiently and reliably. I also want everyone to be able to install and use Inspeqtor with the absolute bare minimum of hassle. This means minimizing third-party dependencies like the Ruby VM itself, gems, etc. In the end, I needed to select the right tool for the job, not just the tool I know.</p>
+
+<p>Ultimately these requirements led me to two options: Go or Rust. Both can build binaries which have no runtime dependencies at all. Both are reliable and fast. Rust has a huge amount of potential but version 1.0 is still not ready yet &mdash; they're still working out syntax details &mdash; and learning their memory ownership model has a definite learning curve. I chose Go because of its maturity and the simplicity of the language.</p>
+
+<p>I want to call out two features that make Go so nice to work with:</p>
+
+<p><strong>Easy concurrency</strong></p>
+
+<p>Modern languages <strong>must</strong> have a better concurrency story than &quot;thin wrapper around the POSIX thread API&quot;. Go's goroutines and channels are a simple but powerful abstraction and easier to use safely than traditional threads. Here Inspeqtor <a href="https://github.com/mperham/inspeqtor/blob/master/inspeqtor.go#L241">gathers the current metrics in parallel</a> for the entities it is monitoring. I'm still trying to figure out best practices for handling errors and ensuring timeouts in goroutines. Google's <a href="http://blog.golang.org/context">Context</a> pattern looks like a strong contender to solve that problem.</p>
+
+<p><strong>Full development workflow</strong></p>
+
+<p>To paraphrase the poet John Donne: &quot;No programming language is an island&quot;. Go ships with tools for testing, code profiling, documentation, cross compiling and syntax formatting. There was only one thing I felt that Go should provide that it doesn't: an assert package for test code. Here's <a href="https://github.com/mperham/inspeqtor/blob/master/events_test.go#L25">some example code</a> which uses a 3rd party assert package I like. Adding if blocks here for every check would really hurt the readability of the code.</p>
+
+<p>So far I'm very pleased with how well Go has worked out for Inspeqtor. I've been running Inspeqtor on my server for about two months now and never once has it gone over 10MB of RAM or any significant CPU usage. Here's Inspeqtor monitoring itself:</p>
+
+<pre class="brush: plain; gutter: false; title: ; notranslate" title="">$ sudo inspeqtorctl status
+Inspeqtor Pro 0.5.0, uptime: 54h14m14s, pid: 11645
+
+Service: inspeqtor [Up/11645]
+  cpu:system                  0.1%           
+  cpu:total_system            0.0%           
+  cpu:total_user              0.1%           
+  cpu:user                    0.1%       90%
+  memory:rss                  8.97m      10m
+</pre>
+
+<p>Every language has strengths and weaknesses. For this purpose, Go has worked out great.</p>
+
+<p>PS C and C++ were never considered. I vowed in 1997 to never manage my own memory again and not for a single day have I ever regretted that decision.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2014\/10\/08\/why-go\/';
+    var disqus_title = 'Why Go?';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2014\/10\/08\/why-go\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

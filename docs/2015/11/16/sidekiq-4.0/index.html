@@ -1,0 +1,177 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Sidekiq 4.0! </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Sidekiq 4.0!</h1>
+      <small class="post-meta">Nov 16, 2015</small>
+      <div class="post-content">
+        
+
+<figure style="float: right;">
+  <img style="border: solid white 10px;" src="http://cdn.shopify.com/s/files/1/0154/2777/products/Sidekiq_-_Detail_1024x1024.jpg" width="260px" />
+</figure>
+
+<p>I'm happy to announce that <strong>Sidekiq 4.0</strong> is now available!</p>
+
+<p>I'm happy to announce that <strong>Sidekiq Pro 3.0</strong> is now available!!</p>
+
+<p>I'm happy to announce that <strong>Sidekiq Enterprise 1.0</strong> is now
+available!!!</p>
+
+<h2 id="sidekiq">Sidekiq</h2>
+
+<p>Sidekiq 4.0 is a major optimization release.  Sidekiq's core has
+been redesigned to remove dependencies and now goes down to the <a href="http://www.boblee.com/images/bear_guitar.jpg">bear metal</a>.
+Benchmarks show job overhead is reduced <strong>six times</strong>,
+garbage creation reduced by <strong>eight times</strong> and job latency cut in half.</p>
+
+<p><strong>Redis 2.8 or greater is now required</strong>.</p>
+
+<p>There are no public Sidekiq API changes so this version upgrade should be very easy.</p>
+
+<p>Please read the <a href="https://github.com/mperham/sidekiq/blob/master/4.0-Upgrade.md">Sidekiq 4.0 release notes</a> for all the detail.</p>
+
+<p><table width="100%">
+<tr><th>Version</th><th>Latency</th><th>Garbage created when<br/> processing 10,000 jobs</th><th>Time to process<br/> 100,000 jobs</th><th>Throughput</th></tr>
+<tr><th>Sidekiq 4.0.0</th><td>10ms</td><td>151 MB</td><td>22 sec</td><td><b>4500 jobs/sec</b></td></tr>
+<tr><th>Sidekiq 3.5.1</th><td>22ms</td><td>1257 MB</td><td>125 sec</td><td>800 job/sec</td></tr>
+<tr><th>Resque 1.25.2</th><td>-</td><td>-</td><td>420 sec</td><td>240 jobs/sec</td></tr>
+<tr><th>DelayedJob 4.1.1</th><td>-</td><td>-</td><td>465 sec</td><td>215 jobs/sec</td></tr>
+</table>
+<small>
+Data collected with MRI 2.2.3 running on my MBP 13-inch w/ 2.8Ghz i7.
+Resque started via <tt>COUNT=25 QUEUE=default rake resque:workers</tt>
+</small></p>
+
+<h2 id="sidekiq-pro">Sidekiq Pro</h2>
+
+<p>Sidekiq Pro 3.0 is designed to work with Sidekiq 4.0's new core design.
+Reliable fetch has been reimplemented but the semantics should remain
+identical.  Pausing and unpausing queues now takes effect in real-time
+due to the redesign, no more polling or 10 second delay.</p>
+
+<p>Platforms without persistent hostnames, notably Heroku and Docker, get
+official support for reliable fetch through the new <code>ephemeral_hostname</code> option.</p>
+
+<p>Read the <a href="https://github.com/mperham/sidekiq/blob/master/Pro-3.0-Upgrade.md">Sidekiq Pro 3.0 release notes</a>.</p>
+
+<h2 id="sidekiq-enterprise">Sidekiq Enterprise</h2>
+
+<p>The newest member of the Sidekiq family, Sidekiq Enterprise, has
+solidified over the last three months with a handful of bugs fixed
+and almost one hundred customers running it in production.
+At this point I think it's stable enough to call 1.0.
+As with Sidekiq Pro, some features have been re-implemented
+to work with the new Sidekiq 4.0 core.</p>
+
+<p>There are no release notes because there's nothing to note: no new
+features and the semantics are identical to 0.x.</p>
+
+<h2 id="support">Support</h2>
+
+<p>Sidekiq 3.x and Sidekiq Pro 2.x are stable and now in maintenance mode; they will get critical bug fixes
+through 2016.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>The demand for both Sidekiq and its commercial siblings continues to amaze me
+since I released Sidekiq Pro three years ago.  Today Sidekiq has passed
+5 million downloads on Rubygems, Sidekiq Pro has many hundreds of customers and
+Sidekiq Enterprise approaches its first hundred.
+Thank you to my customers; you make it possible for me to support and work
+full-time on Sidekiq.</p>
+
+<p><a href="http://sidekiq.org">You can buy Sidekiq Pro or Sidekiq Enterprise here and be up and
+running in minutes.</a></p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2015\/11\/16\/sidekiq-4.0\/';
+    var disqus_title = 'Sidekiq 4.0!';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2015\/11\/16\/sidekiq-4.0\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
