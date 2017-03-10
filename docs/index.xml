@@ -8,8 +8,77 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Mon, 06 Feb 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 10 Mar 2017 09:15:20 -0800</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Welcome, Hugo</title>
+      <link>http://www.mikeperham.com/2017/03/10/welcome-hugo/</link>
+      <pubDate>Fri, 10 Mar 2017 09:15:20 -0800</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/03/10/welcome-hugo/</guid>
+      <description>
+
+&lt;p&gt;I&#39;m trying out a new blogging system after using Jekyll for a few
+years.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-little-history&#34;&gt;A Little History&lt;/h2&gt;
+
+&lt;p&gt;I&#39;ve been blogging personally since 2003 or so and professionally since
+2007 (when I started my Ruby career).  I started on a self-hosted
+Movable Type install and migrated to self-hosted Wordpress in ~2009 but
+the administrivia and complexities of those systems wore me down.  I
+made the decision to wind down my own server and move to hosted
+services, like GitHub Pages, after hearing about the hundredth
+Wordpress security breach.  Since Ruby is my jam, I
+selected Jekyll, a static site generator written in Ruby.&lt;/p&gt;
+
+&lt;h2 id=&#34;jekyll&#34;&gt;Jekyll&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jekyllrb.com/&#34;&gt;Jekyll&lt;/a&gt; was a refreshing change because everything is flat files and
+static content.  No SQL database of content, no server to administer.
+For setup, you have a Gemfile with the &lt;code&gt;github-pages&lt;/code&gt; gem in it and
+everything is installed for you by Bundler.&lt;/p&gt;
+
+&lt;p&gt;All is not perfect though:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;that one gem requires &lt;strong&gt;74&lt;/strong&gt; dependent gems.&lt;/li&gt;
+&lt;li&gt;I could not figure out an easy workflow for creating a post, seeing
+it while I authored it despite reading the docs many times.&lt;/li&gt;
+&lt;li&gt;It took 5-6 seconds to rebuild my site everytime I wanted to preview
+a content change, incremental builds did not work for me.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;hugo&#34;&gt;Hugo&lt;/h2&gt;
+
+&lt;p&gt;&lt;img class=&#34;img img-responsive pull-right&#34; width=&#34;300&#34; src=&#34;https://gohugo.io/img/hugo.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gohugo.io&#34;&gt;Hugo&lt;/a&gt; is a static site generator written in Go which solves many of those
+problems.  Things I love so far:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Easy install with one 17MB binary by running &lt;code&gt;brew install hugo&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Fast: complete site build takes 300ms by running &lt;code&gt;hugo&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;I can preview my entire site by running &lt;code&gt;hugo server&lt;/code&gt; and livereload just magically works: I can see content changes
+immediately in the browser, without even needing to hit the refresh
+button&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Things I don&#39;t like or I&#39;m worried about:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Lots of open issues/PRs.&lt;/li&gt;
+&lt;li&gt;Large Go codebase, Go is not a terse language.&lt;/li&gt;
+&lt;li&gt;Overly complex: archtetypes, taxonomies, tags are all things I don&#39;t need.
+Instead of choosing one config format, they support three!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We&#39;ll see how the project continues over the next few years.
+I&#39;d love to see a site generator written in Crystal, a fast, higher-level language
+that has most of the advantages of Go while also being more terse.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Five Years</title>
@@ -901,172 +970,6 @@ debug problems.  Some good things about Sidekiq Enterprise&#39;s concurrent limi
 
 &lt;p&gt;If you are using Sidekiq today, the Enterprise upgrade will drop right in.
 &lt;a href=&#34;https://enterprise.contribsys.com/quote.html&#34;&gt;Sidekiq Enterprise starts at $1950/yr, get a quote in seconds here.&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Kill Your Dependencies</title>
-      <link>http://www.mikeperham.com/2016/02/09/kill-your-dependencies/</link>
-      <pubDate>Tue, 09 Feb 2016 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2016/02/09/kill-your-dependencies/</guid>
-      <description>
-
-&lt;figure style=&#34;float: right;&#34;&gt;
-  &lt;img style=&#34;border: solid white 0px;&#34; src=&#34;http://wookiehangover.github.io/dependency-injection-for-fun-and-profit/img/dependency-graph2.png&#34; width=&#34;400px&#34; /&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;This post talks about Ruby but it&#39;s true of every language community: Python, JavaScript, Java, etc.  The scourge of dependencies spares no one.&lt;/p&gt;
-
-&lt;p&gt;This is a dependency visualization of every Rails app I&#39;ve ever used.  Does any of this
-sound familiar:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Gemfile with 100s of entries.&lt;/li&gt;
-&lt;li&gt;Test gems loading in production.&lt;/li&gt;
-&lt;li&gt;Each Rails process takes 100s of megabytes of RAM.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The Rubygems system is commendable for how easy it makes packaging up
-Ruby for others to reuse.  But that very ease means it&#39;s also quite easy for
-those gems to pull in other gems transitively, leading to Rails apps
-which &amp;quot;download the Internet&amp;quot; and have hundreds of dependencies.&lt;/p&gt;
-
-&lt;p&gt;When you publish a Rubygem, every one of your dependencies transitively
-becomes a dependency for any app using your gem.  This multiplies the
-impact of bugs in those gems.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-curious-case-of-mime-types&#34;&gt;The curious case of mime-types&lt;/h3&gt;
-
-&lt;p&gt;The &lt;code&gt;mime-types&lt;/code&gt; gem &lt;a href=&#34;https://github.com/mime-types/ruby-mime-types/issues/94&#34;&gt;recently optimized its memory usage&lt;/a&gt;
-and saved megabytes of RAM.
-Literally every Rails app in existence can benefit from this optimization because Rails depends on
-the mime-types gem transitively: &lt;code&gt;rails -&amp;gt; actionmailer -&amp;gt; mail -&amp;gt; mime-types&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;In other words, this gem wasn&#39;t used by your app.  It wasn&#39;t used by Rails
-directly.  It wasn&#39;t used by ActionMailer directly.  It was used deep in the bowels of the ActionMailer
-implementation &lt;strong&gt;and it was using far too much memory&lt;/strong&gt;.  Every single
-Rails app in existence was using 10MB too much due to this issue.&lt;/p&gt;
-
-&lt;h2 id=&#34;app-developers-listen-up&#34;&gt;App Developers, Listen Up!&lt;/h2&gt;
-
-&lt;p&gt;Every dependency in your application has the potential to bloat your
-app, to destabilize your app, to inject odd behavior via monkeypatching
-or buggy native code.
-When you are considering adding a dependency to your Rails app, it&#39;s a
-good idea to do a quick sanity check, in order of preference:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Do I really need this at all?  Kill it.&lt;/li&gt;
-&lt;li&gt;Can I implement the required minimal functionality myself?  Own it.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;If you need a gem:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Does the gem have a native extension?  Look for pure ruby alternatives.&lt;/li&gt;
-&lt;li&gt;Does the gem transitively pull in a lot of other gems?  Look for
-simpler alternatives.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Gems with native extensions can destabilize your system; they can be
-the source of mysterious bugs and crashes.  Avoid gems which pull in more
-dependencies than their value warrants.  Example of a bad gem: the
-&lt;code&gt;fog&lt;/code&gt; gem which pulls in 39 gems, more dependencies than rails itself
-and most of which are unnecessary.&lt;/p&gt;
-
-&lt;p&gt;Lastly, make sure you only load the gem when necessary.  Use Bundler&#39;s
-group support to disable test gems when not testing:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;group&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;:test&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;gem&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;rspec&amp;#39;&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;gem&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;timecop&amp;#39;&lt;/span&gt;
-  &lt;span style=&#34;color: #75715e&#34;&gt;# etc&lt;/span&gt;
-&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;h2 id=&#34;gem-developers-listen-up&#34;&gt;Gem Developers, Listen Up!&lt;/h2&gt;
-
-&lt;p&gt;Part of your job as a library author is to treat your user and their
-application with respect.  You should make an effort to minimize your
-own dependencies so they don&#39;t load unnecessary code or cause issues in the user&#39;s application.
-You control your own code but you don&#39;t control your dependencies.  Any
-bug in a dependency of yours becomes a bug that causes stress for your user and
-their application.&lt;/p&gt;
-
-&lt;p&gt;As a gem developer, for each of your gem dependencies do you:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;know how much memory each takes?&lt;/li&gt;
-&lt;li&gt;know how long each takes to require?&lt;/li&gt;
-&lt;li&gt;know whether it performs any monkeypatching outside of its own module?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Sidekiq, with all of its functionality, has only 3 runtime dependencies:
-&lt;code&gt;concurrent-ruby&lt;/code&gt;, &lt;code&gt;connection_pool&lt;/code&gt; and &lt;code&gt;redis&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;die-json-die-german-for-the-json-the&#34;&gt;Die json, die (German for &amp;quot;The json, the&amp;quot;)&lt;/h3&gt;
-
-&lt;p&gt;&lt;figure style=&#34;float: right;&#34;&gt;
-  &lt;img style=&#34;border: solid white 10px;&#34; src=&#34;http://41.media.tumblr.com/tumblr_lh4z0xSXsx1qbohddo1_500.jpg&#34; width=&#34;320px&#34; /&gt;
-&lt;/figure&gt;
-So many gems declare a dependency on json, oj, multi_json, or yajl-ruby.
-There&#39;s so many ossified layers of cruft around JSON
-processing that only one course of action makes sense: remove it all.
-JSON has been in the stdlib since 1.9, you don&#39;t need to declare any dependencies at all.
-Just &lt;code&gt;require &#39;json&#39;&lt;/code&gt; and let Ruby deal with it.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/rails/rails/pull/23453&#34;&gt;Rails did it&lt;/a&gt;, so can you!&lt;/p&gt;
-
-&lt;h3 id=&#34;why-choose-an-http-client-when-you-can-have-them-all&#34;&gt;Why choose an HTTP client when you can have them all?&lt;/h3&gt;
-
-&lt;p&gt;Every Rails app pulls in a half dozen different HTTP clients: faraday, rest-client,
-httparty, excon, typhoeus, curb, etc.  This is because various gems use them internally.
-&lt;strong&gt;A Rubygem should never use anything but Net::HTTP internally!&lt;/strong&gt;
-Learn the Net:HTTP API, kill those dependencies and stop forcing extra HTTP client gems on your users.&lt;/p&gt;
-
-&lt;p&gt;Let&#39;s say you want to offer an optimized version using curb: ok, but make it
-optional.  Allow the application developer to opt into using curb but
-net/http should always be the default.&lt;/p&gt;
-
-&lt;h3 id=&#34;optimizing-rails-5-0&#34;&gt;Optimizing Rails 5.0&lt;/h3&gt;
-
-&lt;p&gt;For the last few weeks, I&#39;ve been working (in tandem with several other
-developers, hi @_matthewd, @applerebel!) on minimizing gem dependencies
-in Rails 5.0.  Rails 4.2.5 requires 34 gems.  Rails 5.0b1 required 55 gems.
-Rails 5.0b2 required 39 gems.  I expect Rails 5.0 to require 37 gems or
-less.  So far we&#39;ve removed Celluloid, EventMachine, thread_safe, and json.&lt;/p&gt;
-
-&lt;p&gt;Unfortunately there&#39;s no more low-hanging fruit.  I&#39;d love to drop
-Nokogiri, it&#39;s such a huge dependency with a massive native extension component,
-but there are some &lt;a href=&#34;https://github.com/flavorjones/loofah/issues/100&#34;&gt;non-trivial dependencies&lt;/a&gt; on it.
-&lt;a href=&#34;https://github.com/YorickPeterse/oga&#34;&gt;Oga&lt;/a&gt; is a nice, simpler alternative.  If you
-ship a gem which depends on Nokogiri, consider making it optional and defaulting to REXML (I know, but
-at least it&#39;s in stdlib) or Oga instead.&lt;/p&gt;
-
-&lt;h3 id=&#34;be-part-of-the-solution&#34;&gt;Be Part of the Solution&lt;/h3&gt;
-
-&lt;p&gt;I can help with Rails 5.0 but I can&#39;t fix every gem.  If you are a gem developer,
-audit your own dependencies and remove as many as you can.
-If you&#39;re an app developer, take a look in your
-Gemfile and see if you can find a gem or two to remove.
-Simplify, simplify, simplify.&lt;/p&gt;
-
-&lt;p&gt;As an example, I think it&#39;s possible for the &lt;a href=&#34;https://github.com/stripe/stripe-ruby/blob/master/stripe.gemspec#L16&#34;&gt;Stripe gem&lt;/a&gt; to remove both of its runtime dependencies.&lt;/p&gt;
-
-&lt;h3 id=&#34;rules-to-remember&#34;&gt;Rules to Remember&lt;/h3&gt;
-
-&lt;p&gt;Some software engineering rules:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;No code runs faster than no code.&lt;/li&gt;
-&lt;li&gt;No code has fewer bugs than no code.&lt;/li&gt;
-&lt;li&gt;No code uses less memory than no code.&lt;/li&gt;
-&lt;li&gt;No code is easier to understand than no code.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Kill those dependencies.  Your gems and apps will be better for it.&lt;/p&gt;
 </description>
     </item>
     
