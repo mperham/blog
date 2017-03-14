@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Mike Perham</title>
-    <link>http://www.mikeperham.com/index.xml</link>
+    <link>http://www.mikeperham.com</link>
     <description>Latest content from Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
