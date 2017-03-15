@@ -91,7 +91,7 @@ end
 
 The result (still buggy, note graph axis labels, but usable):
 
-<img width="640" src="/images/issue3381.png" />
+<img width="640" src="http://www.mikeperham.com/images/issue3381.png" />
 
 ### Standards
 
