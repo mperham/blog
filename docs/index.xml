@@ -8,8 +8,220 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Tue, 14 Mar 2017 10:51:54 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 10 Apr 2017 09:00:00 -0700</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Migrating from redis-namespace</title>
+      <link>http://www.mikeperham.com/2017/04/10/migrating-from-redis-namespace/</link>
+      <pubDate>Mon, 10 Apr 2017 09:00:00 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/04/10/migrating-from-redis-namespace/</guid>
+      <description>
+
+&lt;p&gt;In a blog post in 2015, &lt;a href=&#34;http://www.mikeperham.com/2015/09/24/storing-data-with-redis/&#34;&gt;Storing Data with Redis&lt;/a&gt;, I wrote about your options for partitioning data
+stored within Redis and came down pretty hard on using key namespacing
+via redis-namespace.
+The redis-namespace gem allows you to share a Redis database among several
+applications by prefixing every key with a namespace but it&#39;s a terrible hack
+that no one should use.  Redis
+already has a native solution if you want to share a Redis instance: databases.
+The default database is 0.  Here&#39;s how to point Sidekiq to use database
+1 instead:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;configure_client&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+  &lt;span style=&#34;color: #75715e&#34;&gt;# these are equivalent&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;url&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;redis://localhost:6379/1&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;db&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;By default, Redis offers 16 databases: 0-15.  This is configurable in
+redis.conf.  Keys in one database are not visible from another database.
+All databases will share global data like registered Lua scripts.
+In practice that&#39;s not a big deal due to Redis&#39;s excellent implementation.&lt;/p&gt;
+
+&lt;p&gt;If you have multiple apps and want to share a Redis instance, just have
+them use different databases.  Create a convention for how your apps map to
+database indexes and stick with it.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Cache data, job data and transactional/persistent data have different configuration needs and should
+not share a Redis instance at all.  If you use Redis for caching and
+jobs and your budget is &amp;gt;$0, you should have two different Redis instances
+with different configurations. Job data is closer to transactional data,
+they can probably share the same Redis if necessary.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;em&gt;&amp;quot;Our current application uses redis-namespace.  How do we migrate away from namespace usage without losing everything we have currently?&amp;quot;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Ah, this is possible but non-trivial, as with all data migrations.
+I will assume you are running Sidekiq.
+Continue onward for the nittiest of gritty, dear reader.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrating-your-data&#34;&gt;Migrating your Data&lt;/h2&gt;
+
+&lt;p&gt;Like any data migration, you have two choices:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Run old/new systems in parallel for N days/weeks&lt;/li&gt;
+&lt;li&gt;Shutdown old setup, migrate data, start new setup&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;running-old-new-in-parallel&#34;&gt;Running old/new in parallel&lt;/h3&gt;
+
+&lt;p&gt;You want to start two Sidekiq processes: old and new.  The old
+process(es) will continue to process any retries and scheduled jobs in
+the old data.  The new process(es) will process all new jobs.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Starting an old and new process
+OLD=1 bundle exec sidekiq ...
+bundle exec sidekiq ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We specifically want the client configuration to only point to the new
+system so that any new jobs from Puma/Unicorn/etc will go to the new
+system.  In this example, the old Redis is using the &lt;code&gt;foo&lt;/code&gt; namespace in
+database 0.  We want the new system to use database 1 with no namespace.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;# Note that the client ALWAYS pushes to the new process&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;configure_client&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;db&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;configure_server&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;ENV&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;OLD&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;
+    &lt;span style=&#34;color: #75715e&#34;&gt;# We&amp;#39;ll continue to poll for old scheduled jobs and retries&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;namespace&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;db&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;else&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;db&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If you are a Sidekiq Pro customer you can monitor both old and new in the Web UI with Sidekiq Pro&#39;s
+&lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Pro-Web-UI#sharding&#34;&gt;Web UI Sharding support&lt;/a&gt;,
+just mount a copy for the old and new config in your &lt;code&gt;config/routes.rb&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;NEWPOOL&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;ConnectionPool&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Redis&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;new(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;db&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;OLDPOOL&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;ConnectionPool&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Redis&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Namespace&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;new(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;:foo&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;:redis&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Redis&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;new(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;db&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;mount&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Pro&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Web&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;with(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;redis_pool&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;NEWPOOL&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;at&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;/sidekiqnew&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;as&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;sidekiqnew&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;mount&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Pro&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Web&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;with(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;redis_pool&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;OLDPOOL&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;),&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;at&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;/sidekiqold&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;as&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;sidekiqold&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Monitor your retry and scheduled job counts in the old system.  After N weeks, you should be able to safely decommission the old Sidekiqs.  Ciao, bella!&lt;/p&gt;
+
+&lt;h3 id=&#34;the-big-migration&#34;&gt;The big migration&lt;/h3&gt;
+
+&lt;p&gt;If you can afford the downtime, it can be a lot faster/easier/cheaper to simply
+migrate your Redis data to strip off the namespace from the key.  You
+shut down the old processes (&lt;strong&gt;anything&lt;/strong&gt; that talks to Redis with the namespace),
+run the migration script, and start everything with the new setup once it&#39;s complete.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;How long will it take?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is an excellent question, look at the size of your databases:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ redis-cli info
+[snip]
+
+# Keyspace
+db0:keys=2,expires=0,avg_ttl=0
+db4:keys=18,expires=15,avg_ttl=1894990352
+db5:keys=10,expires=7,avg_ttl=1894990303
+db14:keys=7,expires=4,avg_ttl=1894990402
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice the keys count.  This will tell you the magnitude of your
+problem: do you have thousands of keys or millions?  For every single
+key, we want to strip the namespace from the front of it.&lt;/p&gt;
+
+&lt;p&gt;We&#39;ll write a Lua script which will run atomically on our instance and
+rename every key.  &lt;strong&gt;This script will not move the data from database 0
+to database 1&lt;/strong&gt; (for future readers, in Redis 4.0, there is a &lt;a href=&#34;https://redis.io/commands/swapdb&#34;&gt;SWAPDB&lt;/a&gt; command which can do
+this).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;WARNING: Depending on the amount of data in Redis, this script may
+crush your Redis instance for a long time.  Do not use it while other
+things are using that Redis instance.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;# remove_ns.rb&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;redis&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;################################&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# Change &amp;quot;foo&amp;quot; to your namespace, leave the &amp;quot;:*&amp;quot; alone&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;ns&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;foo:*&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;################################&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# Point to your Redis instance&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Redis&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;new(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;db&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;script&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;LUA&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;  local count = 0&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;  local keys = redis.call(&amp;quot;keys&amp;quot;, ARGV[1])&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;  for _, keyname in pairs(keys) do&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;    redis.call(&amp;quot;rename&amp;quot;, keyname, string.sub(keyname, ARGV[2]))&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;    count = count + 1&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;  end&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;  return count&lt;/span&gt;
+&lt;span style=&#34;color: #e6db74&#34;&gt;LUA&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;start&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;now&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;count&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;eval(script,&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;[]&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ns,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ns&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;size&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Complete, migrated #{&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;} keys in #{&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Time&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;now&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;start&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;} sec&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Shut down everything talking to your Redis instance.&lt;/strong&gt; You can verify
+by running &lt;code&gt;redis-cli monitor&lt;/code&gt; against the instance and seeing that
+nothing is coming over the wire.&lt;/li&gt;
+&lt;li&gt;Run &lt;code&gt;ruby remove_ns.rb&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Deploy your new configuration and start everything back up.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;testing&#34;&gt;Testing&lt;/h2&gt;
+
+&lt;p&gt;I created a script which creates 500 plain keys and 500 namespaced keys
+to verify that 500 keys are migrated:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;gem&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;redis&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;&amp;lt; 4&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;redis&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Redis&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;new(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;db&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;4&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #ae81ff&#34;&gt;500&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;times&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;idx&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;redis&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;set(idx,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;idx)&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;redis-namespace&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;rn&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Redis&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Namespace&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;new(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;:foo&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;redis&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;redis)&lt;/span&gt;
+
+&lt;span style=&#34;color: #ae81ff&#34;&gt;500&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;times&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;idx&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;rn&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;set(idx,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;idx)&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The result:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;$ ruby remove_ns.rb
+Complete, migrated &lt;span style=&#34;color: #ae81ff&#34;&gt;500&lt;/span&gt; keys in &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;.003167 sec
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The keyspace count goes from 1000 to 500 with the migration.  Please
+note that this migration script blindly renames keys so if you have keys named
+&amp;quot;foo:bar&amp;quot; and &amp;quot;bar&amp;quot;, it&#39;s possible the latter will be overwritten in the
+migration due to the rename.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Avoid namespaces.&lt;/li&gt;
+&lt;li&gt;Data migrations are always fraught with peril, test in staging.&lt;/li&gt;
+&lt;li&gt;Make backups and always have a replica handy.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Good luck!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>RTL scripts and BiDi webapps</title>
@@ -854,126 +1066,6 @@ Crystal.  If you are interested, &lt;a href=&#34;mailto:mike@contribsys.com&#34;
 &lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
 
 &lt;p&gt;Let&#39;s make &lt;a href=&#34;https://github.com/mperham/sidekiq.cr&#34;&gt;Sidekiq.cr&lt;/a&gt; amazing, try it out and help us improve it!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Serving your own Commercial Rubygems</title>
-      <link>http://www.mikeperham.com/2016/05/17/commercial-gems/</link>
-      <pubDate>Tue, 17 May 2016 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2016/05/17/commercial-gems/</guid>
-      <description>
-
-&lt;p&gt;It&#39;s not well known but with Rubygems and Bundler, you can distribute access-controlled commercial Rubygems.  My gems, &lt;a href=&#34;http://sidekiq.org&#34;&gt;Sidekiq Pro and Sidekiq Enterprise&lt;/a&gt;, are the most well known example but I&#39;m not a wizard: anyone can distribute gems to a limited set of customers.  Here&#39;s how I do it.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;A $5/mo DigitalOcean instance running Apache.  No database, no app server.  I have a set of bash scripts which can build a server in 5 minutes.&lt;/li&gt;
-&lt;li&gt;To serve gems, you need to have Apache serve a directory of static files.  You&#39;ll need a VirtualHost entry with something like this:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;  &amp;lt;VirtualHost *:443&amp;gt;
-    ServerName my-server.com
-    DocumentRoot /var/www/gems
-
-    SSLEngine on
-
-    &amp;lt;Location /&amp;gt;
-      AuthType basic
-      AuthName &amp;quot;private area&amp;quot;
-      AuthBasicProvider file
-      AuthUserFile /var/www/gems-passwd
-      Require valid-user
-    &amp;lt;/Location&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;To control access to those gems, you need a &lt;code&gt;/var/www/gems-passwd&lt;/code&gt; file which contains your user / password pairs.  The username / passwords are a hash based on the customer&#39;s email address.  The contents look like this:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;1a7fe3bd:$apr1$0RtyG.1v$D/o5n25i2YmPiTOGAPPI21
-d41be46c:$apr1$.dFnnB5F$Ne2YtTP12q9iM9/ZQvoL01
-09120f77:$apr1$ERLqbLvS$El2Llj6MJlWDWQnJKcrR80
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The command to generate an entry is &lt;code&gt;htpasswd -nb user pwd&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;I have a &lt;code&gt;/var/www/gems&lt;/code&gt; directory which looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ pwd
-/var/www/gems
-$ ls -l
-total 36
-drwxrwxr-x 2 mike adm  4096 Apr  5 16:25 gems
--rw-rw-r-- 1 mike mike   65 Apr  5 16:25 latest_specs.4.8
--rw-rw-r-- 1 mike mike   82 Apr  5 16:25 latest_specs.4.8.gz
--rw-rw-r-- 1 mike mike   98 Apr  5 16:25 prerelease_specs.4.8
--rw-rw-r-- 1 mike mike  100 Apr  5 16:25 prerelease_specs.4.8.gz
-drwxrwxr-x 3 mike adm  4096 Apr  5 16:25 quick
--rw-rw-r-- 1 mike mike 1307 Apr  5 16:25 specs.4.8
--rw-rw-r-- 1 mike mike  251 Apr  5 16:25 specs.4.8.gz
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;When you buy Sidekiq Pro, Stripe sends my server a webhook.  I have a rake task which looks up the new customer&#39;s email address, adds a new user/pwd to the end of the gems-passwd file and then sends them an email with directions to access the Sidekiq Pro gem:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;Put this in your Gemfile:
-
-    source &amp;quot;https://my-server.com&amp;quot; do
-      gem &amp;quot;sidekiq-pro&amp;quot;
-    end
-
-Run this bundle command:
-
-    bundle config my-server.com username:password
-
-Run `bundle install` and you&#39;re done!
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;In addition to the passwd file, the server has a CSV file with &lt;code&gt;email,username,password&lt;/code&gt; so I can look up the Apache username for a customer&#39;s email and regenerate the passwd file from scratch if necessary.&lt;/li&gt;
-&lt;li&gt;If a subscription runs out, Stripe sends the opposite webhook; the server removes them from the CSV and passwd so they can no longer access the gem server.&lt;/li&gt;
-&lt;li&gt;I have rake tasks which can push a new gem version, add/remove a customer, send email, etc.&lt;/li&gt;
-&lt;li&gt;Pushing a new gem version looks like this, note the &lt;code&gt;generate_index&lt;/code&gt; call:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;task&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;:push&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;:release&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;net/ssh&amp;#39;&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;net/scp&amp;#39;&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;sidekiq/pro/version&amp;#39;&lt;/span&gt;
-
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;ver&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;ENV&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;VERSION&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Pro&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;VERSION&lt;/span&gt;
-
-  &lt;span style=&#34;color: #66d9ef&#34;&gt;Net&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;SCP&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;start(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;my-server.com&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;user&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;scp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;scp&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;upload!(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;pkg/sidekiq-pro-#{&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ver&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;}.gem&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;/var/www/gems/gems&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-  &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-
-  &lt;span style=&#34;color: #66d9ef&#34;&gt;Net&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;SSH&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;start(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;my-server.com&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ssh&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
-    &lt;span style=&#34;color: #f8f8f2&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ssh&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;exec!(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;gem generate_index --directory /var/www/gems&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-  &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Released Sidekiq Pro #{&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ver&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;}&amp;quot;&lt;/span&gt;
-&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The Stripe webhook integration is really nice as it automates 90% of my business BUT don&#39;t bother until you have sufficient sales to make it worth your while.  For the first two years, I added customers manually when I got the &amp;quot;You just got a sale!&amp;quot; email.  The hard part is dealing with churn - Stripe doesn&#39;t email when a subscription ends so you&#39;ll need to automate that or at least send yourself email upon that webhook.&lt;/li&gt;
-&lt;li&gt;For redundancy, I run two servers at a time so a replica is always available.  I switch out servers every six months so software versions on the server stay reasonably current: create new replica, old replica is promoted to primary, old primary is killed.  The servers are sync&#39;d with BitTorrent Sync, which is the only &amp;quot;shiny&amp;quot; tech I use but I&#39;ve found nothing better to keep a directory in sync between two servers in near real-time.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;end-result&#34;&gt;End Result&lt;/h3&gt;
-
-&lt;p&gt;When I get a sale, my &amp;quot;Sidekiqbot&amp;quot; script sends me an email that the customer was set up.  It feels pretty awesome to know the onboarding is completely automated.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;./images/sale.png&#34; alt=&#34;sale&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;That&#39;s it: Apache, CSV and some basic Linux/Ruby scripting.  It took me weeks to develop all of this but there&#39;s nothing super difficult about it.  I try to keep the server as simple as possible so I can focus on Sidekiq development and support, not operations.  After all, you&#39;re buying what&#39;s &lt;strong&gt;in&lt;/strong&gt; the gems, not what serves them.  This simplicity has real benefits: it&#39;s cheap ($10/mo for two servers), easy to maintain and reliable.  If you are thinking about following in my footsteps, I hope this blog post helps light the way.&lt;/p&gt;
-
-&lt;p&gt;This article is part of a larger group on the technical nitty gritty of a software business.  Related articles are &lt;a href=&#34;./2015/11/23/how-to-charge-for-your-open-source/&#34;&gt;Charging for your Open Source&lt;/a&gt; (discussion on the money and legal aspects) and &lt;a href=&#34;./2015/01/05/cgi-rubys-bare-metal/&#34;&gt;CGI: Ruby&#39;s bare metal&lt;/a&gt; (discussion on handling Stripe webhooks).&lt;/p&gt;
-
-&lt;h3 id=&#34;postscript&#34;&gt;Postscript&lt;/h3&gt;
-
-&lt;p&gt;I became a member of &lt;a href=&#34;https://rubytogether.org&#34;&gt;Ruby Together&lt;/a&gt; because I rely on Bundler and the Rubygems infrastructure.
-The fact that we can do this at all is the beauty of Bundler and Rubygems: they are easily federated using HTTP and static files only.  As an alternative, consider npm; it requires CouchDB, a full copy of the npm dataset to serve and only supports a single package server.  This design is much more complex, requiring a much heavier server, and makes it effectively impossible for an individual to run an npm server due to the operational costs and maintenance required.  I encourage anyone whose business depends on Ruby to join.&lt;/p&gt;
 </description>
     </item>
     
