@@ -17,7 +17,7 @@ put everything into one database.
 
 There are several questions to answer when determining how to use Redis for different datasets:
 
-1. Can I flush with the dataset without affecting other datasets?
+1. Can I flush the dataset without affecting other datasets?
 2. Can I [tune the persistence strategy][0] per dataset?
    For transactional data, you want real-time persistence with AOF.
    For cache, you want infrequent RDB snapshots or no persistence at all.
