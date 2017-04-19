@@ -8,12 +8,13 @@ Send me event so I can list them here, mperham AT gmail or @mperham.
 
 ## Tuesday 4/25
 
-*Nothing happening?! Boring!*
+* Game Night with Mike and Mike, Sheraton Estrella Room, 7-11pm
 
 ## Wednesday 4/26
 
 * Dinner at [Green New American Vegetarian](https://www.google.com/maps/place/Green+Restaurant/@33.470142,-112.0676519,17z/data=!3m1!4b1!4m5!3m4!1s0x872b126c70ca4875:0x374895659096d56a!8m2!3d33.470142!4d-112.0654579), RSVP to @albinosquirrel, 6:45 pm
 * [Karaoke on Rails](https://www.eventbrite.com/e/karaoke-on-rails-rubykaraoke-tickets-33436732166?aff=eandprexshre&ref=eandprexshre) #rubykaraoke at August Karaoke Box, 8pm-midnight
+* [Honeybadger In-and-Out Bus](https://www.eventbrite.com/e/the-honeybadgerio-in-n-out-bus-tickets-33838334369), In-and-Out Burger, 6:30-8:30pm
 
 ## Thursday 4/27
 
