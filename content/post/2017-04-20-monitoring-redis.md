@@ -1,7 +1,6 @@
 +++
-date = "2017-04-27T09:00:00-07:00"
-title = "Debugging Redis"
-draft = true
+date = "2017-04-20T09:00:00-07:00"
+title = "Monitoring Redis"
 +++
 
 <figure style="float: right; padding-left: 50px">
@@ -12,7 +11,8 @@ draft = true
 Redis is widely by the Ruby community but, like any complex piece of
 infrastructure, isn't well understood by many of its users.  I wanted to
 write a blog post that would answer the question: **How can I check on
-the health of my Redis server?**
+the health of my Redis server?**  Here's a few things you can do to
+better understand your Redis server.
 
 ----
 ## Ask for Info
