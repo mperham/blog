@@ -4,6 +4,11 @@ title = "Debugging Redis"
 draft = true
 +++
 
+<figure style="float: right; padding-left: 50px">
+ <img src="/images/redis.png" width="500"/>
+</figure>
+
+
 Redis is widely by the Ruby community but, like any complex piece of
 infrastructure, isn't well understood by many of its users.  I wanted to
 write a blog post that would answer the question: **How can I check on
@@ -18,21 +23,9 @@ The `info` command is the easiest way to get an overall view of Redis:
 $ redis-cli info
 # Server
 redis_version:3.2.5
-redis_git_sha1:00000000
-redis_git_dirty:0
-redis_build_id:9fe990583d8f1fbf
-redis_mode:standalone
-os:Darwin 16.5.0 x86_64
-arch_bits:64
-multiplexing_api:kqueue
-gcc_version:4.2.1
-process_id:445
-run_id:b2f86239484facc8dd3829ad25dac8757afdb32f
 tcp_port:6379
 uptime_in_seconds:1313002
 uptime_in_days:15
-hz:10
-lru_clock:16178069
 executable:/usr/local/opt/redis/bin/redis-server
 config_file:/usr/local/etc/redis.conf
 
@@ -59,22 +52,6 @@ maxmemory_policy:noeviction
 mem_fragmentation_ratio:15.87
 mem_allocator:libc
 
-# Persistence
-loading:0
-rdb_changes_since_last_save:0
-rdb_bgsave_in_progress:0
-rdb_last_save_time:1492463475
-rdb_last_bgsave_status:ok
-rdb_last_bgsave_time_sec:0
-rdb_current_bgsave_time_sec:-1
-aof_enabled:0
-aof_rewrite_in_progress:0
-aof_rewrite_scheduled:0
-aof_last_rewrite_time_sec:-1
-aof_current_rewrite_time_sec:-1
-aof_last_bgrewrite_status:ok
-aof_last_write_status:ok
-
 # Stats
 total_connections_received:396
 total_commands_processed:588823
@@ -96,29 +73,18 @@ pubsub_patterns:0
 latest_fork_usec:1007
 migrate_cached_sockets:0
 
-# Replication
-role:master
-connected_slaves:0
-master_repl_offset:0
-repl_backlog_active:0
-repl_backlog_size:1048576
-repl_backlog_first_byte_offset:0
-repl_backlog_histlen:0
-
 # CPU
 used_cpu_sys:67.83
 used_cpu_user:42.98
 used_cpu_sys_children:0.07
 used_cpu_user_children:0.07
 
-# Cluster
-cluster_enabled:0
-
 # Keyspace
 db4:keys=25,expires=24,avg_ttl=892611707
 db5:keys=37,expires=36,avg_ttl=829671792
 db8:keys=4,expires=2,avg_ttl=4423347833
 ```
+(output trimmed a bit)
 
 There's a few very important pieces to note in the output:
 
@@ -133,8 +99,8 @@ Memory is the most important thing to note here.  Your entire dataset
 size **must** fit into machine RAM.  If it does not, the resulting swapping will lead
 to terrible performance and massive latency spikes.
 
-`--stat` mode gives you the most important details in a real-time view
-you can watch:
+`redis-cli --stat` will give you the most important details in a real-time view
+you can watch or scrape:
 
 ```
 $ redis-cli --stat
@@ -145,11 +111,15 @@ keys       mem      clients blocked requests            connections
 31         1009.00K 1       0       681485 (+1)         576
 ```
 
+`redis-cli` is a very powerful tool with lots of nice features within
+it.  It's worth running `--help` and playing with the various options
+and modes.
+
 ----
 
 ## Look out for Latency
 
-Latency is the time difference between request and response.  The client sends a
+Latency is the time difference between request and response, e.g. the client sends a
 command and gets a result back in 10ms.  We want this round trip to be as fast as
 possible.
 Really bad latency can trigger "Operation timed out" exceptions in your application.
@@ -182,7 +152,7 @@ min: 0, max: 490, avg: 0.69 (1255 samples) -- 15.01 seconds range
 ```
 
 You can see the first window looks pretty good, the second window had a
-spike of 256ms, and the third had a spike of 3062ms (!).
+spike of 256ms, and the third had a spike of 3062ms (ouch!).
 
 I triggered these spikes by running `redis-cli debug sleep 0.5`.  Not
 recommended in production.
@@ -228,12 +198,19 @@ a testcase for Sidekiq::Client's `push_bulk` API.  Since we're
 enqueueing 10,000 jobs at once, it's not surprising that might take almost 12ms.
 
 **It is safe to run SLOWLOG in production and highly encouraged.**  In
-fact, I would set `slowlog-log-slower-than 2000` to log anything
-greater than 2ms.  If you find the slowlog is constantly full, raise
-that value until it doesn't have many entries **or redesign your system so it
-doesn't run those slow commands**.  For instance, if you want to enqueue
+fact, I would play with `slowlog-log-slower-than` values until you find
+a setting that catches unexpectedly slow things but does not contain a
+lot of "normal" commands from your application.
+If you find the slowlog is constantly full, **redesign your system so it
+doesn't run those slow commands**.
+  For instance, if you want to enqueue
 10,000 jobs, perhaps you could call `push_bulk` 10 times with 1000 jobs
 each, so each invocation only takes 1/10th as long.
+If a piece of OSS is running a slow comamnd,
+open an issue so the maintainer knows about the problem.  I'm not too
+proud to admit it's
+[happened](https://github.com/mperham/sidekiq/issues/3332)
+several times with Sidekiq; I fix them as fast as I can!
 
 ## Extra Credit
 
@@ -243,7 +220,7 @@ responsible for monitoring our infrastructure.  We would do things like:
 1. Write a cron job to dump the slowlog to a daily email if it is not empty.
   Treat any entries as issues to be investigated and fixed.
 2. Set up a dashboard for the Redis server.  Have dedicated
-   graphs for connected_clients, instantaneous_ops_per_sec, and used_memory_rss.
+   graphs for `connected_clients`, `instantaneous_ops_per_sec`, and `used_memory_rss`.
    Treat big changes in these graphs as incidents to be investigated.
 
 Part of owning your infrastructure is monitoring its health proactively;
