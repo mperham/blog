@@ -8,8 +8,80 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Mon, 24 Apr 2017 09:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 25 Apr 2017 09:00:00 -0700</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Hello Sidekiq 5.0</title>
+      <link>http://www.mikeperham.com/2017/04/25/hello-sidekiq-5.0/</link>
+      <pubDate>Tue, 25 Apr 2017 09:00:00 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/04/25/hello-sidekiq-5.0/</guid>
+      <description>
+
+&lt;figure style=&#34;float: right;&#34;&gt;
+ &lt;img src=&#34;./images/50.jpg&#34;/&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;After a few months of work, I&#39;m happy to announce that Sidekiq 5.0 is
+now available.  Sidekiq 5.0 refactors the core job processor to work better
+with Rails 5 and includes a few breaking changes that have been pending for a
+while.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-s-new&#34;&gt;What&#39;s New?&lt;/h2&gt;
+
+&lt;h3 id=&#34;rails-5-native&#34;&gt;Rails 5 native!&lt;/h3&gt;
+
+&lt;p&gt;Sidekiq::Processor has been redesigned to work well
+with Rails 5.0&#39;s Executor.  The Executor is a new API which needs
+to wrap any use of Rails code; it automatically handles code reloading,
+database connection management and any other callbacks.  Before now,
+Sidekiq had middleware to clean up database connections but
+this is no longer necessary with the Executor.&lt;/p&gt;
+
+&lt;p&gt;Note that Sidekiq 5.0 will still work with Rails 4.0+.&lt;/p&gt;
+
+&lt;h3 id=&#34;bad-json-no-problem&#34;&gt;Bad JSON, no problem!&lt;/h3&gt;
+
+&lt;p&gt;Sidekiq now explicitly handles malformed job payloads which cannot be
+parsed as valid JSON.  This is usually due to pushing jobs to Redis via
+other languages.  Invalid jobs are immediately sent to the Dead set so
+they can be manually examined.  Previously these payloads were discarded
+or needed to be removed from Redis manually.&lt;/p&gt;
+
+&lt;h3 id=&#34;right-to-left-languages&#34;&gt;Right-to-Left Languages&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;./images/bidi.png&#34; alt=&#34;bidi&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The Web UI can now natively render RTL (right-to-left) languages like
+Arabic, Hebrew, Persian and Urdu.  This brings language support from 21
+to 25 languages and another billion or so potential Sidekiq users!
+Change your browser to request one of those languages
+and the Web UI will render in that language.&lt;/p&gt;
+
+&lt;h3 id=&#34;cleanup&#34;&gt;Cleanup&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code&gt;delay&lt;/code&gt; APIs are now disabled by default, since they pollute
+&lt;code&gt;Class&lt;/code&gt; and can lead to overly large job payloads.  You can re-enable
+them if your application uses that API.&lt;/p&gt;
+
+&lt;p&gt;The quiet signal has been changed from USR1 to TSTP, which is available in JRuby
+and better reflects the intent: Threads SToP.  USR1 will still work but is
+deprecated. Sidekiq 4.2.9+ also supports TSTP so you can port your
+deployment scripts to use the new signal without risking a major version bump
+at the same time.&lt;/p&gt;
+
+&lt;p&gt;Support for Ruby 2.0, Ruby 2.1 and Rails 3.2 is dropped.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Please see the &lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/5.0-Upgrade.md&#34;&gt;5.0 upgrade notes&lt;/a&gt; for more detail and how to upgrade safely.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Thank you to all my &lt;a href=&#34;http://sidekiq.org&#34;&gt;Sidekiq Pro and Sidekiq Enterprise&lt;/a&gt; customers for
+ensuring the long-term support and maintenance of Sidekiq.  Support OSS software
+and your infrastructure vendors so we can support you!&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Sidekiq at Railsconf 2017</title>
@@ -1060,79 +1132,6 @@ the problem in the GDB dump above.&lt;/p&gt;
 
 &lt;p&gt;If you are a Sidekiq Pro or Enterprise customer and seeing stuck processes, don&#39;t be
 afraid to gist me your GDB dumps - I&#39;d be happy to help diagnose.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Profiling Crystal on OSX</title>
-      <link>http://www.mikeperham.com/2016/06/24/profiling-crystal-on-osx/</link>
-      <pubDate>Fri, 24 Jun 2016 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2016/06/24/profiling-crystal-on-osx/</guid>
-      <description>
-
-&lt;p&gt;How do I profile my program to determine where it is slow?&lt;/p&gt;
-
-&lt;p&gt;This is one of the first questions any developer asks after building a
-non-toy program.  Crystal has a reputation for being quite fast but
-every language has &lt;a href=&#34;http://crystal-lang.org/docs/guides/performance.html&#34;&gt;tricks and optimizations&lt;/a&gt; we miss.&lt;/p&gt;
-
-&lt;p&gt;Since Crystal uses the LLVM compiler suite, we can reuse a lot of the
-infrastructure which knows about LLVM-compiled binaries. &lt;strong&gt;Net result:
-the OSX Developer Tools include a beautiful profiler that works with
-Crystal binaries out of the box - so awesome!&lt;/strong&gt;  If you have XCode
-installed (and if you are reading this blog, it&#39;s very likely you do),
-you can profile a Crystal binary right now, here&#39;s how.&lt;/p&gt;
-
-&lt;h2 id=&#34;instruments&#34;&gt;Instruments&lt;/h2&gt;
-
-&lt;p&gt;Instruments.app is the OSX profiling tool.  We&#39;re going to instrument a
-command line run and then view the results in its GUI.  I assume you
-have Crystal installed; if not, run this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;brew update
-brew install crystal-lang
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now we need an app to profile.  Let&#39;s make a toy app that doesn&#39;t
-do much of anything; put this code in &lt;code&gt;app.cr&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;foo&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(i)&lt;/span&gt;
-  &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;mike&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;to_s&lt;/span&gt;
-&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-
-&lt;span style=&#34;color: #ae81ff&#34;&gt;10_000_000&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;times&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;x&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;foo(x)&lt;/span&gt;
-&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Compile and run in the profiler:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ crystal compile app.cr
-$ instruments -t &amp;quot;Time Profiler&amp;quot; ./app
-Instruments Trace Complete (Duration : 4.458741s; Output : /Users/mike/instrumentscli0.trace)
-$ open instrumentscli0.trace/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You should now see a lovely UI with a totally rad tree view where you
-can drill down into the trace to see where your code spent its time.
-Looks like 80% of my app&#39;s time was spent in Int32#to_s and
-String#+, not exactly shocking but this is a toy example.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dl.dropboxusercontent.com/u/3425424/Blog/crystal_profiler.png&#34; alt=&#34;crystal profiler&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Note that I didn&#39;t use &lt;code&gt;--release&lt;/code&gt; flag with the compiler.  This was a
-choice I made for this blog post; the traces are a LOT easier to
-understand without release optimizations because LLVM doesn&#39;t inline
-method calls so it&#39;s easier to drill into the code execution.  You should
-profile with the --release flag when profiling your own non-trivial code
-so you are profiling the same binary as you run in production.&lt;/p&gt;
-
-&lt;p&gt;Also note that Instruments supports a lot more modes that just the Time
-Profiler - it can track memory allocations, syscalls, and many other aspects.
-Play with it and see what modes are useful to you.&lt;/p&gt;
-
-&lt;p&gt;In conclusion, profiling Crystal code is super easy due to Crystal leveraging the LLVM compiler.
-We can use LLVM-standard tools rather than needing custom profiling APIs and runtime support.&lt;/p&gt;
 </description>
     </item>
     

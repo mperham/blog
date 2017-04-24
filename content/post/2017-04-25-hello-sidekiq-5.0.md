@@ -1,7 +1,6 @@
 +++
-date = "2017-04-24T09:00:00-07:00"
+date = "2017-04-25T09:00:00-07:00"
 title = "Hello Sidekiq 5.0"
-draft = true
 +++
 
 <figure style="float: right;">
