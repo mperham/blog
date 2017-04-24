@@ -8,8 +8,57 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Thu, 20 Apr 2017 09:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 24 Apr 2017 09:00:00 -0700</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Sidekiq at Railsconf 2017</title>
+      <link>http://www.mikeperham.com/2017/04/24/sidekiq-at-railsconf-2017/</link>
+      <pubDate>Mon, 24 Apr 2017 09:00:00 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/04/24/sidekiq-at-railsconf-2017/</guid>
+      <description>
+
+&lt;p&gt;Every year I attend Rubyconf and Railsconf and this year is no
+different.  I launched Sidekiq 4.0 at Rubyconf 2015 and now I&#39;m excited
+ to get down to Phoenix and launch Sidekiq 5.0!
+I want to meet any Rubyists, new or old, who want to chat.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://railsconf.com/assets/objects/RailsconfInternal@2x-2c15a28ee162c7f9151c2148adaeccfeb2786fdb748a4f8b3a948a3b1e705d57.png&#34; alt=&#34;Railsconf&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;a-personal-note&#34;&gt;A Personal Note&lt;/h2&gt;
+
+&lt;p&gt;I attended my first conference in 2007, Rubyconf, in Charlotte NC.
+I still remember my mental state: &lt;strong&gt;awkwardness, isolation and loneliness
+because I knew about two people there&lt;/strong&gt;.  By nature I&#39;m an introvert and
+not really good at mingling in crowds (one reason booze is so popular
+at conferences: it can decrease your inhibitions and make you more chatty).
+As my reputation increased in the community, going to conferences became
+easier because people knew me but here&#39;s my dirty secret:
+I&#39;m still awkward and not great at socializing with new people.&lt;/p&gt;
+
+&lt;p&gt;So I have a guarantee: if you don&#39;t know anyone at Railsconf or just
+need someone to talk to, find me and say hello.  The first day I always
+wear a Sidekiq t-shirt.  You know my blog and here&#39;s some
+topics I will talk endlessly about:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;You and your Ruby story&lt;/li&gt;
+&lt;li&gt;Performance and scalability&lt;/li&gt;
+&lt;li&gt;Threading vs Evented design in languages and systems&lt;/li&gt;
+&lt;li&gt;Sidekiq and other background job systems&lt;/li&gt;
+&lt;li&gt;Ruby, Crystal and Go&lt;/li&gt;
+&lt;li&gt;Open Source, Sustainability, and Business&lt;/li&gt;
+&lt;li&gt;Soccer, Motorcycles and Sports Cars (ask me about the time I crashed a
+race car at Laguna Seca!)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It&#39;s also quite likely that you know my name but I don&#39;t know yours and
+I&#39;m terrible with names/faces so &lt;strong&gt;please introduce yourself&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;PS And of course, I&#39;m giving away Sidekiq stickers to anyone who asks.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Monitoring Redis</title>
@@ -1084,74 +1133,6 @@ Play with it and see what modes are useful to you.&lt;/p&gt;
 
 &lt;p&gt;In conclusion, profiling Crystal code is super easy due to Crystal leveraging the LLVM compiler.
 We can use LLVM-standard tools rather than needing custom profiling APIs and runtime support.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Test Driving Sidekiq and Crystal</title>
-      <link>http://www.mikeperham.com/2016/06/14/test-driving-sidekiq-and-crystal/</link>
-      <pubDate>Tue, 14 Jun 2016 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2016/06/14/test-driving-sidekiq-and-crystal/</guid>
-      <description>
-
-&lt;p&gt;It&#39;s alive!  I&#39;ve finished the initial port of the three core pieces of Sidekiq, the
-client API, the job execution engine and the Web UI, to
-&lt;a href=&#34;http://crystal-lang.org&#34;&gt;Crystal&lt;/a&gt;.  Let&#39;s
-assume we have a Ruby app using Sidekiq.rb and integrate Sidekiq.cr to run
-beside it.&lt;/p&gt;
-
-&lt;figure style=&#34;float: right;&#34;&gt;
-  &lt;a href=&#34;http://crystal-lang.org&#34;&gt;&lt;img style=&#34;border: solid white 0px;&#34; src=&#34;http://crystal-lang.org/images/icon.png&#34; width=&#34;200px&#34; /&gt;&lt;/a&gt;
-&lt;/figure&gt;
-&lt;figure style=&#34;float: right;&#34;&gt;
-  &lt;a href=&#34;http://sidekiq.org&#34;&gt;&lt;img style=&#34;border: solid white 0px;&#34; src=&#34;http://sidekiq.org/assets/kicker.svg&#34; width=&#34;200px&#34; /&gt;&lt;/a&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h2&gt;
-
-&lt;p&gt;Sidekiq.cr has a &lt;a href=&#34;https://github.com/mperham/sidekiq.cr/wiki/Getting-Started&#34;&gt;Getting Started&lt;/a&gt; wiki page which
-walks you through the basics of setting up a new Crystal app.  Follow
-those directions.  Once complete, you should have a Worker named &lt;code&gt;Sample::MyWorker&lt;/code&gt;
-that we can call.  We&#39;re going to build the Sidekiq.cr binary and run it
-with &lt;code&gt;./sidekiq -q crystal&lt;/code&gt;.  Sidekiq.cr is now listening for jobs on
-the &lt;code&gt;crystal&lt;/code&gt; queue only.  Any Ruby-based jobs should use other queues
-so the Crystal worker will never see them - exactly what we want.&lt;/p&gt;
-
-&lt;p&gt;We&#39;ve defined one Worker in the Crystal app:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;module&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;Sample&lt;/span&gt;
-  &lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;MyWorker&lt;/span&gt;
-    &lt;span style=&#34;color: #66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Worker&lt;/span&gt;
-
-    &lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;perform&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(name&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;String,&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;count&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;Int64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-      &lt;span style=&#34;color: #f8f8f2&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;times&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt;
-        &lt;span style=&#34;color: #f8f8f2&#34;&gt;logger&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;info&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Hello, #{&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;name&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;}!&amp;quot;&lt;/span&gt;
-      &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-    &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-  &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Open up an IRB console and run this:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;sidekiq&amp;quot;&lt;/span&gt;
-&lt;span style=&#34;color: #66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;Client&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;push(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;class&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Sample::MyWorker&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;args&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Ruby&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;queue&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;crystal&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Immediately you should see Sidekiq.cr print out three lines:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Start
-2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
-2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
-2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
-2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Done: 0.000121 sec
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Nearly identical to Sidekiq.rb but look at that execution time: &lt;strong&gt;121µs&lt;/strong&gt;!
-In real world code, I&#39;m seeing Crystal execute 5-10x faster than MRI.&lt;/p&gt;
-
-&lt;p&gt;So... got tons of little jobs?  Got compute-heavy jobs?  Crystal and
-Sidekiq.cr might be the solution you&#39;re looking for!  Got questions?
-Find a bug?  &lt;a href=&#34;https://github.com/mperham/sidekiq.cr/issues&#34;&gt;Open an issue&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
