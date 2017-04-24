@@ -23,7 +23,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 
 ## Thursday 4/27
 
-*Nothing happening?! Boring!*
+* Glassbreakers #RailsConf After Party, The Breadfruit & Rum Bar, RSVP tigray@glassbreakers.co
 
 ## Friday 4/28
 
