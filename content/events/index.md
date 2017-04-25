@@ -12,6 +12,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 
 * **[EngineYard 10 Year Party](https://www.eventbrite.com/e/engine-yard-10-year-anniversary-party-tickets-33600718654)**, The Duce, 7-10pm
 * Game Night with Mike and Mike, Sheraton Estrella Room, 7-11pm
+* [Alice Cooper'stown dinner](https://nvite.com/CoopersTown/jje6yz), Alice Cooper'stown, 7-9pm
 
 ## Wednesday 4/26
 
@@ -24,6 +25,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 ## Thursday 4/27
 
 * Glassbreakers #RailsConf After Party, The Breadfruit & Rum Bar, RSVP tigray@glassbreakers.co
+* [AWS meetup](https://www.meetup.com/AWSArizona/events/238776671/), CO+HOOTS, 5-7pm
 
 ## Friday 4/28
 
