@@ -4,7 +4,7 @@ title = "Hello Sidekiq 5.0"
 +++
 
 <figure style="float: right;">
- <img src="/images/50.jpg"/>
+ <img src="http://www.mikeperham.com/images/50.jpg"/>
 </figure>
 
 After a few months of work, I'm happy to announce that Sidekiq 5.0 is
@@ -35,7 +35,7 @@ or needed to be removed from Redis manually.
 
 ### Right-to-Left Languages
 
-![bidi](/images/bidi.png)
+![bidi](http://www.mikeperham.com/images/bidi.png)
 
 The Web UI can now natively render RTL (right-to-left) languages like
 Arabic, Hebrew, Persian and Urdu.  This brings language support from 21

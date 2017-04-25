@@ -20,7 +20,7 @@
       <description>
 
 &lt;figure style=&#34;float: right;&#34;&gt;
- &lt;img src=&#34;./images/50.jpg&#34;/&gt;
+ &lt;img src=&#34;http://www.mikeperham.com/images/50.jpg&#34;/&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;After a few months of work, I&#39;m happy to announce that Sidekiq 5.0 is
@@ -51,7 +51,7 @@ or needed to be removed from Redis manually.&lt;/p&gt;
 
 &lt;h3 id=&#34;right-to-left-languages&#34;&gt;Right-to-Left Languages&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;./images/bidi.png&#34; alt=&#34;bidi&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://www.mikeperham.com/images/bidi.png&#34; alt=&#34;bidi&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The Web UI can now natively render RTL (right-to-left) languages like
 Arabic, Hebrew, Persian and Urdu.  This brings language support from 21
