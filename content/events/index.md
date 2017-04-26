@@ -24,7 +24,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 
 ## Thursday 4/27
 
-* Glassbreakers #RailsConf After Party, The Breadfruit & Rum Bar, RSVP tigray@glassbreakers.co
+* Glassbreakers #RailsConf After Party, The Breadfruit & Rum Bar, 6-8pm, RSVP tigray@glassbreakers.co
 * [AWS meetup](https://www.meetup.com/AWSArizona/events/238776671/), CO+HOOTS, 5-7pm
 
 ## Friday 4/28
