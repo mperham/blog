@@ -26,6 +26,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 
 * Glassbreakers #RailsConf After Party, The Breadfruit & Rum Bar, 6-8pm, RSVP tigray@glassbreakers.co
 * [AWS meetup](https://www.meetup.com/AWSArizona/events/238776671/), CO+HOOTS, 5-7pm
+* [Diamondbacks Game](http://bit.ly/railsball), 6:15 in the South Ballroom Lobby, RSVP at the link or ping @joshvc for more info.
 
 ## Friday 4/28
 
