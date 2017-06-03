@@ -8,8 +8,62 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Tue, 25 Apr 2017 09:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 05 Jun 2017 09:00:00 -0700</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Tracking down performance bugs in Sidekiq jobs</title>
+      <link>http://www.mikeperham.com/2017/06/05/tracking-down-performance-bugs-in-sidekiq-jobs/</link>
+      <pubDate>Mon, 05 Jun 2017 09:00:00 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/06/05/tracking-down-performance-bugs-in-sidekiq-jobs/</guid>
+      <description>
+
+&lt;h2 id=&#34;the-problem&#34;&gt;The Problem&lt;/h2&gt;
+
+&lt;p&gt;A Sidekiq Enterprise customer recently emailed me to ask for help.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;I&#39;m having trouble trying to figure out why one particular worker I have takes so long per job. Some of the jobs are taking 30 minutes. What the program does is load a spreadsheet to the database. When I run &amp;quot;top&amp;quot;, it looks like this.  What should my next step be?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;./images/debugging-top.jpg&#34; alt=&#34;top output&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-explanation&#34;&gt;The Explanation&lt;/h2&gt;
+
+&lt;p&gt;Great question.  The top screenshot tells me a few things:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Each process is using ~4GB of RAM, which is a lot, but top also notes
+the machine has ~64GB of memory so it&#39;s not necessarily unusual.&lt;/li&gt;
+&lt;li&gt;There are four Ruby 2.1 processes (which I assume are Sidekiq
+processes), each pegging a core at 100%.  We want to track down what
+is causing the CPU to peg.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;There&#39;s a two step process to get more info:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Visit the Busy page in the Web UI and see which jobs are running right now.
+See a job that&#39;s taking too long?  Note its PID and TID (&amp;quot;13159&amp;quot; and &amp;quot;otqnxjaoc&amp;quot; in the screenshot).&lt;/li&gt;
+&lt;li&gt;Send the TTIN signal to that PID (&lt;code&gt;kill -TTIN 13159&lt;/code&gt;) and find the backtrace associated with that TID in the log output.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&#34;./images/debugging-busy.png&#34; alt=&#34;busy page&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Often the job backtrace will give you the clue you need to solve the performance problem.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-conclusion&#34;&gt;The Conclusion&lt;/h2&gt;
+
+&lt;p&gt;In this case, the backtrace did provide the necessary clue and the customer did find a solution.
+He was creating a job per row in an Excel file but each job had to get the header data from
+the Excel file; if there was 1000 rows, he&#39;d create 1000 jobs and &lt;strong&gt;each job would reparse the entire Excel file to get the header info&lt;/strong&gt;.
+By restructing the job arguments to include the header info, he removed this redundant work and solved
+a problem which had plagued him for months.  Time elapsed: less than an hour!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Moral of the story: harness the awesome power of Sidekiq&#39;s TTIN feature to crush your performance bugs!&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Hello Sidekiq 5.0</title>
@@ -939,199 +993,6 @@ about +75% in 2016, and Sidekiq is now the dominant background solution for Ruby
 &lt;h2 id=&#34;what-s-next&#34;&gt;What&#39;s Next?&lt;/h2&gt;
 
 &lt;p&gt;Sidekiq 5.0!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Debugging stuck Ruby processes</title>
-      <link>http://www.mikeperham.com/2016/08/05/debugging-stuck-ruby-processes/</link>
-      <pubDate>Fri, 05 Aug 2016 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2016/08/05/debugging-stuck-ruby-processes/</guid>
-      <description>
-
-&lt;p&gt;My Ruby process has stopped doing any work, what&#39;s wrong?&lt;/p&gt;
-
-&lt;p&gt;This is an uncommon but occasional problem for many people, especially
-with large applications using lots of native extensions.&lt;/p&gt;
-
-&lt;h2 id=&#34;step-1-thread-backtraces&#34;&gt;Step 1 - Thread backtraces&lt;/h2&gt;
-
-&lt;p&gt;A Sidekiq process will print out the backtrace of every thread when
-you send it the TTIN signal.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;kill -TTIN &amp;lt;pid&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Side note: YMMV for other types of Ruby processes: resque, unicorn, puma, passenger, etc.  Check
-the gem documentation or open an issue with the maintainers if it&#39;s not clear how to get
-backtraces from your process.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Reading these backtraces will tell you what your threads are doing at
-that instant.  Here&#39;s an example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;2016-08-04T16:16:13.535Z 96660 TID-oxpb26trs WARN: Thread TID-oxpbpcmn0
-2016-08-04T16:16:13.535Z 96660 TID-oxpb26trs WARN: /Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:82:in `select&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:82:in `rescue in _read_from_socket&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:78:in `_read_from_socket&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:70:in `gets&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:362:in `read&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:262:in `block in read&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:250:in `io&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:261:in `read&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:120:in `block in call&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:231:in `block (2 levels) in process&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:367:in `ensure_connected&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:221:in `block in process&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:306:in `logging&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:220:in `process&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:120:in `call&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:209:in `block in call_with_timeout&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:280:in `with_socket_timeout&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/client.rb:208:in `call_with_timeout&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:1137:in `block in _bpop&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:58:in `block in synchronize&#39;
-/Users/mike/.rubies/ruby-2.3.0/lib/ruby/2.3.0/monitor.rb:214:in `mon_synchronize&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:58:in `synchronize&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:1134:in `_bpop&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis.rb:1179:in `brpop&#39;
-/Users/mike/src/sidekiq/lib/sidekiq/fetch.rb:36:in `block in retrieve_work&#39;
-/Users/mike/src/sidekiq/lib/sidekiq.rb:92:in `block in redis&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:64:in `block (2 levels) in with&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:63:in `handle_interrupt&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:63:in `block in with&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:60:in `handle_interrupt&#39;
-/Users/mike/.gem/ruby/2.3.0/gems/connection_pool-2.2.0/lib/connection_pool.rb:60:in `with&#39;
-/Users/mike/src/sidekiq/lib/sidekiq.rb:89:in `redis&#39;
-/Users/mike/src/sidekiq/lib/sidekiq/fetch.rb:36:in `retrieve_work&#39;
-/Users/mike/src/sidekiq/lib/sidekiq/processor.rb:86:in `get_one&#39;
-/Users/mike/src/sidekiq/lib/sidekiq/processor.rb:96:in `fetch&#39;
-/Users/mike/src/sidekiq/lib/sidekiq/processor.rb:79:in `process_one&#39;
-/Users/mike/src/sidekiq/lib/sidekiq/processor.rb:68:in `run&#39;
-/Users/mike/src/sidekiq/lib/sidekiq/util.rb:17:in `watchdog&#39;
-/Users/mike/src/sidekiq/lib/sidekiq/util.rb:25:in `block in safe_thread&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Backtraces look like a big, scary blob of text because they are!  Reading
-a backtrace is hard and a learned skill: &lt;strong&gt;you will get better at it over
-time&lt;/strong&gt;.  Pop open a gem with &lt;code&gt;bundle open &amp;lt;gemname&amp;gt;&lt;/code&gt; and navigate to the
-line in the backtrace; getting comfortable with the code in the various
-gems will help your debugging skills a lot.  The key line is here:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/Users/mike/src/sidekiq/lib/sidekiq/fetch.rb:36:in `block in retrieve_work&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This is a quiet Sidekiq thread that is waiting for a job from Redis.  It&#39;s paused,
-doing nothing, but that&#39;s perfectly normal.&lt;/p&gt;
-
-&lt;p&gt;Most often with stuck processes you&#39;ll see threads paused in the mysql or
-postgresql driver, waiting on query results or waiting for a lock.&lt;/p&gt;
-
-&lt;h2 id=&#34;step-2-gdb&#34;&gt;Step 2 - GDB&lt;/h2&gt;
-
-&lt;p&gt;If the Sidekiq process doesn&#39;t output anything when you send it a TTIN
-signal, that&#39;s a sign you&#39;ve got a deeper problem.  Almost always the
-cause is a native extension gem which is performing a long operation
-without releasing the GVL.&lt;/p&gt;
-
-&lt;p&gt;This means Ruby can&#39;t help - we have to drop down into the bowels of
-the process to understand what is wrong using the GDB debugger.  You can attach
-GDB to a running process like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo gdb /path/to/ruby/binary [PID]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now to get the thread backtraces dumped to a text file, run these
-commands:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;(gdb) set logging file gdb_output.txt
-(gdb) set logging on
-(gdb) set height 10000
-(gdb) t a a bt
-(gdb) quit
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A Sidekiq Enterprise customer recently sent me a GDB dump that I will
-use as an example.  Here&#39;s the first thread:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Thread 32 (Thread 0x3703 of process 40990):
-#0  0x00007fff94b87db6 in __psynch_cvwait () from /usr/lib/system/libsystem_kernel.dylib
-#1  0x00007fff98cab728 in _pthread_cond_wait () from /usr/lib/system/libsystem_pthread.dylib
-#2  0x0000000102dbd5b3 in gvl_acquire_common ()
-#3  0x0000000102db7471 in rb_thread_call_without_gvl ()
-#4  0x00000001031feda1 in rsock_ipaddr () from /Users/user/.rbenv/versions/2.2.4/lib/ruby/2.2.0/x86_64-darwin15/socket.bundle
-#5  0x00000001031f5c4a in sock_s_getaddrinfo () from /Users/user/.rbenv/versions/2.2.4/lib/ruby/2.2.0/x86_64-darwin15/socket.bundle
-#6  0x0000000102dadee3 in vm_call_cfunc ()
-#7  0x0000000102d927c9 in vm_exec_core ()
-#8  0x0000000102da16d6 in vm_exec ()
-#9  0x0000000102da6b03 in invoke_block_from_c ()
-#10 0x0000000102d9da80 in rb_yield ()
-#11 0x0000000102dbbf0c in rb_thread_s_handle_interrupt ()
-#12 0x0000000102dadee3 in vm_call_cfunc ()
-#13 0x0000000102d925f4 in vm_exec_core ()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Note that this is a C-level backtrace.  We&#39;re lower-level and have less
-info available but experience helps fill in the gaps.  The thread is
-calling &lt;code&gt;sock_s_getaddrinfo&lt;/code&gt; which is a DNS lookup.  It looks like it
-has finished the DNS lookup and is now calling &lt;code&gt;gvl_acquire_common&lt;/code&gt; to
-get the GVL in order to continue executing Ruby code.  It is normal
-for some threads to block, waiting for the GVL, but it is not normal for
-most threads to be waiting for the GVL. This was the case: dozens of
-threads were blocked with that exact same backtrace.&lt;/p&gt;
-
-&lt;p&gt;When this happens, look for the odd threads.  20+ threads were blocked with the same
-backtrace as above - you can ignore those.  But one or more threads will be
-doing something else, and indeed there was this backtrace which was
-completely different:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Thread 10 (Thread 0x2103 of process 40990):
-#0  0x00007fff94b892a2 in poll () from /usr/lib/system/libsystem_kernel.dylib
-#1  0x00000001035c892d in pqSocketCheck () from /usr/local/opt/postgresql/lib/libpq.5.dylib
-#2  0x00000001035c87f9 in pqWaitTimed () from /usr/local/opt/postgresql/lib/libpq.5.dylib
-#3  0x00000001035c5fd8 in PQgetResult () from /usr/local/opt/postgresql/lib/libpq.5.dylib
-#4  0x00000001035c62be in PQexecFinish () from /usr/local/opt/postgresql/lib/libpq.5.dylib
-#5  0x00000001035c31bc in PQsetClientEncoding () from /usr/local/opt/postgresql/lib/libpq.5.dylib
-#6  0x000000010359d2a7 in pgconn_set_default_encoding () from /Users/user/.rbenv/versions/2.2.4/gemsets/xxx-v1.1/extensions/x86_64-darwin-15/2.2.0-static/pg-0.18.4/pg_ext.bundle
-#7  0x00000001035990b7 in pgconn_init () from /Users/user/.rbenv/versions/2.2.4/gemsets/xxx-v1.1/extensions/x86_64-darwin-15/2.2.0-static/pg-0.18.4/pg_ext.bundle
-#8  0x0000000102daa929 in vm_call0_body ()
-#9  0x0000000102da9d82 in rb_call0 ()
-#10 0x0000000102cbc969 in rb_class_new_instance ()
-#11 0x0000000102dadee3 in vm_call_cfunc ()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Note the long pathnames at the end of the middle lines - they indicate
-we&#39;re executing within a native extension: the &lt;code&gt;pg&lt;/code&gt; gem which then calls
-into &lt;code&gt;libpq&lt;/code&gt;, postgresql&#39;s native C API.  The &lt;code&gt;pg&lt;/code&gt; gem is calling &lt;code&gt;PQsetClientEncoding&lt;/code&gt;
-which looks like it is making a network call since I see terms like &amp;quot;Socket&amp;quot; and &amp;quot;poll&amp;quot;.&lt;/p&gt;
-
-&lt;p&gt;Now we find the root issue: there&#39;s no GVL release in the backtrace.  MRI&#39;s API is
-excellent in this regard: you should see &lt;code&gt;rb_thread_call_without_gvl&lt;/code&gt; in
-the backtrace to indicate that the thread is not holding the GVL.
-Until that network call finishes, the entire process is locked up and
-can&#39;t do anything.  Most of the time you won&#39;t notice because the network is
-usually pretty fast but in the case where the network is stalled, work
-grinds to a halt.&lt;/p&gt;
-
-&lt;p&gt;All of this assumes you can use GDB in your production environment.  If you&#39;re on
-Heroku or a similar PaaS, try to reproduce the issue on your local machine or a
-Linux VM.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Performing a network operation while holding the GVL is a huge bug and should be fixed.
-This is a current &lt;a href=&#34;https://bitbucket.org/ged/ruby-pg/issues/245/pg-0184&#34;&gt;pg bug in &amp;lt;= 0.18.4&lt;/a&gt;, filed and acknowledged.&lt;/p&gt;
-
-&lt;p&gt;Getting thread dumps from a stuck process is critical to diagnosing the root cause.
-Reading and understanding those backtraces, both in Ruby and in GDB, is a useful skill to have
-when debugging issues.  As you read more code, you&#39;ll get better and
-faster at diagnosing problems.  It took me about 30 seconds to determine
-the problem in the GDB dump above.&lt;/p&gt;
-
-&lt;p&gt;If you are a Sidekiq Pro or Enterprise customer and seeing stuck processes, don&#39;t be
-afraid to gist me your GDB dumps - I&#39;d be happy to help diagnose.&lt;/p&gt;
 </description>
     </item>
     
