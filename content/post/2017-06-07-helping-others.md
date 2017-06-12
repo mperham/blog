@@ -43,7 +43,7 @@ They provide **office hours**.  Students can show up to the professor's
 office at a well-known hour in order to get help.  If other students are
 there, they all have to share the professor's time.
 
-This is the purpose of my weekly [Happy Hour](http://sidekiq.org/support/),
+This is the purpose of my weekly [Happy Hour](http://sidekiq.org/support),
 anyone can show up for that hour and video chat with me about any
 subject.  If others show up, you might have to share the time.  We don't
 have to arrange a time or location, you just need to RSVP so I know to
