@@ -8,8 +8,72 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Mon, 05 Jun 2017 09:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 07 Jun 2017 09:00:19 -0700</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Helping Others</title>
+      <link>http://www.mikeperham.com/2017/06/07/helping-others/</link>
+      <pubDate>Wed, 07 Jun 2017 09:00:19 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/06/07/helping-others/</guid>
+      <description>
+
+&lt;p&gt;I&#39;m a big fan of helping and empowering others through my open source software contributions
+but I often get pings from people from around the world asking for help.
+These requests generally take two forms:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&amp;quot;I&#39;m having this problem with your software...&amp;quot;&lt;/li&gt;
+&lt;li&gt;&amp;quot;I want help with my business idea...&amp;quot;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;One thing I&#39;ve learned over time is that &lt;strong&gt;talking to individuals
+privately does not scale&lt;/strong&gt;.  You have to arrange a date/time, determine a
+chat location/method, often to discuss a problem that can be solved in
+3-5 minutes. Often business questions take an hour or more of due
+diligence, demand research into a particular vertical, etc.  Here&#39;s the
+policies I&#39;ve found work best for all parties.&lt;/p&gt;
+
+&lt;h2 id=&#34;software-issues&#34;&gt;Software Issues&lt;/h2&gt;
+
+&lt;p&gt;All OSS support must go into a persistent, searchable public forum.  No private email, no chat
+rooms or IRC, etc.  Persistent means it can be found years from now.
+Searchable means anyone can search for their own problem and find
+related discussions.  GitHub Issues and StackOverflow are my go-to
+solutions here.&lt;/p&gt;
+
+&lt;p&gt;With these traits, users can search and find solutions to their own
+problems without bothering you.  This is a very good thing: you&#39;re happy
+and they&#39;re happy.&lt;/p&gt;
+
+&lt;h2 id=&#34;business-help&#34;&gt;Business Help&lt;/h2&gt;
+
+&lt;p&gt;Due to my notority and success, I&#39;ve found myself emailed more and more
+frequently by random people wanting my opinion on various subjects (some
+of which I&#39;m definitely not qualified for).  Unlike software support,
+there&#39;s no issue tracker for building a business.  Instead I turn to the
+example of another profession: college professors.  They have classes
+with 100s of students, how do they provide one-on-one help to such a
+large group?&lt;/p&gt;
+
+&lt;p&gt;They provide &lt;strong&gt;office hours&lt;/strong&gt;.  Students can show up to the professor&#39;s
+office at a well-known hour in order to get help.  If other students are
+there, they all have to share the professor&#39;s time.&lt;/p&gt;
+
+&lt;p&gt;This is the purpose of my weekly &lt;a href=&#34;http://sidekiq.org/support/&#34;&gt;Happy Hour&lt;/a&gt;,
+anyone can show up for that hour and video chat with me about any
+subject.  If others show up, you might have to share the time.  We don&#39;t
+have to arrange a time or location, you just need to RSVP so I know to
+be there.&lt;/p&gt;
+
+&lt;h2 id=&#34;wrapup&#34;&gt;Wrapup&lt;/h2&gt;
+
+&lt;p&gt;By providing software support in an open, searchable forum and weekly
+video chat, I can easily provide support to a large group of random
+people &lt;strong&gt;for free&lt;/strong&gt; and still have time for my business, customers and family.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Tracking down performance bugs in Sidekiq jobs</title>
@@ -943,56 +1007,6 @@ defend those rights against their erosion.&lt;/p&gt;
 &lt;p&gt;I&#39;m offering a &lt;strong&gt;free&lt;/strong&gt; license for Sidekiq Enterprise to nation-wide 501(c)3 non-profits
 whose mission is to protect our civil rights or the environment.
 Please &lt;a href=&#34;mailto:mike&amp;amp;#64;contribsys.com&#34;&gt;email me&lt;/a&gt; if you are interested.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Public Relations Blast</title>
-      <link>http://www.mikeperham.com/2017/01/18/public-relations-blast/</link>
-      <pubDate>Wed, 18 Jan 2017 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2017/01/18/public-relations-blast/</guid>
-      <description>
-
-&lt;p&gt;Apologies, dear reader, it&#39;s been a while since I blogged; I&#39;ve been busy with many
-things for the last few months:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;We bought a house and moved, kid started kindergarten.&lt;/li&gt;
-&lt;li&gt;I rewrote Sidekiq Pro&#39;s reliable_fetch into super_fetch, feedback has been
-quite good with no bugs reported and nice performance
-improvements &lt;a href=&#34;https://twitter.com/scottymeuk/status/801828989258108932/&#34;&gt;noted by the Baremetrics team&lt;/a&gt;.
-&lt;img src=&#34;https://pbs.twimg.com/media/CyCq4_DW8AAhViR.jpg&#34; alt=&#34;metrics&#34; /&gt;&lt;/li&gt;
-&lt;li&gt;I&#39;ve pushed out 8 patch releases, trying to stabilize Sidekiq 4.2&#39;s
-new Rails 5 support.  Not my finest hour, but on the positive side I wrote an
-integration test suite to verify Sidekiq&#39;s job execution
-functionality with Rails 4/5 dev/prod.&lt;/li&gt;
-&lt;li&gt;I attended Rubyconf 2016 in Cincinnati, it was a high-quality conference as usual
-from the Ruby Cental folks.&lt;/li&gt;
-&lt;li&gt;I&#39;ve done 4-5 different interviews on my business and how it&#39;s grown
-over the last few years.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&#34;business&#34;&gt;Business&lt;/h2&gt;
-
-&lt;p&gt;The last point wasn&#39;t really planned but snowballed.  I decided to
-interview with IndieHackers on a lark and it turns out that several others
-wanted to interview me based on my success so far.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.indiehackers.com/businesses/sidekiq&#34;&gt;IndieHackers&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://itunes.apple.com/us/podcast/tsb004-mike-perham-turning/id1171237328?i=1000377741544&amp;amp;mt=2&#34;&gt;The SaaS Bootstrapper&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://medium.com/starting-sustaining/mike-perham-interview-8e98939284a5&#34;&gt;Starting and Sustaining&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://giantrobots.fm/219&#34;&gt;Thoughtbot&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The net takeaway is that Sidekiq sales are going very well, revenue grew
-about +75% in 2016, and Sidekiq is now the dominant background solution for Ruby, according to &lt;a href=&#34;https://infinum.co/the-capsized-eight/analyzing-rubygems-stats-v2016&#34;&gt;Infinum&#39;s Rubygems analysis&lt;/a&gt;.
-&lt;img src=&#34;./images/marketshare2016.png&#34; alt=&#34;numbers&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;what-s-next&#34;&gt;What&#39;s Next?&lt;/h2&gt;
-
-&lt;p&gt;Sidekiq 5.0!&lt;/p&gt;
 </description>
     </item>
     
