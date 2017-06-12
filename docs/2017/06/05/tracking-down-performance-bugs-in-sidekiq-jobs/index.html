@@ -59,7 +59,7 @@
 <p>I'm having trouble trying to figure out why one particular worker I have takes so long per job. Some of the jobs are taking 30 minutes. What the program does is load a spreadsheet to the database. When I run &quot;top&quot;, it looks like this.  What should my next step be?</p>
 </blockquote>
 
-<p><img src="../../../../images/debugging-top.jpg" alt="top output" /></p>
+<p><img src="//www.mikeperham.com/images/debugging-top.jpg" alt="top output" /></p>
 
 <h2 id="the-explanation">The Explanation</h2>
 
@@ -81,7 +81,7 @@ See a job that's taking too long?  Note its PID and TID (&quot;13159&quot; and &
 <li>Send the TTIN signal to that PID (<code>kill -TTIN 13159</code>) and find the backtrace associated with that TID in the log output.</li>
 </ol>
 
-<p><img src="../../../../images/debugging-busy.png" alt="busy page" /></p>
+<p><img src="//www.mikeperham.com/images/debugging-busy.png" alt="busy page" /></p>
 
 <p>Often the job backtrace will give you the clue you need to solve the performance problem.</p>
 

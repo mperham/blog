@@ -91,7 +91,7 @@ people &lt;strong&gt;for free&lt;/strong&gt; and still have time for my business
 &lt;p&gt;I&#39;m having trouble trying to figure out why one particular worker I have takes so long per job. Some of the jobs are taking 30 minutes. What the program does is load a spreadsheet to the database. When I run &amp;quot;top&amp;quot;, it looks like this.  What should my next step be?&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&lt;img src=&#34;./images/debugging-top.jpg&#34; alt=&#34;top output&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;//www.mikeperham.com/images/debugging-top.jpg&#34; alt=&#34;top output&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;the-explanation&#34;&gt;The Explanation&lt;/h2&gt;
 
@@ -113,7 +113,7 @@ See a job that&#39;s taking too long?  Note its PID and TID (&amp;quot;13159&amp
 &lt;li&gt;Send the TTIN signal to that PID (&lt;code&gt;kill -TTIN 13159&lt;/code&gt;) and find the backtrace associated with that TID in the log output.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;img src=&#34;./images/debugging-busy.png&#34; alt=&#34;busy page&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;//www.mikeperham.com/images/debugging-busy.png&#34; alt=&#34;busy page&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Often the job backtrace will give you the clue you need to solve the performance problem.&lt;/p&gt;
 

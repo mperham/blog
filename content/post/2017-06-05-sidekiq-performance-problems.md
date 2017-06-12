@@ -9,7 +9,7 @@ A Sidekiq Enterprise customer recently emailed me to ask for help.
 
 > I'm having trouble trying to figure out why one particular worker I have takes so long per job. Some of the jobs are taking 30 minutes. What the program does is load a spreadsheet to the database. When I run "top", it looks like this.  What should my next step be?
 
-![top output](/images/debugging-top.jpg)
+![top output](//www.mikeperham.com/images/debugging-top.jpg)
 
 ## The Explanation
 
@@ -27,7 +27,7 @@ There's a two step process to get more info:
   See a job that's taking too long?  Note its PID and TID ("13159" and "otqnxjaoc" in the screenshot).
 2. Send the TTIN signal to that PID (`kill -TTIN 13159`) and find the backtrace associated with that TID in the log output.
 
-![busy page](/images/debugging-busy.png)
+![busy page](//www.mikeperham.com/images/debugging-busy.png)
 
 Often the job backtrace will give you the clue you need to solve the performance problem.
 
