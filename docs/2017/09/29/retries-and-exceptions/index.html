@@ -1,0 +1,161 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Retries and Exceptions </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Retries and Exceptions</h1>
+      <small class="post-meta">Sep 29, 2017</small>
+      <div class="post-content">
+        <p>Do you hate getting your inbox filled with errors you know you can
+ignore?  Here's one cool trick to make them disappear.</p>
+
+<p>If you are writing a background job, it is best practice to have that
+job retry in the case of unexpected errors.  Networks can be flaky,
+code can be buggy, data can be sketchy -- as they say, &quot;stuff happens&quot;.</p>
+
+<p>Sidekiq's default policy for jobs and retries is simple:</p>
+
+<ul>
+<li>if a job returns normally, it is considered a success.</li>
+<li>if a job raises an error, the error is reported and a retry is
+scheduled.</li>
+</ul>
+
+<p>Many people have asked me: &quot;I have a flaky service, how can I retry the
+job <strong>without</strong> reporting the error to my error service and filling my
+inbox&quot;.  Sometimes the
+asker will want to disable retries or their error service: no way!
+Retries and error reporting are there to handle <strong>unexpected</strong> problems that you need to
+know about.  They should be
+enabled by default and disabled only if your job is truly optional.</p>
+
+<p>Instead, your job should flag errors that can be ignored; we'll configure our
+error service to ignore them.  First we add a flag to the root of all
+errors:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e"># config/initializers/exceptions.rb</span>
+<span style="color: #66d9ef">class</span> <span style="color: #a6e22e">Exception</span>
+  <span style="color: #66d9ef">attr_accessor</span> <span style="color: #e6db74">:ignore_please</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+<p>Now we update our job to rescue and flag those flaky errors:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e"># your job/worker class</span>
+<span style="color: #66d9ef">def</span> <span style="color: #a6e22e">perform</span>
+  <span style="color: #66d9ef">begin</span>
+    <span style="color: #f8f8f2">sketchy_service</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">call</span>
+  <span style="color: #66d9ef">rescue</span> <span style="color: #66d9ef">FlakyError</span> <span style="color: #f92672">=&gt;</span> <span style="color: #f8f8f2">ex</span>
+    <span style="color: #75715e"># flag it to be ignored</span>
+    <span style="color: #f8f8f2">ex</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">ignore_please</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">true</span>
+    <span style="color: #75715e"># re-raise it so Sidekiq will retry</span>
+    <span style="color: #66d9ef">raise</span> <span style="color: #f8f8f2">ex</span>
+  <span style="color: #66d9ef">end</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+<p>Now configure your error service gem to ignore those errors.  Here's how
+to do it for Bugsnag and Honeybadger:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e"># https://docs.bugsnag.com/platforms/ruby/rails/configuration-options/#ignore_classes</span>
+<span style="color: #75715e"># config/initializers/bugsnag.rb</span>
+<span style="color: #66d9ef">Bugsnag</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">configure</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">ignore_classes</span> <span style="color: #f92672">&lt;&lt;</span> <span style="color: #f8f8f2">lambda</span> <span style="color: #f8f8f2">{</span><span style="color: #f92672">|</span><span style="color: #f8f8f2">ex</span><span style="color: #f92672">|</span> <span style="color: #f8f8f2">ex</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">ignore_please</span> <span style="color: #f8f8f2">}</span>
+<span style="color: #66d9ef">end</span>
+
+<span style="color: #75715e"># http://docs.honeybadger.io/ruby/getting-started/ignoring-errors.html#ignore-programmatically</span>
+<span style="color: #75715e"># config/initializers/honeybadger.rb</span>
+<span style="color: #66d9ef">Honeybadger</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">exception_filter</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">notice</span><span style="color: #f92672">|</span>
+  <span style="color: #f8f8f2">notice</span><span style="color: #f92672">[</span><span style="color: #e6db74">:exception</span><span style="color: #f92672">].</span><span style="color: #f8f8f2">ignore_please</span>
+<span style="color: #66d9ef">end</span>
+</pre></div>
+
+<p>Done!  Now your inbox should be a little cleaner.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2017\/09\/29\/retries-and-exceptions\/';
+    var disqus_title = 'Retries and Exceptions';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2017\/09\/29\/retries-and-exceptions\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

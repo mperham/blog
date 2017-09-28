@@ -8,8 +8,79 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Wed, 07 Jun 2017 09:00:19 -0700</lastBuildDate>
+    <lastBuildDate>Fri, 29 Sep 2017 09:00:00 -0700</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Retries and Exceptions</title>
+      <link>http://www.mikeperham.com/2017/09/29/retries-and-exceptions/</link>
+      <pubDate>Fri, 29 Sep 2017 09:00:00 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/09/29/retries-and-exceptions/</guid>
+      <description>&lt;p&gt;Do you hate getting your inbox filled with errors you know you can
+ignore?  Here&#39;s one cool trick to make them disappear.&lt;/p&gt;
+
+&lt;p&gt;If you are writing a background job, it is best practice to have that
+job retry in the case of unexpected errors.  Networks can be flaky,
+code can be buggy, data can be sketchy -- as they say, &amp;quot;stuff happens&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;Sidekiq&#39;s default policy for jobs and retries is simple:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;if a job returns normally, it is considered a success.&lt;/li&gt;
+&lt;li&gt;if a job raises an error, the error is reported and a retry is
+scheduled.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Many people have asked me: &amp;quot;I have a flaky service, how can I retry the
+job &lt;strong&gt;without&lt;/strong&gt; reporting the error to my error service and filling my
+inbox&amp;quot;.  Sometimes the
+asker will want to disable retries or their error service: no way!
+Retries and error reporting are there to handle &lt;strong&gt;unexpected&lt;/strong&gt; problems that you need to
+know about.  They should be
+enabled by default and disabled only if your job is truly optional.&lt;/p&gt;
+
+&lt;p&gt;Instead, your job should flag errors that can be ignored; we&#39;ll configure our
+error service to ignore them.  First we add a flag to the root of all
+errors:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;# config/initializers/exceptions.rb&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Exception&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;attr_accessor&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;:ignore_please&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we update our job to rescue and flag those flaky errors:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;# your job/worker class&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;perform&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;begin&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;sketchy_service&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;call&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;rescue&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;FlakyError&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ex&lt;/span&gt;
+    &lt;span style=&#34;color: #75715e&#34;&gt;# flag it to be ignored&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;ex&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ignore_please&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+    &lt;span style=&#34;color: #75715e&#34;&gt;# re-raise it so Sidekiq will retry&lt;/span&gt;
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;raise&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ex&lt;/span&gt;
+  &lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now configure your error service gem to ignore those errors.  Here&#39;s how
+to do it for Bugsnag and Honeybadger:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #75715e&#34;&gt;# https://docs.bugsnag.com/platforms/ruby/rails/configuration-options/#ignore_classes&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# config/initializers/bugsnag.rb&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;Bugsnag&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;configure&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;config&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ignore_classes&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;lambda&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ex&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;ex&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ignore_please&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #75715e&#34;&gt;# http://docs.honeybadger.io/ruby/getting-started/ignoring-errors.html#ignore-programmatically&lt;/span&gt;
+&lt;span style=&#34;color: #75715e&#34;&gt;# config/initializers/honeybadger.rb&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;Honeybadger&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;exception_filter&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;notice&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;|&lt;/span&gt;
+  &lt;span style=&#34;color: #f8f8f2&#34;&gt;notice&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;:exception&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;].&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;ignore_please&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Done!  Now your inbox should be a little cleaner.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Helping Others</title>
@@ -977,36 +1048,6 @@ framework for processing business transactions.  The two are a potent
 combination.&lt;/p&gt;
 
 &lt;p&gt;Here&#39;s to another great five years!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>What can I do?</title>
-      <link>http://www.mikeperham.com/2017/02/01/what-can-i-do/</link>
-      <pubDate>Wed, 01 Feb 2017 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2017/02/01/what-can-i-do/</guid>
-      <description>
-
-&lt;p&gt;Like many people, I&#39;ve been shaken by the events of the last week.
-I was raised to believe in freedom for all, the rule of law and the inalienable rights
-guaranteed to all Americans by the Constitution.  But ultimately the law
-and the Constitution are pieces of paper; it&#39;s up to every one of us to
-defend those rights against their erosion.&lt;/p&gt;
-
-&lt;p&gt;But what can I do?  Well, a couple of things:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Join the millions of others and protest.&lt;/li&gt;
-&lt;li&gt;Donate money to organizations which are defending our rights.&lt;/li&gt;
-&lt;li&gt;Donate my technical tools to those organizations.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&#34;non-profit-licensing&#34;&gt;Non-Profit Licensing&lt;/h1&gt;
-
-&lt;p&gt;I&#39;m offering a &lt;strong&gt;free&lt;/strong&gt; license for Sidekiq Enterprise to nation-wide 501(c)3 non-profits
-whose mission is to protect our civil rights or the environment.
-Please &lt;a href=&#34;mailto:mike&amp;amp;#64;contribsys.com&#34;&gt;email me&lt;/a&gt; if you are interested.&lt;/p&gt;
 </description>
     </item>
     
