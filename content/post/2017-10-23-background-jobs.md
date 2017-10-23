@@ -6,7 +6,7 @@ title = "The Future of Background Jobs"
 Whether sending an email, adding an item to your cart or tracking an
 impression, modern businesses can be modeled as a series of business
 transactions.  I believe that a good background job framework is the
-best way to execute these transactions and scale your business applications.
+best way to execute these transactions and scale your business applications
 across many machines.  A good background job framework gives you:
 
 * a simple API for defining and calling jobs
