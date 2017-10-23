@@ -8,8 +8,64 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Fri, 29 Sep 2017 09:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 23 Oct 2017 07:00:00 -0700</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>The Future of Background Jobs</title>
+      <link>http://www.mikeperham.com/2017/10/23/the-future-of-background-jobs/</link>
+      <pubDate>Mon, 23 Oct 2017 07:00:00 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/10/23/the-future-of-background-jobs/</guid>
+      <description>&lt;p&gt;Whether sending an email, adding an item to your cart or tracking an
+impression, modern businesses can be modeled as a series of business
+transactions.  I believe that a good background job framework is the
+best way to execute these transactions and scale your business applications.
+across many machines.  A good background job framework gives you:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a simple API for defining and calling jobs&lt;/li&gt;
+&lt;li&gt;automatic error handling and retry logic&lt;/li&gt;
+&lt;li&gt;an interface for monitoring, debugging and introspection&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These jobs become much easier to reason about and debug when they
+all use similar calling conventions, logging and execution environment.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;In fact, I would argue that the current Serverless trend is
+(background jobs - devops + price).  Squint a bit and a serverless
+function call looks a bit like a background job invocation: both are, at
+their core, asynchronous function calls into your app logic.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For the last five years, I&#39;ve created and polished Sidekiq, Sidekiq Pro
+and Sidekiq Enterprise as best as I can, adding features and functionality
+that scale (in the case of a few customers) to billions of jobs per day.&lt;/p&gt;
+
+&lt;p&gt;But Sidekiq has two major constraints:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The datastore is Redis, with all its advantages and disadvantages&lt;/li&gt;
+&lt;li&gt;Almost all functionality is implemented in the Ruby worker process, limiting Sidekiq to Ruby&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;What if we could have a system that:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;scales to thousands of jobs per second?&lt;/li&gt;
+&lt;li&gt;enables polyglot teams -- can be used with any programming language?&lt;/li&gt;
+&lt;li&gt;provides those useful tools and metrics for monitoring and debugging?&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Sidekiq has been very successful but there&#39;s nothing Ruby-specific
+about its conventions; almost all programming languages can benefit from a
+similar tool.  Tomorrow, I&#39;m going to introduce you to my new open source
+project which aims to do all of this: &lt;strong&gt;Faktory&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;./images/faktory.png&#34; alt=&#34;faktory&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Retries and Exceptions</title>
@@ -960,94 +1016,6 @@ Instead of choosing one config format, they support three!&lt;/li&gt;
 &lt;p&gt;We&#39;ll see how the project continues over the next few years.
 I&#39;d love to see a site generator written in Crystal, a fast, higher-level language
 that has most of the advantages of Go while also being more terse.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Five Years</title>
-      <link>http://www.mikeperham.com/2017/02/06/five-years/</link>
-      <pubDate>Mon, 06 Feb 2017 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2017/02/06/five-years/</guid>
-      <description>
-
-&lt;p&gt;Five years ago, I published v0.5.0 of &lt;a href=&#34;http://sidekiq.org&#34;&gt;a little project&lt;/a&gt; I had great hopes for.
-Here we are five years later: I&#39;ve gone from selling $50 licenses to negotiating five-figure enterprise
-deals with the Fortune 500.  Five five five!&lt;/p&gt;
-
-&lt;h1 id=&#34;gimme-five&#34;&gt;Gimme Five!&lt;/h1&gt;
-
-&lt;p&gt;&lt;img src=&#34;./images/highfive.jpg&#34; alt=&#34;five&#34; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;by-the-numbers&#34;&gt;By The Numbers&lt;/h1&gt;
-
-&lt;p&gt;&lt;style&gt;
-table {
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid #000;
-}&lt;/p&gt;
-
-&lt;p&gt;th, td, caption {
-  border: 1px solid #000;
-  padding: 0.3em;
-}
-&lt;/style&gt;
-&lt;table width=&#34;100%&#34;&gt;
-&lt;tr&gt;&lt;th&gt;&amp;nbsp;&lt;/th&gt;&lt;th&gt;1st Birthday&lt;/th&gt;&lt;th&gt;2nd Birthday&lt;/th&gt;&lt;th&gt;4th Birthday&lt;/th&gt;&lt;th&gt;5th Birthday&lt;/th&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;th&gt;Downloads&lt;/th&gt;&lt;td&gt;214,300&lt;/td&gt;&lt;td&gt;1,192,259&lt;/td&gt;&lt;td&gt;5,505,145&lt;/td&gt;&lt;td&gt;11,260,039&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;th&gt;Stars&lt;/th&gt;&lt;td&gt;2144&lt;/td&gt;&lt;td&gt;3535&lt;/td&gt;&lt;td&gt;5846&lt;/td&gt;&lt;td&gt;7087&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;th&gt;Closed
-Issues&lt;/th&gt;&lt;td&gt;663&lt;/td&gt;&lt;td&gt;1420&lt;/td&gt;&lt;td&gt;1887&lt;/td&gt;&lt;td&gt;2378&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;th&gt;Forks&lt;/th&gt;&lt;td&gt;266&lt;/td&gt;&lt;td&gt;563&lt;/td&gt;&lt;td&gt;1003&lt;/td&gt;&lt;td&gt;1247&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;th&gt;Closed PRs&lt;/th&gt;&lt;td&gt;228&lt;/td&gt;&lt;td&gt;380&lt;/td&gt;&lt;td&gt;836&lt;/td&gt;&lt;td&gt;938&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;th&gt;Versions&lt;/th&gt;&lt;td&gt;44&lt;/td&gt;&lt;td&gt;74&lt;/td&gt;&lt;td&gt;110&lt;/td&gt;&lt;td&gt;127&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;th&gt;Customers&lt;/th&gt;&lt;td&gt;25&lt;/td&gt;&lt;td&gt;200&lt;/td&gt;&lt;td&gt;675&lt;/td&gt;&lt;td&gt;726&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;th&gt;Employees&lt;/th&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;
-&lt;/table&gt;
-&lt;br/&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;2016-year-in-review&#34;&gt;2016 Year in Review&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Sidekiq
-
-&lt;ul&gt;
-&lt;li&gt;Rails 5.0 support&lt;/li&gt;
-&lt;li&gt;Dropped Sinatra dependency&lt;/li&gt;
-&lt;li&gt;16 bug fix releases&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Sidekiq Pro
-
-&lt;ul&gt;
-&lt;li&gt;timed_fetch and super_fetch algorithms&lt;/li&gt;
-&lt;li&gt;17 bug fix releases&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Sidekiq Enterprise
-
-&lt;ul&gt;
-&lt;li&gt;Job data encryption&lt;/li&gt;
-&lt;li&gt;Multi-Process with memory monitoring&lt;/li&gt;
-&lt;li&gt;Web UI authorization&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;you-want-five&#34;&gt;You Want Five?&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/mperham/sidekiq/issues/3301&#34;&gt;Sidekiq 5.0 beta&lt;/a&gt; is now
-ready for testing in non-production environments.  The internals have
-been redesigned to work better with Rails 5.0.  It no longer supports
-older Rubies: Ruby 2.2.2+ only.  Read the &lt;a href=&#34;https://github.com/mperham/sidekiq/blob/5-0/5.0-Upgrade.md&#34;&gt;upgrade notes&lt;/a&gt; for more details.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;gem &#39;sidekiq&#39;, &#39;5.0.0.beta1&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I still believe Ruby is the most fun, most flexible, highest level language
-out there for building business applications and Sidekiq is the best
-framework for processing business transactions.  The two are a potent
-combination.&lt;/p&gt;
-
-&lt;p&gt;Here&#39;s to another great five years!&lt;/p&gt;
 </description>
     </item>
     
