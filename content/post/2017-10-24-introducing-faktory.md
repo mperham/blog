@@ -113,7 +113,7 @@ Faktory as a service, Heroku add-on, etc.
 
 Q. Man, I love the q in Sidekiq.  Why no q?<br/>
 A. Because "Faqtory" sounds like software for building this FAQ and
-a multi-billion dollar congolmerate has the worldwide trademark
+a multi-billion dollar conglomerate has the worldwide trademark
 for "Worq".
 
 Q. Where can I ask further questions?<br/>
