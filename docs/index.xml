@@ -8,8 +8,137 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Mon, 23 Oct 2017 07:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 24 Oct 2017 07:00:00 -0700</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Introducing Faktory</title>
+      <link>http://www.mikeperham.com/2017/10/24/introducing-faktory/</link>
+      <pubDate>Tue, 24 Oct 2017 07:00:00 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2017/10/24/introducing-faktory/</guid>
+      <description>
+
+&lt;p&gt;Yesterday I explained how a good background job framework is critical to
+scaling business applications.  Today, meet
+&lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I&#39;ve spent the last six months building &lt;strong&gt;Faktory&lt;/strong&gt;, a new background
+job system which aims to bring the best practices developed over the
+last five years in Sidekiq &lt;strong&gt;to every programming language&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;&lt;img src=&#34;http://www.mikeperham.com/images/faktory-ui.png&#34; width=&#34;800&#34; height=&#34;375&#34;/&gt;&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-basics&#34;&gt;The Basics&lt;/h2&gt;
+
+&lt;p&gt;Faktory is a server daemon which provides a simple API to produce and
+consume background jobs.  Here&#39;s the chatter to create and execute
+a background job:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; PUSH {&amp;quot;jid&amp;quot;:&amp;quot;1238abc712&amp;quot;,&amp;quot;jobtype&amp;quot;:&amp;quot;SomeJob&amp;quot;,&amp;quot;args&amp;quot;:[1,2,&amp;quot;hello&amp;quot;],&amp;quot;queue&amp;quot;:&amp;quot;default&amp;quot;}
+&amp;lt; OK
+&amp;gt; FETCH critical default low
+&amp;lt; {&amp;quot;jid&amp;quot;:&amp;quot;1238abc712&amp;quot;,&amp;quot;jobtype&amp;quot;:&amp;quot;SomeJob&amp;quot;,&amp;quot;args&amp;quot;:[1,2,&amp;quot;hello&amp;quot;],&amp;quot;queue&amp;quot;:&amp;quot;default&amp;quot;}
+[...do the work...]
+&amp;gt; ACK {&amp;quot;jid&amp;quot;:&amp;quot;1238abc712&amp;quot;}
+&amp;lt; OK
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Jobs are a small JSON hash with a few mandatory keys.
+Producers PUSH a job to a queue. Consumers FETCH jobs from queues,
+process them and then either ACK (success) or FAIL the job.  Faktory
+will store and re-enqueue failed jobs over time just as Sidekiq does
+(these are called &amp;quot;retries&amp;quot;).  Networks fail and bugs happen, job retries
+are critical to a &amp;quot;self-healing&amp;quot; production environment.&lt;/p&gt;
+
+&lt;p&gt;To execute jobs, you need a Faktory worker process which can run
+your business logic in the language of your choice.  With the launch
+today, I&#39;m providing:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;faktory&lt;/code&gt; &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;link&lt;/a&gt; - high
+performance background job server&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;faktory_worker_ruby&lt;/code&gt; &lt;a href=&#34;https://github.com/contribsys/faktory_worker_ruby&#34;&gt;link&lt;/a&gt; -
+a Rubygem which can execute jobs fetched from Faktory using Ruby,
+similar to Sidekiq&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;faktory_worker_go&lt;/code&gt; &lt;a href=&#34;https://github.com/contribsys/faktory_worker_go&#34;&gt;link&lt;/a&gt; -
+a library for building a Go-based worker process&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;how-it-works&#34;&gt;How It Works&lt;/h2&gt;
+
+&lt;p&gt;Many existing job systems provide no persistence or a simple binlog
+which can be replayed in case of crash.&lt;/p&gt;
+
+&lt;p&gt;Faktory goes further and provides the same job persistence, state management and
+monitoring Web UI that Sidekiq does.  It uses
+Facebook&#39;s high-performance &lt;a href=&#34;http://rocksdb.org&#34;&gt;RocksDB&lt;/a&gt; embedded
+datastore internally to
+persist all job data, queues, error state, etc.  It exposes a Web UI
+(which is similar to Sidekiq&#39;s), allowing you to see the current
+state of your queues, jobs and workers.&lt;/p&gt;
+
+&lt;p&gt;Faktory listens on port 7419 for commands and port 7420 for the Web UI.
+7419 for the robot workers, 7420 for the human bosses.&lt;/p&gt;
+
+&lt;h2 id=&#34;get-started&#34;&gt;Get Started&lt;/h2&gt;
+
+&lt;p&gt;The project is brand new so it will take a few weeks to polish the
+development process.  If you are a Gopher, you can build the binary locally with Go 1.9.
+If you have Vagrant 2.x running, you can run Faktory via
+the Vagrant box in &lt;code&gt;build/ubuntu&lt;/code&gt;.  See the &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Development&#34;&gt;Development wiki page&lt;/a&gt;
+for more detail.&lt;/p&gt;
+
+&lt;p&gt;We&#39;ll eventually get some install options plugged into the
+&lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Installation&#34;&gt;Installation wiki page&lt;/a&gt;.
+Like all new things, it&#39;s rough today but it will get better over time.&lt;/p&gt;
+
+&lt;h1 id=&#34;fak&#34;&gt;FAK&lt;/h1&gt;
+
+&lt;p&gt;Q. Can I use it in production?&lt;/br&gt;
+A. It&#39;s a brand new project but only you can determine how risk tolerant you are.
+I will release 1.0 when the APIs are solid and I feel it is stable.&lt;/p&gt;
+
+&lt;p&gt;Q. Does Faktory require Redis?&lt;br/&gt;
+A. No. Faktory is a standalone 64-bit Linux binary; it needs a Faktory worker
+process to consume jobs.  Redis -&amp;gt; Sidekiq == Faktory -&amp;gt; Faktory worker&lt;/p&gt;
+
+&lt;p&gt;Q. Are there other things like Faktory?&lt;br/&gt;
+A. Yep, beanstalkd, starling, gearman and others.  Faktory aims to be
+more feature-rich and better supported.  Many of Faktory&#39;s OSS competitors
+are &amp;quot;dead&amp;quot; and no longer supported.  I am fortunate enough to have both
+expertise in background jobs and a business model to support Faktory long-term.&lt;/p&gt;
+
+&lt;p&gt;Q. What&#39;s going to happen to Sidekiq?&lt;br/&gt;
+A. Nothing.  It&#39;s stable, powerful and fully supported.  If you have a
+Ruby/Rails app, it&#39;s a natural choice for background jobs.&lt;/p&gt;
+
+&lt;p&gt;Q. Will you have a commercial version, just like Sidekiq Pro and Enterprise?&lt;br/&gt;
+A. If Faktory sees good uptake, likely yes in 2018.
+Several features like periodic jobs, batches and unique jobs would fit
+very well into a &amp;quot;Faktory Pro&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;Q. Can I help?&lt;br/&gt;
+A. Absolutely.  Faktory&#39;s GitHub repo is &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;contribsys/faktory&lt;/a&gt;;
+try it out and leave feedback.  Build a worker library in your language
+of choice.  I&#39;m fluent in Ruby/Go but not much beyond that.&lt;/p&gt;
+
+&lt;p&gt;Q. Can Faktory be provisioned and managed as a SaaS?&lt;br/&gt;
+A. I have no plans to do so myself but I imagine this would be useful to many.
+I would be happy to chat privately with people interested in offering
+Faktory as a service, Heroku add-on, etc.&lt;/p&gt;
+
+&lt;p&gt;Q. Man, I love the q in Sidekiq.  Why no q?&lt;br/&gt;
+A. Because &amp;quot;Faqtory&amp;quot; sounds like software for building this FAQ and
+a multi-billion dollar congolmerate has the worldwide trademark
+for &amp;quot;Worq&amp;quot;.&lt;/p&gt;
+
+&lt;p&gt;Q. Where can I ask further questions?&lt;br/&gt;
+A. Since you&#39;ve read to the bottom, you get top sekret access to the
+&lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;contribsys/faktory&lt;/a&gt; Gitter chat room.
+I&#39;ll hang out there when I can. Stop by and say hi!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>The Future of Background Jobs</title>
@@ -947,75 +1076,6 @@ comfortably.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;This BiDi work will be part of Sidekiq 5.0.&lt;/strong&gt; If you see a problem in your
 own language/locale, please open an issue or send a pull request to fix it.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Welcome, Hugo</title>
-      <link>http://www.mikeperham.com/2017/03/10/welcome-hugo/</link>
-      <pubDate>Fri, 10 Mar 2017 09:15:20 -0800</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2017/03/10/welcome-hugo/</guid>
-      <description>
-
-&lt;p&gt;I&#39;m trying out a new blogging system after using Jekyll for a few
-years.&lt;/p&gt;
-
-&lt;h2 id=&#34;a-little-history&#34;&gt;A Little History&lt;/h2&gt;
-
-&lt;p&gt;I&#39;ve been blogging personally since 2003 or so and professionally since
-2007 (when I started my Ruby career).  I started on a self-hosted
-Movable Type install and migrated to self-hosted Wordpress in ~2009 but
-the administrivia and complexities of those systems wore me down.  I
-made the decision to wind down my own server and move to hosted
-services, like GitHub Pages, after hearing about the hundredth
-Wordpress security breach.  Since Ruby is my jam, I
-selected Jekyll, a static site generator written in Ruby.&lt;/p&gt;
-
-&lt;h2 id=&#34;jekyll&#34;&gt;Jekyll&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://jekyllrb.com/&#34;&gt;Jekyll&lt;/a&gt; was a refreshing change because everything is flat files and
-static content.  No SQL database of content, no server to administer.
-For setup, you have a Gemfile with the &lt;code&gt;github-pages&lt;/code&gt; gem in it and
-everything is installed for you by Bundler.&lt;/p&gt;
-
-&lt;p&gt;All is not perfect though:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;that one gem requires &lt;strong&gt;74&lt;/strong&gt; dependent gems.&lt;/li&gt;
-&lt;li&gt;I could not figure out an easy workflow for creating a post, seeing
-it while I authored it despite reading the docs many times.&lt;/li&gt;
-&lt;li&gt;It took 5-6 seconds to rebuild my site everytime I wanted to preview
-a content change, incremental builds did not work for me.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&#34;hugo&#34;&gt;Hugo&lt;/h2&gt;
-
-&lt;p&gt;&lt;img class=&#34;img img-responsive pull-right&#34; width=&#34;300&#34; src=&#34;https://gohugo.io/img/hugo.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gohugo.io&#34;&gt;Hugo&lt;/a&gt; is a static site generator written in Go which solves many of those
-problems.  Things I love so far:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Easy install with one 17MB binary by running &lt;code&gt;brew install hugo&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Fast: complete site build takes 300ms by running &lt;code&gt;hugo&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;I can preview my entire site by running &lt;code&gt;hugo server&lt;/code&gt; and livereload just magically works: I can see content changes
-immediately in the browser, without even needing to hit the refresh
-button&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Things I don&#39;t like or I&#39;m worried about:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Lots of open issues/PRs.&lt;/li&gt;
-&lt;li&gt;Large Go codebase, Go is not a terse language.&lt;/li&gt;
-&lt;li&gt;Overly complex: archtetypes, taxonomies, tags are all things I don&#39;t need.
-Instead of choosing one config format, they support three!&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;We&#39;ll see how the project continues over the next few years.
-I&#39;d love to see a site generator written in Crystal, a fast, higher-level language
-that has most of the advantages of Go while also being more terse.&lt;/p&gt;
 </description>
     </item>
     

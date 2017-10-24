@@ -1,0 +1,219 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Introducing Faktory </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Introducing Faktory</h1>
+      <small class="post-meta">Oct 24, 2017</small>
+      <div class="post-content">
+        
+
+<p>Yesterday I explained how a good background job framework is critical to
+scaling business applications.  Today, meet
+<a href="https://github.com/contribsys/faktory">Faktory</a>.</p>
+
+<p>I've spent the last six months building <strong>Faktory</strong>, a new background
+job system which aims to bring the best practices developed over the
+last five years in Sidekiq <strong>to every programming language</strong>.</p>
+
+<p><center><img src="http://www.mikeperham.com/images/faktory-ui.png" width="800" height="375"/></center></p>
+
+<h2 id="the-basics">The Basics</h2>
+
+<p>Faktory is a server daemon which provides a simple API to produce and
+consume background jobs.  Here's the chatter to create and execute
+a background job:</p>
+
+<pre><code>&gt; PUSH {&quot;jid&quot;:&quot;1238abc712&quot;,&quot;jobtype&quot;:&quot;SomeJob&quot;,&quot;args&quot;:[1,2,&quot;hello&quot;],&quot;queue&quot;:&quot;default&quot;}
+&lt; OK
+&gt; FETCH critical default low
+&lt; {&quot;jid&quot;:&quot;1238abc712&quot;,&quot;jobtype&quot;:&quot;SomeJob&quot;,&quot;args&quot;:[1,2,&quot;hello&quot;],&quot;queue&quot;:&quot;default&quot;}
+[...do the work...]
+&gt; ACK {&quot;jid&quot;:&quot;1238abc712&quot;}
+&lt; OK
+</code></pre>
+
+<p>Jobs are a small JSON hash with a few mandatory keys.
+Producers PUSH a job to a queue. Consumers FETCH jobs from queues,
+process them and then either ACK (success) or FAIL the job.  Faktory
+will store and re-enqueue failed jobs over time just as Sidekiq does
+(these are called &quot;retries&quot;).  Networks fail and bugs happen, job retries
+are critical to a &quot;self-healing&quot; production environment.</p>
+
+<p>To execute jobs, you need a Faktory worker process which can run
+your business logic in the language of your choice.  With the launch
+today, I'm providing:</p>
+
+<ul>
+<li><code>faktory</code> <a href="https://github.com/contribsys/faktory">link</a> - high
+performance background job server</li>
+<li><code>faktory_worker_ruby</code> <a href="https://github.com/contribsys/faktory_worker_ruby">link</a> -
+a Rubygem which can execute jobs fetched from Faktory using Ruby,
+similar to Sidekiq</li>
+<li><code>faktory_worker_go</code> <a href="https://github.com/contribsys/faktory_worker_go">link</a> -
+a library for building a Go-based worker process</li>
+</ul>
+
+<h2 id="how-it-works">How It Works</h2>
+
+<p>Many existing job systems provide no persistence or a simple binlog
+which can be replayed in case of crash.</p>
+
+<p>Faktory goes further and provides the same job persistence, state management and
+monitoring Web UI that Sidekiq does.  It uses
+Facebook's high-performance <a href="http://rocksdb.org">RocksDB</a> embedded
+datastore internally to
+persist all job data, queues, error state, etc.  It exposes a Web UI
+(which is similar to Sidekiq's), allowing you to see the current
+state of your queues, jobs and workers.</p>
+
+<p>Faktory listens on port 7419 for commands and port 7420 for the Web UI.
+7419 for the robot workers, 7420 for the human bosses.</p>
+
+<h2 id="get-started">Get Started</h2>
+
+<p>The project is brand new so it will take a few weeks to polish the
+development process.  If you are a Gopher, you can build the binary locally with Go 1.9.
+If you have Vagrant 2.x running, you can run Faktory via
+the Vagrant box in <code>build/ubuntu</code>.  See the <a href="https://github.com/contribsys/faktory/wiki/Development">Development wiki page</a>
+for more detail.</p>
+
+<p>We'll eventually get some install options plugged into the
+<a href="https://github.com/contribsys/faktory/wiki/Installation">Installation wiki page</a>.
+Like all new things, it's rough today but it will get better over time.</p>
+
+<h1 id="fak">FAK</h1>
+
+<p>Q. Can I use it in production?</br>
+A. It's a brand new project but only you can determine how risk tolerant you are.
+I will release 1.0 when the APIs are solid and I feel it is stable.</p>
+
+<p>Q. Does Faktory require Redis?<br/>
+A. No. Faktory is a standalone 64-bit Linux binary; it needs a Faktory worker
+process to consume jobs.  Redis -&gt; Sidekiq == Faktory -&gt; Faktory worker</p>
+
+<p>Q. Are there other things like Faktory?<br/>
+A. Yep, beanstalkd, starling, gearman and others.  Faktory aims to be
+more feature-rich and better supported.  Many of Faktory's OSS competitors
+are &quot;dead&quot; and no longer supported.  I am fortunate enough to have both
+expertise in background jobs and a business model to support Faktory long-term.</p>
+
+<p>Q. What's going to happen to Sidekiq?<br/>
+A. Nothing.  It's stable, powerful and fully supported.  If you have a
+Ruby/Rails app, it's a natural choice for background jobs.</p>
+
+<p>Q. Will you have a commercial version, just like Sidekiq Pro and Enterprise?<br/>
+A. If Faktory sees good uptake, likely yes in 2018.
+Several features like periodic jobs, batches and unique jobs would fit
+very well into a &quot;Faktory Pro&quot;.</p>
+
+<p>Q. Can I help?<br/>
+A. Absolutely.  Faktory's GitHub repo is <a href="https://github.com/contribsys/faktory">contribsys/faktory</a>;
+try it out and leave feedback.  Build a worker library in your language
+of choice.  I'm fluent in Ruby/Go but not much beyond that.</p>
+
+<p>Q. Can Faktory be provisioned and managed as a SaaS?<br/>
+A. I have no plans to do so myself but I imagine this would be useful to many.
+I would be happy to chat privately with people interested in offering
+Faktory as a service, Heroku add-on, etc.</p>
+
+<p>Q. Man, I love the q in Sidekiq.  Why no q?<br/>
+A. Because &quot;Faqtory&quot; sounds like software for building this FAQ and
+a multi-billion dollar congolmerate has the worldwide trademark
+for &quot;Worq&quot;.</p>
+
+<p>Q. Where can I ask further questions?<br/>
+A. Since you've read to the bottom, you get top sekret access to the
+<a href="https://gitter.im/contribsys/faktory">contribsys/faktory</a> Gitter chat room.
+I'll hang out there when I can. Stop by and say hi!</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2017\/10\/24\/introducing-faktory\/';
+    var disqus_title = 'Introducing Faktory';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2017\/10\/24\/introducing-faktory\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
