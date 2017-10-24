@@ -19,7 +19,7 @@
       <guid>http://www.mikeperham.com/2017/10/24/introducing-faktory/</guid>
       <description>
 
-&lt;p&gt;Yesterday I explained how a good background job framework is critical to
+&lt;p&gt;&lt;a href=&#34;//www.mikeperham.com/2017/10/23/the-future-of-background-jobs/&#34;&gt;Yesterday I explained&lt;/a&gt; how a good background job framework is critical to
 scaling business applications.  Today, meet
 &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt;.&lt;/p&gt;
 

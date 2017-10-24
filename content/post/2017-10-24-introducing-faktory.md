@@ -3,7 +3,7 @@ date = "2017-10-24T07:00:00-07:00"
 title = "Introducing Faktory"
 +++
 
-Yesterday I explained how a good background job framework is critical to
+[Yesterday I explained](//www.mikeperham.com/2017/10/23/the-future-of-background-jobs/) how a good background job framework is critical to
 scaling business applications.  Today, meet
 [Faktory](https://github.com/contribsys/faktory).
 
