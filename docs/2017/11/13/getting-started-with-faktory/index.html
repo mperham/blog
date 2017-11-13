@@ -1,0 +1,170 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Getting Started with Faktory </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/inspeqtor/" >Inspeqtor</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Getting Started with Faktory</h1>
+      <small class="post-meta">Nov 13, 2017</small>
+      <div class="post-content">
+        
+
+<p>When I <a href="//www.mikeperham.com/2017/10/24/introducing-faktory/">unveiled my new background job
+system</a> Faktory
+three weeks ago, I didn't have an easy path for people to install and
+try Faktory themselves.  Now there is; let's get it running!</p>
+
+<p><img src="//www.mikeperham.com/images/faktory-logo.png" alt="faktory" /></p>
+
+<h2 id="homebrew">Homebrew</h2>
+
+<p>If you are running macOS, it's installable with Homebrew:</p>
+
+<pre><code>&gt; brew tap contribsys/faktory
+&gt; brew install faktory
+...two minutes pass...
+&gt; faktory
+</code></pre>
+
+<p>Now open your browser to <a href="http://localhost:7420">http://localhost:7420</a></p>
+
+<h2 id="docker">Docker</h2>
+
+<p>If you have Docker, it's easy to pull an image:</p>
+
+<blockquote>
+<p>docker pull contribsys/faktory:latest</p>
+</blockquote>
+
+<p>The command to run it is rather involved, <a href="https://hub.docker.com/r/contribsys/faktory/">see the description</a>.</p>
+
+<h2 id="workers">Workers</h2>
+
+<p>Faktory is only one half of the puzzle, now you need to install a worker
+package which can execute jobs that are pushed to Faktory.  I launched
+Faktory with Ruby and Go worker packages, now there are a half dozen
+libraries for other languages:</p>
+
+<ul>
+<li><a href="https://github.com/contribsys/faktory_worker_ruby">faktory_worker_ruby</a> - Ruby</li>
+<li><a href="https://github.com/contribsys/faktory_worker_go">faktory_worker_go</a> - Go</li>
+<li><a href="https://github.com/cdrx/faktory_worker_python">faktory_worker_python</a> - Python</li>
+<li><a href="https://github.com/basekit/faktory_worker_php">faktory_worker_php</a> - PHP</li>
+<li><a href="https://github.com/jonhoo/faktory-rs">faktory-rs</a> - Rust</li>
+<li><a href="https://github.com/cjbottaro/faktory_worker_ex">faktory_worker_ex</a> - Elixir</li>
+<li><a href="https://github.com/jbielick/faktory_worker_node">faktory_worker_node</a> - Node</li>
+<li><a href="https://github.com/Razenpok/Razensoft.Faktory">Razensoft.Faktory</a> - .NET</li>
+</ul>
+
+<p>Check out those projects and their README for more info on how to get
+started with them.</p>
+
+<h2 id="ruby">Ruby</h2>
+
+<p>If you want to use Faktory with Ruby jobs, I've written up a Getting
+Started guide which shows you the few steps necessary to get jobs
+running with <code>faktory_worker_ruby</code>.</p>
+
+<p><a href="https://github.com/contribsys/faktory/wiki/Getting-Started-Ruby">Getting Started with Faktory and Ruby</a></p>
+
+<h2 id="thanks">Thanks</h2>
+
+<p>The response to Faktory from other open source developers has been
+tremendous.  Lots of pull requests and issues reported, much discussion in the
+issues and chatroom and lots of work still to be done.  Special thanks
+to andrewstucki, cdrx, jonhoo, jweslley, and all the people who've
+built their own worker packages.</p>
+
+<h2 id="wrapup">Wrapup</h2>
+
+<p>Let us know if you have any problems -- <a href="https://gitter.im/contribsys/faktory">pop into the Faktory chatroom</a> and say hi or <a href="https://github.com/contribsys/faktory/issues/new">open a new issue</a>.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2017\/11\/13\/getting-started-with-faktory\/';
+    var disqus_title = 'Getting Started with Faktory';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2017\/11\/13\/getting-started-with-faktory\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
