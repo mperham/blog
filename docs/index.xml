@@ -8,8 +8,131 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Mon, 11 Dec 2017 12:45:07 -0800</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jan 2018 10:53:00 -0800</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Faktory 0.7.0 Released</title>
+      <link>http://www.mikeperham.com/2018/01/08/faktory-0.7.0-released/</link>
+      <pubDate>Mon, 08 Jan 2018 10:53:00 -0800</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2018/01/08/faktory-0.7.0-released/</guid>
+      <description>
+
+&lt;p&gt;Faktory is my brand-new background job system for every programming language.
+If you want to learn more, see &lt;a href=&#34;http://www.mikeperham.com/2017/10/24/introducing-faktory/&#34;&gt;the intro&lt;/a&gt;.
+It&#39;s been three months since the initial launch in October and I&#39;ve heard of several successful rollouts to production.
+If you were reluctant to try out Faktory before, it&#39;s time to start looking into it because
+the biggest release of Faktory yet is now available to all.
+November and December saw lots of changes and improvements; here&#39;s a recap.&lt;/p&gt;
+
+&lt;p&gt;&lt;img style=&#34;float: right; padding: 3px&#34; src=&#34;http://www.mikeperham.com/images/faktory-logo.png&#34; alt=&#34;logo&#34;/&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;job-priorities&#34;&gt;Job Priorities&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Jobs can now be prioritized from 1-9 within a queue!&lt;/strong&gt;
+The initial release of Faktory was focused on replicating Sidekiq&#39;s existing functionality but Faktory&#39;s different architecture allows us to implement features that were impossible in Sidekiq.
+Many, many people have asked for a simple job prioritization scheme but I&#39;ve never implemented it in Sidekiq because of the high runtime cost.
+But since we now control the low-level storage details in Faktory, we can minimize those costs!
+Want something to go to the front of a queue, give it a high priority like 9.
+Want it to drop to the back?
+Simple as:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{ &amp;quot;jobtype&amp;quot;:&amp;quot;MyJob&amp;quot;,&amp;quot;args&amp;quot;:[1,2,3],&amp;quot;queue&amp;quot;:&amp;quot;encoding&amp;quot;,&amp;quot;priority&amp;quot;:1 }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;@andrewstucki did the hard work to design an efficient implementation using a data structure I&#39;d never heard of: the &lt;a href=&#34;https://en.wikipedia.org/wiki/Brodal_queue&#34;&gt;Brodal queue&lt;/a&gt;.
+Nice to see some real Computer Science data structure theory paying off here!&lt;/p&gt;
+
+&lt;h2 id=&#34;reliability&#34;&gt;Reliability&lt;/h2&gt;
+
+&lt;p&gt;Recovered jobs (jobs which kill their worker process, aka poison pills) now use the retry process.
+This ensures that recovered jobs are exponentially backed off and won&#39;t retry every 30 minutes forever as before.&lt;/p&gt;
+
+&lt;p&gt;Faktory now automatically creates backups every hour when in production mode, keeping 24.
+This gives you a full day of backups to recover in case of disaster.&lt;/p&gt;
+
+&lt;p&gt;Note #1: remember that Faktory is a queue system and queues are normally empty.
+It is typical for Faktory&#39;s dataset to be less than 10MB in size unless you are scheduling or retrying lots of jobs.&lt;/p&gt;
+
+&lt;p&gt;Note #2: background jobs will run &lt;strong&gt;at least&lt;/strong&gt; once.
+Restoring a backup is one way to see duplicate job execution.
+You should always strive for &lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Best-Practices#2-make-your-job-idempotent-and-transactional&#34;&gt;idempotency&lt;/a&gt; when writing jobs.&lt;/p&gt;
+
+&lt;h2 id=&#34;newsletter&#34;&gt;Newsletter&lt;/h2&gt;
+
+&lt;p&gt;I&#39;ve created a newsletter for those who want the latest news ASAP.
+Subscribers will get Faktory-related posts like this a day early.
+You can subscribe right here or on the &lt;a href=&#34;http://contribsys.com/faktory/&#34;&gt;Faktory home page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;!-- Begin MailChimp Signup Form --&gt;
+
+&lt;p&gt;&lt;link href=&#34;//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css&#34; rel=&#34;stylesheet&#34; type=&#34;text/css&#34;&gt;
+&lt;style type=&#34;text/css&#34;&gt;
+    #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+&lt;/style&gt;
+&lt;div id=&#34;mc_embed_signup&#34;&gt;
+&lt;form action=&#34;https://contribsys.us17.list-manage.com/subscribe/post?u=c04c3b4f7f54b0a65d156c7e4&amp;amp;id=e3d75d426c&#34; method=&#34;post&#34; id=&#34;mc-embedded-subscribe-form&#34; name=&#34;mc-embedded-subscribe-form&#34; class=&#34;validate&#34; target=&#34;_blank&#34; novalidate&gt;
+    &lt;div id=&#34;mc_embed_signup_scroll&#34;&gt;
+    &lt;label for=&#34;mce-EMAIL&#34;&gt;Subscribe to Faktory Insiders&lt;/label&gt;
+    &lt;input type=&#34;email&#34; value=&#34;&#34; name=&#34;EMAIL&#34; class=&#34;email&#34; id=&#34;mce-EMAIL&#34; placeholder=&#34;email address&#34; required&gt;
+    &lt;!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--&gt;
+    &lt;div style=&#34;position: absolute; left: -5000px;&#34; aria-hidden=&#34;true&#34;&gt;&lt;input type=&#34;text&#34; name=&#34;b_c04c3b4f7f54b0a65d156c7e4_e3d75d426c&#34; tabindex=&#34;-1&#34; value=&#34;&#34;&gt;&lt;/div&gt;
+    &lt;div class=&#34;clear&#34;&gt;&lt;input type=&#34;submit&#34; value=&#34;Subscribe&#34; name=&#34;subscribe&#34; id=&#34;mc-embedded-subscribe&#34; class=&#34;button&#34;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;
+&lt;!--End mc_embed_signup--&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;faktory-as-a-service&#34;&gt;Faktory-as-a-Service&lt;/h2&gt;
+
+&lt;p&gt;Two different companies have sprung up, aimed at providing Faktory as a service.
+If you have an application on Heroku, you can start using Faktory in minutes!
+Check out &lt;a href=&#34;https://www.ackfoundry.com/&#34;&gt;Ackfoundry&lt;/a&gt; and &lt;a href=&#34;http://konglomerate.io/&#34;&gt;Konglomerate&lt;/a&gt; for the latest details.&lt;/p&gt;
+
+&lt;h2 id=&#34;worker-packages&#34;&gt;Worker Packages&lt;/h2&gt;
+
+&lt;p&gt;Several Faktory &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Related-Projects&#34;&gt;worker packages&lt;/a&gt; are seeing solid support and regular improvements.
+Take a look at the Rust, Elixir, Python and Node packages for example.&lt;/p&gt;
+
+&lt;p&gt;Don&#39;t see one for your language?
+Jump into the &lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;chatroom&lt;/a&gt; and ask!&lt;/p&gt;
+
+&lt;h2 id=&#34;security&#34;&gt;Security&lt;/h2&gt;
+
+&lt;p&gt;Faktory&#39;s security design has been one of the toughest engineering problems to solve.
+By default we want both an easy development experience and a secure production deployment.
+To that end, we&#39;ve made several major &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Security&#34;&gt;security policy&lt;/a&gt; changes:&lt;/p&gt;
+
+&lt;h3 id=&#34;faktory-will-not-terminate-tls&#34;&gt;Faktory will not terminate TLS&lt;/h3&gt;
+
+&lt;p&gt;Since most deployments these days are using Docker or another container, we&#39;ve decided the Faktory server will not terminate TLS.
+Instead your network architecture should provide any necessary TLS frontend using haproxy, spiped, stunnel, nginx, etc.&lt;/p&gt;
+
+&lt;p&gt;Faktory clients will all continue to support TLS by including &amp;quot;tls&amp;quot; in the URL scheme, e.g. &lt;code&gt;tcp+tls://faktory.example.com:7419&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;passwords-are-mandatory-in-production&#34;&gt;Passwords are mandatory in production&lt;/h3&gt;
+
+&lt;p&gt;Faktory is one of the few pieces of infrastructure which bake in the idea of &amp;quot;environment&amp;quot; (production and development are the two choices).
+Going forward, a production server must be started with a FAKTORY_PASSWORD environment variable in order to authenticate all connections.&lt;/p&gt;
+
+&lt;p&gt;It&#39;s easy to include the password in the connection URL: &lt;code&gt;tcp+tls://:mypassword123@faktory.example.com:7419&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;csrf-protection&#34;&gt;CSRF protection&lt;/h3&gt;
+
+&lt;p&gt;@vosmith was nice enough to provide a pull request adding CSRF protection to the Web UI.
+CSRF protection prevents a malicious webpage from using your browser to submit a form request, e.g. to clear a queue.
+Further security improvements to the Web UI are always welcome.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;That&#39;s it for now!
+&lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;Jump into the chatroom&lt;/a&gt; if you have questons or concerns.
+And as I said before, I&#39;ve heard of several successful rollouts to production.
+If you were reluctant to try out Faktory before, it&#39;s time to start looking into it!
+See my &lt;a href=&#34;http://www.mikeperham.com/2017/11/13/getting-started-with-faktory/&#34;&gt;Getting Started&lt;/a&gt; guide.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Sidekiq Pro Statsd support -- new and improved!</title>
@@ -649,243 +772,6 @@ race car at Laguna Seca!)&lt;/li&gt;
 I&#39;m terrible with names/faces so &lt;strong&gt;please introduce yourself&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;PS And of course, I&#39;m giving away Sidekiq stickers to anyone who asks.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Monitoring Redis</title>
-      <link>http://www.mikeperham.com/2017/04/20/monitoring-redis/</link>
-      <pubDate>Thu, 20 Apr 2017 09:00:00 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2017/04/20/monitoring-redis/</guid>
-      <description>
-
-&lt;figure style=&#34;float: right; padding-left: 50px&#34;&gt;
- &lt;img src=&#34;./images/redis.png&#34; width=&#34;500&#34;/&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;Redis is widely by the Ruby community but, like any complex piece of
-infrastructure, isn&#39;t well understood by many of its users.  I wanted to
-write a blog post that would answer the question: &lt;strong&gt;How can I check on
-the health of my Redis server?&lt;/strong&gt;  Here&#39;s a few things you can do to
-better understand your Redis server.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;ask-for-info&#34;&gt;Ask for Info&lt;/h2&gt;
-
-&lt;p&gt;The &lt;code&gt;info&lt;/code&gt; command is the easiest way to get an overall view of Redis:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ redis-cli info
-# Server
-redis_version:3.2.5
-tcp_port:6379
-uptime_in_seconds:1313002
-uptime_in_days:15
-executable:/usr/local/opt/redis/bin/redis-server
-config_file:/usr/local/etc/redis.conf
-
-# Clients
-connected_clients:1
-client_longest_output_list:0
-client_biggest_input_buf:0
-blocked_clients:0
-
-# Memory
-used_memory:1043920
-used_memory_human:1019.45K
-used_memory_rss:16564224
-used_memory_rss_human:15.80M
-used_memory_peak:18961872
-used_memory_peak_human:18.08M
-total_system_memory:8589934592
-total_system_memory_human:8.00G
-used_memory_lua:60416
-used_memory_lua_human:59.00K
-maxmemory:0
-maxmemory_human:0B
-maxmemory_policy:noeviction
-mem_fragmentation_ratio:15.87
-mem_allocator:libc
-
-# Stats
-total_connections_received:396
-total_commands_processed:588823
-instantaneous_ops_per_sec:0
-total_net_input_bytes:136139888
-total_net_output_bytes:216183171
-instantaneous_input_kbps:0.00
-instantaneous_output_kbps:0.00
-rejected_connections:0
-sync_full:0
-sync_partial_ok:0
-sync_partial_err:0
-expired_keys:95
-evicted_keys:0
-keyspace_hits:6978
-keyspace_misses:20802
-pubsub_channels:0
-pubsub_patterns:0
-latest_fork_usec:1007
-migrate_cached_sockets:0
-
-# CPU
-used_cpu_sys:67.83
-used_cpu_user:42.98
-used_cpu_sys_children:0.07
-used_cpu_user_children:0.07
-
-# Keyspace
-db4:keys=25,expires=24,avg_ttl=892611707
-db5:keys=37,expires=36,avg_ttl=829671792
-db8:keys=4,expires=2,avg_ttl=4423347833
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;(output trimmed a bit)&lt;/p&gt;
-
-&lt;p&gt;There&#39;s a few very important pieces to note in the output:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;config_file&lt;/code&gt; shows where Redis is getting its static configuration.
-If you need to tweak a setting, this is where to go.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;connected_clients&lt;/code&gt; shows how many network client connections are
-currently connected.  It&#39;s normal for this to be in the hundreds or
-even thousands for a very busy server.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;used_memory_*&lt;/code&gt; is important to see how much RAM is used by Redis.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Memory is the most important thing to note here.  Your entire dataset
-size &lt;strong&gt;must&lt;/strong&gt; fit into machine RAM.  If it does not, the resulting swapping will lead
-to terrible performance and massive latency spikes.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;redis-cli --stat&lt;/code&gt; will give you the most important details in a real-time view
-you can watch or scrape:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ redis-cli --stat
-------- data ------ --------------------- load -------------------- - child -
-keys       mem      clients blocked requests            connections
-31         1009.00K 1       0       681483 (+0)         576
-31         1009.00K 1       0       681484 (+1)         576
-31         1009.00K 1       0       681485 (+1)         576
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;redis-cli&lt;/code&gt; is a very powerful tool with lots of nice features within
-it.  It&#39;s worth running &lt;code&gt;--help&lt;/code&gt; and playing with the various options
-and modes.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;look-out-for-latency&#34;&gt;Look out for Latency&lt;/h2&gt;
-
-&lt;p&gt;Latency is the time difference between request and response, e.g. the client sends a
-command and gets a result back in 10ms.  We want this round trip to be as fast as
-possible.
-Really bad latency can trigger &amp;quot;Operation timed out&amp;quot; exceptions in your application.
-There are two general latency sources:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Network - the network between the client and Redis can be congested.&lt;/li&gt;
-&lt;li&gt;Internal - Redis itself might have commands or internal operations
-which add significant latency.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;network&#34;&gt;Network&lt;/h3&gt;
-
-&lt;p&gt;You can see the current network latency easily:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ redis-cli --latency
-min: 0, max: 1, avg: 0.29 (632 samples)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This shows a minimum of 0ms and max of 1ms, averaging 290µs, latency to
-my localhost server.  Ideal conditions.&lt;/p&gt;
-
-&lt;p&gt;You can also easily watch latency history, here with a default window of 15 sec:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ redis-cli --latency-history
-min: 0, max: 7, avg: 0.24 (1321 samples) -- 15.00 seconds range
-min: 0, max: 256, avg: 0.55 (1280 samples) -- 15.01 seconds range
-min: 0, max: 3062, avg: 3.86 (1051 samples) -- 15.98 seconds range
-min: 0, max: 490, avg: 0.69 (1255 samples) -- 15.01 seconds range
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can see the first window looks pretty good, the second window had a
-spike of 256ms, and the third had a spike of 3062ms (ouch!).&lt;/p&gt;
-
-&lt;p&gt;I triggered these spikes by running &lt;code&gt;redis-cli debug sleep 0.5&lt;/code&gt;.  Not
-recommended in production.&lt;/p&gt;
-
-&lt;h3 id=&#34;internal&#34;&gt;Internal&lt;/h3&gt;
-
-&lt;p&gt;Redis also has a latency event and monitoring subsystem to track
-commands execution latency and operations (like forking) which might
-block command processing. Use the &lt;a href=&#34;https://redis.io/topics/latency-monitor&#34;&gt;LATENCY&lt;/a&gt;
-commands to monitor and collect these events.  Some commands can be naturally
-slow, see SLOWLOG below.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;watch-for-slow-commands&#34;&gt;Watch for Slow Commands&lt;/h2&gt;
-
-&lt;p&gt;Because it is single-threaded, it&#39;s vitally important that all commands
-to Redis process quickly or one slow command can block everyone else for
-a significant amount of time.  Redis includes a configurable &lt;a href=&#34;https://redis.io/commands/slowlog&#34;&gt;SLOWLOG&lt;/a&gt;
-command to watch for these bad apples.&lt;/p&gt;
-
-&lt;p&gt;My Redis is configured by Homebrew to log any commands that take longer than 10ms, a
-sensible default.  Run this on your instance and see if you find anything suspicious:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ redis-cli slowlog get 10
-1) 1) (integer) 3
-   2) (integer) 1492461257
-   3) (integer) 11825
-   4)  1) &amp;quot;LPUSH&amp;quot;
-       2) &amp;quot;queue:default&amp;quot;
-       3) &amp;quot;{\&amp;quot;queue\&amp;quot;:\&amp;quot;default\&amp;quot;,\&amp;quot;jid\&amp;quot;:\&amp;quot;df55c4e27c48e63f0d5212b4\&amp;quot;,\&amp;quot;class\&amp;quot;:\&amp;quot;LoadWorker\&amp;quot;,\&amp;quot;args\&amp;quot;:[0],\&amp;quot;created_at\&amp;quot;:1492461257.208411,\&amp;quot;enqueued_at\&amp;quot;... (33 more bytes)&amp;quot;
-       4) &amp;quot;{\&amp;quot;queue\&amp;quot;:\&amp;quot;default\&amp;quot;,\&amp;quot;jid\&amp;quot;:\&amp;quot;4989e31cea7ecf78e93b7f9f\&amp;quot;,\&amp;quot;class\&amp;quot;:\&amp;quot;LoadWorker\&amp;quot;,\&amp;quot;args\&amp;quot;:[1],\&amp;quot;created_at\&amp;quot;:1492461257.2084169,\&amp;quot;enqueued_at... (34 more bytes)&amp;quot;
-      [snip]
-      32) &amp;quot;... (9971 more arguments)&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There are four parts to each entry: 3 is a unique identifier, 1492461257 is the timestamp
-when it happened and 11825 is the number of microseconds for execution, 11.825ms.
-The last part is the command with arguments.&lt;/p&gt;
-
-&lt;p&gt;I happen to know that entry is an LPUSH to the &lt;code&gt;default&lt;/code&gt; queue of 10,000 jobs.  It&#39;s
-a testcase for Sidekiq::Client&#39;s &lt;code&gt;push_bulk&lt;/code&gt; API.  Since we&#39;re
-enqueueing 10,000 jobs at once, it&#39;s not surprising that might take almost 12ms.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;It is safe to run SLOWLOG in production and highly encouraged.&lt;/strong&gt;  In
-fact, I would play with &lt;code&gt;slowlog-log-slower-than&lt;/code&gt; values until you find
-a setting that catches unexpectedly slow things but does not contain a
-lot of &amp;quot;normal&amp;quot; commands from your application.
-If you find the slowlog is constantly full, &lt;strong&gt;redesign your system so it
-doesn&#39;t run those slow commands&lt;/strong&gt;.
-  For instance, if you want to enqueue
-10,000 jobs, perhaps you could call &lt;code&gt;push_bulk&lt;/code&gt; 10 times with 1000 jobs
-each, so each invocation only takes 1/10th as long.
-If a piece of OSS is running a slow comamnd,
-open an issue so the maintainer knows about the problem.  I&#39;m not too
-proud to admit it&#39;s
-&lt;a href=&#34;https://github.com/mperham/sidekiq/issues/3332&#34;&gt;happened&lt;/a&gt;
-several times with Sidekiq; I fix them as fast as I can!&lt;/p&gt;
-
-&lt;h2 id=&#34;extra-credit&#34;&gt;Extra Credit&lt;/h2&gt;
-
-&lt;p&gt;When I was managing technical operations, my team was
-responsible for monitoring our infrastructure.  We would do things like:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Write a cron job to dump the slowlog to a daily email if it is not empty.
-Treat any entries as issues to be investigated and fixed.&lt;/li&gt;
-&lt;li&gt;Set up a dashboard for the Redis server.  Have dedicated
-graphs for &lt;code&gt;connected_clients&lt;/code&gt;, &lt;code&gt;instantaneous_ops_per_sec&lt;/code&gt;, and &lt;code&gt;used_memory_rss&lt;/code&gt;.
-Treat big changes in these graphs as incidents to be investigated.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Part of owning your infrastructure is monitoring its health proactively;
-understanding these tools and having quick access to this data will be
-invaluable when debugging failures and outages.&lt;/p&gt;
 </description>
     </item>
     

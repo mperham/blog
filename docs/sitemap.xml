@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.mikeperham.com/2018/01/08/faktory-0.7.0-released/</loc>
+    <lastmod>2018-01-08T10:53:00-08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.mikeperham.com/2017/12/11/sidekiq-pro-statsd-support----new-and-improved/</loc>
     <lastmod>2017-12-11T12:45:07-08:00</lastmod>
   </url>
@@ -1482,7 +1487,7 @@
   
   <url>
     <loc>http://www.mikeperham.com/</loc>
-    <lastmod>2017-12-11T12:45:07-08:00</lastmod>
+    <lastmod>2018-01-08T10:53:00-08:00</lastmod>
     <priority>0</priority>
   </url>
   
