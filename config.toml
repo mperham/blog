@@ -28,14 +28,10 @@ smartypants = false
 "url" = "http://sidekiq.org/"
 "title" = "Sidekiq"
 
-[params.links.bInspeqtor]
-"url" = "http://contribsys.com/inspeqtor/"
-"title" = "Inspeqtor"
+[params.links.bFaktory]
+"url" = "http://contribsys.com/faktory/"
+"title" = "Faktory"
 
-[params.links.cEvents]
-"url" = "/events/"
-"title" = "Events"
-
-[params.links.dAbout]
+[params.links.cAbout]
 "url" = "/about/"
 "title" = "About"
