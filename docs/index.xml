@@ -8,8 +8,101 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Mon, 08 Jan 2018 10:53:00 -0800</lastBuildDate>
+    <lastBuildDate>Mon, 05 Feb 2018 09:00:00 -0800</lastBuildDate>
     <atom:link href="http://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Happy 6th Birthday, Sidekiq</title>
+      <link>http://www.mikeperham.com/2018/02/05/happy-6th-birthday-sidekiq/</link>
+      <pubDate>Mon, 05 Feb 2018 09:00:00 -0800</pubDate>
+      <author>Mike Perham</author>
+      <guid>http://www.mikeperham.com/2018/02/05/happy-6th-birthday-sidekiq/</guid>
+      <description>
+
+&lt;div style=&#34;float: right; padding-left: 10px&#34;&gt;
+&lt;figure&gt;&lt;img src=&#34;//www.mikeperham.com/images/sidekiq.png&#34; width=&#34;400&#34;/&gt;&lt;/figure&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&#34;./2012/02/07/sidekiq-simple-efficient-messaging-for-rails/&#34;&gt;Six years ago I shipped Sidekiq v0.5.0&lt;/a&gt; and changed my life.
+I talked to some developers recently:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;I had been working in Go for a while but I kept coming back to Ruby
+because Sidekiq makes everything so fast and easy to scale.&amp;quot;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is my recipe for success.
+Sell a product developers want because it makes their job so much easier.
+You don&#39;t need a sales force when developers evangelize your product to every new company they join.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;My favorite quote from this AMA (with which I wholeheartedly agree) is in regards to Sidekiq: “... rarely does infrastructure so keenly understand what developers, infrastructure engineers, and operators will want out of it.” &lt;a href=&#34;https://twitter.com/mperham?ref_src=twsrc%5Etfw&#34;&gt;@mperham&lt;/a&gt; &lt;a href=&#34;https://t.co/RCdG9gwtDV&#34;&gt;https://t.co/RCdG9gwtDV&lt;/a&gt;&lt;/p&gt;&amp;mdash; John K Sawers (@johnksawers) &lt;a href=&#34;https://twitter.com/johnksawers/status/959604621181366272?ref_src=twsrc%5Etfw&#34;&gt;February 3, 2018&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;2017 revenue was right on target, about 40% higher YoY.
+Nice, steady organic growth with little marketing on my part.
+Why burn yourself out chasing arbitrary growth targets from investors?
+Profitable?  Yes.  Growing?  Yes.
+Irie, mon.&lt;/p&gt;
+
+&lt;h2 id=&#34;today-is-a-big-day&#34;&gt;Today is a BIG DAY!&lt;/h2&gt;
+
+&lt;p&gt;I&#39;m shipping several releases today:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Sidekiq 5.1 now has global job death handlers and enables the ActiveRecord query cache by default.
+&lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/Changes.md#510&#34;&gt;Changes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Sidekiq Pro 4.0 removes deprecated APIs and adds a new &lt;strong&gt;experimental&lt;/strong&gt; feature: batch death.
+Now if a batch job dies, it marks the entire batch as dead also (since it will never succeed).
+New APIs allow you to enumerate dead Batches.
+Feedback is requested here, is it useful?
+What further refinements would you like to see?
+&lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/Pro-Changes.md#400&#34;&gt;Pro Changes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Sidekiq Enterprise 1.7 adds support for &lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Ent-Rolling-Restarts&#34;&gt;&lt;strong&gt;long-running jobs and rolling restarts&lt;/strong&gt;&lt;/a&gt;.
+Signal USR2 and a Sidekiq process will gracefully exit once all jobs are complete, even if those jobs take hours to complete.
+This has been a hugely requested feature and it took me a while to figure out how to implement it.
+&lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/Ent-Changes.md#180&#34;&gt;Ent Changes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div style=&#34;float: right; padding-left: 10px&#34;&gt;
+&lt;div class=&#34;panel panel-danger&#34;&gt;
+  &lt;div class=&#34;panel-heading&#34;&gt;
+    &lt;h2 class=&#34;panel-title&#34;&gt;&lt;b&gt;Gotta have it?&lt;/b&gt;&lt;/h2&gt;
+  &lt;/div&gt;
+  &lt;div class=&#34;panel-body&#34;&gt;
+    &lt;p&gt;
+      Purchase Sidekiq Pro or Sidekiq Enterprise at &lt;a href=&#34;https://sidekiq.org&#34;&gt;sidekiq.org&lt;/a&gt;.
+    &lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;One of my goals for this year is to slow the rate of releases.
+There were 12 Sidekiq releases last year but it&#39;s been 4 months since Sidekiq 5.0.5 was released.
+Ideally I want quarterly maintenance releases.&lt;/p&gt;
+
+&lt;p&gt;Lately my biggest problem has been Gmail&#39;s Spam folder.  For the last
+month or two, a very high
+percentage of customer receipts and welcome emails are winding up in the
+Spam folder for some reason, despite me sending a very low daily volume from
+my own email account. I can&#39;t explain it or debug it and feel pretty
+powerless. Any email delivery wizards have ideas? My email is in the footer.&lt;/p&gt;
+
+&lt;h2 id=&#34;faktory&#34;&gt;Faktory&lt;/h2&gt;
+
+&lt;p&gt;I also introduced &lt;a href=&#34;http://contribsys.com/faktory/&#34;&gt;Faktory&lt;/a&gt; last year.
+This is the first step in my long-term plan to bring Sidekiq goodness to all programming languages.
+I&#39;ll be working on Faktory Enterprise over the next few months and hopefully have it for sale by the end of 2018.&lt;/p&gt;
+
+&lt;h2 id=&#34;more-information&#34;&gt;More Information&lt;/h2&gt;
+
+&lt;p&gt;Many, many people have asked me questions about sustainable open source
+and following a similar path with their project.
+The &lt;a href=&#34;https://www.indiehackers.com/businesses/sidekiq&#34;&gt;Indiehackers interview&lt;/a&gt; I did a year ago proved extremely popular and resonanated with many people.
+Want to discuss more, ask questions?
+Got an open source project you want to make sustainable?
+Stop by my weekly &lt;a href=&#34;https://sidekiq.org/support.html&#34;&gt;Happy Hour&lt;/a&gt; and let&#39;s chat.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Faktory 0.7.0 Released</title>
@@ -723,55 +816,6 @@ at the same time.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Thank you to all my &lt;a href=&#34;http://sidekiq.org&#34;&gt;Sidekiq Pro and Sidekiq Enterprise&lt;/a&gt; customers for
 ensuring the long-term support and maintenance of Sidekiq.  Support OSS software
 and your infrastructure vendors so we can support you!&lt;/strong&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Sidekiq at Railsconf 2017</title>
-      <link>http://www.mikeperham.com/2017/04/24/sidekiq-at-railsconf-2017/</link>
-      <pubDate>Mon, 24 Apr 2017 09:00:00 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>http://www.mikeperham.com/2017/04/24/sidekiq-at-railsconf-2017/</guid>
-      <description>
-
-&lt;p&gt;Every year I attend Rubyconf and Railsconf and this year is no
-different.  I launched Sidekiq 4.0 at Rubyconf 2015 and now I&#39;m excited
- to get down to Phoenix and launch Sidekiq 5.0!
-I want to meet any Rubyists, new or old, who want to chat.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://railsconf.com/assets/objects/RailsconfInternal@2x-2c15a28ee162c7f9151c2148adaeccfeb2786fdb748a4f8b3a948a3b1e705d57.png&#34; alt=&#34;Railsconf&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;a-personal-note&#34;&gt;A Personal Note&lt;/h2&gt;
-
-&lt;p&gt;I attended my first conference in 2007, Rubyconf, in Charlotte NC.
-I still remember my mental state: &lt;strong&gt;awkwardness, isolation and loneliness
-because I knew about two people there&lt;/strong&gt;.  By nature I&#39;m an introvert and
-not really good at mingling in crowds (one reason booze is so popular
-at conferences: it can decrease your inhibitions and make you more chatty).
-As my reputation increased in the community, going to conferences became
-easier because people knew me but here&#39;s my dirty secret:
-I&#39;m still awkward and not great at socializing with new people.&lt;/p&gt;
-
-&lt;p&gt;So I have a guarantee: if you don&#39;t know anyone at Railsconf or just
-need someone to talk to, find me and say hello.  The first day I always
-wear a Sidekiq t-shirt.  You know my blog and here&#39;s some
-topics I will talk endlessly about:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;You and your Ruby story&lt;/li&gt;
-&lt;li&gt;Performance and scalability&lt;/li&gt;
-&lt;li&gt;Threading vs Evented design in languages and systems&lt;/li&gt;
-&lt;li&gt;Sidekiq and other background job systems&lt;/li&gt;
-&lt;li&gt;Ruby, Crystal and Go&lt;/li&gt;
-&lt;li&gt;Open Source, Sustainability, and Business&lt;/li&gt;
-&lt;li&gt;Soccer, Motorcycles and Sports Cars (ask me about the time I crashed a
-race car at Laguna Seca!)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;It&#39;s also quite likely that you know my name but I don&#39;t know yours and
-I&#39;m terrible with names/faces so &lt;strong&gt;please introduce yourself&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;PS And of course, I&#39;m giving away Sidekiq stickers to anyone who asks.&lt;/p&gt;
 </description>
     </item>
     

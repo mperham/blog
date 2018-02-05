@@ -1,0 +1,181 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Happy 6th Birthday, Sidekiq </title>
+    
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Happy 6th Birthday, Sidekiq</h1>
+      <small class="post-meta">Feb 5, 2018</small>
+      <div class="post-content">
+        
+
+<div style="float: right; padding-left: 10px">
+<figure><img src="//www.mikeperham.com/images/sidekiq.png" width="400"/></figure>
+</div>
+
+<p><a href="../../../../2012/02/07/sidekiq-simple-efficient-messaging-for-rails/">Six years ago I shipped Sidekiq v0.5.0</a> and changed my life.
+I talked to some developers recently:</p>
+
+<blockquote>
+<p>&quot;I had been working in Go for a while but I kept coming back to Ruby
+because Sidekiq makes everything so fast and easy to scale.&quot;</p>
+</blockquote>
+
+<p>This is my recipe for success.
+Sell a product developers want because it makes their job so much easier.
+You don't need a sales force when developers evangelize your product to every new company they join.</p>
+
+<p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">My favorite quote from this AMA (with which I wholeheartedly agree) is in regards to Sidekiq: “... rarely does infrastructure so keenly understand what developers, infrastructure engineers, and operators will want out of it.” <a href="https://twitter.com/mperham?ref_src=twsrc%5Etfw">@mperham</a> <a href="https://t.co/RCdG9gwtDV">https://t.co/RCdG9gwtDV</a></p>&mdash; John K Sawers (@johnksawers) <a href="https://twitter.com/johnksawers/status/959604621181366272?ref_src=twsrc%5Etfw">February 3, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<p>2017 revenue was right on target, about 40% higher YoY.
+Nice, steady organic growth with little marketing on my part.
+Why burn yourself out chasing arbitrary growth targets from investors?
+Profitable?  Yes.  Growing?  Yes.
+Irie, mon.</p>
+
+<h2 id="today-is-a-big-day">Today is a BIG DAY!</h2>
+
+<p>I'm shipping several releases today:</p>
+
+<ul>
+<li>Sidekiq 5.1 now has global job death handlers and enables the ActiveRecord query cache by default.
+<a href="https://github.com/mperham/sidekiq/blob/master/Changes.md#510">Changes</a></li>
+<li>Sidekiq Pro 4.0 removes deprecated APIs and adds a new <strong>experimental</strong> feature: batch death.
+Now if a batch job dies, it marks the entire batch as dead also (since it will never succeed).
+New APIs allow you to enumerate dead Batches.
+Feedback is requested here, is it useful?
+What further refinements would you like to see?
+<a href="https://github.com/mperham/sidekiq/blob/master/Pro-Changes.md#400">Pro Changes</a></li>
+<li>Sidekiq Enterprise 1.7 adds support for <a href="https://github.com/mperham/sidekiq/wiki/Ent-Rolling-Restarts"><strong>long-running jobs and rolling restarts</strong></a>.
+Signal USR2 and a Sidekiq process will gracefully exit once all jobs are complete, even if those jobs take hours to complete.
+This has been a hugely requested feature and it took me a while to figure out how to implement it.
+<a href="https://github.com/mperham/sidekiq/blob/master/Ent-Changes.md#180">Ent Changes</a></li>
+</ul>
+
+<div style="float: right; padding-left: 10px">
+<div class="panel panel-danger">
+  <div class="panel-heading">
+    <h2 class="panel-title"><b>Gotta have it?</b></h2>
+  </div>
+  <div class="panel-body">
+    <p>
+      Purchase Sidekiq Pro or Sidekiq Enterprise at <a href="https://sidekiq.org">sidekiq.org</a>.
+    </p>
+  </div>
+</div>
+</div>
+
+<p>One of my goals for this year is to slow the rate of releases.
+There were 12 Sidekiq releases last year but it's been 4 months since Sidekiq 5.0.5 was released.
+Ideally I want quarterly maintenance releases.</p>
+
+<p>Lately my biggest problem has been Gmail's Spam folder.  For the last
+month or two, a very high
+percentage of customer receipts and welcome emails are winding up in the
+Spam folder for some reason, despite me sending a very low daily volume from
+my own email account. I can't explain it or debug it and feel pretty
+powerless. Any email delivery wizards have ideas? My email is in the footer.</p>
+
+<h2 id="faktory">Faktory</h2>
+
+<p>I also introduced <a href="http://contribsys.com/faktory/">Faktory</a> last year.
+This is the first step in my long-term plan to bring Sidekiq goodness to all programming languages.
+I'll be working on Faktory Enterprise over the next few months and hopefully have it for sale by the end of 2018.</p>
+
+<h2 id="more-information">More Information</h2>
+
+<p>Many, many people have asked me questions about sustainable open source
+and following a similar path with their project.
+The <a href="https://www.indiehackers.com/businesses/sidekiq">Indiehackers interview</a> I did a year ago proved extremely popular and resonanated with many people.
+Want to discuss more, ask questions?
+Got an open source project you want to make sustainable?
+Stop by my weekly <a href="https://sidekiq.org/support.html">Happy Hour</a> and let's chat.</p>
+
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikeperham';
+    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2018\/02\/05\/happy-6th-birthday-sidekiq\/';
+    var disqus_title = 'Happy 6th Birthday, Sidekiq';
+    var disqus_url = 'http:\/\/www.mikeperham.com\/2018\/02\/05\/happy-6th-birthday-sidekiq\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
