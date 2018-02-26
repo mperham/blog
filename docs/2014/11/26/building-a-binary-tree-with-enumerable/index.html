@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title> Building a Binary Tree with Enumerable </title>
     
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
@@ -26,12 +26,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-right">
             <ul class="nav navbar-nav navbar-right">
                 
-                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
                 
                     <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
                 
@@ -66,19 +66,17 @@ tree structure too.  Here's what a binary tree &quot;looks&quot; like.</p>
 <p>Funny thing about a binary tree is that every part of the tree looks like the same: you have a node with some <code>data</code>,
 along with <code>left</code> and <code>right</code> pointers to the child nodes.</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">class</span> <span style="color: #a6e22e">Node</span>
-  <span style="color: #66d9ef">attr_accessor</span> <span style="color: #e6db74">:data</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:left</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:right</span>
-  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">initialize</span><span style="color: #f8f8f2">(data)</span>
-    <span style="color: #f8f8f2">@data</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">data</span>
-  <span style="color: #66d9ef">end</span>
-<span style="color: #66d9ef">end</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
+  <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:data</span>, <span style="color:#e6db74">:left</span>, <span style="color:#e6db74">:right</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">initialize</span>(data)
+    @data <span style="color:#f92672">=</span> data
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
 
-<span style="color: #75715e"># build the first two levels of the tree pictured above</span>
-<span style="color: #f8f8f2">root</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #ae81ff">7</span><span style="color: #f8f8f2">)</span>
-<span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">left</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #ae81ff">3</span><span style="color: #f8f8f2">)</span>
-<span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">right</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #ae81ff">12</span><span style="color: #f8f8f2">)</span>
-</pre></div>
-
+<span style="color:#75715e"># build the first two levels of the tree pictured above</span>
+root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">7</span><span style="color:#f92672"></span>)
+root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span><span style="color:#f92672"></span>)
+root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">12</span><span style="color:#f92672"></span>)</code></pre></div>
 
 <p>The amazing thing about <code>Enumerable</code> is this: you implement <strong>one</strong> method, <code>each</code>, and you get dozens of useful
 methods in return!  <code>each</code> knows how to iterate through elements in your data structure and so Ruby can leverage
@@ -87,29 +85,27 @@ that to implement lots of other functionality.</p>
 <p>Remember I said that every part of a binary tree looks the same: that's a hallmark of a recursive data structure.
 We'll use recursion to iterate through the tree in our <code>each</code> method:</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">class</span> <span style="color: #a6e22e">Node</span>
-  <span style="color: #66d9ef">include</span> <span style="color: #66d9ef">Enumerable</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
+  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Enumerable</span>
 
-  <span style="color: #66d9ef">attr_accessor</span> <span style="color: #e6db74">:data</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:left</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:right</span>
-  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">initialize</span><span style="color: #f8f8f2">(data)</span>
-    <span style="color: #f8f8f2">@data</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">data</span>
-  <span style="color: #66d9ef">end</span>
+  <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:data</span>, <span style="color:#e6db74">:left</span>, <span style="color:#e6db74">:right</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">initialize</span>(data)
+    @data <span style="color:#f92672">=</span> data
+  <span style="color:#66d9ef">end</span>
 
-  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">each</span><span style="color: #f8f8f2">(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">block)</span>
-    <span style="color: #f8f8f2">left</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">each(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">block)</span> <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">left</span>
-    <span style="color: #f8f8f2">block</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">call(self)</span>
-    <span style="color: #f8f8f2">right</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">each(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">block)</span> <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">right</span>
-  <span style="color: #66d9ef">end</span>
-<span style="color: #66d9ef">end</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">each</span>(<span style="color:#f92672">&amp;</span>block)
+    left<span style="color:#f92672">.</span>each(<span style="color:#f92672">&amp;</span>block) <span style="color:#66d9ef">if</span> left
+    block<span style="color:#f92672">.</span>call(self)
+    right<span style="color:#f92672">.</span>each(<span style="color:#f92672">&amp;</span>block) <span style="color:#66d9ef">if</span> right
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
 
-<span style="color: #f8f8f2">root</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #ae81ff">7</span><span style="color: #f8f8f2">)</span>
-<span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">left</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #ae81ff">3</span><span style="color: #f8f8f2">)</span>
-<span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">right</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #ae81ff">12</span><span style="color: #f8f8f2">)</span>
-<span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">each</span> <span style="color: #f8f8f2">{</span><span style="color: #f92672">|</span><span style="color: #f8f8f2">x</span><span style="color: #f92672">|</span> <span style="color: #f8f8f2">puts</span> <span style="color: #f8f8f2">x</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span> <span style="color: #f8f8f2">}</span> <span style="color: #75715e"># will print &quot;3 7 12&quot;</span>
+root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">7</span><span style="color:#f92672"></span>)
+root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span><span style="color:#f92672"></span>)
+root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">12</span><span style="color:#f92672"></span>)
+root<span style="color:#f92672">.</span>each {<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> puts x<span style="color:#f92672">.</span>data } <span style="color:#75715e"># will print &#34;3 7 12&#34;</span>
 
-<span style="color: #f8f8f2">puts</span> <span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">inject(</span><span style="color: #ae81ff">0</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">memo,</span> <span style="color: #f8f8f2">node</span><span style="color: #f92672">|</span> <span style="color: #f8f8f2">memo</span> <span style="color: #f92672">+=</span> <span style="color: #f8f8f2">node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span> <span style="color: #f8f8f2">}</span>
-</pre></div>
-
+puts root<span style="color:#f92672">.</span>inject(<span style="color:#ae81ff">0</span><span style="color:#f92672"></span>) { <span style="color:#f92672">|</span>memo, node<span style="color:#f92672">|</span> memo <span style="color:#f92672">+=</span> node<span style="color:#f92672">.</span>data }</code></pre></div>
 
 <p>The final trick to Enumerable is to implement a comparison operator so Ruby can compare two
 Nodes and tell which one is greater.  This allows it to implement sorting, min and max operations.
@@ -118,39 +114,37 @@ like a spaceship if you squint.  Note we delegate the <code>&lt;=&gt;</code> cal
 the tree is storing comparable data: integers, strings, or a value object which itself
 implements <code>&lt;=&gt;</code>.</p>
 
-<p><div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">class</span> <span style="color: #a6e22e">Node</span>
-  <span style="color: #66d9ef">include</span> <span style="color: #66d9ef">Enumerable</span>
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
+  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Enumerable</span>
 
-  <span style="color: #66d9ef">attr_accessor</span> <span style="color: #e6db74">:data</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:left</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:right</span>
-  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">initialize</span><span style="color: #f8f8f2">(data)</span>
-    <span style="color: #f8f8f2">@data</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">data</span>
-  <span style="color: #66d9ef">end</span>
+  <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:data</span>, <span style="color:#e6db74">:left</span>, <span style="color:#e6db74">:right</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">initialize</span>(data)
+    @data <span style="color:#f92672">=</span> data
+  <span style="color:#66d9ef">end</span>
 
-  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">each</span><span style="color: #f8f8f2">(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">block)</span>
-    <span style="color: #f8f8f2">left</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">each(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">block)</span> <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">left</span>
-    <span style="color: #f8f8f2">block</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">call(self)</span>
-    <span style="color: #f8f8f2">right</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">each(</span><span style="color: #f92672">&amp;</span><span style="color: #f8f8f2">block)</span> <span style="color: #66d9ef">if</span> <span style="color: #f8f8f2">right</span>
-  <span style="color: #66d9ef">end</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">each</span>(<span style="color:#f92672">&amp;</span>block)
+    left<span style="color:#f92672">.</span>each(<span style="color:#f92672">&amp;</span>block) <span style="color:#66d9ef">if</span> left
+    block<span style="color:#f92672">.</span>call(self)
+    right<span style="color:#f92672">.</span>each(<span style="color:#f92672">&amp;</span>block) <span style="color:#66d9ef">if</span> right
+  <span style="color:#66d9ef">end</span>
 
-  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">&lt;=&gt;</span><span style="color: #f8f8f2">(other_node)</span>
-    <span style="color: #f8f8f2">data</span> <span style="color: #f92672">&lt;=&gt;</span> <span style="color: #f8f8f2">other_node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span>
-  <span style="color: #66d9ef">end</span>
-<span style="color: #66d9ef">end</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">&lt;=&gt;</span>(other_node)
+    data <span style="color:#f92672">&lt;=&gt;</span> other_node<span style="color:#f92672">.</span>data
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
 
-<span style="color: #f8f8f2">root</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #ae81ff">3</span><span style="color: #f8f8f2">)</span>
-<span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">left</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #ae81ff">2</span><span style="color: #f8f8f2">)</span>
-<span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">right</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Node</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">)</span>
-<span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">each</span> <span style="color: #f8f8f2">{</span><span style="color: #f92672">|</span><span style="color: #f8f8f2">x</span><span style="color: #f92672">|</span> <span style="color: #f8f8f2">puts</span> <span style="color: #f8f8f2">x</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span> <span style="color: #f8f8f2">}</span>
+root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span><span style="color:#f92672"></span>)
+root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">2</span><span style="color:#f92672"></span>)
+root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">1</span><span style="color:#f92672"></span>)
+root<span style="color:#f92672">.</span>each {<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> puts x<span style="color:#f92672">.</span>data }
 
-<span style="color: #75715e"># just a few of the various operations Enumerable provides</span>
-<span style="color: #f8f8f2">puts</span> <span style="color: #e6db74">&quot;SUM&quot;</span>
-<span style="color: #f8f8f2">puts</span> <span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">inject(</span><span style="color: #ae81ff">0</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">memo,</span> <span style="color: #f8f8f2">val</span><span style="color: #f92672">|</span> <span style="color: #f8f8f2">memo</span> <span style="color: #f92672">+=</span> <span style="color: #f8f8f2">val</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span> <span style="color: #f8f8f2">}</span>
-<span style="color: #f8f8f2">puts</span> <span style="color: #e6db74">&quot;MAX&quot;</span>
-<span style="color: #f8f8f2">puts</span> <span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">max</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span>
-<span style="color: #f8f8f2">puts</span> <span style="color: #e6db74">&quot;SORT&quot;</span>
-<span style="color: #f8f8f2">puts</span> <span style="color: #f8f8f2">root</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">sort</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">map(</span><span style="color: #f92672">&amp;</span><span style="color: #e6db74">:data</span><span style="color: #f8f8f2">)</span>
-</pre></div>
-</p>
+<span style="color:#75715e"># just a few of the various operations Enumerable provides</span>
+puts <span style="color:#e6db74">&#34;SUM&#34;</span>
+puts root<span style="color:#f92672">.</span>inject(<span style="color:#ae81ff">0</span><span style="color:#f92672"></span>) { <span style="color:#f92672">|</span>memo, val<span style="color:#f92672">|</span> memo <span style="color:#f92672">+=</span> val<span style="color:#f92672">.</span>data }
+puts <span style="color:#e6db74">&#34;MAX&#34;</span>
+puts root<span style="color:#f92672">.</span>max<span style="color:#f92672">.</span>data
+puts <span style="color:#e6db74">&#34;SORT&#34;</span>
+puts root<span style="color:#f92672">.</span>sort<span style="color:#f92672">.</span>map(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:data</span>)</code></pre></div></p>
 
 <p>This is pretty incredible and really shows off the power of Ruby: we've built a really powerful
 data structure in just a few lines of code.  All is not wine and roses though, there's several hard parts
@@ -164,20 +158,25 @@ structures &quot;feel&quot; normal.  In this example, the binary tree looks like
 is completely different under the covers.</p>
 
         <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'mikeperham';
-    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2014\/11\/26\/building-a-binary-tree-with-enumerable\/';
-    var disqus_title = 'Building a Binary Tree with Enumerable';
-    var disqus_url = 'http:\/\/www.mikeperham.com\/2014\/11\/26\/building-a-binary-tree-with-enumerable\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </div>
     </div>
     <footer class="site-footer">
@@ -205,8 +204,8 @@ is completely different under the covers.</p>
 	</div>
 </footer>
 
-    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
 
   </body>
 </html>

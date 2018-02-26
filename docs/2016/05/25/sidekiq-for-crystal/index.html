@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title> Sidekiq for Crystal </title>
     
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
@@ -26,12 +26,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-right">
             <ul class="nav navbar-nav navbar-right">
                 
-                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
                 
                     <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
                 
@@ -140,31 +140,29 @@ To process 100,000 noop jobs:</p>
 <h2 id="the-codebase-is-a-trainwreck-though-right">The codebase is a trainwreck though, right?</h2>
 
 <p>The code is shockingly similar to Ruby in many cases.  Take a gander at this testcase:</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&quot;./spec_helper&quot;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#34;./spec_helper&#34;</span>
 
-<span style="color: #66d9ef">class</span> <span style="color: #a6e22e">MyWorker</span>
-  <span style="color: #66d9ef">include</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Worker</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyWorker</span>
+  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
 
-  <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">perform</span><span style="color: #f8f8f2">(a</span> <span style="color: #f8f8f2">:</span> <span style="color: #66d9ef">Int64</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">b</span> <span style="color: #f8f8f2">:</span> <span style="color: #66d9ef">Int64</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">c</span> <span style="color: #f8f8f2">:</span> <span style="color: #f8f8f2">String)</span>
-    <span style="color: #75715e">#puts &quot;hello world!&quot;</span>
-  <span style="color: #66d9ef">end</span>
-<span style="color: #66d9ef">end</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">perform</span>(a : <span style="color:#66d9ef">Int64</span>, b : <span style="color:#66d9ef">Int64</span>, c : String)
+    <span style="color:#75715e">#puts &#34;hello world!&#34;</span>
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
 
-<span style="color: #f8f8f2">describe</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Worker</span> <span style="color: #66d9ef">do</span>
-  <span style="color: #f8f8f2">describe</span> <span style="color: #e6db74">&quot;client-side&quot;</span> <span style="color: #66d9ef">do</span>
-    <span style="color: #f8f8f2">it</span> <span style="color: #e6db74">&quot;can create a basic job&quot;</span> <span style="color: #66d9ef">do</span>
-      <span style="color: #f8f8f2">jid</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">MyWorker</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">async</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">perform(</span><span style="color: #ae81ff">1</span><span style="color: #f8f8f2">_i64,</span> <span style="color: #ae81ff">2</span><span style="color: #f8f8f2">_i64,</span> <span style="color: #e6db74">&quot;3&quot;</span><span style="color: #f8f8f2">)</span>
-      <span style="color: #f8f8f2">jid</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">should</span> <span style="color: #f8f8f2">match</span> <span style="color: #e6db74">/[a-f0-9]{24}/</span>
-      <span style="color: #f8f8f2">pool</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Pool</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span>
-      <span style="color: #f8f8f2">pool</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">redis</span> <span style="color: #f8f8f2">{</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">c</span><span style="color: #f92672">|</span> <span style="color: #f8f8f2">c</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">lpop(</span><span style="color: #e6db74">&quot;queue:default&quot;</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">}</span>
-    <span style="color: #66d9ef">end</span>
+describe <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span> <span style="color:#66d9ef">do</span>
+  describe <span style="color:#e6db74">&#34;client-side&#34;</span> <span style="color:#66d9ef">do</span>
+    it <span style="color:#e6db74">&#34;can create a basic job&#34;</span> <span style="color:#66d9ef">do</span>
+      jid <span style="color:#f92672">=</span> <span style="color:#66d9ef">MyWorker</span><span style="color:#f92672">.</span>async<span style="color:#f92672">.</span>perform(<span style="color:#ae81ff">1</span><span style="color:#f92672"></span>_i64, <span style="color:#ae81ff">2</span><span style="color:#f92672"></span>_i64, <span style="color:#e6db74">&#34;3&#34;</span>)
+      jid<span style="color:#f92672">.</span>should match <span style="color:#e6db74">/[a-f0-9]{24}/</span>
+      pool <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pool</span><span style="color:#f92672">.</span>new
+      pool<span style="color:#f92672">.</span>redis { <span style="color:#f92672">|</span>c<span style="color:#f92672">|</span> c<span style="color:#f92672">.</span>lpop(<span style="color:#e6db74">&#34;queue:default&#34;</span>) }
+    <span style="color:#66d9ef">end</span>
 
-    <span style="color: #f8f8f2">it</span> <span style="color: #e6db74">&quot;can schedule a basic job&quot;</span> <span style="color: #66d9ef">do</span>
-      <span style="color: #f8f8f2">jid</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">MyWorker</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">async</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">perform_in(</span><span style="color: #ae81ff">60</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">seconds,</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">_i64,</span> <span style="color: #ae81ff">2</span><span style="color: #f8f8f2">_i64,</span> <span style="color: #e6db74">&quot;3&quot;</span><span style="color: #f8f8f2">)</span>
-      <span style="color: #f8f8f2">jid</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">should</span> <span style="color: #f8f8f2">match</span> <span style="color: #e6db74">/[a-f0-9]{24}/</span>
-    <span style="color: #66d9ef">end</span>
-</pre></div>
-
+    it <span style="color:#e6db74">&#34;can schedule a basic job&#34;</span> <span style="color:#66d9ef">do</span>
+      jid <span style="color:#f92672">=</span> <span style="color:#66d9ef">MyWorker</span><span style="color:#f92672">.</span>async<span style="color:#f92672">.</span>perform_in(<span style="color:#ae81ff">60</span><span style="color:#f92672">.</span>seconds, <span style="color:#ae81ff">1</span><span style="color:#f92672"></span>_i64, <span style="color:#ae81ff">2</span><span style="color:#f92672"></span>_i64, <span style="color:#e6db74">&#34;3&#34;</span>)
+      jid<span style="color:#f92672">.</span>should match <span style="color:#e6db74">/[a-f0-9]{24}/</span>
+    <span style="color:#66d9ef">end</span></code></pre></div>
 <p>With the exception of a few type hints, that's identical to Ruby.</p>
 
 <h2 id="cool-just-gonna-push-this-to-production">Cool, just gonna push this to production...</h2>
@@ -191,20 +189,25 @@ Crystal.  If you are interested, <a href="mailto:mike@contribsys.com">email me</
 <p>Let's make <a href="https://github.com/mperham/sidekiq.cr">Sidekiq.cr</a> amazing, try it out and help us improve it!</p>
 
         <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'mikeperham';
-    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2016\/05\/25\/sidekiq-for-crystal\/';
-    var disqus_title = 'Sidekiq for Crystal';
-    var disqus_url = 'http:\/\/www.mikeperham.com\/2016\/05\/25\/sidekiq-for-crystal\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </div>
     </div>
     <footer class="site-footer">
@@ -232,8 +235,8 @@ Crystal.  If you are interested, <a href="mailto:mike@contribsys.com">email me</
 	</div>
 </footer>
 
-    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
 
   </body>
 </html>

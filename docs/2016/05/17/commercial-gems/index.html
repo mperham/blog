@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title> Serving your own Commercial Rubygems </title>
     
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
@@ -26,12 +26,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-right">
             <ul class="nav navbar-nav navbar-right">
                 
-                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
                 
                     <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
                 
@@ -121,24 +121,22 @@ Run `bundle install` and you're done!
 <li>I have rake tasks which can push a new gem version, add/remove a customer, send email, etc.</li>
 <li>Pushing a new gem version looks like this, note the <code>generate_index</code> call:</li>
 </ul>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">task</span> <span style="color: #e6db74">:push</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">:release</span> <span style="color: #66d9ef">do</span>
-  <span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&#39;net/ssh&#39;</span>
-  <span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&#39;net/scp&#39;</span>
-  <span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&#39;sidekiq/pro/version&#39;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:push</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">:release</span> <span style="color:#66d9ef">do</span>
+  require <span style="color:#e6db74">&#39;net/ssh&#39;</span>
+  require <span style="color:#e6db74">&#39;net/scp&#39;</span>
+  require <span style="color:#e6db74">&#39;sidekiq/pro/version&#39;</span>
 
-  <span style="color: #f8f8f2">ver</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">ENV</span><span style="color: #f92672">[</span><span style="color: #e6db74">&quot;VERSION&quot;</span><span style="color: #f92672">]</span> <span style="color: #f92672">||</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Pro</span><span style="color: #f92672">::</span><span style="color: #66d9ef">VERSION</span>
+  ver <span style="color:#f92672">=</span> <span style="color:#66d9ef">ENV</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;VERSION&#34;</span><span style="color:#f92672">]</span> <span style="color:#f92672">||</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">::</span><span style="color:#66d9ef">VERSION</span>
 
-  <span style="color: #66d9ef">Net</span><span style="color: #f92672">::</span><span style="color: #66d9ef">SCP</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">start(</span><span style="color: #e6db74">&quot;my-server.com&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;user&quot;</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">scp</span><span style="color: #f92672">|</span>
-    <span style="color: #f8f8f2">scp</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">upload!(</span><span style="color: #e6db74">&quot;pkg/sidekiq-pro-#{</span><span style="color: #f8f8f2">ver</span><span style="color: #e6db74">}.gem&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;/var/www/gems/gems&quot;</span><span style="color: #f8f8f2">)</span>
-  <span style="color: #66d9ef">end</span>
+  <span style="color:#66d9ef">Net</span><span style="color:#f92672">::</span><span style="color:#66d9ef">SCP</span><span style="color:#f92672">.</span>start(<span style="color:#e6db74">&#34;my-server.com&#34;</span>, <span style="color:#e6db74">&#34;user&#34;</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>scp<span style="color:#f92672">|</span>
+    scp<span style="color:#f92672">.</span>upload!(<span style="color:#e6db74">&#34;pkg/sidekiq-pro-</span><span style="color:#e6db74">#{</span>ver<span style="color:#e6db74">}</span><span style="color:#e6db74">.gem&#34;</span>, <span style="color:#e6db74">&#34;/var/www/gems/gems&#34;</span>)
+  <span style="color:#66d9ef">end</span>
 
-  <span style="color: #66d9ef">Net</span><span style="color: #f92672">::</span><span style="color: #66d9ef">SSH</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">start(</span><span style="color: #e6db74">&quot;my-server.com&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&#39;user&#39;</span><span style="color: #f8f8f2">)</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">ssh</span><span style="color: #f92672">|</span>
-    <span style="color: #f8f8f2">puts</span> <span style="color: #f8f8f2">ssh</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">exec!(</span><span style="color: #e6db74">&quot;gem generate_index --directory /var/www/gems&quot;</span><span style="color: #f8f8f2">)</span>
-  <span style="color: #66d9ef">end</span>
-  <span style="color: #f8f8f2">puts</span> <span style="color: #e6db74">&quot;Released Sidekiq Pro #{</span><span style="color: #f8f8f2">ver</span><span style="color: #e6db74">}&quot;</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
-
+  <span style="color:#66d9ef">Net</span><span style="color:#f92672">::</span><span style="color:#66d9ef">SSH</span><span style="color:#f92672">.</span>start(<span style="color:#e6db74">&#34;my-server.com&#34;</span>, <span style="color:#e6db74">&#39;user&#39;</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>ssh<span style="color:#f92672">|</span>
+    puts ssh<span style="color:#f92672">.</span>exec!(<span style="color:#e6db74">&#34;gem generate_index --directory /var/www/gems&#34;</span>)
+  <span style="color:#66d9ef">end</span>
+  puts <span style="color:#e6db74">&#34;Released Sidekiq Pro </span><span style="color:#e6db74">#{</span>ver<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
 <ul>
 <li>The Stripe webhook integration is really nice as it automates 90% of my business BUT don't bother until you have sufficient sales to make it worth your while.  For the first two years, I added customers manually when I got the &quot;You just got a sale!&quot; email.  The hard part is dealing with churn - Stripe doesn't email when a subscription ends so you'll need to automate that or at least send yourself email upon that webhook.</li>
 <li>For redundancy, I run two servers at a time so a replica is always available.  I switch out servers every six months so software versions on the server stay reasonably current: create new replica, old replica is promoted to primary, old primary is killed.  The servers are sync'd with BitTorrent Sync, which is the only &quot;shiny&quot; tech I use but I've found nothing better to keep a directory in sync between two servers in near real-time.</li>
@@ -160,20 +158,25 @@ Run `bundle install` and you're done!
 The fact that we can do this at all is the beauty of Bundler and Rubygems: they are easily federated using HTTP and static files only.  As an alternative, consider npm; it requires CouchDB, a full copy of the npm dataset to serve and only supports a single package server.  This design is much more complex, requiring a much heavier server, and makes it effectively impossible for an individual to run an npm server due to the operational costs and maintenance required.  I encourage anyone whose business depends on Ruby to join.</p>
 
         <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'mikeperham';
-    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2016\/05\/17\/commercial-gems\/';
-    var disqus_title = 'Serving your own Commercial Rubygems';
-    var disqus_url = 'http:\/\/www.mikeperham.com\/2016\/05\/17\/commercial-gems\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </div>
     </div>
     <footer class="site-footer">
@@ -201,8 +204,8 @@ The fact that we can do this at all is the beauty of Bundler and Rubygems: they 
 	</div>
 </footer>
 
-    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
 
   </body>
 </html>

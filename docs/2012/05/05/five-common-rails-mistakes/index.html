@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title> Five Common Rails Mistakes </title>
     
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
@@ -26,12 +26,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-right">
             <ul class="nav navbar-nav navbar-right">
                 
-                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
                 
                     <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
                 
@@ -54,25 +54,21 @@
 
 <p>Your data model is the core of your application. Without schema constraints, your data will slowly corrode due to bugs in your codebase until you can't depend on any fields being populated. Here's a Contact schema:</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">create_table</span> <span style="color: #e6db74">&quot;contacts&quot;</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">t</span><span style="color: #f92672">|</span>
-  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">integer</span>  <span style="color: #e6db74">&quot;user_id&quot;</span>
-  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;name&quot;</span>
-  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;phone&quot;</span>
-  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;email&quot;</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">create_table <span style="color:#e6db74">&#34;contacts&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>t<span style="color:#f92672">|</span>
+  t<span style="color:#f92672">.</span>integer  <span style="color:#e6db74">&#34;user_id&#34;</span>
+  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;name&#34;</span>
+  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;phone&#34;</span>
+  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;email&#34;</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
 
 <p>What is required? Presumably a Contact must belong_to a User and have a name &mdash; use database constraints to guarantee this. By adding <code>:null =&gt; false</code>, we ensure that the model is always consistent even if we have bugs in our validation because the database will not allow a model to be saved if it fails those constraints.</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">create_table</span> <span style="color: #e6db74">&quot;contacts&quot;</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">t</span><span style="color: #f92672">|</span>
-  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">integer</span>  <span style="color: #e6db74">&quot;user_id&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:null</span> <span style="color: #f92672">=&gt;</span> <span style="color: #66d9ef">false</span>
-  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;name&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:null</span> <span style="color: #f92672">=&gt;</span> <span style="color: #66d9ef">false</span>
-  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;phone&quot;</span>
-  <span style="color: #f8f8f2">t</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">string</span>   <span style="color: #e6db74">&quot;email&quot;</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">create_table <span style="color:#e6db74">&#34;contacts&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>t<span style="color:#f92672">|</span>
+  t<span style="color:#f92672">.</span>integer  <span style="color:#e6db74">&#34;user_id&#34;</span>, <span style="color:#e6db74">:null</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
+  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#e6db74">:null</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
+  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;phone&#34;</span>
+  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;email&#34;</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
 
 <p><strong>Bonus points</strong>: use <code>:limit =&gt; N</code> to size your string columns appropriately. Strings default to 255 characters and phone probably doesn't need to be that big, does it?</p>
 
@@ -86,20 +82,16 @@
 
 <p>If you are creating helper methods, kudos, at least you trying to keep your view layer clean. But developers often don't know the basics of creating tags within helpers, leading to messy string concatenation or interpolation:</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">str</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;&lt;li class=&#39;vehicle_list&#39;&gt;&quot;</span>
-<span style="color: #f8f8f2">str</span> <span style="color: #f92672">+=</span> <span style="color: #f8f8f2">link_to(</span><span style="color: #e6db74">&quot;#{</span><span style="color: #f8f8f2">vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">title</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">upcase</span><span style="color: #e6db74">} Sale&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">show_all_styles_path(vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">id,</span> <span style="color: #f8f8f2">vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">url_title))</span>
-<span style="color: #f8f8f2">str</span> <span style="color: #f92672">+=</span> <span style="color: #e6db74">&quot;&lt;/li&gt;&quot;</span>
-<span style="color: #f8f8f2">str</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">html_safe</span>
-</pre></div>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;li class=&#39;vehicle_list&#39;&gt;&#34;</span>
+str <span style="color:#f92672">+=</span> link_to(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">#{</span>vehicle<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>upcase<span style="color:#e6db74">}</span><span style="color:#e6db74"> Sale&#34;</span>, show_all_styles_path(vehicle<span style="color:#f92672">.</span>id, vehicle<span style="color:#f92672">.</span>url_title))
+str <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;&lt;/li&gt;&#34;</span>
+str<span style="color:#f92672">.</span>html_safe</code></pre></div>
 
 <p>Yikes, it's ugly and can easily lead to XSS security holes! <code>content_tag</code> is your friend.</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">content_tag</span> <span style="color: #e6db74">:li</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:class</span> <span style="color: #f92672">=&gt;</span> <span style="color: #e6db74">&#39;vehicle_list&#39;</span> <span style="color: #66d9ef">do</span>
-  <span style="color: #f8f8f2">link_to(</span><span style="color: #e6db74">&quot;#{</span><span style="color: #f8f8f2">vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">title</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">upcase</span><span style="color: #e6db74">} Sale&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #f8f8f2">show_all_styles_path(vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">id,</span> <span style="color: #f8f8f2">vehicle</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">url_title))</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">content_tag <span style="color:#e6db74">:li</span>, <span style="color:#e6db74">:class</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;vehicle_list&#39;</span> <span style="color:#66d9ef">do</span>
+  link_to(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">#{</span>vehicle<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>upcase<span style="color:#e6db74">}</span><span style="color:#e6db74"> Sale&#34;</span>, show_all_styles_path(vehicle<span style="color:#f92672">.</span>id, vehicle<span style="color:#f92672">.</span>url_title))
+<span style="color:#66d9ef">end</span></code></pre></div>
 
 <p><strong>Bonus points</strong>: start introducing helper methods that take blocks. Nested blocks are a natural fit when generating nested HTML.</p>
 
@@ -107,19 +99,15 @@
 
 <p>You need to fix some data so you'll just iterate through it all and fix it, right?</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">User</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">has_purchased(</span><span style="color: #66d9ef">true</span><span style="color: #f8f8f2">)</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">each</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">customer</span><span style="color: #f92672">|</span>
-  <span style="color: #f8f8f2">customer</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">grant_role(</span><span style="color: #e6db74">:customer</span><span style="color: #f8f8f2">)</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">User</span><span style="color:#f92672">.</span>has_purchased(<span style="color:#66d9ef">true</span>)<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>customer<span style="color:#f92672">|</span>
+  customer<span style="color:#f92672">.</span>grant_role(<span style="color:#e6db74">:customer</span>)
+<span style="color:#66d9ef">end</span></code></pre></div>
 
 <p>You have an ecommerce site with a million customers. Let's say each User object takes 500 bytes. This code will take 500MB of memory at runtime! Better:</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">User</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">has_purchased(</span><span style="color: #66d9ef">true</span><span style="color: #f8f8f2">)</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">find_each</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">customer</span><span style="color: #f92672">|</span>
-  <span style="color: #f8f8f2">customer</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">grant_role(</span><span style="color: #e6db74">:customer</span><span style="color: #f8f8f2">)</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">User</span><span style="color:#f92672">.</span>has_purchased(<span style="color:#66d9ef">true</span>)<span style="color:#f92672">.</span>find_each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>customer<span style="color:#f92672">|</span>
+  customer<span style="color:#f92672">.</span>grant_role(<span style="color:#e6db74">:customer</span>)
+<span style="color:#66d9ef">end</span></code></pre></div>
 
 <p><code>find_each</code> uses <code>find_in_batches</code> to pull in 1000 records at a time, dramatically lowering the runtime memory requirements.</p>
 
@@ -135,20 +123,25 @@
 
 <p>Update: use <code>find_each</code> rather than <code>find_in_batches</code>, thanks readers!</p>
         <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'mikeperham';
-    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2012\/05\/05\/five-common-rails-mistakes\/';
-    var disqus_title = 'Five Common Rails Mistakes';
-    var disqus_url = 'http:\/\/www.mikeperham.com\/2012\/05\/05\/five-common-rails-mistakes\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </div>
     </div>
     <footer class="site-footer">
@@ -176,8 +169,8 @@
 	</div>
 </footer>
 
-    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
 
   </body>
 </html>

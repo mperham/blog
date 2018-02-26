@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title> Migrating from redis-namespace </title>
     
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
@@ -26,12 +26,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="http://www.mikeperham.com">Mike Perham</a>
+            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-right">
             <ul class="nav navbar-nav navbar-right">
                 
-                    <li><a href="http://sidekiq.org/" >Sidekiq</a></li>
+                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
                 
                     <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
                 
@@ -58,13 +58,11 @@ that no one should use.  Redis
 already has a native solution if you want to share a Redis instance: databases.
 The default database is 0.  Here's how to point Sidekiq to use database
 1 instead:</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">configure_client</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">|</span>
-  <span style="color: #75715e"># these are equivalent</span>
-  <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">redis</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span> <span style="color: #e6db74">url</span><span style="color: #f8f8f2">:</span> <span style="color: #e6db74">&quot;redis://localhost:6379/1&quot;</span> <span style="color: #f8f8f2">}</span>
-  <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">redis</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span> <span style="color: #e6db74">db</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">1</span> <span style="color: #f8f8f2">}</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_client <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  <span style="color:#75715e"># these are equivalent</span>
+  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">url</span>: <span style="color:#e6db74">&#34;redis://localhost:6379/1&#34;</span> }
+  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">db</span>: <span style="color:#ae81ff">1</span> <span style="color:#f92672"></span>}
+<span style="color:#66d9ef">end</span></code></pre></div>
 <p>By default, Redis offers 16 databases: 0-15.  This is configurable in
 redis.conf.  Keys in one database are not visible from another database.
 All databases will share global data like registered Lua scripts.
@@ -112,31 +110,27 @@ bundle exec sidekiq ...
 system so that any new jobs from Puma/Unicorn/etc will go to the new
 system.  In this example, the old Redis is using the <code>foo</code> namespace in
 database 0.  We want the new system to use database 1 with no namespace.</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e"># Note that the client ALWAYS pushes to the new process</span>
-<span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">configure_client</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">|</span>
-  <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">redis</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span> <span style="color: #e6db74">db</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">1</span> <span style="color: #f8f8f2">}</span>
-<span style="color: #66d9ef">end</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Note that the client ALWAYS pushes to the new process</span>
+<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_client <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">db</span>: <span style="color:#ae81ff">1</span> <span style="color:#f92672"></span>}
+<span style="color:#66d9ef">end</span>
 
-<span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">configure_server</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">|</span>
-  <span style="color: #66d9ef">if</span> <span style="color: #66d9ef">ENV</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;OLD&#39;</span><span style="color: #f92672">]</span>
-    <span style="color: #75715e"># We&#39;ll continue to poll for old scheduled jobs and retries</span>
-    <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">redis</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span> <span style="color: #e6db74">namespace</span><span style="color: #f8f8f2">:</span> <span style="color: #e6db74">&#39;foo&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">db</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">0</span> <span style="color: #f8f8f2">}</span>
-  <span style="color: #66d9ef">else</span>
-    <span style="color: #f8f8f2">config</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">redis</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">{</span> <span style="color: #e6db74">db</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">1</span> <span style="color: #f8f8f2">}</span>
-  <span style="color: #66d9ef">end</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
-
+<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">ENV</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#39;OLD&#39;</span><span style="color:#f92672">]</span>
+    <span style="color:#75715e"># We&#39;ll continue to poll for old scheduled jobs and retries</span>
+    config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">namespace</span>: <span style="color:#e6db74">&#39;foo&#39;</span>, <span style="color:#e6db74">db</span>: <span style="color:#ae81ff">0</span> <span style="color:#f92672"></span>}
+  <span style="color:#66d9ef">else</span>
+    config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">db</span>: <span style="color:#ae81ff">1</span> <span style="color:#f92672"></span>}
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
 <p>If you are a Sidekiq Pro customer you can monitor both old and new in the Web UI with Sidekiq Pro's
 <a href="https://github.com/mperham/sidekiq/wiki/Pro-Web-UI#sharding">Web UI Sharding support</a>,
 just mount a copy for the old and new config in your <code>config/routes.rb</code>:</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">NEWPOOL</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">ConnectionPool</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span> <span style="color: #f8f8f2">{</span> <span style="color: #66d9ef">Redis</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #e6db74">db</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">1</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">}</span>
-<span style="color: #66d9ef">OLDPOOL</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">ConnectionPool</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new</span> <span style="color: #f8f8f2">{</span> <span style="color: #66d9ef">Redis</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Namespace</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #e6db74">:foo</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">:redis</span> <span style="color: #f92672">=&gt;</span> <span style="color: #66d9ef">Redis</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #e6db74">db</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">))</span> <span style="color: #f8f8f2">}</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">NEWPOOL</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">.</span>new { <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">db</span>: <span style="color:#ae81ff">1</span><span style="color:#f92672"></span>) }
+<span style="color:#66d9ef">OLDPOOL</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">.</span>new { <span style="color:#66d9ef">Redis</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Namespace</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:foo</span>, <span style="color:#e6db74">:redis</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">db</span>: <span style="color:#ae81ff">0</span><span style="color:#f92672"></span>)) }
 
-<span style="color: #f8f8f2">mount</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Pro</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Web</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">with(</span><span style="color: #e6db74">redis_pool</span><span style="color: #f8f8f2">:</span> <span style="color: #66d9ef">NEWPOOL</span><span style="color: #f8f8f2">),</span> <span style="color: #e6db74">at</span><span style="color: #f8f8f2">:</span> <span style="color: #e6db74">&#39;/sidekiqnew&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">as</span><span style="color: #f8f8f2">:</span> <span style="color: #e6db74">&#39;sidekiqnew&#39;</span>
-<span style="color: #f8f8f2">mount</span> <span style="color: #66d9ef">Sidekiq</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Pro</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Web</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">with(</span><span style="color: #e6db74">redis_pool</span><span style="color: #f8f8f2">:</span> <span style="color: #66d9ef">OLDPOOL</span><span style="color: #f8f8f2">),</span> <span style="color: #e6db74">at</span><span style="color: #f8f8f2">:</span> <span style="color: #e6db74">&#39;/sidekiqold&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">as</span><span style="color: #f8f8f2">:</span> <span style="color: #e6db74">&#39;sidekiqold&#39;</span>
-</pre></div>
-
+mount <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">.</span>with(<span style="color:#e6db74">redis_pool</span>: <span style="color:#66d9ef">NEWPOOL</span>), <span style="color:#e6db74">at</span>: <span style="color:#e6db74">&#39;/sidekiqnew&#39;</span>, <span style="color:#e6db74">as</span>: <span style="color:#e6db74">&#39;sidekiqnew&#39;</span>
+mount <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">.</span>with(<span style="color:#e6db74">redis_pool</span>: <span style="color:#66d9ef">OLDPOOL</span>), <span style="color:#e6db74">at</span>: <span style="color:#e6db74">&#39;/sidekiqold&#39;</span>, <span style="color:#e6db74">as</span>: <span style="color:#e6db74">&#39;sidekiqold&#39;</span></code></pre></div>
 <p>Monitor your retry and scheduled job counts in the old system.  After N weeks, you should be able to safely decommission the old Sidekiqs.  Ciao, bella!</p>
 
 <h3 id="the-big-migration">The big migration</h3>
@@ -174,32 +168,30 @@ this).</p>
 <p><strong>WARNING: Depending on the amount of data in Redis, this script may
 crush your Redis instance for a long time.  Do not use it while other
 things are using that Redis instance.</strong></p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #75715e"># remove_ns.rb</span>
-<span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&#39;redis&#39;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># remove_ns.rb</span>
+require <span style="color:#e6db74">&#39;redis&#39;</span>
 
-<span style="color: #75715e">################################</span>
-<span style="color: #75715e"># Change &quot;foo&quot; to your namespace, leave the &quot;:*&quot; alone</span>
-<span style="color: #f8f8f2">ns</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;foo:*&quot;</span>
+<span style="color:#75715e">################################</span>
+<span style="color:#75715e"># Change &#34;foo&#34; to your namespace, leave the &#34;:*&#34; alone</span>
+ns <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;foo:*&#34;</span>
 
-<span style="color: #75715e">################################</span>
-<span style="color: #75715e"># Point to your Redis instance</span>
-<span style="color: #f8f8f2">redis</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Redis</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #e6db74">db</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">)</span>
+<span style="color:#75715e">################################</span>
+<span style="color:#75715e"># Point to your Redis instance</span>
+redis <span style="color:#f92672">=</span> <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">db</span>: <span style="color:#ae81ff">0</span><span style="color:#f92672"></span>)
 
-<span style="color: #f8f8f2">script</span> <span style="color: #f92672">=</span> <span style="color: #f92672">&lt;&lt;-</span><span style="color: #e6db74">LUA</span>
-<span style="color: #e6db74">  local count = 0</span>
-<span style="color: #e6db74">  local keys = redis.call(&quot;keys&quot;, ARGV[1])</span>
-<span style="color: #e6db74">  for _, keyname in pairs(keys) do</span>
-<span style="color: #e6db74">    redis.call(&quot;rename&quot;, keyname, string.sub(keyname, ARGV[2]))</span>
-<span style="color: #e6db74">    count = count + 1</span>
-<span style="color: #e6db74">  end</span>
-<span style="color: #e6db74">  return count</span>
-<span style="color: #e6db74">LUA</span>
+script <span style="color:#f92672">=</span> <span style="color:#e6db74">&lt;&lt;-LUA
+</span><span style="color:#e6db74"></span>  local count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+  <span style="color:#f92672"></span>local keys <span style="color:#f92672">=</span> redis<span style="color:#f92672">.</span>call(<span style="color:#e6db74">&#34;keys&#34;</span>, <span style="color:#66d9ef">ARGV</span><span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">]</span>)
+  <span style="color:#66d9ef">for</span> _, keyname <span style="color:#66d9ef">in</span> pairs(keys) <span style="color:#66d9ef">do</span>
+    redis<span style="color:#f92672">.</span>call(<span style="color:#e6db74">&#34;rename&#34;</span>, keyname, string<span style="color:#f92672">.</span>sub(keyname, <span style="color:#66d9ef">ARGV</span><span style="color:#f92672">[</span><span style="color:#ae81ff">2</span><span style="color:#f92672">]</span>))
+    count <span style="color:#f92672">=</span> count <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+  <span style="color:#f92672"></span><span style="color:#66d9ef">end</span>
+  <span style="color:#66d9ef">return</span> count
+<span style="color:#66d9ef">LUA</span>
 
-<span style="color: #f8f8f2">start</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Time</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">now</span>
-<span style="color: #f8f8f2">count</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">redis</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">eval(script,</span> <span style="color: #f92672">[]</span><span style="color: #f8f8f2">,</span> <span style="color: #f92672">[</span><span style="color: #f8f8f2">ns,</span> <span style="color: #f8f8f2">ns</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">size</span><span style="color: #f92672">]</span><span style="color: #f8f8f2">)</span>
-<span style="color: #f8f8f2">puts</span> <span style="color: #e6db74">&quot;Complete, migrated #{</span><span style="color: #f8f8f2">count</span><span style="color: #e6db74">} keys in #{</span><span style="color: #66d9ef">Time</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">now</span> <span style="color: #f92672">-</span> <span style="color: #f8f8f2">start</span><span style="color: #e6db74">} sec&quot;</span>
-</pre></div>
-
+start <span style="color:#f92672">=</span> <span style="color:#66d9ef">Time</span><span style="color:#f92672">.</span>now
+count <span style="color:#f92672">=</span> redis<span style="color:#f92672">.</span>eval(script, <span style="color:#f92672">[]</span>, <span style="color:#f92672">[</span>ns, ns<span style="color:#f92672">.</span>size<span style="color:#f92672">]</span>)
+puts <span style="color:#e6db74">&#34;Complete, migrated </span><span style="color:#e6db74">#{</span>count<span style="color:#e6db74">}</span><span style="color:#e6db74"> keys in </span><span style="color:#e6db74">#{</span><span style="color:#66d9ef">Time</span><span style="color:#f92672">.</span>now <span style="color:#f92672">-</span> start<span style="color:#e6db74">}</span><span style="color:#e6db74"> sec&#34;</span></code></pre></div>
 <p>Now:</p>
 
 <ol>
@@ -214,28 +206,24 @@ nothing is coming over the wire.</li>
 
 <p>I created a script which creates 500 plain keys and 500 namespaced keys
 to verify that 500 keys are migrated:</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">gem</span> <span style="color: #e6db74">&#39;redis&#39;</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">&quot;&lt; 4&quot;</span>
-<span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&#39;redis&#39;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">gem <span style="color:#e6db74">&#39;redis&#39;</span>, <span style="color:#e6db74">&#34;&lt; 4&#34;</span>
+require <span style="color:#e6db74">&#39;redis&#39;</span>
 
-<span style="color: #f8f8f2">redis</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Redis</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #e6db74">db</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">4</span><span style="color: #f8f8f2">)</span>
+redis <span style="color:#f92672">=</span> <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">db</span>: <span style="color:#ae81ff">4</span><span style="color:#f92672"></span>)
 
-<span style="color: #ae81ff">500</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">times</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">idx</span><span style="color: #f92672">|</span>
-  <span style="color: #f8f8f2">redis</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">set(idx,</span> <span style="color: #f8f8f2">idx)</span>
-<span style="color: #66d9ef">end</span>
+<span style="color:#ae81ff">500</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
+  redis<span style="color:#f92672">.</span>set(idx, idx)
+<span style="color:#66d9ef">end</span>
 
-<span style="color: #f8f8f2">require</span> <span style="color: #e6db74">&#39;redis-namespace&#39;</span>
-<span style="color: #f8f8f2">rn</span> <span style="color: #f92672">=</span> <span style="color: #66d9ef">Redis</span><span style="color: #f92672">::</span><span style="color: #66d9ef">Namespace</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">new(</span><span style="color: #e6db74">:foo</span><span style="color: #f8f8f2">,</span> <span style="color: #e6db74">redis</span><span style="color: #f8f8f2">:</span> <span style="color: #f8f8f2">redis)</span>
+require <span style="color:#e6db74">&#39;redis-namespace&#39;</span>
+rn <span style="color:#f92672">=</span> <span style="color:#66d9ef">Redis</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Namespace</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:foo</span>, <span style="color:#e6db74">redis</span>: redis)
 
-<span style="color: #ae81ff">500</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">times</span> <span style="color: #66d9ef">do</span> <span style="color: #f92672">|</span><span style="color: #f8f8f2">idx</span><span style="color: #f92672">|</span>
-  <span style="color: #f8f8f2">rn</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">set(idx,</span> <span style="color: #f8f8f2">idx)</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
-
+<span style="color:#ae81ff">500</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
+  rn<span style="color:#f92672">.</span>set(idx, idx)
+<span style="color:#66d9ef">end</span></code></pre></div>
 <p>The result:</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>$ ruby remove_ns.rb
-Complete, migrated <span style="color: #ae81ff">500</span> keys in <span style="color: #ae81ff">0</span>.003167 sec
-</pre></div>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ ruby remove_ns.rb
+Complete, migrated <span style="color:#ae81ff">500</span> keys in <span style="color:#ae81ff">0</span>.003167 sec</code></pre></div>
 <p>The keyspace count goes from 1000 to 500 with the migration.  Please
 note that this migration script blindly renames keys so if you have keys named
 &quot;foo:bar&quot; and &quot;bar&quot;, it's possible the latter will be overwritten in the
@@ -252,20 +240,25 @@ migration due to the rename.</p>
 <p>Good luck!</p>
 
         <div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'mikeperham';
-    var disqus_identifier = 'http:\/\/www.mikeperham.com\/2017\/04\/10\/migrating-from-redis-namespace\/';
-    var disqus_title = 'Migrating from redis-namespace';
-    var disqus_url = 'http:\/\/www.mikeperham.com\/2017\/04\/10\/migrating-from-redis-namespace\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </div>
     </div>
     <footer class="site-footer">
@@ -293,8 +286,8 @@ migration due to the rename.</p>
 	</div>
 </footer>
 
-    <script src="http://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="http://www.mikeperham.com/js/bootstrap.min.js"></script>
+    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
 
   </body>
 </html>
