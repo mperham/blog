@@ -1,6 +1,6 @@
 languageCode = "en-us"
 title = "Mike Perham"
-baseURL = "http://www.mikeperham.com"
+baseURL = "https://www.mikeperham.com"
 theme = "simple-hugo"
 relativeURLs = true
 publishDir = "docs"
@@ -25,7 +25,7 @@ smartypants = false
 [params.links]
 
 [params.links.aSidekiq]
-"url" = "http://sidekiq.org/"
+"url" = "https://sidekiq.org/"
 "title" = "Sidekiq"
 
 [params.links.bFaktory]
