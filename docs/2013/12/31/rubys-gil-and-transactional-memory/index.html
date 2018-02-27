@@ -53,13 +53,13 @@
 
 <h3 id="what-is-hardware-transactional-memory">What is Hardware Transactional Memory?</h3>
 
-<p><a href="https://en.wikipedia.org/wiki/Transactional_memory">Transactional Memory</a> ensures that a set of operations in memory happen in a consistent manner. If my code reads a variable, changes that variable and writes it back to memory, TM tries to ensure that these operations yield a predictable outcome. TM can be implemented in software (e.g. see Clojure's STM support) or in hardware<sup class="footnote-ref" id="fnref:3"><a rel="footnote" href="#fn:3">1</a></sup>.</p>
+<p><a href="https://en.wikipedia.org/wiki/Transactional_memory">Transactional Memory</a> ensures that a set of operations in memory happen in a consistent manner. If my code reads a variable, changes that variable and writes it back to memory, TM tries to ensure that these operations yield a predictable outcome. TM can be implemented in software (e.g. see Clojure's STM support) or in hardware<sup class="footnote-ref" id="fnref:3"><a href="#fn:3">1</a></sup>.</p>
 
 <h3 id="what-is-the-gil">What is the GIL?</h3>
 
 <p>(or, How to stop concurrency problems by stopping concurrency)</p>
 
-<p>Ruby<sup class="footnote-ref" id="fnref:http-researcher-watson-ibm-com-researcher-files-jp-ODAIRA-PPoPP2014-RubyGILHTM-pdf"><a rel="footnote" href="#fn:http-researcher-watson-ibm-com-researcher-files-jp-ODAIRA-PPoPP2014-RubyGILHTM-pdf">2</a></sup>'s GIL is a VM-wide mutex that a thread must obtain before that thread can execute Ruby code. This is necessary because C extensions and many parts of Ruby are not actually thread-safe (including Array and Hash!) By holding the GIL, we guarantee that our thread's Ruby code is the only Ruby code executing; there can't be any concurrency issues.<sup class="footnote-ref" id="fnref:https-en-wikipedia-org-wiki-Transactional-memory"><a rel="footnote" href="#fn:https-en-wikipedia-org-wiki-Transactional-memory">3</a></sup></p>
+<p>Ruby<sup class="footnote-ref" id="fnref:http-researcher-watson-ibm-com-researcher-files-jp-ODAIRA-PPoPP2014-RubyGILHTM-pdf"><a href="#fn:http-researcher-watson-ibm-com-researcher-files-jp-ODAIRA-PPoPP2014-RubyGILHTM-pdf">2</a></sup>'s GIL is a VM-wide mutex that a thread must obtain before that thread can execute Ruby code. This is necessary because C extensions and many parts of Ruby are not actually thread-safe (including Array and Hash!) By holding the GIL, we guarantee that our thread's Ruby code is the only Ruby code executing; there can't be any concurrency issues.<sup class="footnote-ref" id="fnref:https-en-wikipedia-org-wiki-Transactional-memory"><a href="#fn:https-en-wikipedia-org-wiki-Transactional-memory">3</a></sup></p>
 
 <h3 id="what-does-tm-have-to-do-with-the-gil">What does TM have to do with the GIL?</h3>
 
