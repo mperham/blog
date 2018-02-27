@@ -8,8 +8,108 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Mon, 05 Feb 2018 09:00:00 -0800</lastBuildDate>
+    <lastBuildDate>Wed, 28 Feb 2018 07:00:00 -0800</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Ruby Optimization with One Magic Comment</title>
+      <link>https://www.mikeperham.com/2018/02/28/ruby-optimization-with-one-magic-comment/</link>
+      <pubDate>Wed, 28 Feb 2018 07:00:00 -0800</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2018/02/28/ruby-optimization-with-one-magic-comment/</guid>
+      <description>
+
+&lt;p&gt;Software performance optimization is simple: find a way to do less. Ruby has a reputation for being slow and, while that impression is a decade out of date, one of the leading offenders has been the garbage collector.&lt;/p&gt;
+
+&lt;p&gt;This leads to the question: can we speed up Ruby by creating less garbage? Absolutely!&lt;/p&gt;
+
+&lt;h2 id=&#34;a-string-primer&#34;&gt;A String Primer&lt;/h2&gt;
+
+&lt;p&gt;Ruby has an unfortunate default semantic that all Strings are mutable:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;string &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+string &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This allocates two Strings, &amp;quot;&amp;quot; and &amp;quot;mike&amp;quot;. The first, empty String is then mutated to contain &amp;quot;mike&amp;quot;. However String mutation is quite rare, more common is something like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;123&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# unnecessary garbage here!&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Every invocation of getmike will allocate a new copy of &amp;quot;mike&amp;quot;, which is then immediately thrown away as garbage, but is required because Ruby just treats the String as a method argument which might be mutated inside &lt;code&gt;Hash#[]&lt;/code&gt;. So wasteful!&lt;/p&gt;
+
+&lt;h2 id=&#34;freeze&#34;&gt;Freeze!&lt;/h2&gt;
+
+&lt;p&gt;Ruby introduced the freeze concept many years ago to minimize allocation. Calling freeze on an object tells Ruby to treat it as immutable. Now Ruby knows that it can treat &amp;quot;mike&amp;quot; as a constant:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;freeze&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The problem? It makes the code uglier and needs to be called everywhere you declare a String.&lt;/p&gt;
+
+&lt;h2 id=&#34;magic-comments&#34;&gt;Magic Comments!&lt;/h2&gt;
+
+&lt;p&gt;Ruby 2.3 introduced a very nice option: each Ruby file can opt into Strings as immutable, meaning all Strings within that file will automatically freeze, with a simple magic comment at the top of the file. This will not allocate an extra String for &amp;quot;mike&amp;quot;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# frozen_string_literal: true&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;123&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;the-real-world&#34;&gt;The Real World&lt;/h2&gt;
+
+&lt;p&gt;Years ago I added a lot of freeze calls to Sidekiq to minimize its impact on the garbage collector and maximize performance.
+Last week &lt;a href=&#34;https://github.com/mperham/sidekiq/pull/3759/files&#34;&gt;I removed all those calls&lt;/a&gt; and added a &lt;code&gt;frozen_string_literal&lt;/code&gt; comment to all Ruby files.&lt;/p&gt;
+
+&lt;p&gt;To see the effect, I ran an experiment with &lt;code&gt;frozen_string_literal&lt;/code&gt; using Sidekiq&#39;s benchmark script by adding &lt;code&gt;GC.disable&lt;/code&gt; and watching the RSS grow. Note how Ruby allows you to enable or disable the feature with a flag:&lt;/p&gt;
+
+&lt;h3 id=&#34;disabled&#34;&gt;Disabled&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ RUBYOPT=--disable=frozen-string-literal bundle exec bin/sidekiqload
+Created 30000 jobs
+RSS: 105852 Pending: 25749
+RSS: 178880 Pending: 21514
+RSS: 252804 Pending: 17306
+RSS: 326824 Pending: 12987
+RSS: 399268 Pending: 8810
+RSS: 472620 Pending: 4618
+RSS: 547968 Pending: 319
+RSS: 553568 Pending: 0
+Done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;enabled&#34;&gt;Enabled&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ RUBYOPT=--enable=frozen-string-literal bundle exec bin/sidekiqload
+Created 30000 jobs
+RSS: 105824 Pending: 25687
+RSS: 174948 Pending: 21700
+RSS: 245448 Pending: 17669
+RSS: 316848 Pending: 13559
+RSS: 388544 Pending: 9447
+RSS: 456704 Pending: 5288
+RSS: 450552 Pending: 1160
+RSS: 457536 Pending: 0
+Done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;frozen_string_literal&lt;/code&gt; reduces the generated garbage by ~100MB or ~20%!&lt;/strong&gt; Free performance by adding a one line comment.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Gem authors: add &lt;code&gt;# frozen_string_literal: true&lt;/code&gt; to the top of all Ruby files in a gem.&lt;/strong&gt;
+It gives a free performance improvement to all your users as long as you don&#39;t use String mutation.&lt;/p&gt;
+
+&lt;h3 id=&#34;notes&#34;&gt;Notes&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;If you do mutate, use &lt;code&gt;String.new&lt;/code&gt; to allocate a mutable String instead of &amp;quot;&amp;quot;.&lt;/li&gt;
+&lt;li&gt;The magic comment will only work on Ruby 2.3+ but since Ruby 2.2 is EOL in one month, I think it&#39;s fair to stop performance tuning for it.&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
     
     <item>
       <title>Happy 6th Birthday, Sidekiq</title>
@@ -736,78 +836,6 @@ By restructing the job arguments to include the header info, he removed this red
 a problem which had plagued him for months.  Time elapsed: less than an hour!&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Moral of the story: harness the awesome power of Sidekiq&#39;s TTIN feature to crush your performance bugs!&lt;/strong&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Hello Sidekiq 5.0</title>
-      <link>https://www.mikeperham.com/2017/04/25/hello-sidekiq-5.0/</link>
-      <pubDate>Tue, 25 Apr 2017 09:00:00 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2017/04/25/hello-sidekiq-5.0/</guid>
-      <description>
-
-&lt;figure style=&#34;float: right;&#34;&gt;
- &lt;img src=&#34;http://www.mikeperham.com/images/50.jpg&#34;/&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;After a few months of work, I&#39;m happy to announce that Sidekiq 5.0 is
-now available.  Sidekiq 5.0 refactors the core job processor to work better
-with Rails 5 and includes a few breaking changes that have been pending for a
-while.&lt;/p&gt;
-
-&lt;h2 id=&#34;what-s-new&#34;&gt;What&#39;s New?&lt;/h2&gt;
-
-&lt;h3 id=&#34;rails-5-native&#34;&gt;Rails 5 native!&lt;/h3&gt;
-
-&lt;p&gt;Sidekiq::Processor has been redesigned to work well
-with Rails 5.0&#39;s Executor.  The Executor is a new API which needs
-to wrap any use of Rails code; it automatically handles code reloading,
-database connection management and any other callbacks.  Before now,
-Sidekiq had middleware to clean up database connections but
-this is no longer necessary with the Executor.&lt;/p&gt;
-
-&lt;p&gt;Note that Sidekiq 5.0 will still work with Rails 4.0+.&lt;/p&gt;
-
-&lt;h3 id=&#34;bad-json-no-problem&#34;&gt;Bad JSON, no problem!&lt;/h3&gt;
-
-&lt;p&gt;Sidekiq now explicitly handles malformed job payloads which cannot be
-parsed as valid JSON.  This is usually due to pushing jobs to Redis via
-other languages.  Invalid jobs are immediately sent to the Dead set so
-they can be manually examined.  Previously these payloads were discarded
-or needed to be removed from Redis manually.&lt;/p&gt;
-
-&lt;h3 id=&#34;right-to-left-languages&#34;&gt;Right-to-Left Languages&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://www.mikeperham.com/images/bidi.png&#34; alt=&#34;bidi&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The Web UI can now natively render RTL (right-to-left) languages like
-Arabic, Hebrew, Persian and Urdu.  This brings language support from 21
-to 25 languages and another billion or so potential Sidekiq users!
-Change your browser to request one of those languages
-and the Web UI will render in that language.&lt;/p&gt;
-
-&lt;h3 id=&#34;cleanup&#34;&gt;Cleanup&lt;/h3&gt;
-
-&lt;p&gt;The &lt;code&gt;delay&lt;/code&gt; APIs are now disabled by default, since they pollute
-&lt;code&gt;Class&lt;/code&gt; and can lead to overly large job payloads.  You can re-enable
-them if your application uses that API.&lt;/p&gt;
-
-&lt;p&gt;The quiet signal has been changed from USR1 to TSTP, which is available in JRuby
-and better reflects the intent: Threads SToP.  USR1 will still work but is
-deprecated. Sidekiq 4.2.9+ also supports TSTP so you can port your
-deployment scripts to use the new signal without risking a major version bump
-at the same time.&lt;/p&gt;
-
-&lt;p&gt;Support for Ruby 2.0, Ruby 2.1 and Rails 3.2 is dropped.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Please see the &lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/5.0-Upgrade.md&#34;&gt;5.0 upgrade notes&lt;/a&gt; for more detail and how to upgrade safely.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Thank you to all my &lt;a href=&#34;http://sidekiq.org&#34;&gt;Sidekiq Pro and Sidekiq Enterprise&lt;/a&gt; customers for
-ensuring the long-term support and maintenance of Sidekiq.  Support OSS software
-and your infrastructure vendors so we can support you!&lt;/strong&gt;&lt;/p&gt;
 </description>
     </item>
     

@@ -1,0 +1,193 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Ruby Optimization with One Magic Comment </title>
+    
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Ruby Optimization with One Magic Comment</h1>
+      <small class="post-meta">Feb 28, 2018</small>
+      <div class="post-content">
+        
+
+<p>Software performance optimization is simple: find a way to do less. Ruby has a reputation for being slow and, while that impression is a decade out of date, one of the leading offenders has been the garbage collector.</p>
+
+<p>This leads to the question: can we speed up Ruby by creating less garbage? Absolutely!</p>
+
+<h2 id="a-string-primer">A String Primer</h2>
+
+<p>Ruby has an unfortunate default semantic that all Strings are mutable:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+string <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;mike&#34;</span></code></pre></div>
+<p>This allocates two Strings, &quot;&quot; and &quot;mike&quot;. The first, empty String is then mutated to contain &quot;mike&quot;. However String mutation is quite rare, more common is something like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">HASH</span> <span style="color:#f92672">=</span> {
+  <span style="color:#e6db74">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>
+<span style="color:#f92672"></span>}
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">getmike</span>
+  <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">]</span> <span style="color:#75715e"># unnecessary garbage here!</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
+<p>Every invocation of getmike will allocate a new copy of &quot;mike&quot;, which is then immediately thrown away as garbage, but is required because Ruby just treats the String as a method argument which might be mutated inside <code>Hash#[]</code>. So wasteful!</p>
+
+<h2 id="freeze">Freeze!</h2>
+
+<p>Ruby introduced the freeze concept many years ago to minimize allocation. Calling freeze on an object tells Ruby to treat it as immutable. Now Ruby knows that it can treat &quot;mike&quot; as a constant:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">getmike</span>
+  <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">.</span>freeze<span style="color:#f92672">]</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
+<p>The problem? It makes the code uglier and needs to be called everywhere you declare a String.</p>
+
+<h2 id="magic-comments">Magic Comments!</h2>
+
+<p>Ruby 2.3 introduced a very nice option: each Ruby file can opt into Strings as immutable, meaning all Strings within that file will automatically freeze, with a simple magic comment at the top of the file. This will not allocate an extra String for &quot;mike&quot;.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># frozen_string_literal: true</span>
+
+<span style="color:#66d9ef">HASH</span> <span style="color:#f92672">=</span> {
+  <span style="color:#e6db74">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>
+<span style="color:#f92672"></span>}
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">getmike</span>
+  <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">]</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
+<h2 id="the-real-world">The Real World</h2>
+
+<p>Years ago I added a lot of freeze calls to Sidekiq to minimize its impact on the garbage collector and maximize performance.
+Last week <a href="https://github.com/mperham/sidekiq/pull/3759/files">I removed all those calls</a> and added a <code>frozen_string_literal</code> comment to all Ruby files.</p>
+
+<p>To see the effect, I ran an experiment with <code>frozen_string_literal</code> using Sidekiq's benchmark script by adding <code>GC.disable</code> and watching the RSS grow. Note how Ruby allows you to enable or disable the feature with a flag:</p>
+
+<h3 id="disabled">Disabled</h3>
+
+<pre><code>$ RUBYOPT=--disable=frozen-string-literal bundle exec bin/sidekiqload
+Created 30000 jobs
+RSS: 105852 Pending: 25749
+RSS: 178880 Pending: 21514
+RSS: 252804 Pending: 17306
+RSS: 326824 Pending: 12987
+RSS: 399268 Pending: 8810
+RSS: 472620 Pending: 4618
+RSS: 547968 Pending: 319
+RSS: 553568 Pending: 0
+Done
+</code></pre>
+
+<h3 id="enabled">Enabled</h3>
+
+<pre><code>$ RUBYOPT=--enable=frozen-string-literal bundle exec bin/sidekiqload
+Created 30000 jobs
+RSS: 105824 Pending: 25687
+RSS: 174948 Pending: 21700
+RSS: 245448 Pending: 17669
+RSS: 316848 Pending: 13559
+RSS: 388544 Pending: 9447
+RSS: 456704 Pending: 5288
+RSS: 450552 Pending: 1160
+RSS: 457536 Pending: 0
+Done
+</code></pre>
+
+<p><strong><code>frozen_string_literal</code> reduces the generated garbage by ~100MB or ~20%!</strong> Free performance by adding a one line comment.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p><strong>Gem authors: add <code># frozen_string_literal: true</code> to the top of all Ruby files in a gem.</strong>
+It gives a free performance improvement to all your users as long as you don't use String mutation.</p>
+
+<h3 id="notes">Notes</h3>
+
+<ol>
+<li>If you do mutate, use <code>String.new</code> to allocate a mutable String instead of &quot;&quot;.</li>
+<li>The magic comment will only work on Ruby 2.3+ but since Ruby 2.2 is EOL in one month, I think it's fair to stop performance tuning for it.</li>
+</ol>
+
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
