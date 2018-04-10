@@ -1,37 +1,29 @@
 ---
-title: Railsconf 2017 Events
+title: Railsconf 2018 Events
 author: Mike Perham
 type: pages
 ---
 
 This is the list of **official** and unofficial Railsconf 2017 events.  Official,
-sponsored events can be found on the [Railsconf Events](http://railsconf.com/program/events) page.
+sponsored events can be found on the [Railsconf](http://railsconf.com/) site.
 Send me events so I can list them here, mperham AT gmail or @mperham.
 
-## Tuesday 4/25
+## Monday 4/16
 
-* **[EngineYard 10 Year Party](https://www.eventbrite.com/e/engine-yard-10-year-anniversary-party-tickets-33600718654)**, The Duce, 7-10pm
-* Game Night with Mike and Mike, Sheraton Estrella Room, 7-11pm
-* [Alice Cooper'stown dinner](https://nvite.com/CoopersTown/jje6yz), Alice Cooper'stown, 7-9pm
+* Let me know!
 
-## Wednesday 4/26
+## Tuesday 4/17
 
-* **Procore Happy Hour**, Convention Center, 4-5:30pm
-* Dinner at [Green New American Vegetarian](https://www.google.com/maps/place/Green+Restaurant/@33.470142,-112.0676519,17z/data=!3m1!4b1!4m5!3m4!1s0x872b126c70ca4875:0x374895659096d56a!8m2!3d33.470142!4d-112.0654579), RSVP to @albinosquirrel, 6:45 pm
-* [Karaoke on Rails](https://www.eventbrite.com/e/karaoke-on-rails-rubykaraoke-tickets-33436732166?aff=eandprexshre&ref=eandprexshre) #rubykaraoke at August Karaoke Box, 8pm-midnight
-* [Honeybadger In-and-Out Bus](https://www.eventbrite.com/e/the-honeybadgerio-in-n-out-bus-tickets-33838334369), In-and-Out Burger, 6:30-8:30pm
-* [Railstutorial Beerware Night](https://www.eventbrite.com/e/learn-enoughrails-tutorial-beerware-night-at-railsconf-2017-tickets-32517558894), Angel's Ale House, 7-10pm
+* Let me know!
 
-## Thursday 4/27
+## Wednesday 4/18
 
-* Glassbreakers #RailsConf After Party, 6-8pm, RSVP tigray@glassbreakers.co
-* [AWS meetup](https://www.meetup.com/AWSArizona/events/238776671/), CO+HOOTS, 5-7pm
-* [Diamondbacks Game](http://bit.ly/railsball), 6:15 in the South Ballroom Lobby, RSVP at the link or ping @joshvc for more info.
+* Let me know!
 
-## Friday 4/28
+## Thursday 4/19
 
-*Nothing happening?! Boring!*
+* Let me know!
 
 ### Hotel
 
-[Sheraton Grand Phoenix](https://www.google.com/maps/place/sheraton+Grand+Phoenix,+North+3rd+Street,+Phoenix,+AZ/@33.4500609,-112.0727765,17z/data=!3m1!4b1!4m5!3m4!1s0x872b1218b2304b9b:0x61bebe037e093064!8m2!3d33.4500609!4d-112.0705878)
+[The Westin Convention Center](http://www.westinpittsburgh.com/)
