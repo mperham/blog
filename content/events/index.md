@@ -18,7 +18,8 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 
 ## Wednesday 4/18
 
-* Let me know!
+* Railsconf5k, Westin Lobby, 7am. @barrettclark
+* @RailsTutorial Beerware Night with @mhartl, 7-10pm, [signup](https://www.eventbrite.com/e/7th-semi-annual-rails-tutorial-beerware-night-tickets-45036732078)
 
 ## Thursday 4/19
 
