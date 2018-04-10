@@ -32,6 +32,10 @@ smartypants = false
 "url" = "http://contribsys.com/faktory/"
 "title" = "Faktory"
 
-[params.links.cAbout]
+[params.links.cEvents]
+"url" = "/events/"
+"title" = "Events"
+
+[params.links.dAbout]
 "url" = "/about/"
 "title" = "About"
