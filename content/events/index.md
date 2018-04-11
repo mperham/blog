@@ -23,7 +23,8 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 
 ## Thursday 4/19
 
-* [Greater than Code](https://www.greaterthancode.com/) live podcast recording, Show Office A room, 2:40pm
+* [Greater than Code](https://www.greaterthancode.com/) live podcast recording, Show Office A room, 2:40pm.
+  Live audience welcomed and desired, swag will be given away.
 
 ### Hotel
 
