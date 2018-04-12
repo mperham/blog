@@ -10,7 +10,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 
 ## Monday 4/16
 
-* Let me know!
+* AppSignal Pre-conf meetup, first few rounds on @appsignal, 5-10pm, [RSVP](https://www.eventbrite.com/e/pre-railsconf-meetup-tickets-45111838724)
 
 ## Tuesday 4/17
 
