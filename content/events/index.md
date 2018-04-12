@@ -14,11 +14,13 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 
 ## Tuesday 4/17
 
-* Do you music?  Jam session with @aspleenic, 6:30pm, Keynote room
+* Do you music?  Jam session with @aspleenic, 7:00pm, Room 306, [song
+list](http://github.com/aspleenic/railsconf-2011-musicjam)
 
 ## Wednesday 4/18
 
 * Railsconf5k, Westin Lobby, 7am. @barrettclark
+* #RubyKaraoke with EngineYard, Hard Rock Cafe, 8pm, [RSVP](https://www.engineyard.com/railskaraoke)
 * @RailsTutorial Beerware Night with @mhartl, 7-10pm, [signup](https://www.eventbrite.com/e/7th-semi-annual-rails-tutorial-beerware-night-tickets-45036732078)
 
 ## Thursday 4/19
