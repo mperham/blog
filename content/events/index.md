@@ -14,7 +14,7 @@ Send me events so I can list them here, mperham AT gmail or @mperham.
 
 ## Tuesday 4/17
 
-* Let me know!
+* Do you music?  Jam session with @aspleenic, 6:30pm, Keynote room
 
 ## Wednesday 4/18
 
