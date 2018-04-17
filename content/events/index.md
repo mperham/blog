@@ -28,6 +28,11 @@ list](http://github.com/aspleenic/railsconf-2011-musicjam)
 * [Greater than Code](https://www.greaterthancode.com/) live podcast recording, Show Office A room, 2:40pm.
   Live audience welcomed and desired, swag will be given away.
 
+## Friday 4/20 and Saturday 4/21
+
+* Heartifacts - conf around software and mental health, [https://codeandsupply.co/heartifacts](https://codeandsupply.co/heartifacts)
+
+
 ### Hotel
 
 [The Westin Convention Center](http://www.westinpittsburgh.com/)
