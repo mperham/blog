@@ -27,6 +27,7 @@ list](http://github.com/aspleenic/railsconf-2011-musicjam)
 
 * [Greater than Code](https://www.greaterthancode.com/) live podcast recording, Show Office A room, 2:40pm.
   Live audience welcomed and desired, swag will be given away.
+* **Board Game Night**, Westin 2nd Floor, 8:30pm. @mperham
 
 ## Friday 4/20 and Saturday 4/21
 
