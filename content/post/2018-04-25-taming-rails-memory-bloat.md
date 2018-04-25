@@ -35,7 +35,7 @@ You should see a noticable reduction in memory usage after rebooting.
 Switching Ruby's allocator to jemalloc looks to be an even more effective solution... for a price.
 One example:
 
-![jemalloc](/images/jemalloc.jpg)
+![jemalloc](https://www.mikeperham.com/images/jemalloc.jpg)
 
 The results have been described as "miraculous".
 That's **40GB** worth of Sidekiq processes shrunk to **9GB**, a 4x reduction.

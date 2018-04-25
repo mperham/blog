@@ -50,7 +50,7 @@ Set this environment variable in your dynos, systemd unit files or however you s
 &lt;p&gt;Switching Ruby&#39;s allocator to jemalloc looks to be an even more effective solution... for a price.
 One example:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;./images/jemalloc.jpg&#34; alt=&#34;jemalloc&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.mikeperham.com/images/jemalloc.jpg&#34; alt=&#34;jemalloc&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The results have been described as &amp;quot;miraculous&amp;quot;.
 That&#39;s &lt;strong&gt;40GB&lt;/strong&gt; worth of Sidekiq processes shrunk to &lt;strong&gt;9GB&lt;/strong&gt;, a 4x reduction.
