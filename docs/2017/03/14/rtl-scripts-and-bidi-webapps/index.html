@@ -114,7 +114,7 @@ the RTL overrides if rendering an RTL script.  For example, I put this RTL logic
 <span style="color:#960050;background-color:#1e0010">&lt;</span>% end %&gt;</code></pre></div>
 <p>The <code>rtl?</code> method is very simple, it just checks for Farsi as the
 current locale:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">rtl?</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rtl?</span>
   <span style="color:#e6db74">&#39;fa&#39;</span> <span style="color:#f92672">==</span> locale
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p>The result (still buggy, note graph axis labels, but usable):</p>

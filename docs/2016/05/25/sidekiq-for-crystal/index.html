@@ -147,7 +147,7 @@ To process 100,000 noop jobs:</p>
 <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyWorker</span>
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">perform</span>(a : <span style="color:#66d9ef">Int64</span>, b : <span style="color:#66d9ef">Int64</span>, c : String)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(a : <span style="color:#66d9ef">Int64</span>, b : <span style="color:#66d9ef">Int64</span>, c : String)
     <span style="color:#75715e">#puts &#34;hello world!&#34;</span>
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span>
@@ -155,14 +155,14 @@ To process 100,000 noop jobs:</p>
 describe <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span> <span style="color:#66d9ef">do</span>
   describe <span style="color:#e6db74">&#34;client-side&#34;</span> <span style="color:#66d9ef">do</span>
     it <span style="color:#e6db74">&#34;can create a basic job&#34;</span> <span style="color:#66d9ef">do</span>
-      jid <span style="color:#f92672">=</span> <span style="color:#66d9ef">MyWorker</span><span style="color:#f92672">.</span>async<span style="color:#f92672">.</span>perform(<span style="color:#ae81ff">1</span><span style="color:#f92672"></span>_i64, <span style="color:#ae81ff">2</span><span style="color:#f92672"></span>_i64, <span style="color:#e6db74">&#34;3&#34;</span>)
+      jid <span style="color:#f92672">=</span> <span style="color:#66d9ef">MyWorker</span><span style="color:#f92672">.</span>async<span style="color:#f92672">.</span>perform(<span style="color:#ae81ff">1</span>_i64, <span style="color:#ae81ff">2</span>_i64, <span style="color:#e6db74">&#34;3&#34;</span>)
       jid<span style="color:#f92672">.</span>should match <span style="color:#e6db74">/[a-f0-9]{24}/</span>
       pool <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pool</span><span style="color:#f92672">.</span>new
       pool<span style="color:#f92672">.</span>redis { <span style="color:#f92672">|</span>c<span style="color:#f92672">|</span> c<span style="color:#f92672">.</span>lpop(<span style="color:#e6db74">&#34;queue:default&#34;</span>) }
     <span style="color:#66d9ef">end</span>
 
     it <span style="color:#e6db74">&#34;can schedule a basic job&#34;</span> <span style="color:#66d9ef">do</span>
-      jid <span style="color:#f92672">=</span> <span style="color:#66d9ef">MyWorker</span><span style="color:#f92672">.</span>async<span style="color:#f92672">.</span>perform_in(<span style="color:#ae81ff">60</span><span style="color:#f92672">.</span>seconds, <span style="color:#ae81ff">1</span><span style="color:#f92672"></span>_i64, <span style="color:#ae81ff">2</span><span style="color:#f92672"></span>_i64, <span style="color:#e6db74">&#34;3&#34;</span>)
+      jid <span style="color:#f92672">=</span> <span style="color:#66d9ef">MyWorker</span><span style="color:#f92672">.</span>async<span style="color:#f92672">.</span>perform_in(<span style="color:#ae81ff">60</span><span style="color:#f92672">.</span>seconds, <span style="color:#ae81ff">1</span>_i64, <span style="color:#ae81ff">2</span>_i64, <span style="color:#e6db74">&#34;3&#34;</span>)
       jid<span style="color:#f92672">.</span>should match <span style="color:#e6db74">/[a-f0-9]{24}/</span>
     <span style="color:#66d9ef">end</span></code></pre></div>
 <p>With the exception of a few type hints, that's identical to Ruby.</p>

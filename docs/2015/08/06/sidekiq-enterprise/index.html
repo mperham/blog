@@ -70,9 +70,9 @@ allows you to declare and enforce rate limits across all your Ruby
 processes, Sidekiq or not:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Allow up to 50 concurrent operations to the ERP service</span>
-<span style="color:#66d9ef">ERP_LIMITER</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Limiter</span><span style="color:#f92672">.</span>concurrent(<span style="color:#e6db74">:erp</span>, <span style="color:#ae81ff">50</span><span style="color:#f92672"></span>)
+<span style="color:#66d9ef">ERP_LIMITER</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Limiter</span><span style="color:#f92672">.</span>concurrent(<span style="color:#e6db74">:erp</span>, <span style="color:#ae81ff">50</span>)
 
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">perform</span>(<span style="color:#f92672">...</span>)
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">...</span>)
   <span style="color:#66d9ef">ERP_LIMITER</span><span style="color:#f92672">.</span>within_limit <span style="color:#66d9ef">do</span>
     <span style="color:#66d9ef">Erp</span><span style="color:#f92672">.</span>do_something
   <span style="color:#66d9ef">end</span>
@@ -105,7 +105,7 @@ It's dead simple to register a periodic job:</p>
 <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
   config<span style="color:#f92672">.</span>periodic <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>mgr<span style="color:#f92672">|</span>
     mgr<span style="color:#f92672">.</span>register <span style="color:#e6db74">&#34;* * * * *&#34;</span>, <span style="color:#66d9ef">MinutelyWorker</span>, <span style="color:#66d9ef">retry</span>: <span style="color:#ae81ff">1</span>
-    <span style="color:#f92672"></span>mgr<span style="color:#f92672">.</span>register <span style="color:#e6db74">&#34;*/4 * 10 * *&#34;</span>, <span style="color:#66d9ef">OddTimedWorker</span>, <span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#39;critical&#39;</span>
+    mgr<span style="color:#f92672">.</span>register <span style="color:#e6db74">&#34;*/4 * 10 * *&#34;</span>, <span style="color:#66d9ef">OddTimedWorker</span>, <span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#39;critical&#39;</span>
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
 
@@ -138,7 +138,7 @@ user presses a button, you might not want a storm of clicks to create a storm of
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
   sidekiq_options <span style="color:#e6db74">unique_for</span>: <span style="color:#ae81ff">10</span><span style="color:#f92672">.</span>minutes
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">perform</span>(<span style="color:#f92672">...</span>)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">...</span>)
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
 

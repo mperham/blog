@@ -70,15 +70,15 @@ along with <code>left</code> and <code>right</code> pointers to the child nodes.
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
   <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:data</span>, <span style="color:#e6db74">:left</span>, <span style="color:#e6db74">:right</span>
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">initialize</span>(data)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(data)
     @data <span style="color:#f92672">=</span> data
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span>
 
 <span style="color:#75715e"># build the first two levels of the tree pictured above</span>
-root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">7</span><span style="color:#f92672"></span>)
-root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span><span style="color:#f92672"></span>)
-root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">12</span><span style="color:#f92672"></span>)</code></pre></div>
+root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">7</span>)
+root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span>)
+root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">12</span>)</code></pre></div>
 
 <p>The amazing thing about <code>Enumerable</code> is this: you implement <strong>one</strong> method, <code>each</code>, and you get dozens of useful
 methods in return!  <code>each</code> knows how to iterate through elements in your data structure and so Ruby can leverage
@@ -91,23 +91,23 @@ We'll use recursion to iterate through the tree in our <code>each</code> method:
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Enumerable</span>
 
   <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:data</span>, <span style="color:#e6db74">:left</span>, <span style="color:#e6db74">:right</span>
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">initialize</span>(data)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(data)
     @data <span style="color:#f92672">=</span> data
   <span style="color:#66d9ef">end</span>
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">each</span>(<span style="color:#f92672">&amp;</span>block)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">each</span>(<span style="color:#f92672">&amp;</span>block)
     left<span style="color:#f92672">.</span>each(<span style="color:#f92672">&amp;</span>block) <span style="color:#66d9ef">if</span> left
     block<span style="color:#f92672">.</span>call(self)
     right<span style="color:#f92672">.</span>each(<span style="color:#f92672">&amp;</span>block) <span style="color:#66d9ef">if</span> right
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span>
 
-root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">7</span><span style="color:#f92672"></span>)
-root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span><span style="color:#f92672"></span>)
-root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">12</span><span style="color:#f92672"></span>)
+root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">7</span>)
+root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span>)
+root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">12</span>)
 root<span style="color:#f92672">.</span>each {<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> puts x<span style="color:#f92672">.</span>data } <span style="color:#75715e"># will print &#34;3 7 12&#34;</span>
 
-puts root<span style="color:#f92672">.</span>inject(<span style="color:#ae81ff">0</span><span style="color:#f92672"></span>) { <span style="color:#f92672">|</span>memo, node<span style="color:#f92672">|</span> memo <span style="color:#f92672">+=</span> node<span style="color:#f92672">.</span>data }</code></pre></div>
+puts root<span style="color:#f92672">.</span>inject(<span style="color:#ae81ff">0</span>) { <span style="color:#f92672">|</span>memo, node<span style="color:#f92672">|</span> memo <span style="color:#f92672">+=</span> node<span style="color:#f92672">.</span>data }</code></pre></div>
 
 <p>The final trick to Enumerable is to implement a comparison operator so Ruby can compare two
 Nodes and tell which one is greater.  This allows it to implement sorting, min and max operations.
@@ -116,37 +116,37 @@ like a spaceship if you squint.  Note we delegate the <code>&lt;=&gt;</code> cal
 the tree is storing comparable data: integers, strings, or a value object which itself
 implements <code>&lt;=&gt;</code>.</p>
 
-<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Enumerable</span>
 
   <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:data</span>, <span style="color:#e6db74">:left</span>, <span style="color:#e6db74">:right</span>
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">initialize</span>(data)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(data)
     @data <span style="color:#f92672">=</span> data
   <span style="color:#66d9ef">end</span>
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">each</span>(<span style="color:#f92672">&amp;</span>block)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">each</span>(<span style="color:#f92672">&amp;</span>block)
     left<span style="color:#f92672">.</span>each(<span style="color:#f92672">&amp;</span>block) <span style="color:#66d9ef">if</span> left
     block<span style="color:#f92672">.</span>call(self)
     right<span style="color:#f92672">.</span>each(<span style="color:#f92672">&amp;</span>block) <span style="color:#66d9ef">if</span> right
   <span style="color:#66d9ef">end</span>
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">&lt;=&gt;</span>(other_node)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">&lt;=&gt;</span>(other_node)
     data <span style="color:#f92672">&lt;=&gt;</span> other_node<span style="color:#f92672">.</span>data
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span>
 
-root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span><span style="color:#f92672"></span>)
-root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">2</span><span style="color:#f92672"></span>)
-root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">1</span><span style="color:#f92672"></span>)
+root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span>)
+root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">2</span>)
+root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">1</span>)
 root<span style="color:#f92672">.</span>each {<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> puts x<span style="color:#f92672">.</span>data }
 
 <span style="color:#75715e"># just a few of the various operations Enumerable provides</span>
 puts <span style="color:#e6db74">&#34;SUM&#34;</span>
-puts root<span style="color:#f92672">.</span>inject(<span style="color:#ae81ff">0</span><span style="color:#f92672"></span>) { <span style="color:#f92672">|</span>memo, val<span style="color:#f92672">|</span> memo <span style="color:#f92672">+=</span> val<span style="color:#f92672">.</span>data }
+puts root<span style="color:#f92672">.</span>inject(<span style="color:#ae81ff">0</span>) { <span style="color:#f92672">|</span>memo, val<span style="color:#f92672">|</span> memo <span style="color:#f92672">+=</span> val<span style="color:#f92672">.</span>data }
 puts <span style="color:#e6db74">&#34;MAX&#34;</span>
 puts root<span style="color:#f92672">.</span>max<span style="color:#f92672">.</span>data
 puts <span style="color:#e6db74">&#34;SORT&#34;</span>
-puts root<span style="color:#f92672">.</span>sort<span style="color:#f92672">.</span>map(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:data</span>)</code></pre></div></p>
+puts root<span style="color:#f92672">.</span>sort<span style="color:#f92672">.</span>map(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:data</span>)</code></pre></div>
 
 <p>This is pretty incredible and really shows off the power of Ruby: we've built a really powerful
 data structure in just a few lines of code.  All is not wine and roses though, there's several hard parts

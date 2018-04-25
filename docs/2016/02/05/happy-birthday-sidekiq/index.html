@@ -84,7 +84,7 @@ don't need to manage individual child processes.  With this new
 multi-process support, it's really simple to scale Sidekiq across all
 cores.  <a href="https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process">Read More</a></p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">COUNT</span><span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> <span style="color:#f92672"></span>bundle exec sidekiqswarm <span style="color:#f92672">-</span>e production</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">COUNT</span><span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> bundle exec sidekiqswarm <span style="color:#f92672">-</span>e production</code></pre></div>
 
 <h2 id="sidekiq-pro">Sidekiq Pro</h2>
 
@@ -95,7 +95,7 @@ pause queues.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">q <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new
 q<span style="color:#f92672">.</span>pause!
 sleep <span style="color:#ae81ff">10</span>
-<span style="color:#f92672"></span>q<span style="color:#f92672">.</span>unpause!</code></pre></div>
+q<span style="color:#f92672">.</span>unpause!</code></pre></div>
 
 <p><a href="https://github.com/mperham/sidekiq/blob/master/Pro-Changes.md">Read More</a></p>
 
@@ -104,7 +104,7 @@ sleep <span style="color:#ae81ff">10</span>
 <p>Sidekiq gained support for an ActiveJob-style <code>set</code> method, to set options
 dynamically:</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">SomeWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#39;high&#39;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span><span style="color:#f92672"></span>, <span style="color:#ae81ff">2</span><span style="color:#f92672"></span>, <span style="color:#ae81ff">3</span><span style="color:#f92672"></span>)</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">SomeWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#39;high&#39;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>)</code></pre></div>
 
 <p>Also, the Web UI now shows a tag next to any process which is quiet (has
 received the USR1 signal). <a href="https://github.com/mperham/sidekiq/blob/master/Changes.md">Read More</a></p>

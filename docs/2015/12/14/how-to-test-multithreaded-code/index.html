@@ -78,7 +78,7 @@ p<span style="color:#f92672">.</span>start</code></pre></div>
 In order to test those complex internals, I make its <a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L62">internal API public</a> so that the test suite has full
 access to the methods.  The <code>start</code> method spins up a thread which calls a very simple <code>run</code> loop similar this:</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">run</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>
   <span style="color:#66d9ef">while</span> <span style="color:#f92672">!</span>@done
     job <span style="color:#f92672">=</span> fetch
     process(job) <span style="color:#66d9ef">if</span> job
@@ -88,7 +88,7 @@ access to the methods.  The <code>start</code> method spins up a thread which ca
 <p>I've kept the run method as simple as possible since we can't call it in
 the test suite but we can call <code>fetch</code> and <code>process</code> in order to test them:</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">test_process_fake_job</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_process_fake_job</span>
   p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
   result <span style="color:#f92672">=</span> p<span style="color:#f92672">.</span>process(some_fake_job)
   <span style="color:#75715e"># asserts...</span>
@@ -129,26 +129,26 @@ hack.  Here's a complete example of how to do it in Ruby:</p>
 <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Upcaser</span>
   <span style="color:#66d9ef">Request</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Struct</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:args</span>, <span style="color:#e6db74">:block</span>)
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">initialize</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
     @queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new
   <span style="color:#66d9ef">end</span>
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">start</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>
     @thread <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new(<span style="color:#f92672">&amp;</span>method(<span style="color:#e6db74">:run</span>))
   <span style="color:#66d9ef">end</span>
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">process</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">&amp;</span>block)
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">&amp;</span>block)
     @queue <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">Request</span><span style="color:#f92672">.</span>new(args, block)
     <span style="color:#66d9ef">true</span>
   <span style="color:#66d9ef">end</span>
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">terminate</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">terminate</span>
     @queue <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">nil</span>
   <span style="color:#66d9ef">end</span>
 
   <span style="color:#66d9ef">private</span>
 
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">run</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>
     <span style="color:#66d9ef">loop</span> <span style="color:#66d9ef">do</span>
       req <span style="color:#f92672">=</span> @queue<span style="color:#f92672">.</span>pop
       <span style="color:#66d9ef">break</span> <span style="color:#66d9ef">unless</span> req
@@ -160,7 +160,7 @@ hack.  Here's a complete example of how to do it in Ruby:</p>
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span>
 
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">test_upcaser</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_upcaser</span>
   m <span style="color:#f92672">=</span> <span style="color:#66d9ef">Mutex</span><span style="color:#f92672">.</span>new
   cv <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConditionVariable</span><span style="color:#f92672">.</span>new
 

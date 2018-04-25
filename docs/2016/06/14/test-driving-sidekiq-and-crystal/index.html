@@ -79,7 +79,7 @@ so the Crystal worker will never see them - exactly what we want.</p>
   <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyWorker</span>
     <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
 
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">perform</span>(name : String, count : <span style="color:#66d9ef">Int64</span>)
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(name : String, count : <span style="color:#66d9ef">Int64</span>)
       count<span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span>
         logger<span style="color:#f92672">.</span>info <span style="color:#e6db74">&#34;Hello, </span><span style="color:#e6db74">#{</span>name<span style="color:#e6db74">}</span><span style="color:#e6db74">!&#34;</span>
       <span style="color:#66d9ef">end</span>

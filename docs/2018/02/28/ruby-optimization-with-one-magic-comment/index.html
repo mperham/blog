@@ -63,9 +63,9 @@ string <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&
 <p>This allocates two Strings, &quot;&quot; and &quot;mike&quot;. The first, empty String is then mutated to contain &quot;mike&quot;. However String mutation is quite rare, more common is something like this:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">HASH</span> <span style="color:#f92672">=</span> {
   <span style="color:#e6db74">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>
-<span style="color:#f92672"></span>}
+}
 
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">getmike</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getmike</span>
   <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">]</span> <span style="color:#75715e"># unnecessary garbage here!</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p>Every invocation of getmike will allocate a new copy of &quot;mike&quot;, which is then immediately thrown away as garbage, but is required because Ruby just treats the String as a method argument which might be mutated inside <code>Hash#[]</code>. So wasteful!</p>
@@ -73,7 +73,7 @@ string <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&
 <h2 id="freeze">Freeze!</h2>
 
 <p>Ruby introduced the freeze concept many years ago to minimize allocation. Calling freeze on an object tells Ruby to treat it as immutable. Now Ruby knows that it can treat &quot;mike&quot; as a constant:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">getmike</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getmike</span>
   <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">.</span>freeze<span style="color:#f92672">]</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p>The problem? It makes the code uglier and needs to be called everywhere you declare a String.</p>
@@ -85,9 +85,9 @@ string <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&
 
 <span style="color:#66d9ef">HASH</span> <span style="color:#f92672">=</span> {
   <span style="color:#e6db74">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>
-<span style="color:#f92672"></span>}
+}
 
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">getmike</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getmike</span>
   <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">]</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
 <h2 id="the-real-world">The Real World</h2>

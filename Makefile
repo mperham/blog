@@ -1,5 +1,5 @@
 build:
-	hugo
+	hugo -DF
 
 serve:
-	hugo serve --buildDrafts
+	hugo serve -DF

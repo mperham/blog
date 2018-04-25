@@ -66,7 +66,7 @@ they tell Upstart when and how to start the associated processes.</p>
 processes.  Upon machine boot, Upstart will start <code>workers</code> which will start those N
 processes.  Within <code>workers.conf</code> we've declared how many processes we want to start:</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">env <span style="color:#66d9ef">NUM_WORKERS</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2</span><span style="color:#f92672"></span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">env <span style="color:#66d9ef">NUM_WORKERS</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2</span></code></pre></div>
 
 <p>If you want to quickly shut down all Sidekiq processes, run <code>stop workers</code>. Start
 them back up with <code>start workers</code>.  Of course you can do both with <code>restart workers</code>.

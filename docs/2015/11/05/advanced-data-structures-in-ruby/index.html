@@ -63,17 +63,17 @@ time-limited <code>pop</code> operation.  This can be very useful when coordinat
 time-sensitive operations between threads.  Recently I used it as an alternative
 to <code>sleep</code> so I could wake up a sleeping thread immediately:</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">initialize</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
   @done <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
   @sleeper <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">::</span><span style="color:#66d9ef">TimedStack</span><span style="color:#f92672">.</span>new
 <span style="color:#66d9ef">end</span>
 
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">terminate</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">terminate</span>
   @done <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
   @sleeper <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">nil</span>
 <span style="color:#66d9ef">end</span>
 
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e"></span><span style="color:#f92672"></span><span style="color:#a6e22e">start</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>
   @thread <span style="color:#f92672">||=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
     <span style="color:#66d9ef">while</span> <span style="color:#f92672">!</span>@done
       do_something
@@ -81,7 +81,7 @@ to <code>sleep</code> so I could wake up a sleeping thread immediately:</p>
       <span style="color:#75715e"># terminate will wake up the sleeper early so it can exit</span>
       <span style="color:#75715e"># immediately.</span>
       <span style="color:#66d9ef">begin</span>
-        @sleeper<span style="color:#f92672">.</span>pop(<span style="color:#ae81ff">60</span><span style="color:#f92672"></span>)
+        @sleeper<span style="color:#f92672">.</span>pop(<span style="color:#ae81ff">60</span>)
       <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Timeout</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Error</span>
       <span style="color:#66d9ef">end</span>
     <span style="color:#66d9ef">end</span>
