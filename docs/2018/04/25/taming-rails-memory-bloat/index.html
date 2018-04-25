@@ -1,0 +1,184 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Taming Rails memory bloat </title>
+    
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Taming Rails memory bloat</h1>
+      <small class="post-meta">Apr 25, 2018</small>
+      <div class="post-content">
+        
+
+<p>MRI, the standard Ruby interpreter, has a serious problem with memory bloat in large Rails apps.
+It's quite common for me to see Sidekiq processes which are 1-2GB in RSS or even larger!
+It turns out that a large part of this memory usage is due to memory fragmentation: MRI uses
+the OS's memory allocator by default (on Linux, almost always GNU glibc),
+which seems to work poorly with Ruby's memory allocation patterns.</p>
+
+<p><a href="https://www.speedshop.co/2017/12/04/malloc-doubles-ruby-memory.html">Nate Berkopec went into great detail</a> about Ruby memory bloat.  His blog post is a much deeper dive.</p>
+
+<p>One important note: this behavior is specific to GNU glibc on Linux.
+OSX and BSD appear to have better quality allocators, not as prone to fragmentation.</p>
+
+<h2 id="reducing-arenas">Reducing Arenas</h2>
+
+<p>The major cause of fragmentation appears to be the large number of glibc memory arenas in heavily multi-threaded programs.
+&quot;Heavily multi-threaded&quot; -- sound familiar?  That's Sidekiq.
+People on Heroku have discovered that to reduce memory, they should set <code>-c 5</code> which reduces the number of threads from 25 to 5.
+That reduces the &quot;heavily multi-threaded&quot; trigger and leads to less bloat.</p>
+
+<p>But the better way is to reduce glibc's memory arena count.
+Set this environment variable in your dynos, systemd unit files or however you start Sidekiq:</p>
+
+<pre><code>MALLOC_ARENA_MAX = 2
+</code></pre>
+
+<p>You should see a noticable reduction in memory usage after rebooting.</p>
+
+<h2 id="using-jemalloc">Using jemalloc</h2>
+
+<p>Switching Ruby's allocator to jemalloc looks to be an even more effective solution... for a price.
+One example:</p>
+
+<p><img src="../../../../images/jemalloc.jpg" alt="jemalloc" /></p>
+
+<p>The results have been described as &quot;miraculous&quot;.
+That's <strong>40GB</strong> worth of Sidekiq processes shrunk to <strong>9GB</strong>, a 4x reduction.
+Much of this space is fragmented memory and switching to jemalloc fixes this wasted space.
+Seeing R14 errors on Heroku?
+<a href="https://www.levups.com/en/blog/2017/optimize_ruby_memory_usage_jemalloc_heroku_scalingo.html">Just throw a little jemalloc in there</a>.</p>
+
+<p>The issue with jemalloc is that it can cause problems in different environments.
+For example, it's had compatibility issues with Alpine Linux so if you are running Ruby in Alpine-based Docker images, you could see segfaults or stack overflows.
+If you want to try jemalloc, be sure you test your app thoroughly before pushing to production.</p>
+
+<p><a href="http://oldblog.antirez.com/post/everything-about-redis-24.html">Redis pulled in jemalloc explicitly to reduce memory fragmentation, with
+big success</a>:</p>
+
+<blockquote>
+<p>&quot;Since we introduced the specially encoded data types Redis started suffering from fragmentation. We tried different things to fix the problem, but basically the Linux default allocator in glibc sucks really, really hard. [...] Every single case of fragmentation in real world systems was fixed by this change, and also the amount of memory used dropped a bit.&quot;</p>
+</blockquote>
+
+<h2 id="trying-jemalloc">Trying jemalloc</h2>
+
+<p>Want to try jemalloc on OS X?
+My installed rubies seem to hardcode the memory allocator so you might need to build MRI with jemalloc specifically.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">brew install jemalloc
+<span style="color:#75715e"># Now install Ruby with jemalloc enabled
+</span><span style="color:#75715e">#   with rbenv:
+</span><span style="color:#75715e">#     RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install 2.5.1
+</span><span style="color:#75715e">#   with ruby-install
+</span><span style="color:#75715e">#     ruby-install ruby-2.5.1 -- --with-jemalloc
+</span><span style="color:#75715e"></span>chruby ruby-2.5.1
+MALLOC_CONF<span style="color:#f92672">=</span>stats_print:true irb</code></pre></div>
+<p>If you see lots of arcane stats print out upon exiting IRB, jemalloc is running in your Ruby.
+Make sure to verify your Ruby is actually running jemalloc; it is easy to misconfigure and have it silently fall back to the default allocator.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I'm convinced that tuning glibc is a no brainer.
+Set <code>MALLOC_ARENA_MAX=2</code> everywhere you start Sidekiq and enjoy your extra memory.</p>
+
+<p>Using jemalloc is more complex.
+Memory bloat has been a serious issue in large scale Rails apps as far back as I can remember in Ruby.
+I wish ruby-core would pull in jemalloc as the default allocator but they seem content with glibc.
+Major Rails apps like <a href="https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3073">GitLab</a>, Discourse and <a href="https://github.com/tootsuite/mastodon/issues/7257">Mastodon</a> plan to or have already integrated jemalloc but each app has to do it separately.
+If you have a large Rails app, integrate jemalloc and see significant improvements, please <a href="https://bugs.ruby-lang.org/issues/new">open a Ruby issue</a> with graphs before and after.
+Let's give ruby-core all the data they need to make the right decision.</p>
+
+<p>Ruby-core jemalloc issues: <a href="https://bugs.ruby-lang.org/issues/13524">13524</a>, <a href="https://bugs.ruby-lang.org/issues/9113">9113</a></p>
+
+        <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

@@ -8,8 +8,97 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Wed, 28 Feb 2018 07:00:00 -0800</lastBuildDate>
+    <lastBuildDate>Wed, 25 Apr 2018 09:00:00 -0700</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Taming Rails memory bloat</title>
+      <link>https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/</link>
+      <pubDate>Wed, 25 Apr 2018 09:00:00 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/</guid>
+      <description>
+
+&lt;p&gt;MRI, the standard Ruby interpreter, has a serious problem with memory bloat in large Rails apps.
+It&#39;s quite common for me to see Sidekiq processes which are 1-2GB in RSS or even larger!
+It turns out that a large part of this memory usage is due to memory fragmentation: MRI uses
+the OS&#39;s memory allocator by default (on Linux, almost always GNU glibc),
+which seems to work poorly with Ruby&#39;s memory allocation patterns.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.speedshop.co/2017/12/04/malloc-doubles-ruby-memory.html&#34;&gt;Nate Berkopec went into great detail&lt;/a&gt; about Ruby memory bloat.  His blog post is a much deeper dive.&lt;/p&gt;
+
+&lt;p&gt;One important note: this behavior is specific to GNU glibc on Linux.
+OSX and BSD appear to have better quality allocators, not as prone to fragmentation.&lt;/p&gt;
+
+&lt;h2 id=&#34;reducing-arenas&#34;&gt;Reducing Arenas&lt;/h2&gt;
+
+&lt;p&gt;The major cause of fragmentation appears to be the large number of glibc memory arenas in heavily multi-threaded programs.
+&amp;quot;Heavily multi-threaded&amp;quot; -- sound familiar?  That&#39;s Sidekiq.
+People on Heroku have discovered that to reduce memory, they should set &lt;code&gt;-c 5&lt;/code&gt; which reduces the number of threads from 25 to 5.
+That reduces the &amp;quot;heavily multi-threaded&amp;quot; trigger and leads to less bloat.&lt;/p&gt;
+
+&lt;p&gt;But the better way is to reduce glibc&#39;s memory arena count.
+Set this environment variable in your dynos, systemd unit files or however you start Sidekiq:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MALLOC_ARENA_MAX = 2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You should see a noticable reduction in memory usage after rebooting.&lt;/p&gt;
+
+&lt;h2 id=&#34;using-jemalloc&#34;&gt;Using jemalloc&lt;/h2&gt;
+
+&lt;p&gt;Switching Ruby&#39;s allocator to jemalloc looks to be an even more effective solution... for a price.
+One example:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;./images/jemalloc.jpg&#34; alt=&#34;jemalloc&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The results have been described as &amp;quot;miraculous&amp;quot;.
+That&#39;s &lt;strong&gt;40GB&lt;/strong&gt; worth of Sidekiq processes shrunk to &lt;strong&gt;9GB&lt;/strong&gt;, a 4x reduction.
+Much of this space is fragmented memory and switching to jemalloc fixes this wasted space.
+Seeing R14 errors on Heroku?
+&lt;a href=&#34;https://www.levups.com/en/blog/2017/optimize_ruby_memory_usage_jemalloc_heroku_scalingo.html&#34;&gt;Just throw a little jemalloc in there&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The issue with jemalloc is that it can cause problems in different environments.
+For example, it&#39;s had compatibility issues with Alpine Linux so if you are running Ruby in Alpine-based Docker images, you could see segfaults or stack overflows.
+If you want to try jemalloc, be sure you test your app thoroughly before pushing to production.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://oldblog.antirez.com/post/everything-about-redis-24.html&#34;&gt;Redis pulled in jemalloc explicitly to reduce memory fragmentation, with
+big success&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;Since we introduced the specially encoded data types Redis started suffering from fragmentation. We tried different things to fix the problem, but basically the Linux default allocator in glibc sucks really, really hard. [...] Every single case of fragmentation in real world systems was fixed by this change, and also the amount of memory used dropped a bit.&amp;quot;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;trying-jemalloc&#34;&gt;Trying jemalloc&lt;/h2&gt;
+
+&lt;p&gt;Want to try jemalloc on OS X?
+My installed rubies seem to hardcode the memory allocator so you might need to build MRI with jemalloc specifically.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;brew install jemalloc
+&lt;span style=&#34;color:#75715e&#34;&gt;# Now install Ruby with jemalloc enabled
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#   with rbenv:
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#     RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install 2.5.1
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#   with ruby-install
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#     ruby-install ruby-2.5.1 -- --with-jemalloc
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;chruby ruby-2.5.1
+MALLOC_CONF&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;stats_print:true irb&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If you see lots of arcane stats print out upon exiting IRB, jemalloc is running in your Ruby.
+Make sure to verify your Ruby is actually running jemalloc; it is easy to misconfigure and have it silently fall back to the default allocator.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I&#39;m convinced that tuning glibc is a no brainer.
+Set &lt;code&gt;MALLOC_ARENA_MAX=2&lt;/code&gt; everywhere you start Sidekiq and enjoy your extra memory.&lt;/p&gt;
+
+&lt;p&gt;Using jemalloc is more complex.
+Memory bloat has been a serious issue in large scale Rails apps as far back as I can remember in Ruby.
+I wish ruby-core would pull in jemalloc as the default allocator but they seem content with glibc.
+Major Rails apps like &lt;a href=&#34;https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3073&#34;&gt;GitLab&lt;/a&gt;, Discourse and &lt;a href=&#34;https://github.com/tootsuite/mastodon/issues/7257&#34;&gt;Mastodon&lt;/a&gt; plan to or have already integrated jemalloc but each app has to do it separately.
+If you have a large Rails app, integrate jemalloc and see significant improvements, please &lt;a href=&#34;https://bugs.ruby-lang.org/issues/new&#34;&gt;open a Ruby issue&lt;/a&gt; with graphs before and after.
+Let&#39;s give ruby-core all the data they need to make the right decision.&lt;/p&gt;
+
+&lt;p&gt;Ruby-core jemalloc issues: &lt;a href=&#34;https://bugs.ruby-lang.org/issues/13524&#34;&gt;13524&lt;/a&gt;, &lt;a href=&#34;https://bugs.ruby-lang.org/issues/9113&#34;&gt;9113&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Ruby Optimization with One Magic Comment</title>
@@ -31,9 +120,9 @@ string &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &
 &lt;p&gt;This allocates two Strings, &amp;quot;&amp;quot; and &amp;quot;mike&amp;quot;. The first, empty String is then mutated to contain &amp;quot;mike&amp;quot;. However String mutation is quite rare, more common is something like this:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
   &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;123&lt;/span&gt;
-&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;}
+}
 
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
   &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# unnecessary garbage here!&lt;/span&gt;
 &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Every invocation of getmike will allocate a new copy of &amp;quot;mike&amp;quot;, which is then immediately thrown away as garbage, but is required because Ruby just treats the String as a method argument which might be mutated inside &lt;code&gt;Hash#[]&lt;/code&gt;. So wasteful!&lt;/p&gt;
@@ -41,7 +130,7 @@ string &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &
 &lt;h2 id=&#34;freeze&#34;&gt;Freeze!&lt;/h2&gt;
 
 &lt;p&gt;Ruby introduced the freeze concept many years ago to minimize allocation. Calling freeze on an object tells Ruby to treat it as immutable. Now Ruby knows that it can treat &amp;quot;mike&amp;quot; as a constant:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
   &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;freeze&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
 &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;The problem? It makes the code uglier and needs to be called everywhere you declare a String.&lt;/p&gt;
@@ -53,9 +142,9 @@ string &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &
 
 &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
   &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;123&lt;/span&gt;
-&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;}
+}
 
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
   &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
 &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id=&#34;the-real-world&#34;&gt;The Real World&lt;/h2&gt;
@@ -361,7 +450,7 @@ metrics into their own internal format.&lt;/p&gt;
 &lt;div style=&#34;clear: both&#34;&gt;
 &lt;/div&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;statsd-ruby&amp;#39;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Pro&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;statsd &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;{ &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Statsd&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;127.0.0.1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;8125&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;) }&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Pro&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;statsd &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;{ &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Statsd&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;127.0.0.1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;8125&lt;/span&gt;) }&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Note that it&#39;s a Proc; Sidekiq Pro uses a connection pool with several clients so a
 single global client doesn&#39;t become a source of thread and socket contention.&lt;/p&gt;
 
@@ -694,7 +783,7 @@ errors:&lt;/p&gt;
 &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now we update our job to rescue and flag those flaky errors:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# your job/worker class&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;perform&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;perform&lt;/span&gt;
   &lt;span style=&#34;color:#66d9ef&#34;&gt;begin&lt;/span&gt;
     sketchy_service&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;call
   &lt;span style=&#34;color:#66d9ef&#34;&gt;rescue&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;FlakyError&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; ex
@@ -782,60 +871,6 @@ be there.&lt;/p&gt;
 &lt;p&gt;By providing software support in an open, searchable forum and weekly
 video chat, I can easily provide support to a large group of random
 people &lt;strong&gt;for free&lt;/strong&gt; and still have time for my business, customers and family.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Tracking down performance bugs in Sidekiq jobs</title>
-      <link>https://www.mikeperham.com/2017/06/05/tracking-down-performance-bugs-in-sidekiq-jobs/</link>
-      <pubDate>Mon, 05 Jun 2017 09:00:00 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2017/06/05/tracking-down-performance-bugs-in-sidekiq-jobs/</guid>
-      <description>
-
-&lt;h2 id=&#34;the-problem&#34;&gt;The Problem&lt;/h2&gt;
-
-&lt;p&gt;A Sidekiq Enterprise customer recently emailed me to ask for help.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;I&#39;m having trouble trying to figure out why one particular worker I have takes so long per job. Some of the jobs are taking 30 minutes. What the program does is load a spreadsheet to the database. When I run &amp;quot;top&amp;quot;, it looks like this.  What should my next step be?&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;//www.mikeperham.com/images/debugging-top.jpg&#34; alt=&#34;top output&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;the-explanation&#34;&gt;The Explanation&lt;/h2&gt;
-
-&lt;p&gt;Great question.  The top screenshot tells me a few things:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Each process is using ~4GB of RAM, which is a lot, but top also notes
-the machine has ~64GB of memory so it&#39;s not necessarily unusual.&lt;/li&gt;
-&lt;li&gt;There are four Ruby 2.1 processes (which I assume are Sidekiq
-processes), each pegging a core at 100%.  We want to track down what
-is causing the CPU to peg.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;There&#39;s a two step process to get more info:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Visit the Busy page in the Web UI and see which jobs are running right now.
-See a job that&#39;s taking too long?  Note its PID and TID (&amp;quot;13159&amp;quot; and &amp;quot;otqnxjaoc&amp;quot; in the screenshot).&lt;/li&gt;
-&lt;li&gt;Send the TTIN signal to that PID (&lt;code&gt;kill -TTIN 13159&lt;/code&gt;) and find the backtrace associated with that TID in the log output.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&#34;//www.mikeperham.com/images/debugging-busy.png&#34; alt=&#34;busy page&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Often the job backtrace will give you the clue you need to solve the performance problem.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-conclusion&#34;&gt;The Conclusion&lt;/h2&gt;
-
-&lt;p&gt;In this case, the backtrace did provide the necessary clue and the customer did find a solution.
-He was creating a job per row in an Excel file but each job had to get the header data from
-the Excel file; if there was 1000 rows, he&#39;d create 1000 jobs and &lt;strong&gt;each job would reparse the entire Excel file to get the header info&lt;/strong&gt;.
-By restructing the job arguments to include the header info, he removed this redundant work and solved
-a problem which had plagued him for months.  Time elapsed: less than an hour!&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Moral of the story: harness the awesome power of Sidekiq&#39;s TTIN feature to crush your performance bugs!&lt;/strong&gt;&lt;/p&gt;
 </description>
     </item>
     
