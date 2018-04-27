@@ -83,4 +83,4 @@ Major Rails apps like [GitLab](https://gitlab.com/gitlab-org/omnibus-gitlab/issu
 If you have a large Rails app, integrate jemalloc and see significant improvements, please [open a Ruby issue](https://bugs.ruby-lang.org/issues/new) with graphs before and after.
 Let's give ruby-core all the data they need to make the right decision.
 
-Ruby-core jemalloc issues: [13524](https://bugs.ruby-lang.org/issues/13524), [9113](https://bugs.ruby-lang.org/issues/9113)
+Ruby-core jemalloc issues: [13524](https://bugs.ruby-lang.org/issues/13524), [9113](https://bugs.ruby-lang.org/issues/9113), [14718](https://bugs.ruby-lang.org/issues/14718)
