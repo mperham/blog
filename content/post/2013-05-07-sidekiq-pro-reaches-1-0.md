@@ -19,7 +19,7 @@ Example: ".@AcmeCorp wants Sidekiq Pro! http://example.org/dashboard.png"
 
 A few days from now, I'll collect all the tweets and draw one at random from a hat. Good luck!
 
- [1]: http://sidekiq.org/pro
+ [1]: http://sidekiq.org/
  [2]: https://github.com/mperham/sidekiq/blob/master/Pro-Changes.md
  [3]: https://watsi.org/
  [4]: http://litmus.com/

@@ -9,7 +9,7 @@ url: /2012/10/01/say-hello-to-sidekiq-pro/
 
 It's been 8 months since the initial release and by now I hope everyone agrees that [Sidekiq][1] has dramatically improved the state of the art in asynchronous processing for Ruby. [The Clymb][2] has been using it in production for 6 months now and it's been far faster and more stable than our old Delayed::Job setup.
 
-But Sidekiq just has feature parity with the best of the competition right now. It's time to build some next generation functionality on top of that foundation -- <a href="http://sidekiq.org/pro" style="color: #b1003e; font-size: 20px; font-weight: bold;">Sidekiq Pro</a> is a new **commercial** add-on for Sidekiq which adds some great new features that I hope people will find useful and worth paying for.
+But Sidekiq just has feature parity with the best of the competition right now. It's time to build some next generation functionality on top of that foundation -- <a href="http://sidekiq.org/" style="color: #b1003e; font-size: 20px; font-weight: bold;">Sidekiq Pro</a> is a new **commercial** add-on for Sidekiq which adds some great new features that I hope people will find useful and worth paying for.
 
 **Features**
 

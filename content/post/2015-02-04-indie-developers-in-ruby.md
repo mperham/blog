@@ -74,7 +74,7 @@ since it's all Mac/iOS native, but it's focused on making iOS development for us
 
 **Sidekiq**
 
-I'm happy to be part of this list too!  [Sidekiq Pro](http://sidekiq.org/pro/) extends Sidekiq with more features and a support contract.
+I'm happy to be part of this list too!  [Sidekiq Pro](http://sidekiq.org/) extends Sidekiq with more features and a support contract.
 If you want to build a scalable Ruby website for the long-term, use Passenger Enterprise for your app server and Sidekiq Pro for
 processing background jobs.  Since its launch three years ago, Sidekiq has grown from a side project to my full-time job.
 

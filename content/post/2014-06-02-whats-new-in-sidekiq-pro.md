@@ -46,7 +46,7 @@ I'm going to remove notification schemes (campfire, hipchat, email, webhook) in 
 
 If you have an idea for a Sidekiq Pro feature, please [open an issue][6] so we can discuss. Happy 'kiqing!
 
- [1]: http://sidekiq.org/pro
+ [1]: http://sidekiq.org/
  [2]: http://cascadiaruby.com/
  [3]: http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-1.56.37-PM.png
  [4]: http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-3.16.46-PM.png

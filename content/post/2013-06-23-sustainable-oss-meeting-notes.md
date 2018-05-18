@@ -38,4 +38,4 @@ Projects can differ radically in how to sustain them.
 *   Keep the codebase clean and enjoyable to work on, refactoring to improve your enjoyment of the code can be a great idea. Prune features which are support hotspots.
 *   If you want to earn anything more than beer money for your efforts, explicitly consider a business model appropriate to you and your project.
 
- [1]: http://sidekiq.org/pro
+ [1]: http://sidekiq.org/

@@ -67,6 +67,6 @@ end
 ## Conclusion
 
 Here's the [Sidekiq Pro 2.0 Upgrade Notes](https://github.com/mperham/sidekiq/blob/master/Pro-2.0-Upgrade.md).
-If you're not a Sidekiq Pro customer yet, [you can buy Sidekiq Pro here](http://sidekiq.org/pro/).  Enjoy!
+If you're not a Sidekiq Pro customer yet, [you can buy Sidekiq Pro here](http://sidekiq.org/).  Enjoy!
 
 Diagrams courtesy of the very nifty [draw.io](http://draw.io).

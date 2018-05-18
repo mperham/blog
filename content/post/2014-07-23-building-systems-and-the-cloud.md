@@ -32,4 +32,4 @@ There are reasons for using cloud providers but I don't find them compelling for
 
 For the record, the cloud is a good idea in a corporate environment where getting a server from IT can take weeks (!) to go through the proper channels. Use the cloud to prototype the service while doing the paperwork to eventually bring the service in-house on an IT-supported server.
 
- [1]: http://sidekiq.org/pro
+ [1]: http://sidekiq.org/

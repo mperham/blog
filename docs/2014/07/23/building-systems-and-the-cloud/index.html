@@ -60,7 +60,7 @@
 
 <ol>
 <li>Raise the Redis client's network timeout from the default of 1 sec to N seconds. I've seen latencies over 5 seconds. This won't fix the problem but your system will raise fewer errors.</li>
-<li>Use <a href="http://sidekiq.org/pro">Sidekiq Pro</a>'s reliable client feature. It will catch the timeout error and retry the operation regularly until it succeeds.</li>
+<li>Use <a href="http://sidekiq.org/">Sidekiq Pro</a>'s reliable client feature. It will catch the timeout error and retry the operation regularly until it succeeds.</li>
 <li>Move onto dedicated hardware where you know the network is high-quality and the machine isn't overloaded.</li>
 </ol>
 

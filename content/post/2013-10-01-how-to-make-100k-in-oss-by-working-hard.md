@@ -24,4 +24,4 @@ My one open question is how to market Sidekiq Pro now? Sure, I could fill the Si
 As always, thank you to my customers for making this ongoing experiment a success and I hope the results so far encourage other OSS developers to experiment with ways to finance their own hard work.
 
  [1]: http://sidekiq.org
- [2]: http://sidekiq.org/pro
+ [2]: http://sidekiq.org/

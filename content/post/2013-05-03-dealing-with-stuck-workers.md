@@ -26,4 +26,4 @@ Process crashes can be a serious problem: any jobs executing during the crash ar
 
 Alternatively, you can buy [Sidekiq Pro][1] and use its reliable queueing feature. I spoke with a Sidekiq user at Railsconf whose processes were crashing and losing jobs. They jumped at the chance: rather than spending days tracking down the bug, they could live with a crash once or twice a day since Upstart would just restart the process and immediately resume the job. It's not the ideal solution but it stopped the loss of jobs and put out the immediate fire: now they could debug the issue at their leisure rather than needing to fix it ASAP.
 
- [1]: http://sidekiq.org/pro
+ [1]: http://sidekiq.org/

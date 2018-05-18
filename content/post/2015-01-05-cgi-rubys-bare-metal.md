@@ -82,7 +82,7 @@ solves the performance overhead by keeping a process running 24/7.
 Ultimately plain old CGI solved my requirements: only Apache is running 24/7 and new Sidekiq Pro customers
 now get their license information within seconds of purchase, making everyone happy!
 
- [1]: http://sidekiq.org/pro/
+ [1]: http://sidekiq.org/
  [2]: http://www.boblee.com/images/bear_guitar.jpg
  [3]: http://www.ruby-doc.org/stdlib-2.2.0/libdoc/cgi/rdoc/CGI.html
  [4]: http://www.fastcgi.com/

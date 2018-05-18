@@ -24,4 +24,4 @@ I'm happy to announce the winner of my [Sidekiq Pro][1] 1.0 license giveaway is 
 
 Thanks Libin and everyone else who entered. I hope Sidekiq Pro makes your system even better!
 
- [1]: http://sidekiq.org/pro
+ [1]: http://sidekiq.org/

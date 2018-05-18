@@ -29,4 +29,4 @@ It's been fantastic working with new contributors, noticing more and more people
 
  [1]: http://www.theclymb.com/invite-from/mperham
  [2]: /2013/01/30/2012-oss-rookie-project-of-the-year/
- [3]: http://sidekiq.org/pro
+ [3]: http://sidekiq.org/

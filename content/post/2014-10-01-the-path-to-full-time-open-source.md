@@ -33,6 +33,6 @@ Now I want to do it again.
 
 **Three months ago I quit my job to work on Sidekiq and build a brand new OSS project and commercial product. [Introducing Inspeqtor][3]!**
 
- [1]: http://sidekiq.org/pro
+ [1]: http://sidekiq.org/
  [2]: http://www.mikeperham.com/wp-content/uploads/2014/09/logo.png
  [3]: http://www.mikeperham.com/2014/10/02/introducing-inspeqtor/
