@@ -58,7 +58,7 @@
 <p>We had a few minutes of outage recently due to this architecture. We read some <a href="http://kristian.blog.linpro.no/2009/05/25/common-varnish-issues/">Varnish tuning tips</a> and decided to modify our default configuration. Specifically we raised the minimum thread count from 1 to 500. Because, after all, &quot;* idle threads are cheap*&quot;. But they are only cheap on 64-bit systems where allocating hundreds of MB for extra stack space is a no brainer! When we rolled out this change, the process ran out of memory and couldn't allocate the extra threads. Klaxons went off and I rolled back the changes. Over the next few months, we'll be upgrading our caches to 64 bit so that we don't need to worry about sizing issues moving forward.</p>
 
         <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

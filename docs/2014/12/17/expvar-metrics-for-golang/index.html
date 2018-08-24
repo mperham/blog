@@ -95,13 +95,13 @@ for monitoring purposes.</p>
 <p>Here you can see how to declare a map of counters and then start to increment them as actions happen in your daemon.
 You can see in the JSON blob above how they appear when exported:</p>
 
-<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> (
   <span style="color:#a6e22e">counts</span> = <span style="color:#a6e22e">expvar</span>.<span style="color:#a6e22e">NewMap</span>(<span style="color:#e6db74">&#34;counters&#34;</span>)
 )
 <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">init</span>() {
   <span style="color:#a6e22e">counts</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;a&#34;</span>, <span style="color:#ae81ff">10</span>)
   <span style="color:#a6e22e">counts</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;b&#34;</span>, <span style="color:#ae81ff">10</span>)
-}</code></pre></div></p>
+}</code></pre></div>
 
 <h2 id="wherein-i-mix-in-some-awesome">Wherein I Mix in some Awesome</h2>
 
@@ -120,7 +120,7 @@ Inspeqtor Pro can give you this real-time memory visualization.</p>
 What about the JVM?  <a href="http://rubini.us/2014/12/10/rubinius-metrics-meets-influxdb/">Rubinius recently discussed their VM metrics support</a>, let's see other runtimes do the same!
 Make it easy to expose and tooling will appear to support it.</p>
         <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

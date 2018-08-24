@@ -56,7 +56,7 @@
 <p>I <a href="https://github.com/mperham/sidekiq/commit/fb2c286506107dc0d5d3f297c19df8170b32ef54#L1R3">rewrote the signal handling</a> to conform with the new restrictions: all handlers now just push the name of the signal onto a global array and the main thread polls once per second for unhandled signals. This isn't perfect, polling is something to be avoided where possible, but I don't know of a better solution and it's a lot better than the previous &quot;fat&quot; handlers that did a lot of work.</p>
 
         <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

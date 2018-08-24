@@ -70,19 +70,19 @@
 
 <p>Here's an example of a Ruby script you cannot shutdown gracefully. Run it and you'll see exactly the behavior I've described.</p>
 
-<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">while</span> <span style="color:#66d9ef">true</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">while</span> <span style="color:#66d9ef">true</span>
   <span style="color:#66d9ef">begin</span>
     sleep <span style="color:#ae81ff">5</span>
     puts <span style="color:#e6db74">&#39;ping&#39;</span>
   <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Exception</span> <span style="color:#f92672">=&gt;</span> ex
     puts <span style="color:#e6db74">&#34;Mmmmm, brains&#34;</span>
   <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span></code></pre></div></p>
+<span style="color:#66d9ef">end</span></code></pre></div>
 
 <p>So remember, your application errors should be subclasses of StandardError and if you want to catch everything, just stick will plain old &quot;rescue =&gt; ex&quot;. Your application will behave better for it.</p>
 
         <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
