@@ -8,8 +8,120 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Wed, 25 Apr 2018 09:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Fri, 24 Aug 2018 09:00:00 -0700</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Parallelize your work with Sidekiq Pro</title>
+      <link>https://www.mikeperham.com/2018/08/24/parallelize-your-work-with-sidekiq-pro/</link>
+      <pubDate>Fri, 24 Aug 2018 09:00:00 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2018/08/24/parallelize-your-work-with-sidekiq-pro/</guid>
+      <description>&lt;p&gt;A common issue for Sidekiq users are long jobs: jobs which
+process in serial a long list of things.  Why not parallelize that work
+and make it a lot faster?&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/MapReduce&#34;&gt;Map/Reduce&lt;/a&gt; is a pattern for distributed computing: a list of things is &lt;strong&gt;mapped&lt;/strong&gt; onto a set of jobs.
+Your Sidekiq workers execute those jobs in parallel and store the results of the work.
+Something then &lt;strong&gt;reduces&lt;/strong&gt; those calculations into a single result.
+In this way, large volumes of work can be done in parallel, speeding up batch processing.&lt;/p&gt;
+
+&lt;p&gt;I&#39;ve got a CSV file which needs to be processed.
+Processing each row might involve web crawling or some other intensive work so we can&#39;t process it in serial without it taking hours.
+We&#39;ll create a contrived example where we have a list of webpages and we want to get the bytesize of each page.
+We&#39;ll use Sidekiq Pro&#39;s Batch API to perform the work in parallel:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-csv&#34; data-lang=&#34;csv&#34;&gt;id,name,uri
+1273,Google,https://google.com
+1209,Yahoo,https://yahoo.com
+8273,Sidekiq,https://sidekiq.org&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now we&#39;ll create a worker which kicks off the CSV processing and a worker which processes each row in the CSV.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;csv&amp;#39;&lt;/span&gt;
+require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;net/http&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CSVProcessor&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Worker&lt;/span&gt;
+
+  &lt;span style=&#34;color:#75715e&#34;&gt;# MAP - create a job for each row&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;perform&lt;/span&gt;(csv_filename&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;./pages.csv&amp;#34;&lt;/span&gt;)
+    batch &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Batch&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new
+    batch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;on(&lt;span style=&#34;color:#e6db74&#34;&gt;:success&lt;/span&gt;, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;class, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;filename&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; csv_filename)
+    batch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;jobs &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;CSV&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;foreach(csv_filename, &lt;span style=&#34;color:#e6db74&#34;&gt;:headers&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;row&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;RowProcessor&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;perform_async(row&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fields)
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+
+  &lt;span style=&#34;color:#75715e&#34;&gt;# REDUCE - do something with all the results&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;on_success&lt;/span&gt;(status, options)
+    &lt;span style=&#34;color:#75715e&#34;&gt;# Sidekiq Pro will call this once all the RowProcessor jobs are done.&lt;/span&gt;
+    data, _ &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;redis &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;conn&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
+      conn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;multi &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+        conn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hgetall &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;crawl-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;status&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bid&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+        conn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;del &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;crawl-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;status&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bid&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+
+    data&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;each_pair &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;name, size&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
+      puts &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;name&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; is &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;size&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; bytes&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;RowProcessor&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Worker&lt;/span&gt;
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;perform&lt;/span&gt;(row)
+    name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; row&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+    uri &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; row&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+    content &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Net&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;HTTP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(&lt;span style=&#34;color:#66d9ef&#34;&gt;URI&lt;/span&gt;(uri))
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;# The only tricky part: we need to store the results&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;# somewhere so the callback can gather the data together.&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;# Redis is perfect for this.&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;# The BID is the Batch ID shared by all jobs in the batch.&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;redis &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;conn&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
+      conn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hset &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;crawl-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bid&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, name, content&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bytesize
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The Batch feature tracks the set of jobs and runs any callbacks when all jobs are finished.&lt;/p&gt;
+
+&lt;p&gt;I put that CSV data into ./pages.csv.
+We kick off the entire process with a simple &lt;code&gt;CSVProcessor.perform_async&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&#39;s the result:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2018-08-24T15:19:03.279Z 93268 TID-ov9mbken4 CSVProcessor JID-418bed33391e0d9d23c8151d INFO: start
+2018-08-24T15:19:03.286Z 93268 TID-ov9mbken4 CSVProcessor JID-418bed33391e0d9d23c8151d INFO: done: 0.006 sec
+2018-08-24T15:19:03.286Z 93268 TID-ov9mbkeg4 RowProcessor JID-97e9e7e8058a48a4cb5dc9dd BID-zFk-b6ZVqoS-6w INFO: start
+2018-08-24T15:19:03.290Z 93268 TID-ov9mbkeak RowProcessor JID-754a8ecd713507ca396bf3d7 BID-zFk-b6ZVqoS-6w INFO: start
+2018-08-24T15:19:03.294Z 93268 TID-ov9mbkfhk RowProcessor JID-1dfa5546400901f9a16f2181 BID-zFk-b6ZVqoS-6w INFO: start
+2018-08-24T15:19:03.442Z 93268 TID-ov9mbkeg4 RowProcessor JID-97e9e7e8058a48a4cb5dc9dd BID-zFk-b6ZVqoS-6w INFO: done: 0.156 sec
+2018-08-24T15:19:03.487Z 93268 TID-ov9mbkfhk RowProcessor JID-1dfa5546400901f9a16f2181 BID-zFk-b6ZVqoS-6w INFO: done: 0.193 sec
+2018-08-24T15:19:03.647Z 93268 TID-ov9mbkeak RowProcessor JID-754a8ecd713507ca396bf3d7 BID-zFk-b6ZVqoS-6w INFO: done: 0.358 sec
+2018-08-24T15:19:04.414Z 93268 TID-ov9mbka0k Sidekiq::Batch::Callback JID-00672f540b4dcc0f5c3d80e7 INFO: start
+2018-08-24T15:19:04.420Z 93268 TID-ov9mbka0k Sidekiq::Batch::Callback JID-00672f540b4dcc0f5c3d80e7 INFO: done: 0.006 sec
+2018-08-24T15:19:05.428Z 93268 TID-ov9mbkatw Sidekiq::Batch::Callback JID-9cebed28a6fd88f1877dcb46 INFO: start
+Google is 11340 bytes
+Sidekiq is 19475 bytes
+Yahoo is 483535 bytes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(Side note: good grief, Yahoo!)&lt;/p&gt;
+
+&lt;p&gt;We built a parallel web crawling system in less than 50 lines of Ruby code + Sidekiq Pro.
+Nice.&lt;/p&gt;
+
+&lt;p&gt;Helpful links:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Batches&#34;&gt;Batches wiki&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=b2fI0vGf3Bo&amp;amp;list=PLjeHh2LSCFrWGT5uVjUuFKAcrcj5kSai1&#34;&gt;Batches screencast&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://plasso.com/s/YSeEjhi5ga/&#34;&gt;Buy Sidekiq Pro&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Taming Rails memory bloat</title>
@@ -807,70 +919,6 @@ to do it for Bugsnag and Honeybadger:&lt;/p&gt;
   notice&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;:exception&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;].&lt;/span&gt;ignore_please
 &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Done!  Now your inbox should be a little cleaner.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Helping Others</title>
-      <link>https://www.mikeperham.com/2017/06/07/helping-others/</link>
-      <pubDate>Wed, 07 Jun 2017 09:00:19 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2017/06/07/helping-others/</guid>
-      <description>
-
-&lt;p&gt;I&#39;m a big fan of helping and empowering others through my open source software contributions
-but I often get pings from people from around the world asking for help.
-These requests generally take two forms:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&amp;quot;I&#39;m having this problem with your software...&amp;quot;&lt;/li&gt;
-&lt;li&gt;&amp;quot;I want help with my business idea...&amp;quot;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;One thing I&#39;ve learned over time is that &lt;strong&gt;talking to individuals
-privately does not scale&lt;/strong&gt;.  You have to arrange a date/time, determine a
-chat location/method, often to discuss a problem that can be solved in
-3-5 minutes. Often business questions take an hour or more of due
-diligence, demand research into a particular vertical, etc.  Here&#39;s the
-policies I&#39;ve found work best for all parties.&lt;/p&gt;
-
-&lt;h2 id=&#34;software-issues&#34;&gt;Software Issues&lt;/h2&gt;
-
-&lt;p&gt;All OSS support must go into a persistent, searchable public forum.  No private email, no chat
-rooms or IRC, etc.  Persistent means it can be found years from now.
-Searchable means anyone can search for their own problem and find
-related discussions.  GitHub Issues and StackOverflow are my go-to
-solutions here.&lt;/p&gt;
-
-&lt;p&gt;With these traits, users can search and find solutions to their own
-problems without bothering you.  This is a very good thing: you&#39;re happy
-and they&#39;re happy.&lt;/p&gt;
-
-&lt;h2 id=&#34;business-help&#34;&gt;Business Help&lt;/h2&gt;
-
-&lt;p&gt;Due to my notority and success, I&#39;ve found myself emailed more and more
-frequently by random people wanting my opinion on various subjects (some
-of which I&#39;m definitely not qualified for).  Unlike software support,
-there&#39;s no issue tracker for building a business.  Instead I turn to the
-example of another profession: college professors.  They have classes
-with 100s of students, how do they provide one-on-one help to such a
-large group?&lt;/p&gt;
-
-&lt;p&gt;They provide &lt;strong&gt;office hours&lt;/strong&gt;.  Students can show up to the professor&#39;s
-office at a well-known hour in order to get help.  If other students are
-there, they all have to share the professor&#39;s time.&lt;/p&gt;
-
-&lt;p&gt;This is the purpose of my weekly &lt;a href=&#34;http://sidekiq.org/support&#34;&gt;Happy Hour&lt;/a&gt;,
-anyone can show up for that hour and video chat with me about any
-subject.  If others show up, you might have to share the time.  We don&#39;t
-have to arrange a time or location, you just need to RSVP so I know to
-be there.&lt;/p&gt;
-
-&lt;h2 id=&#34;wrapup&#34;&gt;Wrapup&lt;/h2&gt;
-
-&lt;p&gt;By providing software support in an open, searchable forum and weekly
-video chat, I can easily provide support to a large group of random
-people &lt;strong&gt;for free&lt;/strong&gt; and still have time for my business, customers and family.&lt;/p&gt;
 </description>
     </item>
     
