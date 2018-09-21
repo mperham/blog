@@ -7,8 +7,6 @@ Last month I revived [my Mastodon account](https://mastodon.xyz/@mperham) after 
 Twitter giving Nazi accounts acting in bad faith a pass while suspending
 upset liberal accounts acting in good faith.
 
-{{% mastodon status="https://mastodon.xyz/@mperham/100743659488287177" width="600" height="230" %}}
-
 I think this concept of acting in good faith vs bad faith is the crux of
 the issue in social media today.  Is this person trying to make things
 better or are they delaying action, spreading confusion
@@ -34,6 +32,10 @@ to have enough traction to work today. Niche-specific instances like
 [https://ruby.social](https://ruby.social) for Ruby developers make for nice, small communities and
 small communities tend to treat each other with more respect than larger
 ones.  [Find your own community](https://instances.social/) and wean yourself off Twitter today!
+
+Mastodon looks pretty similar to Twitter:
+
+{{% mastodon status="https://mastodon.xyz/@mperham/100743659488287177" width="600" height="230" %}}
 
 I'm at [https://mastodon.xyz/@mperham](https://mastodon.xyz/@mperham)
 and Sidekiq is hanging out with all the Rubyists at [https://ruby.social/@sidekiq](https://ruby.social/@sidekiq).  I hope you give Mastodon a try.
