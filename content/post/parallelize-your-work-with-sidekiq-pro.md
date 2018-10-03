@@ -112,4 +112,4 @@ Helpful links:
 
 * [Batches wiki](https://github.com/mperham/sidekiq/wiki/Batches)
 * [Batches screencast](https://www.youtube.com/watch?v=b2fI0vGf3Bo&list=PLjeHh2LSCFrWGT5uVjUuFKAcrcj5kSai1)
-* [Buy Sidekiq Pro](https://plasso.com/s/YSeEjhi5ga/)
+* [Buy Sidekiq Pro](https://billing.contribsys.com/spro/new.cgi)

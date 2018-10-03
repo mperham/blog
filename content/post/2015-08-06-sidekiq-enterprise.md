@@ -185,6 +185,6 @@ one of them fits your needs too.
 [0]: https://github.com/mperham/sidekiq/wiki/Ent-Rate-Limiting
 [1]: https://github.com/mperham/sidekiq/wiki/Ent-Leader-Election
 [2]: https://github.com/mperham/sidekiq/wiki/Ent-Periodic-Jobs
-[3]: https://enterprise.contribsys.com/quote.html
+[3]: https://billing.contribsys.com/sent/new.cgi
 [4]: mailto:mike&#40;contribsys.com?subject=Enterprise%20Upgrade
 [5]: https://github.com/mperham/sidekiq/wiki/Ent-Unique-Jobs

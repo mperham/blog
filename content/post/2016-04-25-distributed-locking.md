@@ -105,5 +105,5 @@ debug problems.  Some good things about Sidekiq Enterprise's concurrent limiter:
  * it provides much better visibility with real-time metrics about limiter usage
 
 If you are using Sidekiq today, the Enterprise upgrade will drop right in.
-[Sidekiq Enterprise starts at $1950/yr, get a quote in seconds here.](https://enterprise.contribsys.com/quote.html)
+[Sidekiq Enterprise starts at $179/mo, get a quote in seconds here.](https://billing.contribsys.com/sent/new.cgi)
 
