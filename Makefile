@@ -1,5 +1,6 @@
 build:
 	hugo -DF
 
-serve:
+run:
+	open http://localhost:1313/
 	hugo serve -DF

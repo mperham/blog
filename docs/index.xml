@@ -8,8 +8,95 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Fri, 21 Sep 2018 09:37:21 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 10 Oct 2018 13:31:27 -0700</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Building Linux Packages and using Github Releases</title>
+      <link>https://www.mikeperham.com/2018/10/10/building-linux-packages-and-using-github-releases/</link>
+      <pubDate>Wed, 10 Oct 2018 13:31:27 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2018/10/10/building-linux-packages-and-using-github-releases/</guid>
+      <description>
+
+&lt;p&gt;I&#39;m preparing to launch &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt; 0.9, a major overhaul to switch
+from RocksDB to Redis as the storage engine.
+The improvement in the development process is amazing.
+But I need to finalize how I distribute Faktory releases, which brings
+up the question:&lt;/p&gt;
+
+&lt;blockquote class=&#34;twitter-tweet&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;Help me figure out how to distribute Faktory!&lt;br&gt;&lt;br&gt;When installing software infrastructure on Linux, I want use:&lt;/p&gt;&amp;mdash; 🎤 🍐🐖 (@mperham) &lt;a href=&#34;https://twitter.com/mperham/status/1050047444480753664?ref_src=twsrc%5Etfw&#34;&gt;October 10, 2018&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+
+
+&lt;p&gt;As of right now, that tweet poll shows 58% of people want a deb, 32% want a Docker image, 7% want an rpm and 3% are Linux hipsters that lovingly craft each network packet by hand.&lt;/p&gt;
+
+&lt;h2 id=&#34;building-packages&#34;&gt;Building Packages&lt;/h2&gt;
+
+&lt;p&gt;By removing RocksDB, a C++ dependency, we moved from a cgo build to a pure Go build.
+The advantages of a pure Go build process are hard to overstate:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;I can cross-compile Linux binaries on OSX&lt;/li&gt;
+&lt;li&gt;Since it doesn&#39;t use glibc and libcpp, I don&#39;t need to build distro-specific binaries&lt;/li&gt;
+&lt;li&gt;I don&#39;t need to use Vagrant or Docker to run Linux in order to build packages&lt;/li&gt;
+&lt;li&gt;I could narrow the package formats to only two, deb and rpm, and really I could get away with one.
+DEB appears to have won the popularity contest and Debian distros seem to be the strong majority among my followers.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;With these changes, Faktory&#39;s package build went from an hour of manually running various scripts to &lt;strong&gt;four seconds&lt;/strong&gt;.
+That&#39;s four seconds for a &lt;strong&gt;full build&lt;/strong&gt;: cleaning, generating, cross compiling and building the deb/rpm files.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ time make package
+go generate github.com/contribsys/faktory/webui
+Created package {:path=&amp;gt;&amp;quot;packaging/output/systemd/faktory_0.9.0-beta3_amd64.deb&amp;quot;}
+Created package {:path=&amp;gt;&amp;quot;packaging/output/systemd/faktory-0.9.0-beta3.x86_64.rpm&amp;quot;}
+
+real	0m4.218s
+user	0m3.529s
+sys	0m0.833s
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are only two requirements for these packages: 64-bit Linux and systemd.
+No business is running 32-bit anymore for anything but edge case reasons.
+systemd has been the Ubuntu default for ~4 years now so I&#39;m ok with that for now.&lt;/p&gt;
+
+&lt;p&gt;The unsung hero in all of this build process is &lt;a href=&#34;https://github.com/jordansissel/fpm/&#34;&gt;the &lt;code&gt;fpm&lt;/code&gt; gem&lt;/a&gt;.
+Jordan Sissel deserves our eternal praise for his work in making it easy to build Linux packages anywhere.
+If I could license &amp;quot;FPM Pro&amp;quot; to pay him for his work, I would in a heartbeat.
+In the meantime, my public thanks will have to be enough.&lt;/p&gt;
+
+&lt;h2 id=&#34;using-github-releases&#34;&gt;Using GitHub Releases&lt;/h2&gt;
+
+&lt;p&gt;Now that I can build these &amp;quot;universal&amp;quot; packages, how do I distribute them?
+apt/yum repos are notoriously painful to setup and run.
+Easiest quick solution that I know of is to use GitHub releases:
+tag the code, generate the packages and then create a release.
+Here&#39;s how I create a Faktory release:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-make&#34; data-lang=&#34;make&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;release&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; clean test package tag
+  @echo Generating release notes
+  ruby .github/notes.rb &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+  @echo Releasing faktory &lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;ITERATION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+  hub release create v&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;ITERATION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;    -a packaging/output/systemd/&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;NAME&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;_&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;ITERATION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;_amd64.deb &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;    -a packaging/output/systemd/&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;NAME&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;-&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;ITERATION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;.x86_64.rpm &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;    -F /tmp/release-notes.md -e -o
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Note the Ruby script to generate the release notes automatically,
+including changelog link and SHA256 sums for each file.
+&lt;code&gt;brew install hub&lt;/code&gt; to get GitHub&#39;s handy CLI tool.&lt;/p&gt;
+
+&lt;p&gt;To install that DEB:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;curl -LO https://github.com/contribsys/faktory/releases/download/v0.9.0-beta3/faktory_0.9.0-beta3_amd64.deb
+dpkg -i faktory_0.9.0-beta3_amd64.deb&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;GitHub Releases work well enough for now.
+They don&#39;t have the benefit of a full-blown package repo but they provide a stable download link for binaries and are far simpler to setup and use from my POV.
+In reality, I would imagine most teams will fetch and install the package via Puppet/Chef/Ansible.
+Hopefully as Faktory gets more popular, it will make its way into the official distro repos.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Moving to Mastodon</title>
@@ -861,62 +948,6 @@ for &amp;quot;Worq&amp;quot;.&lt;/p&gt;
 A. Since you&#39;ve read to the bottom, you get top sekret access to the
 &lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;contribsys/faktory&lt;/a&gt; Gitter chat room.
 I&#39;ll hang out there when I can. Stop by and say hi!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>The Future of Background Jobs</title>
-      <link>https://www.mikeperham.com/2017/10/23/the-future-of-background-jobs/</link>
-      <pubDate>Mon, 23 Oct 2017 07:00:00 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2017/10/23/the-future-of-background-jobs/</guid>
-      <description>&lt;p&gt;Whether sending an email, adding an item to your cart or tracking an
-impression, modern businesses can be modeled as a series of business
-transactions.  I believe that a good background job framework is the
-best way to execute these transactions and scale your business applications
-across many machines.  A good background job framework gives you:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;a simple API for defining and calling jobs&lt;/li&gt;
-&lt;li&gt;automatic error handling and retry logic&lt;/li&gt;
-&lt;li&gt;an interface for monitoring, debugging and introspection&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;These jobs become much easier to reason about and debug when they
-all use similar calling conventions, logging and execution environment.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;In fact, I would argue that the current Serverless trend is
-(background jobs - devops + price).  Squint a bit and a serverless
-function call looks a bit like a background job invocation: both are, at
-their core, asynchronous function calls into your app logic.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;For the last five years, I&#39;ve created and polished Sidekiq, Sidekiq Pro
-and Sidekiq Enterprise as best as I can, adding features and functionality
-that scale (in the case of a few customers) to billions of jobs per day.&lt;/p&gt;
-
-&lt;p&gt;But Sidekiq has two major constraints:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;The datastore is Redis, with all its advantages and disadvantages&lt;/li&gt;
-&lt;li&gt;Almost all functionality is implemented in the Ruby worker process, limiting Sidekiq to Ruby&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;What if we could have a system that:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;scales to thousands of jobs per second?&lt;/li&gt;
-&lt;li&gt;enables polyglot teams -- can be used with any programming language?&lt;/li&gt;
-&lt;li&gt;provides those useful tools and metrics for monitoring and debugging?&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Sidekiq has been very successful but there&#39;s nothing Ruby-specific
-about its conventions; almost all programming languages can benefit from a
-similar tool.  Tomorrow, I&#39;m going to introduce you to my new open source
-project which aims to do all of this: &lt;strong&gt;Faktory&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;./images/faktory.png&#34; alt=&#34;faktory&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     

@@ -1,0 +1,183 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Building Linux Packages and using Github Releases </title>
+    
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
+    <link rel="shortcut icon" href="../../../../favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+    <link rel="me" href="https://mastodon.xyz/@mperham">
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
+                
+                    <li><a href="../../../../events/" >Events</a></li>
+                
+                    <li><a href="../../../../about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Building Linux Packages and using Github Releases</h1>
+      <small class="post-meta">Oct 10, 2018</small>
+      <div class="post-content">
+        
+
+<p>I'm preparing to launch <a href="https://github.com/contribsys/faktory">Faktory</a> 0.9, a major overhaul to switch
+from RocksDB to Redis as the storage engine.
+The improvement in the development process is amazing.
+But I need to finalize how I distribute Faktory releases, which brings
+up the question:</p>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Help me figure out how to distribute Faktory!<br><br>When installing software infrastructure on Linux, I want use:</p>&mdash; 🎤 🍐🐖 (@mperham) <a href="https://twitter.com/mperham/status/1050047444480753664?ref_src=twsrc%5Etfw">October 10, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>As of right now, that tweet poll shows 58% of people want a deb, 32% want a Docker image, 7% want an rpm and 3% are Linux hipsters that lovingly craft each network packet by hand.</p>
+
+<h2 id="building-packages">Building Packages</h2>
+
+<p>By removing RocksDB, a C++ dependency, we moved from a cgo build to a pure Go build.
+The advantages of a pure Go build process are hard to overstate:</p>
+
+<ol>
+<li>I can cross-compile Linux binaries on OSX</li>
+<li>Since it doesn't use glibc and libcpp, I don't need to build distro-specific binaries</li>
+<li>I don't need to use Vagrant or Docker to run Linux in order to build packages</li>
+<li>I could narrow the package formats to only two, deb and rpm, and really I could get away with one.
+DEB appears to have won the popularity contest and Debian distros seem to be the strong majority among my followers.</li>
+</ol>
+
+<p>With these changes, Faktory's package build went from an hour of manually running various scripts to <strong>four seconds</strong>.
+That's four seconds for a <strong>full build</strong>: cleaning, generating, cross compiling and building the deb/rpm files.</p>
+
+<pre><code>$ time make package
+go generate github.com/contribsys/faktory/webui
+Created package {:path=&gt;&quot;packaging/output/systemd/faktory_0.9.0-beta3_amd64.deb&quot;}
+Created package {:path=&gt;&quot;packaging/output/systemd/faktory-0.9.0-beta3.x86_64.rpm&quot;}
+
+real	0m4.218s
+user	0m3.529s
+sys	0m0.833s
+</code></pre>
+
+<p>There are only two requirements for these packages: 64-bit Linux and systemd.
+No business is running 32-bit anymore for anything but edge case reasons.
+systemd has been the Ubuntu default for ~4 years now so I'm ok with that for now.</p>
+
+<p>The unsung hero in all of this build process is <a href="https://github.com/jordansissel/fpm/">the <code>fpm</code> gem</a>.
+Jordan Sissel deserves our eternal praise for his work in making it easy to build Linux packages anywhere.
+If I could license &quot;FPM Pro&quot; to pay him for his work, I would in a heartbeat.
+In the meantime, my public thanks will have to be enough.</p>
+
+<h2 id="using-github-releases">Using GitHub Releases</h2>
+
+<p>Now that I can build these &quot;universal&quot; packages, how do I distribute them?
+apt/yum repos are notoriously painful to setup and run.
+Easiest quick solution that I know of is to use GitHub releases:
+tag the code, generate the packages and then create a release.
+Here's how I create a Faktory release:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">release</span><span style="color:#f92672">:</span> clean test package tag
+  @echo Generating release notes
+  ruby .github/notes.rb <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
+  @echo Releasing faktory <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>
+  hub release create v<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>_<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>_amd64.deb <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>.x86_64.rpm <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -F /tmp/release-notes.md -e -o
+</code></pre></div>
+<p>Note the Ruby script to generate the release notes automatically,
+including changelog link and SHA256 sums for each file.
+<code>brew install hub</code> to get GitHub's handy CLI tool.</p>
+
+<p>To install that DEB:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl -LO https://github.com/contribsys/faktory/releases/download/v0.9.0-beta3/faktory_0.9.0-beta3_amd64.deb
+dpkg -i faktory_0.9.0-beta3_amd64.deb</code></pre></div>
+<h2 id="conclusion">Conclusion</h2>
+
+<p>GitHub Releases work well enough for now.
+They don't have the benefit of a full-blown package repo but they provide a stable download link for binaries and are far simpler to setup and use from my POV.
+In reality, I would imagine most teams will fetch and install the package via Puppet/Chef/Ansible.
+Hopefully as Faktory gets more popular, it will make its way into the official distro repos.</p>
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>
