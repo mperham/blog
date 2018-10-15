@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.mikeperham.com/2018/10/12/testing-rubys-cgi/</loc>
+    <lastmod>2018-10-12T08:59:06-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.mikeperham.com/2018/10/10/building-linux-packages-and-using-github-releases/</loc>
     <lastmod>2018-10-10T13:31:27-07:00</lastmod>
   </url>
@@ -1518,7 +1523,7 @@
   
   <url>
     <loc>https://www.mikeperham.com/</loc>
-    <lastmod>2018-10-10T13:31:27-07:00</lastmod>
+    <lastmod>2018-10-12T08:59:06-07:00</lastmod>
     <priority>0</priority>
   </url>
   

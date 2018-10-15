@@ -8,8 +8,144 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Wed, 10 Oct 2018 13:31:27 -0700</lastBuildDate>
+    <lastBuildDate>Fri, 12 Oct 2018 08:59:06 -0700</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Testing Ruby&#39;s CGI</title>
+      <link>https://www.mikeperham.com/2018/10/12/testing-rubys-cgi/</link>
+      <pubDate>Fri, 12 Oct 2018 08:59:06 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2018/10/12/testing-rubys-cgi/</guid>
+      <description>
+
+&lt;p&gt;CGI is a standard for generating HTML pages from scripts executed as
+child processes by a web server. I explained CGI and how I use it in a
+previous post, &lt;a href=&#34;./2015/01/05/cgi-rubys-bare-metal/&#34;&gt;CGI: Ruby&#39;s Bare Metal&lt;/a&gt;.
+I like to use CGI because it means that I don&#39;t have to run any Ruby app
+server (e.g. puma, passenger, unicorn) 24/7.  Less moving parts == more
+robust!&lt;/p&gt;
+
+&lt;p&gt;Those app servers get most of the press these days so sadly CGI doesn&#39;t
+have much support and documentation; I couldn&#39;t find anything on how to &lt;strong&gt;test&lt;/strong&gt; CGI scripts.
+These scripts handle my business, they need to work so I decided to put some effort into testing CGI.
+You, dear reader, are the benefactor!&lt;/p&gt;
+
+&lt;p&gt;Two things I learned:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Webrick, Ruby&#39;s built-in HTTP server, does have support for calling CGI scripts.
+This will be critical for us, it means we don&#39;t have to install Apache or nginx to call the CGI scripts.&lt;/li&gt;
+&lt;li&gt;Because CGI outputs raw HTML, we&#39;ll need to do browser-level testing
+using Capybara with headless chrome or another automated browser.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Great! Our test suite will be a Ruby process with two things:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Webrick serving CGI requests&lt;/li&gt;
+&lt;li&gt;Capybara requesting URLs from Webrick&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;How can a Ruby process do two things at once?  With Threads, of course!&lt;/p&gt;
+
+&lt;h2 id=&#34;webrick&#34;&gt;Webrick&lt;/h2&gt;
+
+&lt;p&gt;Webrick is set up out of the box to serve any &lt;code&gt;.cgi&lt;/code&gt; files as Ruby CGI scripts.
+You point Webrick to your &lt;code&gt;DocumentRoot&lt;/code&gt; as normal.  Note that since
+Capybara is going to be driving the tests, we need Webrick to execute in
+another thread so both the HTTP client and server can execute
+concurrently:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;WEBRICK&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Thread&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+  require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;webrick&amp;#39;&lt;/span&gt;
+
+  server &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;WEBrick&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;HTTPServer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new(
+    &lt;span style=&#34;color:#e6db74&#34;&gt;:Port&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;8999&lt;/span&gt;,
+    &lt;span style=&#34;color:#e6db74&#34;&gt;:DocumentRoot&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;File&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;expand_path(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;../..&amp;#34;&lt;/span&gt;, __FILE__),
+  )
+  trap(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;INT&amp;#39;&lt;/span&gt;) { server&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shutdown }
+
+  puts &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Starting Webrick on port 8999&amp;#34;&lt;/span&gt;
+  server&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;start
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;capybara&#34;&gt;Capybara&lt;/h2&gt;
+
+&lt;p&gt;Most of the Capybara integration is straight out of the README, there is
+only one trick necessary: since we are starting our own custom Webrick
+server in a separate thread, we need to tell Capybara not to start a
+server on its own and point it to ours instead.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;run_server &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;app_host &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://localhost:8999&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;After an hour of fiddling, here&#39;s the &lt;code&gt;test/helper.rb&lt;/code&gt; I came up with:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Thread&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;report_on_exception &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+
+require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;minitest/autorun&amp;#39;&lt;/span&gt;
+require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;capybara/minitest&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;run_server &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# I found poltergeist quick to install and worked first time, YMMV&lt;/span&gt;
+require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;capybara/poltergeist&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;javascript_driver &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;:poltergeist&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CGITest&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Minitest&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Test&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;DSL&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Minitest&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Assertions&lt;/span&gt;
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;setup&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;current_driver &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;javascript_driver
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;teardown&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset_sessions!
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use_default_driver
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Here&amp;#39;s the trick:&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# We need to run the Webrick server in a separate thread so the&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# testcases can make requests and block, waiting for the response.&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;WEBRICK&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Thread&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+  require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;webrick&amp;#39;&lt;/span&gt;
+
+  server &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;WEBrick&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;HTTPServer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new(
+    &lt;span style=&#34;color:#e6db74&#34;&gt;:Port&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;8999&lt;/span&gt;,
+    &lt;span style=&#34;color:#e6db74&#34;&gt;:DocumentRoot&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;File&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;expand_path(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;../..&amp;#34;&lt;/span&gt;, __FILE__),
+  )
+  trap(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;INT&amp;#39;&lt;/span&gt;) { server&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shutdown }
+
+  puts &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Starting Webrick on port 8999&amp;#34;&lt;/span&gt;
+  server&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;start
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Point Capybara to Webrick!&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Capybara&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;app_host &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;http://localhost:8999&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# give webrick time to boot before the tests can run&lt;/span&gt;
+sleep &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Now I create &lt;code&gt;test/smoke_test.rb&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;require_relative &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;./helper&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;SmokeTest&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;CGITest&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test_pro_navigation&lt;/span&gt;
+    visit(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/spro/new.cgi&amp;#34;&lt;/span&gt;)
+    assert page&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;has_content?(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Subscribe to&amp;#39;&lt;/span&gt;)
+
+    visit(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/spro/update.cgi&amp;#34;&lt;/span&gt;)
+    assert page&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;has_content?(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Update your&amp;#39;&lt;/span&gt;)
+
+    visit(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/spro/cancel.cgi&amp;#34;&lt;/span&gt;)
+    assert page&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;has_content?(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Cancel your&amp;#39;&lt;/span&gt;)
+
+    visit(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/spro/delete.cgi&amp;#34;&lt;/span&gt;)
+    assert page&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;has_content?(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Confirm your&amp;#39;&lt;/span&gt;)
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;That&#39;s a quick test to make sure the &lt;a href=&#34;https://billing.contribsys.com/spro/&#34;&gt;billing scripts for Sidekiq
+Pro&lt;/a&gt; will render correctly and not crash.
+Now with a little test coverage I&#39;ve got more confidence that changes won&#39;t break these scripts.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Building Linux Packages and using Github Releases</title>
@@ -819,135 +955,6 @@ built their own worker packages.&lt;/p&gt;
 &lt;h2 id=&#34;wrapup&#34;&gt;Wrapup&lt;/h2&gt;
 
 &lt;p&gt;Let us know if you have any problems -- &lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;pop into the Faktory chatroom&lt;/a&gt; and say hi or &lt;a href=&#34;https://github.com/contribsys/faktory/issues/new&#34;&gt;open a new issue&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Introducing Faktory</title>
-      <link>https://www.mikeperham.com/2017/10/24/introducing-faktory/</link>
-      <pubDate>Tue, 24 Oct 2017 07:00:00 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2017/10/24/introducing-faktory/</guid>
-      <description>
-
-&lt;p&gt;&lt;a href=&#34;//www.mikeperham.com/2017/10/23/the-future-of-background-jobs/&#34;&gt;Yesterday I explained&lt;/a&gt; how a good background job framework is critical to
-scaling business applications.  Today, meet
-&lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I&#39;ve spent the last six months building &lt;strong&gt;Faktory&lt;/strong&gt;, a new background
-job system which aims to bring the best practices developed over the
-last five years in Sidekiq &lt;strong&gt;to every programming language&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;img src=&#34;http://www.mikeperham.com/images/faktory-ui.png&#34; width=&#34;800&#34; height=&#34;375&#34;/&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;the-basics&#34;&gt;The Basics&lt;/h2&gt;
-
-&lt;p&gt;Faktory is a server daemon which provides a simple API to produce and
-consume background jobs.  Here&#39;s the chatter to create and execute
-a background job:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;gt; PUSH {&amp;quot;jid&amp;quot;:&amp;quot;1238abc712&amp;quot;,&amp;quot;jobtype&amp;quot;:&amp;quot;SomeJob&amp;quot;,&amp;quot;args&amp;quot;:[1,2,&amp;quot;hello&amp;quot;],&amp;quot;queue&amp;quot;:&amp;quot;default&amp;quot;}
-&amp;lt; OK
-&amp;gt; FETCH critical default low
-&amp;lt; {&amp;quot;jid&amp;quot;:&amp;quot;1238abc712&amp;quot;,&amp;quot;jobtype&amp;quot;:&amp;quot;SomeJob&amp;quot;,&amp;quot;args&amp;quot;:[1,2,&amp;quot;hello&amp;quot;],&amp;quot;queue&amp;quot;:&amp;quot;default&amp;quot;}
-[...do the work...]
-&amp;gt; ACK {&amp;quot;jid&amp;quot;:&amp;quot;1238abc712&amp;quot;}
-&amp;lt; OK
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Jobs are a small JSON hash with a few mandatory keys.
-Producers PUSH a job to a queue. Consumers FETCH jobs from queues,
-process them and then either ACK (success) or FAIL the job.  Faktory
-will store and re-enqueue failed jobs over time just as Sidekiq does
-(these are called &amp;quot;retries&amp;quot;).  Networks fail and bugs happen, job retries
-are critical to a &amp;quot;self-healing&amp;quot; production environment.&lt;/p&gt;
-
-&lt;p&gt;To execute jobs, you need a Faktory worker process which can run
-your business logic in the language of your choice.  With the launch
-today, I&#39;m providing:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;faktory&lt;/code&gt; &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;link&lt;/a&gt; - high
-performance background job server&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;faktory_worker_ruby&lt;/code&gt; &lt;a href=&#34;https://github.com/contribsys/faktory_worker_ruby&#34;&gt;link&lt;/a&gt; -
-a Rubygem which can execute jobs fetched from Faktory using Ruby,
-similar to Sidekiq&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;faktory_worker_go&lt;/code&gt; &lt;a href=&#34;https://github.com/contribsys/faktory_worker_go&#34;&gt;link&lt;/a&gt; -
-a library for building a Go-based worker process&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;how-it-works&#34;&gt;How It Works&lt;/h2&gt;
-
-&lt;p&gt;Many existing job systems provide no persistence or a simple binlog
-which can be replayed in case of crash.&lt;/p&gt;
-
-&lt;p&gt;Faktory goes further and provides the same job persistence, state management and
-monitoring Web UI that Sidekiq does.  It uses
-Facebook&#39;s high-performance &lt;a href=&#34;http://rocksdb.org&#34;&gt;RocksDB&lt;/a&gt; embedded
-datastore internally to
-persist all job data, queues, error state, etc.  It exposes a Web UI
-(which is similar to Sidekiq&#39;s), allowing you to see the current
-state of your queues, jobs and workers.&lt;/p&gt;
-
-&lt;p&gt;Faktory listens on port 7419 for commands and port 7420 for the Web UI.
-7419 for the robot workers, 7420 for the human bosses.&lt;/p&gt;
-
-&lt;h2 id=&#34;get-started&#34;&gt;Get Started&lt;/h2&gt;
-
-&lt;p&gt;The project is brand new so it will take a few weeks to polish the
-development process.  If you are a Gopher, you can build the binary locally with Go 1.9.
-If you have Vagrant 2.x running, you can run Faktory via
-the Vagrant box in &lt;code&gt;build/ubuntu&lt;/code&gt;.  See the &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Development&#34;&gt;Development wiki page&lt;/a&gt;
-for more detail.&lt;/p&gt;
-
-&lt;p&gt;We&#39;ll eventually get some install options plugged into the
-&lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Installation&#34;&gt;Installation wiki page&lt;/a&gt;.
-Like all new things, it&#39;s rough today but it will get better over time.&lt;/p&gt;
-
-&lt;h1 id=&#34;fak&#34;&gt;FAK&lt;/h1&gt;
-
-&lt;p&gt;Q. Can I use it in production?&lt;/br&gt;
-A. It&#39;s a brand new project but only you can determine how risk tolerant you are.
-I will release 1.0 when the APIs are solid and I feel it is stable.&lt;/p&gt;
-
-&lt;p&gt;Q. Does Faktory require Redis?&lt;br/&gt;
-A. No. Faktory is a standalone 64-bit Linux binary; it needs a Faktory worker
-process to consume jobs.  Redis -&amp;gt; Sidekiq == Faktory -&amp;gt; Faktory worker&lt;/p&gt;
-
-&lt;p&gt;Q. Are there other things like Faktory?&lt;br/&gt;
-A. Yep, beanstalkd, starling, gearman and others.  Faktory aims to be
-more feature-rich and better supported.  Many of Faktory&#39;s OSS competitors
-are &amp;quot;dead&amp;quot; and no longer supported.  I am fortunate enough to have both
-expertise in background jobs and a business model to support Faktory long-term.&lt;/p&gt;
-
-&lt;p&gt;Q. What&#39;s going to happen to Sidekiq?&lt;br/&gt;
-A. Nothing.  It&#39;s stable, powerful and fully supported.  If you have a
-Ruby/Rails app, it&#39;s a natural choice for background jobs.&lt;/p&gt;
-
-&lt;p&gt;Q. Will you have a commercial version, just like Sidekiq Pro and Enterprise?&lt;br/&gt;
-A. If Faktory sees good uptake, likely yes in 2018.
-Several features like periodic jobs, batches and unique jobs would fit
-very well into a &amp;quot;Faktory Pro&amp;quot;.&lt;/p&gt;
-
-&lt;p&gt;Q. Can I help?&lt;br/&gt;
-A. Absolutely.  Faktory&#39;s GitHub repo is &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;contribsys/faktory&lt;/a&gt;;
-try it out and leave feedback.  Build a worker library in your language
-of choice.  I&#39;m fluent in Ruby/Go but not much beyond that.&lt;/p&gt;
-
-&lt;p&gt;Q. Can Faktory be provisioned and managed as a SaaS?&lt;br/&gt;
-A. I have no plans to do so myself but I imagine this would be useful to many.
-I would be happy to chat privately with people interested in offering
-Faktory as a service, Heroku add-on, etc.&lt;/p&gt;
-
-&lt;p&gt;Q. Man, I love the q in Sidekiq.  Why no q?&lt;br/&gt;
-A. Because &amp;quot;Faqtory&amp;quot; sounds like software for building this FAQ and
-a multi-billion dollar conglomerate has the worldwide trademark
-for &amp;quot;Worq&amp;quot;.&lt;/p&gt;
-
-&lt;p&gt;Q. Where can I ask further questions?&lt;br/&gt;
-A. Since you&#39;ve read to the bottom, you get top sekret access to the
-&lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;contribsys/faktory&lt;/a&gt; Gitter chat room.
-I&#39;ll hang out there when I can. Stop by and say hi!&lt;/p&gt;
 </description>
     </item>
     
