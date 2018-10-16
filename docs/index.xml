@@ -8,8 +8,90 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Fri, 12 Oct 2018 08:59:06 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 16 Oct 2018 09:26:18 -0700</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Faktory 0.9.0 - Hello, Redis!</title>
+      <link>https://www.mikeperham.com/2018/10/16/faktory-0.9.0---hello-redis/</link>
+      <pubDate>Tue, 16 Oct 2018 09:26:18 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2018/10/16/faktory-0.9.0---hello-redis/</guid>
+      <description>
+
+&lt;p&gt;Faktory is my new background job system which brings Sidekiq-like background jobs to all languages.
+Want Sidekiq in PHP? Python? JavaScript? You got it!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;./images/faktory-ui.png&#34; alt=&#34;faktory ui&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Faktory 0.9 has just been released with a major architectural overhaul.
+I&#39;ve replaced the previous storage engine, RocksDB, with Redis.
+This change had hugely important, very good downstream effects!&lt;/p&gt;
+
+&lt;p&gt;Want to try Faktory?  &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/&#34;&gt;The wiki has everything you need&lt;/a&gt;!&lt;/p&gt;
+
+&lt;h2 id=&#34;why-redis&#34;&gt;Why Redis?&lt;/h2&gt;
+
+&lt;p&gt;So why did I replace RocksDB?
+RocksDB has two advantages over Redis:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is very fast&lt;/li&gt;
+&lt;li&gt;it is embeddable (which means it links into your process and provides an API your code calls directly).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The problem is that &lt;strong&gt;everything else&lt;/strong&gt; is a disadvantage:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It has dozens of barely documented options&lt;/li&gt;
+&lt;li&gt;It&#39;s written in C++, meaning a much more complex build process to embed it into a Go process&lt;/li&gt;
+&lt;li&gt;It has virtually no usage outside of large corporate silos (e.g. Facebook,
+Yahoo, Pinterest) where internal developers can learn and maintain it.&lt;/li&gt;
+&lt;li&gt;Its API is key/value only, very low-level, with no higher-level structures supported.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Redis, on the other hand:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;has lots of great documentation.&lt;/li&gt;
+&lt;li&gt;used everywhere, by everyone.&lt;/li&gt;
+&lt;li&gt;has lots of commercial support and offerings.&lt;/li&gt;
+&lt;li&gt;has a broad, stable, high-level API&lt;/li&gt;
+&lt;li&gt;is not much slower, only 10-20%.  It&#39;ll still handle 1000s of jobs/sec.&lt;/li&gt;
+&lt;li&gt;and lastly, I have years of experience supporting it in production!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now instead of a directory full of obscure files, we have a single
+&lt;code&gt;faktory.rdb&lt;/code&gt; file with all data.  Now we can use &lt;code&gt;redis-cli&lt;/code&gt; and RDB
+tools to introspect the datastore, monitor commands in real-time, use
+existing Redis monitoring integrations to monitor Faktory&#39;s storage.
+&lt;strong&gt;When we build on the shoulders of giants, the view is pretty good.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The only issue I had to solve is how to &amp;quot;embed&amp;quot; Redis?  I can&#39;t link it
+into the process directly so instead I updated Faktory to start Redis as
+a child process and maintain a named socket to it.  By keeping it local,
+using a named socket, we ensure our usage of Redis is both high
+performance and secure (since Redis does not listen on the network).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;./images/faktory-logo.png&#34; alt=&#34;faktory logo&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;what-s-upcoming&#34;&gt;What&#39;s Upcoming?&lt;/h2&gt;
+
+&lt;p&gt;With 0.9 out, I&#39;m very close to releasing Faktory Pro, my first commercially supported version of Faktory!
+The initial feature list:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Cron jobs - enqueue jobs on a periodic schedule&lt;/li&gt;
+&lt;li&gt;Expiring jobs - throw away jobs which have passed a given expiration date&lt;/li&gt;
+&lt;li&gt;Redis Gateway - expose Redis on a TCP port so you can attach a replica to it for real-time replication&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;em&gt;This feature list is very likely to grow over time.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/contribsys/faktory/wiki/&#34;&gt;See the Faktory wiki for how to install and lots of documentation&lt;/a&gt;.
+Join us in &lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;the chatroom&lt;/a&gt; or &lt;a href=&#34;https://github.com/contribsys/faktory/issues/&#34;&gt;open an issue&lt;/a&gt; if you have questions.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Testing Ruby&#39;s CGI</title>
@@ -875,86 +957,6 @@ jobs.duplicate.$WorkerClassName - metric with the worker&#39;s class name includ
 
 &lt;p&gt;With this, your operations dashboards should be more useful than ever.
 Want more metrics?  &lt;a href=&#34;https://github.com/mperham/sidekiq/issues/new&#34;&gt;Open an issue!&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Getting Started with Faktory</title>
-      <link>https://www.mikeperham.com/2017/11/13/getting-started-with-faktory/</link>
-      <pubDate>Mon, 13 Nov 2017 08:25:10 -0800</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2017/11/13/getting-started-with-faktory/</guid>
-      <description>
-
-&lt;p&gt;When I &lt;a href=&#34;//www.mikeperham.com/2017/10/24/introducing-faktory/&#34;&gt;unveiled my new background job
-system&lt;/a&gt; Faktory
-three weeks ago, I didn&#39;t have an easy path for people to install and
-try Faktory themselves.  Now there is; let&#39;s get it running!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;//www.mikeperham.com/images/faktory-logo.png&#34; alt=&#34;faktory&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;homebrew&#34;&gt;Homebrew&lt;/h2&gt;
-
-&lt;p&gt;If you are running macOS, it&#39;s installable with Homebrew:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;gt; brew tap contribsys/faktory
-&amp;gt; brew install faktory
-...two minutes pass...
-&amp;gt; faktory
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now open your browser to &lt;a href=&#34;http://localhost:7420&#34;&gt;http://localhost:7420&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;docker&#34;&gt;Docker&lt;/h2&gt;
-
-&lt;p&gt;If you have Docker, it&#39;s easy to pull an image:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;docker pull contribsys/faktory:latest&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The command to run it is rather involved, &lt;a href=&#34;https://hub.docker.com/r/contribsys/faktory/&#34;&gt;see the description&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;workers&#34;&gt;Workers&lt;/h2&gt;
-
-&lt;p&gt;Faktory is only one half of the puzzle, now you need to install a worker
-package which can execute jobs that are pushed to Faktory.  I launched
-Faktory with Ruby and Go worker packages, now there are a half dozen
-libraries for other languages:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/contribsys/faktory_worker_ruby&#34;&gt;faktory_worker_ruby&lt;/a&gt; - Ruby&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/contribsys/faktory_worker_go&#34;&gt;faktory_worker_go&lt;/a&gt; - Go&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/cdrx/faktory_worker_python&#34;&gt;faktory_worker_python&lt;/a&gt; - Python&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/basekit/faktory_worker_php&#34;&gt;faktory_worker_php&lt;/a&gt; - PHP&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/jonhoo/faktory-rs&#34;&gt;faktory-rs&lt;/a&gt; - Rust&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/cjbottaro/faktory_worker_ex&#34;&gt;faktory_worker_ex&lt;/a&gt; - Elixir&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/jbielick/faktory_worker_node&#34;&gt;faktory_worker_node&lt;/a&gt; - Node&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/Razenpok/Razensoft.Faktory&#34;&gt;Razensoft.Faktory&lt;/a&gt; - .NET&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Check out those projects and their README for more info on how to get
-started with them.&lt;/p&gt;
-
-&lt;h2 id=&#34;ruby&#34;&gt;Ruby&lt;/h2&gt;
-
-&lt;p&gt;If you want to use Faktory with Ruby jobs, I&#39;ve written up a Getting
-Started guide which shows you the few steps necessary to get jobs
-running with &lt;code&gt;faktory_worker_ruby&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Getting-Started-Ruby&#34;&gt;Getting Started with Faktory and Ruby&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;thanks&#34;&gt;Thanks&lt;/h2&gt;
-
-&lt;p&gt;The response to Faktory from other open source developers has been
-tremendous.  Lots of pull requests and issues reported, much discussion in the
-issues and chatroom and lots of work still to be done.  Special thanks
-to andrewstucki, cdrx, jonhoo, jweslley, and all the people who&#39;ve
-built their own worker packages.&lt;/p&gt;
-
-&lt;h2 id=&#34;wrapup&#34;&gt;Wrapup&lt;/h2&gt;
-
-&lt;p&gt;Let us know if you have any problems -- &lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;pop into the Faktory chatroom&lt;/a&gt; and say hi or &lt;a href=&#34;https://github.com/contribsys/faktory/issues/new&#34;&gt;open a new issue&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
