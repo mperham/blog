@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
-    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
+    <link rel="shortcut icon" href="/favicon.ico">
     
     <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
     <link rel="me" href="https://mastodon.xyz/@mperham">
@@ -36,9 +36,9 @@
                 
                     <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
                 
-                    <li><a href="../../../../events/" >Events</a></li>
+                    <li><a href="/events/" >Events</a></li>
                 
-                    <li><a href="../../../../about/" >About</a></li>
+                    <li><a href="/about/" >About</a></li>
                 
                 
             </ul>
@@ -50,7 +50,7 @@
       <h1>Using ActiveRecord with EventMachine</h1>
       <small class="post-meta">Mar 30, 2010</small>
       <div class="post-content">
-        <p>Given all my work with Fibers and EventMachine over the last three months, it should come as no surprise that I've been working on infrastructure based on Fibers and EventMachine to get maximum scalability without the callback style of code which I dislike for many reasons. <a href="../../../../2010/01/27/scalable-ruby-processing-with-eventmachine/">Watch my talk on scaling with EventMachine</a> if you need more background on the problem.</p>
+        <p>Given all my work with Fibers and EventMachine over the last three months, it should come as no surprise that I've been working on infrastructure based on Fibers and EventMachine to get maximum scalability without the callback style of code which I dislike for many reasons. <a href="/2010/01/27/scalable-ruby-processing-with-eventmachine/">Watch my talk on scaling with EventMachine</a> if you need more background on the problem.</p>
 
 <p>Now that I have RabbitMQ, Cassandra, Solr and the Amazon AWS services evented, the only holdup was ActiveRecord. Some people may advocate using another ORM layer but when you have 2-3 other Rails apps, all sharing 100+ models, you can't afford to maintain two separate ORM layers. Plus, frankly I like the Rails stack: it works pretty well, is thoroughly documented and every Ruby developer is familiar with it.</p>
 

@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
-    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
+    <link rel="shortcut icon" href="/favicon.ico">
     
     <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
     <link rel="me" href="https://mastodon.xyz/@mperham">
@@ -36,9 +36,9 @@
                 
                     <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
                 
-                    <li><a href="../../../../events/" >Events</a></li>
+                    <li><a href="/events/" >Events</a></li>
                 
-                    <li><a href="../../../../about/" >About</a></li>
+                    <li><a href="/about/" >About</a></li>
                 
                 
             </ul>
@@ -50,7 +50,7 @@
       <h1>Cassandra Internals -- Tricks!</h1>
       <small class="post-meta">Mar 20, 2010</small>
       <div class="post-content">
-        <p>In my previous posts, I covered how Cassandra <a href="../../../../2010/03/17/cassandra-internals-reading/">reads</a> and <a href="../../../../2010/03/13/cassandra-internals-writing/">writes</a> data. In this post, I want to explain some of the trickery that Cassandra uses to provide a scalable distributed system.</p>
+        <p>In my previous posts, I covered how Cassandra <a href="/2010/03/17/cassandra-internals-reading/">reads</a> and <a href="/2010/03/13/cassandra-internals-writing/">writes</a> data. In this post, I want to explain some of the trickery that Cassandra uses to provide a scalable distributed system.</p>
 
 <p><strong>Gossip</strong></p>
 
@@ -58,7 +58,7 @@
 
 <p><strong>Hinted Handoff</strong></p>
 
-<p>In <a href="../../../../2010/03/13/cassandra-internals-writing/">writing</a>, I mentioned that Cassandra stores a copy of the data on N nodes. The client can select a consistency level for a write based on the importance of the data -- for example, ConsistencyLevel.QUORUM means that a majority of those N nodes must reply success for the write to be considered successful.</p>
+<p>In <a href="/2010/03/13/cassandra-internals-writing/">writing</a>, I mentioned that Cassandra stores a copy of the data on N nodes. The client can select a consistency level for a write based on the importance of the data -- for example, ConsistencyLevel.QUORUM means that a majority of those N nodes must reply success for the write to be considered successful.</p>
 
 <p>What happens if one of those nodes goes down? How do those writes propagate to that node later? Cassandra uses a technique known as <a href="http://wiki.apache.org/cassandra/HintedHandoff">hinted handoff</a>, where the data is written to anther random node X to be stored and replayed for node Y when it comes back online (remember that gossip will quickly tell X when Y comes online). Hinted handoff ensures that node Y will quickly match the rest of the cluster. Note that read repair would still eventually &quot;fix&quot; the old data if hinted handoff did not work for some reason but only once the client asked for that data.</p>
 

@@ -22,7 +22,7 @@
 &lt;p&gt;Faktory is my new background job system which brings Sidekiq-like background jobs to all languages.
 Want Sidekiq in PHP? Python? JavaScript? You got it!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;./images/faktory-ui.png&#34; alt=&#34;faktory ui&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.mikeperham.com/images/faktory-ui.png&#34; alt=&#34;faktory ui&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Faktory 0.9 has just been released with a major architectural overhaul.
 I&#39;ve replaced the previous storage engine, RocksDB, with Redis.
@@ -73,7 +73,7 @@ a child process and maintain a named socket to it.  By keeping it local,
 using a named socket, we ensure our usage of Redis is both high
 performance and secure (since Redis does not listen on the network).&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;./images/faktory-logo.png&#34; alt=&#34;faktory logo&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.mikeperham.com/images/faktory-logo.png&#34; alt=&#34;faktory logo&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;what-s-upcoming&#34;&gt;What&#39;s Upcoming?&lt;/h2&gt;
 
@@ -103,7 +103,7 @@ Join us in &lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;the chat
 
 &lt;p&gt;CGI is a standard for generating HTML pages from scripts executed as
 child processes by a web server. I explained CGI and how I use it in a
-previous post, &lt;a href=&#34;./2015/01/05/cgi-rubys-bare-metal/&#34;&gt;CGI: Ruby&#39;s Bare Metal&lt;/a&gt;.
+previous post, &lt;a href=&#34;https://www.mikeperham.com/2015/01/05/cgi-rubys-bare-metal/&#34;&gt;CGI: Ruby&#39;s Bare Metal&lt;/a&gt;.
 I like to use CGI because it means that I don&#39;t have to run any Ruby app
 server (e.g. puma, passenger, unicorn) 24/7.  Less moving parts == more
 robust!&lt;/p&gt;
@@ -692,7 +692,7 @@ It gives a free performance improvement to all your users as long as you don&#39
 &lt;figure&gt;&lt;img src=&#34;//www.mikeperham.com/images/sidekiq.png&#34; width=&#34;400&#34;/&gt;&lt;/figure&gt;
 &lt;/div&gt;
 
-&lt;p&gt;&lt;a href=&#34;./2012/02/07/sidekiq-simple-efficient-messaging-for-rails/&#34;&gt;Six years ago I shipped Sidekiq v0.5.0&lt;/a&gt; and changed my life.
+&lt;p&gt;&lt;a href=&#34;https://www.mikeperham.com/2012/02/07/sidekiq-simple-efficient-messaging-for-rails/&#34;&gt;Six years ago I shipped Sidekiq v0.5.0&lt;/a&gt; and changed my life.
 I talked to some developers recently:&lt;/p&gt;
 
 &lt;blockquote&gt;
