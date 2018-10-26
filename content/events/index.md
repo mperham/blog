@@ -1,39 +1,34 @@
 ---
-title: Railsconf 2018 Events
+title: Rubyconf 2018 Events
 author: Mike Perham
 type: pages
 ---
 
-This is the list of **official** and unofficial Railsconf events.  Official,
-sponsored events can be found on the [Railsconf](http://railsconf.com/) site.
-Send me events so I can list them here, mperham AT gmail or @mperham.
+This is the list of **official** and unofficial Rubyconf events.  Official,
+sponsored events can be found on the [Rubyconf](http://rubyconf.com/) site.
+Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
-## Monday 4/16
+## Monday 11/12
 
-* AppSignal Pre-conf meetup, first few rounds on @appsignal, 5-10pm, [RSVP](https://www.eventbrite.com/e/pre-railsconf-meetup-tickets-45111838724)
+* Send me the time, place and a link to more info!
 
-## Tuesday 4/17
+## Tuesday 11/13
 
-* Do you music?  Jam session with @aspleenic, 7:00pm, Room 306, [song
-list](http://github.com/aspleenic/railsconf-2011-musicjam)
+* Send me the time, place and a link to more info!
 
-## Wednesday 4/18
+## Wednesday 11/4
 
-* Railsconf5k, Westin Lobby, 7am. @barrettclark
-* #RubyKaraoke with EngineYard, Hard Rock Cafe, 8pm, [RSVP](https://www.engineyard.com/railskaraoke)
-* @RailsTutorial Beerware Night with @mhartl, 7-10pm, [signup](https://www.eventbrite.com/e/7th-semi-annual-rails-tutorial-beerware-night-tickets-45036732078)
+* Send me the time, place and a link to more info!
 
-## Thursday 4/19
+## Thursday 11/15
 
-* [Greater than Code](https://www.greaterthancode.com/) live podcast recording, Show Office A room, 2:40pm.
-  Live audience welcomed and desired, swag will be given away.
-* **Board Game Night**, Westin 2nd Floor, 8:30pm. @mperham
+* Send me the time, place and a link to more info!
 
-## Friday 4/20 and Saturday 4/21
+## Friday 11/16
 
-* Heartifacts - conf around software and mental health, [https://codeandsupply.co/heartifacts](https://codeandsupply.co/heartifacts)
+* Send me the time, place and a link to more info!
 
 
 ### Hotel
 
-[The Westin Convention Center](http://www.westinpittsburgh.com/)
+[The Millennium Biltmore](https://www.millenniumhotels.com/en/los-angeles/millennium-biltmore-hotel-los-angeles/)
