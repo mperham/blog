@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
-    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
+    <link rel="shortcut icon" href="/favicon.ico">
     
     <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
     <link rel="me" href="https://mastodon.xyz/@mperham">
@@ -36,9 +36,9 @@
                 
                     <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
                 
-                    <li><a href="../../../../events/" >Events</a></li>
+                    <li><a href="/events/" >Events</a></li>
                 
-                    <li><a href="../../../../about/" >About</a></li>
+                    <li><a href="/about/" >About</a></li>
                 
                 
             </ul>
@@ -53,7 +53,7 @@
         
 
 <figure style="float:right">
-  <img src="../../../../wp-content/uploads/2015/02/sidekiq-pro.png" width="303" height="74"/>
+  <img src="/wp-content/uploads/2015/02/sidekiq-pro.png" width="303" height="74"/>
 </figure>
 
 <p>I'm happy to announce that <strong><a href="http://sidekiq.org/pro">Sidekiq Pro</a></strong> 2.0 is ready for general use.  There's two major features
@@ -63,18 +63,18 @@ and some refactoring you need to know about.</p>
 
 <p>Sidekiq allows you to fire off a set of jobs to process asynchronously but you don't know when the whole set of jobs are complete:</p>
 
-<p><img src="../../../../wp-content/uploads/2015/02/sidekiq.png" alt="no job workflow" /></p>
+<p><img src="/wp-content/uploads/2015/02/sidekiq.png" alt="no job workflow" /></p>
 
 <p>Sidekiq Pro provides the <strong>Batch</strong> abstraction, it represents a set of jobs; you can attach callbacks
 to be fired when the set of jobs has finished.  This allows more complex job workflows:</p>
 
-<p><img src="../../../../wp-content/uploads/2015/02/pro1.png" alt="simple job workflow" /></p>
+<p><img src="/wp-content/uploads/2015/02/pro1.png" alt="simple job workflow" /></p>
 
 <p>For 2.0, the Batch implementation and data model was overhauled for higher performance, much smaller size
 and <strong>Batches can now be nested</strong>: a job within a Batch can itself create a child Batch of jobs.  The callbacks for
 the parent batch will only be fired once the child batch callbacks have finished.</p>
 
-<p><img src="../../../../wp-content/uploads/2015/02/pro2.png" alt="complex job workflow" /></p>
+<p><img src="/wp-content/uploads/2015/02/pro2.png" alt="complex job workflow" /></p>
 
 <p>This was some of the hardest code I've ever written (it requires a bag of buzzwords: asynchronous, distributed,
 transactional, threadsafe and fast!) but I'm really proud of the outcome.  Sidekiq Pro should be

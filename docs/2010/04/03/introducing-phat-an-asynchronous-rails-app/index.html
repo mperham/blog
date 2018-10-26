@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../images/headshot-icon.png">
-    <link rel="shortcut icon" href="../../../../favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
+    <link rel="shortcut icon" href="/favicon.ico">
     
     <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
     <link rel="me" href="https://mastodon.xyz/@mperham">
@@ -36,9 +36,9 @@
                 
                     <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
                 
-                    <li><a href="../../../../events/" >Events</a></li>
+                    <li><a href="/events/" >Events</a></li>
                 
-                    <li><a href="../../../../about/" >About</a></li>
+                    <li><a href="/about/" >About</a></li>
                 
                 
             </ul>
@@ -71,7 +71,7 @@
 end
 </pre>
 
-<p>How does it work? If you want the nitty-gritty, <a href="../../../../2010/01/27/scalable-ruby-processing-with-eventmachine/">watch my talk on EventMachine and Fibers</a>. Everything that does network access ideally should be modified to be Fiber-aware. I've updated many gems to be Fiber-aware: <a href="http://github.com/mperham/memcache-client">memcache-client</a>, <a href="http://github.com/mperham/em_postgresql">em_postgresql</a> (and activerecord), cassandra, bunny and rsolr to name a few. You'll also need to run thin as your app server, since all of this code assumes it is executing within EventMachine.</p>
+<p>How does it work? If you want the nitty-gritty, <a href="/2010/01/27/scalable-ruby-processing-with-eventmachine/">watch my talk on EventMachine and Fibers</a>. Everything that does network access ideally should be modified to be Fiber-aware. I've updated many gems to be Fiber-aware: <a href="http://github.com/mperham/memcache-client">memcache-client</a>, <a href="http://github.com/mperham/em_postgresql">em_postgresql</a> (and activerecord), cassandra, bunny and rsolr to name a few. You'll also need to run thin as your app server, since all of this code assumes it is executing within EventMachine.</p>
 
 <p>Additionally we need to ensure that each request runs in its own Fiber. My new gem, <a href="http://github.com/mperham/rack-fiber_pool">rack-fiber_pool</a>, will do this for you, just add it as Rack middleware in <code>config/environment.rb</code>. Here's the basic configuration:</p>
 
