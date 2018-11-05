@@ -14,7 +14,8 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Tuesday 11/13
 
-* Send me the time, place and a link to more info!
+* Board games with @mperham, 8pm, Biltmore meeting room area,
+bring your favorite game!
 
 ## Wednesday 11/4
 
