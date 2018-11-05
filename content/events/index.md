@@ -14,12 +14,12 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Tuesday 11/13
 
-* Board games with @mperham, 8pm, Biltmore meeting room area,
-bring your favorite game!
+* Board games with @mperham, 8pm, location TBA, bring your favorite game!
+* Fair.com party, Biltmore Music room, 5:30pm, free food + drink
 
 ## Wednesday 11/4
 
-* Send me the time, place and a link to more info!
+* Fair.com party day 2, Biltmore Music room, 7pm, free food + drink
 
 ## Thursday 11/15
 
