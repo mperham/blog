@@ -18,8 +18,9 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 * Fair.com party, Biltmore Music room, 5:30pm
 * Board games with @mperham, 8pm, location TBA, bring your favorite game!
 
-## Wednesday 11/4
+## Wednesday 11/14
 
+* Rubyconf 5k, Biltmore lobby, 7am
 * **Weedmaps** happy hour, ask for location at Weedmaps booth, 8pm, RSVP above
 * Fair.com party day 2, Biltmore Music room, 7pm
 * **[#RubyKaraoke](https://www.eventbrite.com/e/ruby-conf-rubykaraoke-with-engine-yard-and-ruby-together-tickets-52178908520)**, Shrine, 8pm
