@@ -16,13 +16,14 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 * **NationBuilder happy hour**, Biltmore 2nd floor, 5:45pm, RSVP above
 * Fair.com party, Biltmore Music room, 5:30pm
-* Board games with @mperham, 8pm, location TBA, bring your favorite game!
+* Board games with @mperham, 8pm, Rendevous Court (past Biltmore elevators), bring your favorite game!
 
 ## Wednesday 11/14
 
 * Rubyconf 5k, Biltmore lobby, 7am
-* **Weedmaps** happy hour, ask for location at Weedmaps booth, 8pm, RSVP above
+* [8th Semi-Annual Rails Tutorial Beerware Night](https://www.eventbrite.com/e/8th-semi-annual-rails-tutorial-beerware-night-tickets-52328068662), 6-8pm
 * Fair.com party day 2, Biltmore Music room, 7pm
+* **Weedmaps** happy hour, ask for location at Weedmaps booth, 8pm, RSVP above
 * **[#RubyKaraoke](https://www.eventbrite.com/e/ruby-conf-rubykaraoke-with-engine-yard-and-ruby-together-tickets-52178908520)**, Shrine, 8pm
 
 ## Thursday 11/15
