@@ -22,7 +22,8 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 * Rubyconf 5k, Biltmore lobby, 7am
 * [8th Semi-Annual Rails Tutorial Beerware Night](https://www.eventbrite.com/e/8th-semi-annual-rails-tutorial-beerware-night-tickets-52328068662), 6-8pm
-* Fair.com party day 2, Biltmore Music room, 7pm
+* Fair.com party day 2, Biltmore Music room, 7pm,
+[RSVP](https://www.evite.com/event/0144IP734JG7KQN4AEPI4IDSBDBCTQ/activity)
 * **Weedmaps** happy hour, ask for location at Weedmaps booth, 8pm, RSVP above
 * **[#RubyKaraoke](https://www.eventbrite.com/e/ruby-conf-rubykaraoke-with-engine-yard-and-ruby-together-tickets-52178908520)**, Shrine, 8pm
 
