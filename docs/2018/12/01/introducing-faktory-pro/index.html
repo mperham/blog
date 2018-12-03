@@ -1,0 +1,159 @@
+  <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title> Introducing Faktory Pro </title>
+    
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <link href="" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
+                
+                    <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
+                
+                    <li><a href="/events/" >Events</a></li>
+                
+                    <li><a href="/about/" >About</a></li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    <div class="container page-wrap">
+      <h1>Introducing Faktory Pro</h1>
+      <small class="post-meta">Dec 1, 2018</small>
+      <div class="post-content">
+        
+
+<p>I'm happy to announce Faktory Pro, my commercial version of <a href="https://github.com/contribsys/faktory">Faktory</a>, is now available for purchase.
+Faktory is my next generation background job system which brings Sidekiq functionality to <strong>all programming languages</strong>.
+If you want background jobs in Python, JavaScript, PHP, Go, Ruby, or Rust, Faktory can work with them all!
+It gives you a standard job interface and conventions useful for all languages.</p>
+
+<p><img src="/images/faktory-ui.png" alt="faktory ui" /></p>
+
+<h2 id="why-jobs">Why Jobs?</h2>
+
+<p>I believe background jobs are the best architectural pattern for scaling typical
+business apps to many machines.  Sidekiq has been enormously successful
+because it implements that pattern and adds opinionated conventions
+which make the average developer's life much easier:</p>
+
+<ul>
+<li>A standard mechanism for implementing and creating a unit of work</li>
+<li>A standard process for error handling with automatic retries and backoff</li>
+<li>&quot;All-in-one&quot; packaging so the base package includes everything necessary: client API, worker process, management APIs, and a beautiful Web UI translated to 25 languages</li>
+</ul>
+
+<p>If you want to build and maintain your own low-level infrastructure, Faktory is not
+for you. If you want to build and scale a traditional business app as quickly and
+painlessly as possible, Faktory is designed for you.</p>
+
+<h2 id="features">Features</h2>
+
+<p>This initial launch includes these features but <strong>the Pro feature list here will grow over time</strong>.
+Notably I will implement as many of the <a href="https://sidekiq.org">commercial Sidekiq features</a> as possible.</p>
+
+<ol>
+<li><a href="https://github.com/contribsys/faktory/wiki/Pro-Cron">Cron jobs</a> - kick off jobs on a regular schedule.</li>
+<li><a href="https://github.com/contribsys/faktory/wiki/Pro-Redis-Gateway">Redis Gateway</a> - expose Redis to the network so you can take backups, set up a replica, etc.</li>
+<li><a href="https://github.com/contribsys/faktory/wiki/Pro-Expiring-Jobs">Expiring jobs</a> - configure jobs to expire if they have not successfully processed within some time interval</li>
+</ol>
+
+<p>Future features might include metrics, batches, unique jobs, encryption, Web UI search, etc.
+Faktory's different architecture means some features aren't possible but enables others that Sidekiq couldn't do well, like queue throttling.
+I'm exciting to see what new things are possible!</p>
+
+<h2 id="pricing">Pricing</h2>
+
+<p>Faktory Pro is a server you run and is priced <em>per production instance</em> at $149/mo for the first server and $49/mo for each additional server.
+Each Faktory Pro server can handle thousands of jobs per second under
+normal conditions.
+Testing, staging and development instances are unlimited and free.
+For the price of one consultant-hour per month, you get a well-maintained and well-supported feature-rich job system.</p>
+
+<p>You can <strong><a href="https://billing.contribsys.com/fpro/new.cgi">buy Faktory Pro</a></strong> right here.
+Got questions?
+Check out the <a href="https://github.com/contribsys/faktory/wiki">wiki documentation</a>, <a href="https://github.com/contribsys/faktory/issues/new">open an issue</a> or <a href="https://gitter.im/contribsys/faktory/">jump into the chatroom</a> and say hi!</p>
+
+        <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </div>
+    </div>
+    <footer class="site-footer">
+	<div class="container">
+		<h4>Mike Perham</h4>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>Ruby, OSS and the Internet</p>
+					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<p>
+						<span class="fa fa-fw fa-github"></span>
+						<a href="https://github.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-twitter"></span>
+						<a href="https://twitter.com/mperham">mperham</a>
+            <br/>
+						<span class="fa fa-fw fa-id-badge"></span>
+            <a rel="me" href="https://mastodon.xyz/@mperham">mperham@mastodon.xyz</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
+<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

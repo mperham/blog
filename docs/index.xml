@@ -8,8 +8,69 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Tue, 16 Oct 2018 09:26:18 -0700</lastBuildDate>
+    <lastBuildDate>Sat, 01 Dec 2018 10:13:45 -0800</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Introducing Faktory Pro</title>
+      <link>https://www.mikeperham.com/2018/12/01/introducing-faktory-pro/</link>
+      <pubDate>Sat, 01 Dec 2018 10:13:45 -0800</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2018/12/01/introducing-faktory-pro/</guid>
+      <description>
+
+&lt;p&gt;I&#39;m happy to announce Faktory Pro, my commercial version of &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt;, is now available for purchase.
+Faktory is my next generation background job system which brings Sidekiq functionality to &lt;strong&gt;all programming languages&lt;/strong&gt;.
+If you want background jobs in Python, JavaScript, PHP, Go, Ruby, or Rust, Faktory can work with them all!
+It gives you a standard job interface and conventions useful for all languages.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://www.mikeperham.com/images/faktory-ui.png&#34; alt=&#34;faktory ui&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;why-jobs&#34;&gt;Why Jobs?&lt;/h2&gt;
+
+&lt;p&gt;I believe background jobs are the best architectural pattern for scaling typical
+business apps to many machines.  Sidekiq has been enormously successful
+because it implements that pattern and adds opinionated conventions
+which make the average developer&#39;s life much easier:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A standard mechanism for implementing and creating a unit of work&lt;/li&gt;
+&lt;li&gt;A standard process for error handling with automatic retries and backoff&lt;/li&gt;
+&lt;li&gt;&amp;quot;All-in-one&amp;quot; packaging so the base package includes everything necessary: client API, worker process, management APIs, and a beautiful Web UI translated to 25 languages&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If you want to build and maintain your own low-level infrastructure, Faktory is not
+for you. If you want to build and scale a traditional business app as quickly and
+painlessly as possible, Faktory is designed for you.&lt;/p&gt;
+
+&lt;h2 id=&#34;features&#34;&gt;Features&lt;/h2&gt;
+
+&lt;p&gt;This initial launch includes these features but &lt;strong&gt;the Pro feature list here will grow over time&lt;/strong&gt;.
+Notably I will implement as many of the &lt;a href=&#34;https://sidekiq.org&#34;&gt;commercial Sidekiq features&lt;/a&gt; as possible.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Pro-Cron&#34;&gt;Cron jobs&lt;/a&gt; - kick off jobs on a regular schedule.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Pro-Redis-Gateway&#34;&gt;Redis Gateway&lt;/a&gt; - expose Redis to the network so you can take backups, set up a replica, etc.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Pro-Expiring-Jobs&#34;&gt;Expiring jobs&lt;/a&gt; - configure jobs to expire if they have not successfully processed within some time interval&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Future features might include metrics, batches, unique jobs, encryption, Web UI search, etc.
+Faktory&#39;s different architecture means some features aren&#39;t possible but enables others that Sidekiq couldn&#39;t do well, like queue throttling.
+I&#39;m exciting to see what new things are possible!&lt;/p&gt;
+
+&lt;h2 id=&#34;pricing&#34;&gt;Pricing&lt;/h2&gt;
+
+&lt;p&gt;Faktory Pro is a server you run and is priced &lt;em&gt;per production instance&lt;/em&gt; at $149/mo for the first server and $49/mo for each additional server.
+Each Faktory Pro server can handle thousands of jobs per second under
+normal conditions.
+Testing, staging and development instances are unlimited and free.
+For the price of one consultant-hour per month, you get a well-maintained and well-supported feature-rich job system.&lt;/p&gt;
+
+&lt;p&gt;You can &lt;strong&gt;&lt;a href=&#34;https://billing.contribsys.com/fpro/new.cgi&#34;&gt;buy Faktory Pro&lt;/a&gt;&lt;/strong&gt; right here.
+Got questions?
+Check out the &lt;a href=&#34;https://github.com/contribsys/faktory/wiki&#34;&gt;wiki documentation&lt;/a&gt;, &lt;a href=&#34;https://github.com/contribsys/faktory/issues/new&#34;&gt;open an issue&lt;/a&gt; or &lt;a href=&#34;https://gitter.im/contribsys/faktory/&#34;&gt;jump into the chatroom&lt;/a&gt; and say hi!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Faktory 0.9.0 - Hello, Redis!</title>
@@ -893,70 +954,6 @@ Further security improvements to the Web UI are always welcome.&lt;/p&gt;
 And as I said before, I&#39;ve heard of several successful rollouts to production.
 If you were reluctant to try out Faktory before, it&#39;s time to start looking into it!
 See my &lt;a href=&#34;http://www.mikeperham.com/2017/11/13/getting-started-with-faktory/&#34;&gt;Getting Started&lt;/a&gt; guide.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Sidekiq Pro Statsd support -- new and improved!</title>
-      <link>https://www.mikeperham.com/2017/12/11/sidekiq-pro-statsd-support----new-and-improved/</link>
-      <pubDate>Mon, 11 Dec 2017 12:45:07 -0800</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2017/12/11/sidekiq-pro-statsd-support----new-and-improved/</guid>
-      <description>
-
-&lt;div style=&#34;float: right; padding-left: 10px&#34;&gt;
-&lt;figure&gt;
-&lt;img src=&#34;//www.mikeperham.com/images/statsd.png&#34;/&gt;
-&lt;figcaption&gt;&lt;small&gt;Drivy&#39;s impressive Sidekiq dashboard [&lt;a href=&#34;https://drivy.engineering/sidekiq-instrumentation/&#34;&gt;source&lt;/a&gt;]&lt;/small&gt;&lt;/figcaption&gt;
-&lt;/figure&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Several customers have been asking for more metrics to track Sidekiq
-internals: when is a job dropped due to uniqueness or expiration?  I&#39;ve
-had to put off the work while working on
-&lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt; but recently I took a week off
-to focus on Sidekiq and implement this feature.&lt;/p&gt;
-
-&lt;h2 id=&#34;new-and-improved&#34;&gt;New and Improved&lt;/h2&gt;
-
-&lt;p&gt;Sidekiq Pro 3.6 has a brand new Statsd metrics subsystem.  Statsd is a
-de facto universal standard for metrics in open source software, created by Etsy.  Even if you
-use another system like InfluxDB, Prometheus or Datadog, every
-metrics system will have an adapter or proxy to convert Statsd
-metrics into their own internal format.&lt;/p&gt;
-
-&lt;p&gt;You plug in the Statsd client in your initializer and Sidekiq Pro will add metrics:&lt;/p&gt;
-
-&lt;div style=&#34;clear: both&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;statsd-ruby&amp;#39;&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Pro&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;statsd &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;{ &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Statsd&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;127.0.0.1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;8125&lt;/span&gt;) }&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Note that it&#39;s a Proc; Sidekiq Pro uses a connection pool with several clients so a
-single global client doesn&#39;t become a source of thread and socket contention.&lt;/p&gt;
-
-&lt;h2 id=&#34;more-metrics&#34;&gt;More Metrics&lt;/h2&gt;
-
-&lt;p&gt;Sidekiq Pro now publishes several new metrics:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;jobs.expired - when a job is expired
-jobs.recovered.push - when a job is recovered by reliable_push after a network outage
-jobs.recovered.fetch - when a job is recovered by super_fetch after a process crash
-batch.created - when a batch is created
-batch.complete - when a batch is completed
-batch.success - when a batch is successful
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Future versions of Sidekiq Enterprise will also publish more metrics
-based on their features.  A sample:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;jobs.periodic.created - enqueued a cron job
-leader.election - Sidekiq cluster changed leadership
-jobs.duplicate - a job was not enqueued because it was not unique
-jobs.duplicate.$WorkerClassName - metric with the worker&#39;s class name included, for debugging
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With this, your operations dashboards should be more useful than ever.
-Want more metrics?  &lt;a href=&#34;https://github.com/mperham/sidekiq/issues/new&#34;&gt;Open an issue!&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
