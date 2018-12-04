@@ -58,6 +58,12 @@ Notably I will implement as many of the &lt;a href=&#34;https://sidekiq.org&#34;
 Faktory&#39;s different architecture means some features aren&#39;t possible but enables others that Sidekiq couldn&#39;t do well, like queue throttling.
 I&#39;m exciting to see what new things are possible!&lt;/p&gt;
 
+&lt;h2 id=&#34;how-to-try-it&#34;&gt;How to Try It&lt;/h2&gt;
+
+&lt;p&gt;There is a macOS binary of Faktory Pro available for free trial on your
+local laptop on the &lt;a href=&#34;https://github.com/contribsys/faktory/releases&#34;&gt;Faktory releases&lt;/a&gt; page.
+Additionally each sale comes with a 14 day trial period -- you won&#39;t be charged for two weeks.&lt;/p&gt;
+
 &lt;h2 id=&#34;pricing&#34;&gt;Pricing&lt;/h2&gt;
 
 &lt;p&gt;Faktory Pro is a server you run and is priced &lt;em&gt;per production instance&lt;/em&gt; at $149/mo for the first server and $49/mo for each additional server.

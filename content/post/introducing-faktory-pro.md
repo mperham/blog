@@ -39,6 +39,11 @@ Future features might include metrics, batches, unique jobs, encryption, Web UI 
 Faktory's different architecture means some features aren't possible but enables others that Sidekiq couldn't do well, like queue throttling.
 I'm exciting to see what new things are possible!
 
+## How to Try It
+
+There is a macOS binary of Faktory Pro available for free trial on your
+local laptop on the [Faktory releases](https://github.com/contribsys/faktory/releases) page.
+Additionally each sale comes with a 14 day trial period -- you won't be charged for two weeks.
 
 ## Pricing
 
