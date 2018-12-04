@@ -56,7 +56,7 @@ Notably I will implement as many of the &lt;a href=&#34;https://sidekiq.org&#34;
 
 &lt;p&gt;Future features might include metrics, batches, unique jobs, encryption, Web UI search, etc.
 Faktory&#39;s different architecture means some features aren&#39;t possible but enables others that Sidekiq couldn&#39;t do well, like queue throttling.
-I&#39;m exciting to see what new things are possible!&lt;/p&gt;
+I&#39;m excited to see what new things are possible!&lt;/p&gt;
 
 &lt;h2 id=&#34;how-to-try-it&#34;&gt;How to Try It&lt;/h2&gt;
 
