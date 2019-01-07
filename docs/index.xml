@@ -80,10 +80,10 @@ Check out the &lt;a href=&#34;https://github.com/contribsys/faktory/wiki&#34;&gt
     
     <item>
       <title>Faktory 0.9.0 - Hello, Redis!</title>
-      <link>https://www.mikeperham.com/2018/10/16/faktory-0.9.0---hello-redis/</link>
+      <link>https://www.mikeperham.com/2018/10/16/faktory-0.9.0-hello-redis/</link>
       <pubDate>Tue, 16 Oct 2018 09:26:18 -0700</pubDate>
       <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2018/10/16/faktory-0.9.0---hello-redis/</guid>
+      <guid>https://www.mikeperham.com/2018/10/16/faktory-0.9.0-hello-redis/</guid>
       <description>
 
 &lt;p&gt;Faktory is my new background job system which brings Sidekiq-like background jobs to all languages.
@@ -621,12 +621,12 @@ big success&lt;/a&gt;:&lt;/p&gt;
 &lt;p&gt;Want to try jemalloc on OS X?
 My installed rubies seem to hardcode the memory allocator so you might need to build MRI with jemalloc specifically.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;brew install jemalloc
-&lt;span style=&#34;color:#75715e&#34;&gt;# Now install Ruby with jemalloc enabled
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#   with rbenv:
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#     RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install 2.5.1
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#   with ruby-install
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#     ruby-install ruby-2.5.1 -- --with-jemalloc
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;chruby ruby-2.5.1
+&lt;span style=&#34;color:#75715e&#34;&gt;# Now install Ruby with jemalloc enabled&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#   with rbenv:&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#     RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install 2.5.1&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#   with ruby-install&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#     ruby-install ruby-2.5.1 -- --with-jemalloc&lt;/span&gt;
+chruby ruby-2.5.1
 MALLOC_CONF&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;stats_print:true irb&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;If you see lots of arcane stats print out upon exiting IRB, jemalloc is running in your Ruby.
 Make sure to verify your Ruby is actually running jemalloc; it is easy to misconfigure and have it silently fall back to the default allocator.&lt;/p&gt;

@@ -51,8 +51,6 @@
       <div class="post-content">
         <p>We're actually starting to run the new FiveRuns service daemons internally and found that they were dying due to various issues so I integrated a little bit of ActionMailer code to email the dev team when a daemon dies with the relevant details.  Below is what I did -- do you have any tips for monitoring Ruby daemon processes?</p>
 
-<p></p>
-
 <p>First we need to create an ActionMailer which will send email:</p>
 
 <pre>class DemiseMailer &lt; ActionMailer::Base

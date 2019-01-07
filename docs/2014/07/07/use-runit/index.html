@@ -51,8 +51,6 @@
       <div class="post-content">
         <p>I've been exploring a few new (to me!) technologies recently and <a href="http://smarden.org/runit/">runit</a> is one that I've come away really impressed with. Linux distros have a few competing init services available: Upstart, systemd, runit or creaky old sysvinit. Having researched all of them and having built lots of server-side systems over the last two decades, I can firmly recommend runit if you want a server-focused, reliable init system based on the traditional Unix philosophy.</p>
 
-<p></p>
-
 <p>The point of an init system is to start and supervise processes when the machine boots up. If you're building a modern web site, you want memcached, redis, postgresql, mysql and other daemons to start up immediately when the machine boots. Supervision means the init system will restart the process immediately if it disappears for some reason, e.g. a crash. Reliability of the init system is paramount so simplicity is a key attribute.</p>
 
 <p>Unfortunately newer init systems like systemd have become increasingly complex to handle more desktop-focused requirements. Here's a <a href="http://www.freedesktop.org/software/systemd/man/#S">list of systemd APIs</a>: does having 100s of public API functions and commands inspire confidence in its reliability?</p>

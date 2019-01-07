@@ -1,5 +1,5 @@
 build:
-	hugo -DF
+	hugo -F
 
 run:
 	open http://localhost:1313/

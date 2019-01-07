@@ -53,8 +53,7 @@
 
 <p>The original Dynamo paper created a wave of interest in the <a href="https://en.wikipedia.org/wiki/CAP_theorem">CAP theorem</a> and gave rise to the recent crop of distributed databases: Cassandra, Riak, et al. These systems are generally AP where C can be tuned to provide some guarantee of consistency, i.e. they do their best to provide CAP according to the application's needs. For instance, you might have a cluster of 5 nodes where a write to the cluster will return success if 3 of the nodes acknowledge the write. The cluster will still be available even if two of the machines fail.</p>
 
-<p>In theory they are a great way to ensure availability to your application in the face of network failures. In practice, I believe <strong>these databases are so complex that they often provide less availability than a simpler CP system like a SQL database.</strong><br />
-</p>
+<p>In theory they are a great way to ensure availability to your application in the face of network failures. In practice, I believe <strong>these databases are so complex that they often provide less availability than a simpler CP system like a SQL database.</strong></p>
 
 <p>Consider:</p>
 

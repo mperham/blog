@@ -106,12 +106,12 @@ big success</a>:</p>
 <p>Want to try jemalloc on OS X?
 My installed rubies seem to hardcode the memory allocator so you might need to build MRI with jemalloc specifically.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">brew install jemalloc
-<span style="color:#75715e"># Now install Ruby with jemalloc enabled
-</span><span style="color:#75715e">#   with rbenv:
-</span><span style="color:#75715e">#     RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install 2.5.1
-</span><span style="color:#75715e">#   with ruby-install
-</span><span style="color:#75715e">#     ruby-install ruby-2.5.1 -- --with-jemalloc
-</span><span style="color:#75715e"></span>chruby ruby-2.5.1
+<span style="color:#75715e"># Now install Ruby with jemalloc enabled</span>
+<span style="color:#75715e">#   with rbenv:</span>
+<span style="color:#75715e">#     RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install 2.5.1</span>
+<span style="color:#75715e">#   with ruby-install</span>
+<span style="color:#75715e">#     ruby-install ruby-2.5.1 -- --with-jemalloc</span>
+chruby ruby-2.5.1
 MALLOC_CONF<span style="color:#f92672">=</span>stats_print:true irb</code></pre></div>
 <p>If you see lots of arcane stats print out upon exiting IRB, jemalloc is running in your Ruby.
 Make sure to verify your Ruby is actually running jemalloc; it is easy to misconfigure and have it silently fall back to the default allocator.</p>

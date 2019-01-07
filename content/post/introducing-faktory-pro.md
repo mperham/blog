@@ -1,7 +1,6 @@
 +++
 title = "Introducing Faktory Pro"
 date = 2018-12-01T10:13:45-08:00
-draft = true
 +++
 
 I'm happy to announce Faktory Pro, my commercial version of [Faktory](https://github.com/contribsys/faktory), is now available for purchase.
