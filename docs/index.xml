@@ -8,8 +8,150 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Sat, 01 Dec 2018 10:13:45 -0800</lastBuildDate>
+    <lastBuildDate>Tue, 08 Jan 2019 10:03:54 -0800</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Using Faktory with Python</title>
+      <link>https://www.mikeperham.com/2019/01/08/using-faktory-with-python/</link>
+      <pubDate>Tue, 08 Jan 2019 10:03:54 -0800</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2019/01/08/using-faktory-with-python/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt; is my new polyglot background job system, allowing any programming
+language to use background jobs.  I&#39;ve documented how to
+use Faktory with Ruby and Go as I&#39;m an expert in both languages.
+Today I wanted to step outside my comfort zone and try Faktory with a
+language I don&#39;t know: Python.  Let&#39;s see how easy it is for me, a noob,
+to get Python jobs running with Faktory!&lt;/p&gt;
+
+&lt;p&gt;We need three pieces for any background job system:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The client pushes jobs to the server.&lt;/li&gt;
+&lt;li&gt;The server (i.e. Faktory) manages the queues and jobs.&lt;/li&gt;
+&lt;li&gt;The worker pulls jobs from the server and executes them.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;server-setup&#34;&gt;Server Setup&lt;/h2&gt;
+
+&lt;p&gt;Most importantly, you&#39;ll need the &lt;code&gt;faktory&lt;/code&gt; server installed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew tap contribsys/faktory
+brew install faktory
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On macOS, easy.
+See &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Installation&#34;&gt;Installation&lt;/a&gt; if you are on Linux.&lt;/p&gt;
+
+&lt;h2 id=&#34;python-setup&#34;&gt;Python Setup&lt;/h2&gt;
+
+&lt;p&gt;First thing I did was install a modern Python with &lt;code&gt;brew install
+python&lt;/code&gt;, which got me Python 3.7.2.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install python
+$ pip install faktory
+Successfully installed faktory-0.4.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We install the &lt;code&gt;faktory&lt;/code&gt; package, which is the Python client/worker library
+provided by &lt;a href=&#34;https://github.com/crdx/faktory_worker_python&#34;&gt;cdrx/faktory_worker_python&lt;/a&gt;.
+We&#39;ll use it to push and fetch jobs.&lt;/p&gt;
+
+&lt;h2 id=&#34;client-script&#34;&gt;Client Script&lt;/h2&gt;
+
+&lt;p&gt;We&#39;ll create a very simple script to create a job every second.  Here we
+create an &lt;code&gt;adder&lt;/code&gt; job with two random integers for arguments:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# fclient.py&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; faktory
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; random
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; time
+
+time&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sleep(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; faktory&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;connection() &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; client:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; True:
+        client&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;queue(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;adder&amp;#39;&lt;/span&gt;, args&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;(random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;), random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;)))
+        time&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sleep(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;worker-script&#34;&gt;Worker Script&lt;/h2&gt;
+
+&lt;p&gt;The worker is the long-running process which fetches jobs from Faktory and
+executes them.  We register the set of job types we know about and then
+wait for jobs from Faktory.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# fworker.py&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; faktory &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Worker
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; time
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; logging
+logging&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;basicConfig(level&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;logging&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;INFO)
+
+time&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sleep(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;adder&lt;/span&gt;(x, y):
+    logging&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;info(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; + &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, x, y, x &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; y)
+
+w &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Worker(queues&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;default&amp;#39;&lt;/span&gt;], concurrency&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+w&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;register(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;adder&amp;#39;&lt;/span&gt;, adder)
+w&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;run()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;the-result&#34;&gt;The Result&lt;/h2&gt;
+
+&lt;p&gt;Finally I created a &lt;code&gt;Procfile&lt;/code&gt; which runs all three parts and used
+foreman to run it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ gem install foreman
+$ cat Procfile
+faktory: /usr/local/bin/faktory
+client: /usr/local/bin/python3.7 ./fclient.py
+worker: /usr/local/bin/python3.7 ./fworker.py
+$ foreman start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The output:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ foreman start
+10:37:21 faktory.1 | started with pid 7319
+10:37:21 client.1  | started with pid 7320
+10:37:21 worker.1  | started with pid 7321
+10:37:21 faktory.1 | Faktory 0.9.3
+10:37:21 faktory.1 | Copyright © 2019 Contributed Systems LLC
+10:37:21 faktory.1 | Licensed under the GNU Public License 3.0
+10:37:21 faktory.1 | I 2019-01-02T18:37:21.055Z Initializing redis storage at /Users/mikeperham/.faktory/db, socket /Users/mikeperham/.faktory/db/redis.sock
+10:37:21 faktory.1 | I 2019-01-02T18:37:21.084Z Web server now listening at localhost:7420
+10:37:21 faktory.1 | I 2019-01-02T18:37:21.084Z PID 7319 listening at localhost:7419, press Ctrl-C to stop
+10:37:22 worker.1  | INFO:faktory.worker:Registered task: adder
+10:37:22 worker.1  | INFO:faktory.connection:Connecting to localhost:7419
+10:37:22 worker.1  | INFO:faktory.worker:Queues: default
+10:37:22 worker.1  | INFO:faktory.worker:Labels: python
+10:37:22 worker.1  | INFO:root:943 + 720 = 1663
+10:37:23 worker.1  | INFO:root:131 + 259 = 390
+10:37:24 worker.1  | INFO:root:272 + 304 = 576
+10:37:25 faktory.1 | I 2019-01-02T18:37:25.090Z Retries processed 2 jobs
+10:37:25 worker.1  | INFO:root:418 + 86 = 504
+10:37:26 worker.1  | INFO:root:818 + 56 = 874
+10:37:27 worker.1  | INFO:root:619 + 237 = 856
+10:37:28 worker.1  | INFO:root:926 + 93 = 1019
+10:37:29 worker.1  | INFO:root:481 + 812 = 1293
+10:37:30 worker.1  | INFO:root:391 + 224 = 615
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It works!
+We are creating a job in our Python client process, sending it to Faktory which distributes it to our Python worker process.
+Our Python client could be a Django application or anything else.
+In this way you can scale your job processing across many, many machines and workers.&lt;/p&gt;
+
+&lt;p&gt;Now while it is running, open your browser to &lt;a href=&#34;http://localhost:7420&#34;&gt;http://localhost:7420&lt;/a&gt;
+and check out the nice dashboard as your jobs process.
+With the dashboard you can see jobs which have recently failed and are awaiting retry.
+Got a bug in your code?
+The worker will catch the exception and report the failure to Faktory so it can retry the job later.&lt;/p&gt;
+
+&lt;p&gt;If you&#39;re a Python developer, I hope this piques your curiousity to try Faktory.
+Remember Faktory&#39;s advantage is that you can push and pull jobs with any programming language.
+Want to create jobs in PHP and process them in Python?
+No problem!
+Check out all the &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Related-Projects#language-bindings&#34;&gt;different languages supported&lt;/a&gt; today.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Introducing Faktory Pro</title>
@@ -837,129 +979,6 @@ The &lt;a href=&#34;https://www.indiehackers.com/businesses/sidekiq&#34;&gt;Indi
 Want to discuss more, ask questions?
 Got an open source project you want to make sustainable?
 Stop by my weekly &lt;a href=&#34;https://sidekiq.org/support.html&#34;&gt;Happy Hour&lt;/a&gt; and let&#39;s chat.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Faktory 0.7.0 Released</title>
-      <link>https://www.mikeperham.com/2018/01/08/faktory-0.7.0-released/</link>
-      <pubDate>Mon, 08 Jan 2018 10:53:00 -0800</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2018/01/08/faktory-0.7.0-released/</guid>
-      <description>
-
-&lt;p&gt;Faktory is my brand-new background job system for every programming language.
-If you want to learn more, see &lt;a href=&#34;http://www.mikeperham.com/2017/10/24/introducing-faktory/&#34;&gt;the intro&lt;/a&gt;.
-It&#39;s been three months since the initial launch in October and I&#39;ve heard of several successful rollouts to production.
-If you were reluctant to try out Faktory before, it&#39;s time to start looking into it because
-the biggest release of Faktory yet is now available to all.
-November and December saw lots of changes and improvements; here&#39;s a recap.&lt;/p&gt;
-
-&lt;p&gt;&lt;img style=&#34;float: right; padding: 3px&#34; src=&#34;http://www.mikeperham.com/images/faktory-logo.png&#34; alt=&#34;logo&#34;/&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;job-priorities&#34;&gt;Job Priorities&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Jobs can now be prioritized from 1-9 within a queue!&lt;/strong&gt;
-The initial release of Faktory was focused on replicating Sidekiq&#39;s existing functionality but Faktory&#39;s different architecture allows us to implement features that were impossible in Sidekiq.
-Many, many people have asked for a simple job prioritization scheme but I&#39;ve never implemented it in Sidekiq because of the high runtime cost.
-But since we now control the low-level storage details in Faktory, we can minimize those costs!
-Want something to go to the front of a queue, give it a high priority like 9.
-Want it to drop to the back?
-Simple as:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{ &amp;quot;jobtype&amp;quot;:&amp;quot;MyJob&amp;quot;,&amp;quot;args&amp;quot;:[1,2,3],&amp;quot;queue&amp;quot;:&amp;quot;encoding&amp;quot;,&amp;quot;priority&amp;quot;:1 }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;@andrewstucki did the hard work to design an efficient implementation using a data structure I&#39;d never heard of: the &lt;a href=&#34;https://en.wikipedia.org/wiki/Brodal_queue&#34;&gt;Brodal queue&lt;/a&gt;.
-Nice to see some real Computer Science data structure theory paying off here!&lt;/p&gt;
-
-&lt;h2 id=&#34;reliability&#34;&gt;Reliability&lt;/h2&gt;
-
-&lt;p&gt;Recovered jobs (jobs which kill their worker process, aka poison pills) now use the retry process.
-This ensures that recovered jobs are exponentially backed off and won&#39;t retry every 30 minutes forever as before.&lt;/p&gt;
-
-&lt;p&gt;Faktory now automatically creates backups every hour when in production mode, keeping 24.
-This gives you a full day of backups to recover in case of disaster.&lt;/p&gt;
-
-&lt;p&gt;Note #1: remember that Faktory is a queue system and queues are normally empty.
-It is typical for Faktory&#39;s dataset to be less than 10MB in size unless you are scheduling or retrying lots of jobs.&lt;/p&gt;
-
-&lt;p&gt;Note #2: background jobs will run &lt;strong&gt;at least&lt;/strong&gt; once.
-Restoring a backup is one way to see duplicate job execution.
-You should always strive for &lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Best-Practices#2-make-your-job-idempotent-and-transactional&#34;&gt;idempotency&lt;/a&gt; when writing jobs.&lt;/p&gt;
-
-&lt;h2 id=&#34;newsletter&#34;&gt;Newsletter&lt;/h2&gt;
-
-&lt;p&gt;I&#39;ve created a newsletter for those who want the latest news ASAP.
-Subscribers will get Faktory-related posts like this a day early.
-You can subscribe right here or on the &lt;a href=&#34;http://contribsys.com/faktory/&#34;&gt;Faktory home page&lt;/a&gt;.&lt;/p&gt;
-
-&lt;!-- Begin MailChimp Signup Form --&gt;
-
-&lt;p&gt;&lt;link href=&#34;//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css&#34; rel=&#34;stylesheet&#34; type=&#34;text/css&#34;&gt;
-&lt;style type=&#34;text/css&#34;&gt;
-    #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
-&lt;/style&gt;
-&lt;div id=&#34;mc_embed_signup&#34;&gt;
-&lt;form action=&#34;https://contribsys.us17.list-manage.com/subscribe/post?u=c04c3b4f7f54b0a65d156c7e4&amp;amp;id=e3d75d426c&#34; method=&#34;post&#34; id=&#34;mc-embedded-subscribe-form&#34; name=&#34;mc-embedded-subscribe-form&#34; class=&#34;validate&#34; target=&#34;_blank&#34; novalidate&gt;
-    &lt;div id=&#34;mc_embed_signup_scroll&#34;&gt;
-    &lt;label for=&#34;mce-EMAIL&#34;&gt;Subscribe to Faktory Insiders&lt;/label&gt;
-    &lt;input type=&#34;email&#34; value=&#34;&#34; name=&#34;EMAIL&#34; class=&#34;email&#34; id=&#34;mce-EMAIL&#34; placeholder=&#34;email address&#34; required&gt;
-    &lt;!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups--&gt;
-    &lt;div style=&#34;position: absolute; left: -5000px;&#34; aria-hidden=&#34;true&#34;&gt;&lt;input type=&#34;text&#34; name=&#34;b_c04c3b4f7f54b0a65d156c7e4_e3d75d426c&#34; tabindex=&#34;-1&#34; value=&#34;&#34;&gt;&lt;/div&gt;
-    &lt;div class=&#34;clear&#34;&gt;&lt;input type=&#34;submit&#34; value=&#34;Subscribe&#34; name=&#34;subscribe&#34; id=&#34;mc-embedded-subscribe&#34; class=&#34;button&#34;&gt;&lt;/div&gt;
-    &lt;/div&gt;
-&lt;/form&gt;
-&lt;/div&gt;
-&lt;!--End mc_embed_signup--&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;faktory-as-a-service&#34;&gt;Faktory-as-a-Service&lt;/h2&gt;
-
-&lt;p&gt;Two different companies have sprung up, aimed at providing Faktory as a service.
-If you have an application on Heroku, you can start using Faktory in minutes!
-Check out &lt;a href=&#34;https://www.ackfoundry.com/&#34;&gt;Ackfoundry&lt;/a&gt; and &lt;a href=&#34;http://konglomerate.io/&#34;&gt;Konglomerate&lt;/a&gt; for the latest details.&lt;/p&gt;
-
-&lt;h2 id=&#34;worker-packages&#34;&gt;Worker Packages&lt;/h2&gt;
-
-&lt;p&gt;Several Faktory &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Related-Projects&#34;&gt;worker packages&lt;/a&gt; are seeing solid support and regular improvements.
-Take a look at the Rust, Elixir, Python and Node packages for example.&lt;/p&gt;
-
-&lt;p&gt;Don&#39;t see one for your language?
-Jump into the &lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;chatroom&lt;/a&gt; and ask!&lt;/p&gt;
-
-&lt;h2 id=&#34;security&#34;&gt;Security&lt;/h2&gt;
-
-&lt;p&gt;Faktory&#39;s security design has been one of the toughest engineering problems to solve.
-By default we want both an easy development experience and a secure production deployment.
-To that end, we&#39;ve made several major &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Security&#34;&gt;security policy&lt;/a&gt; changes:&lt;/p&gt;
-
-&lt;h3 id=&#34;faktory-will-not-terminate-tls&#34;&gt;Faktory will not terminate TLS&lt;/h3&gt;
-
-&lt;p&gt;Since most deployments these days are using Docker or another container, we&#39;ve decided the Faktory server will not terminate TLS.
-Instead your network architecture should provide any necessary TLS frontend using haproxy, spiped, stunnel, nginx, etc.&lt;/p&gt;
-
-&lt;p&gt;Faktory clients will all continue to support TLS by including &amp;quot;tls&amp;quot; in the URL scheme, e.g. &lt;code&gt;tcp+tls://faktory.example.com:7419&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;passwords-are-mandatory-in-production&#34;&gt;Passwords are mandatory in production&lt;/h3&gt;
-
-&lt;p&gt;Faktory is one of the few pieces of infrastructure which bake in the idea of &amp;quot;environment&amp;quot; (production and development are the two choices).
-Going forward, a production server must be started with a FAKTORY_PASSWORD environment variable in order to authenticate all connections.&lt;/p&gt;
-
-&lt;p&gt;It&#39;s easy to include the password in the connection URL: &lt;code&gt;tcp+tls://:mypassword123@faktory.example.com:7419&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;csrf-protection&#34;&gt;CSRF protection&lt;/h3&gt;
-
-&lt;p&gt;@vosmith was nice enough to provide a pull request adding CSRF protection to the Web UI.
-CSRF protection prevents a malicious webpage from using your browser to submit a form request, e.g. to clear a queue.
-Further security improvements to the Web UI are always welcome.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;That&#39;s it for now!
-&lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;Jump into the chatroom&lt;/a&gt; if you have questons or concerns.
-And as I said before, I&#39;ve heard of several successful rollouts to production.
-If you were reluctant to try out Faktory before, it&#39;s time to start looking into it!
-See my &lt;a href=&#34;http://www.mikeperham.com/2017/11/13/getting-started-with-faktory/&#34;&gt;Getting Started&lt;/a&gt; guide.&lt;/p&gt;
 </description>
     </item>
     
