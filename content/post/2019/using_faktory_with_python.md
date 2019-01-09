@@ -1,7 +1,6 @@
 +++
 title = "Using Faktory with Python"
 date = 2019-01-08T10:03:54-08:00
-draft = true
 +++
 
 [Faktory](https://github.com/contribsys/faktory) is my new polyglot background job system, allowing any programming
