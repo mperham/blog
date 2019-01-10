@@ -56,7 +56,7 @@ Successfully installed faktory-0.4.0
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We install the &lt;code&gt;faktory&lt;/code&gt; package, which is the Python client/worker library
-provided by &lt;a href=&#34;https://github.com/crdx/faktory_worker_python&#34;&gt;cdrx/faktory_worker_python&lt;/a&gt;.
+provided by &lt;a href=&#34;https://github.com/cdrx/faktory_worker_python&#34;&gt;cdrx/faktory_worker_python&lt;/a&gt;.
 We&#39;ll use it to push and fetch jobs.&lt;/p&gt;
 
 &lt;h2 id=&#34;client-script&#34;&gt;Client Script&lt;/h2&gt;

@@ -36,7 +36,7 @@ python`, which got me Python 3.7.2.
     Successfully installed faktory-0.4.0
 
 We install the `faktory` package, which is the Python client/worker library
-provided by [cdrx/faktory_worker_python](https://github.com/crdx/faktory_worker_python).
+provided by [cdrx/faktory_worker_python](https://github.com/cdrx/faktory_worker_python).
 We'll use it to push and fetch jobs.
 
 ## Client Script
