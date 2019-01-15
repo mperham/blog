@@ -87,8 +87,8 @@ foreman to run it:
 $ gem install foreman
 $ cat Procfile
 faktory: /usr/local/bin/faktory
-client: /usr/local/bin/python3.7 ./fclient.py
-worker: /usr/local/bin/python3.7 ./fworker.py
+client: /usr/local/bin/node ./fclient.js
+worker: /usr/local/bin/node ./fworker.js
 $ foreman start
 ```
 
