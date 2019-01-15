@@ -8,8 +8,142 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Tue, 08 Jan 2019 10:03:54 -0800</lastBuildDate>
+    <lastBuildDate>Wed, 16 Jan 2019 09:00:55 -0800</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Using Faktory with JavaScript</title>
+      <link>https://www.mikeperham.com/2019/01/16/using-faktory-with-javascript/</link>
+      <pubDate>Wed, 16 Jan 2019 09:00:55 -0800</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2019/01/16/using-faktory-with-javascript/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt; is my new polyglot background job system, allowing any programming
+language to use background jobs.  I&#39;ve documented how to
+use Faktory with Ruby and Go as I&#39;m an expert in both languages.
+Today I wanted to step outside my comfort zone and try Faktory with a
+language I barely know: JavaScript.  Let&#39;s see how easy it is for me, a noob,
+to get JavaScript jobs running with Faktory!&lt;/p&gt;
+
+&lt;p&gt;We need three pieces for any background job system:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;The client pushes jobs to the server.&lt;/li&gt;
+&lt;li&gt;The server (i.e. Faktory) manages the queues and jobs.&lt;/li&gt;
+&lt;li&gt;The worker pulls jobs from the server and executes them.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;server-setup&#34;&gt;Server Setup&lt;/h2&gt;
+
+&lt;p&gt;Most importantly, you&#39;ll need the &lt;code&gt;faktory&lt;/code&gt; server installed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew tap contribsys/faktory
+brew install faktory
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On macOS, easy.
+See &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Installation&#34;&gt;Installation&lt;/a&gt; if you are on Linux.&lt;/p&gt;
+
+&lt;h2 id=&#34;javascript-setup&#34;&gt;JavaScript Setup&lt;/h2&gt;
+
+&lt;p&gt;First thing I did was install Node with &lt;code&gt;brew install node&lt;/code&gt;, which got me Node 11.6.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install node
+$ npm install faktory-worker
++ faktory-worker@2.2.3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We install the &lt;code&gt;faktory-worker&lt;/code&gt; package, which is the JavaScript client/worker library
+provided by &lt;a href=&#34;https://github.com/jbielick/faktory_worker_node&#34;&gt;jbielick/faktory_worker_node&lt;/a&gt;.
+We&#39;ll use it to push and fetch jobs.&lt;/p&gt;
+
+&lt;h2 id=&#34;client-script&#34;&gt;Client Script&lt;/h2&gt;
+
+&lt;p&gt;We&#39;ll create a script to send a new job to Faktory every second.  Here we
+create an &lt;code&gt;adder&lt;/code&gt; job with two random integers for arguments:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randInt&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;min&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;max&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;) {
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; Math.&lt;span style=&#34;color:#a6e22e&#34;&gt;floor&lt;/span&gt;(Math.&lt;span style=&#34;color:#a6e22e&#34;&gt;random&lt;/span&gt;() &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;max&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;min&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;min&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;faktory&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;faktory-worker&amp;#39;&lt;/span&gt;);
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;createJob&lt;/span&gt;() {
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;client&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;faktory&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;connect&lt;/span&gt;();
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;jid&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;client&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;job&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;adder&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;randInt&lt;/span&gt;(), &lt;span style=&#34;color:#a6e22e&#34;&gt;randInt&lt;/span&gt;()).&lt;span style=&#34;color:#a6e22e&#34;&gt;push&lt;/span&gt;();
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;client&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;close&lt;/span&gt;();
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Job&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;jid&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;setTimeout&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;createJob&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;)
+}
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;setTimeout&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;createJob&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;worker-script&#34;&gt;Worker Script&lt;/h2&gt;
+
+&lt;p&gt;The worker is the long-running process which fetches jobs from Faktory and
+executes them.  We register the set of job types we know about and then
+wait for jobs from Faktory.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;faktory&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;require&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;faktory-worker&amp;#39;&lt;/span&gt;);
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;faktory&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;register&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;adder&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;async&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;) =&amp;gt; {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;${a} + ${b} = ${a+b}&amp;#34;&lt;/span&gt;)
+});
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;faktory&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;work&lt;/span&gt;();
+&lt;span style=&#34;color:#75715e&#34;&gt;// send INT signal to shutdown gracefully
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;the-result&#34;&gt;The Result&lt;/h2&gt;
+
+&lt;p&gt;Finally I created a &lt;code&gt;Procfile&lt;/code&gt; which runs all three parts and used
+foreman to run it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ gem install foreman
+$ cat Procfile
+faktory: /usr/local/bin/faktory
+client: /usr/local/bin/python3.7 ./fclient.py
+worker: /usr/local/bin/python3.7 ./fworker.py
+$ foreman start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The output:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ foreman start
+12:37:31 faktory.1 | started with pid 40472
+12:37:31 client.1  | started with pid 40473
+12:37:31 worker.1  | started with pid 40474
+12:37:31 faktory.1 | Faktory 0.9.4
+12:37:31 faktory.1 | Copyright © 2019 Contributed Systems LLC
+12:37:31 faktory.1 | Licensed under the GNU Public License 3.0
+12:37:31 faktory.1 | I 2019-01-15T20:37:31.437Z Initializing redis storage at /Users/mikeperham/.faktory/db, socket /Users/mikeperham/.faktory/db/redis.sock
+12:37:31 faktory.1 | I 2019-01-15T20:37:31.469Z Web server now listening at localhost:7420
+12:37:31 faktory.1 | I 2019-01-15T20:37:31.469Z PID 40472 listening at localhost:7419, press Ctrl-C to stop
+12:37:32 worker.1  | 754 + 43 = 797
+12:37:33 worker.1  | 841 + 51 = 892
+12:37:34 worker.1  | 706 + 756 = 1462
+12:37:35 worker.1  | 187 + 343 = 530
+12:37:36 worker.1  | 690 + 587 = 1277
+12:37:37 worker.1  | 368 + 168 = 536
+12:37:38 worker.1  | 152 + 900 = 1052
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It works!
+We are creating a job in our JavaScript client process, sending it to Faktory which distributes it to our Node worker process.
+Our JavaScript client could be an Express web application or anything else.
+In this way you can scale your job processing across many, many machines and workers.&lt;/p&gt;
+
+&lt;p&gt;Now while it is running, open your browser to &lt;a href=&#34;http://localhost:7420&#34;&gt;http://localhost:7420&lt;/a&gt;
+and check out the nice dashboard as your jobs process.
+With the dashboard you can see jobs which have recently failed and are awaiting retry.
+Got a bug in your code?
+The worker will catch the exception and report the failure to Faktory so it can retry the job later.&lt;/p&gt;
+
+&lt;p&gt;If you&#39;re a JavaScript developer, I hope this piques your curiousity to try Faktory.
+Remember Faktory&#39;s advantage is that you can push and pull jobs with any programming language.
+Want to create jobs in Ruby or PHP and process them in JavaScript?
+No problem!
+Check out all the &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/Related-Projects#language-bindings&#34;&gt;different languages supported&lt;/a&gt; today.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Using Faktory with Python</title>
@@ -886,99 +1020,6 @@ It gives a free performance improvement to all your users as long as you don&#39
 &lt;li&gt;If you do mutate, use &lt;code&gt;String.new&lt;/code&gt; to allocate a mutable String instead of &amp;quot;&amp;quot;.&lt;/li&gt;
 &lt;li&gt;The magic comment will only work on Ruby 2.3+ but since Ruby 2.2 is EOL in one month, I think it&#39;s fair to stop performance tuning for it.&lt;/li&gt;
 &lt;/ol&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Happy 6th Birthday, Sidekiq</title>
-      <link>https://www.mikeperham.com/2018/02/05/happy-6th-birthday-sidekiq/</link>
-      <pubDate>Mon, 05 Feb 2018 09:00:00 -0800</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2018/02/05/happy-6th-birthday-sidekiq/</guid>
-      <description>
-
-&lt;div style=&#34;float: right; padding-left: 10px&#34;&gt;
-&lt;figure&gt;&lt;img src=&#34;//www.mikeperham.com/images/sidekiq.png&#34; width=&#34;400&#34;/&gt;&lt;/figure&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.mikeperham.com/2012/02/07/sidekiq-simple-efficient-messaging-for-rails/&#34;&gt;Six years ago I shipped Sidekiq v0.5.0&lt;/a&gt; and changed my life.
-I talked to some developers recently:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&amp;quot;I had been working in Go for a while but I kept coming back to Ruby
-because Sidekiq makes everything so fast and easy to scale.&amp;quot;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This is my recipe for success.
-Sell a product developers want because it makes their job so much easier.
-You don&#39;t need a sales force when developers evangelize your product to every new company they join.&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;en&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;My favorite quote from this AMA (with which I wholeheartedly agree) is in regards to Sidekiq: “... rarely does infrastructure so keenly understand what developers, infrastructure engineers, and operators will want out of it.” &lt;a href=&#34;https://twitter.com/mperham?ref_src=twsrc%5Etfw&#34;&gt;@mperham&lt;/a&gt; &lt;a href=&#34;https://t.co/RCdG9gwtDV&#34;&gt;https://t.co/RCdG9gwtDV&lt;/a&gt;&lt;/p&gt;&amp;mdash; John K Sawers (@johnksawers) &lt;a href=&#34;https://twitter.com/johnksawers/status/959604621181366272?ref_src=twsrc%5Etfw&#34;&gt;February 3, 2018&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;2017 revenue was right on target, about 40% higher YoY.
-Nice, steady organic growth with little marketing on my part.
-Why burn yourself out chasing arbitrary growth targets from investors?
-Profitable?  Yes.  Growing?  Yes.
-Irie, mon.&lt;/p&gt;
-
-&lt;h2 id=&#34;today-is-a-big-day&#34;&gt;Today is a BIG DAY!&lt;/h2&gt;
-
-&lt;p&gt;I&#39;m shipping several releases today:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Sidekiq 5.1 now has global job death handlers and enables the ActiveRecord query cache by default.
-&lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/Changes.md#510&#34;&gt;Changes&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Sidekiq Pro 4.0 removes deprecated APIs and adds a new &lt;strong&gt;experimental&lt;/strong&gt; feature: batch death.
-Now if a batch job dies, it marks the entire batch as dead also (since it will never succeed).
-New APIs allow you to enumerate dead Batches.
-Feedback is requested here, is it useful?
-What further refinements would you like to see?
-&lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/Pro-Changes.md#400&#34;&gt;Pro Changes&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Sidekiq Enterprise 1.7 adds support for &lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Ent-Rolling-Restarts&#34;&gt;&lt;strong&gt;long-running jobs and rolling restarts&lt;/strong&gt;&lt;/a&gt;.
-Signal USR2 and a Sidekiq process will gracefully exit once all jobs are complete, even if those jobs take hours to complete.
-This has been a hugely requested feature and it took me a while to figure out how to implement it.
-&lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/Ent-Changes.md#180&#34;&gt;Ent Changes&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div style=&#34;float: right; padding-left: 10px&#34;&gt;
-&lt;div class=&#34;panel panel-danger&#34;&gt;
-  &lt;div class=&#34;panel-heading&#34;&gt;
-    &lt;h2 class=&#34;panel-title&#34;&gt;&lt;b&gt;Gotta have it?&lt;/b&gt;&lt;/h2&gt;
-  &lt;/div&gt;
-  &lt;div class=&#34;panel-body&#34;&gt;
-    &lt;p&gt;
-      Purchase Sidekiq Pro or Sidekiq Enterprise at &lt;a href=&#34;https://sidekiq.org&#34;&gt;sidekiq.org&lt;/a&gt;.
-    &lt;/p&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;One of my goals for this year is to slow the rate of releases.
-There were 12 Sidekiq releases last year but it&#39;s been 4 months since Sidekiq 5.0.5 was released.
-Ideally I want quarterly maintenance releases.&lt;/p&gt;
-
-&lt;p&gt;Lately my biggest problem has been Gmail&#39;s Spam folder.  For the last
-month or two, a very high
-percentage of customer receipts and welcome emails are winding up in the
-Spam folder for some reason, despite me sending a very low daily volume from
-my own email account. I can&#39;t explain it or debug it and feel pretty
-powerless. Any email delivery wizards have ideas? My email is in the footer.&lt;/p&gt;
-
-&lt;h2 id=&#34;faktory&#34;&gt;Faktory&lt;/h2&gt;
-
-&lt;p&gt;I also introduced &lt;a href=&#34;http://contribsys.com/faktory/&#34;&gt;Faktory&lt;/a&gt; last year.
-This is the first step in my long-term plan to bring Sidekiq goodness to all programming languages.
-I&#39;ll be working on Faktory Enterprise over the next few months and hopefully have it for sale by the end of 2018.&lt;/p&gt;
-
-&lt;h2 id=&#34;more-information&#34;&gt;More Information&lt;/h2&gt;
-
-&lt;p&gt;Many, many people have asked me questions about sustainable open source
-and following a similar path with their project.
-The &lt;a href=&#34;https://www.indiehackers.com/businesses/sidekiq&#34;&gt;Indiehackers interview&lt;/a&gt; I did a year ago proved extremely popular and resonanated with many people.
-Want to discuss more, ask questions?
-Got an open source project you want to make sustainable?
-Stop by my weekly &lt;a href=&#34;https://sidekiq.org/support.html&#34;&gt;Happy Hour&lt;/a&gt; and let&#39;s chat.&lt;/p&gt;
 </description>
     </item>
     

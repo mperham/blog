@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.mikeperham.com/2019/01/16/using-faktory-with-javascript/</loc>
+    <lastmod>2019-01-16T09:00:55-08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.mikeperham.com/2019/01/08/using-faktory-with-python/</loc>
     <lastmod>2019-01-08T10:03:54-08:00</lastmod>
   </url>
@@ -1538,7 +1543,7 @@
   
   <url>
     <loc>https://www.mikeperham.com/</loc>
-    <lastmod>2019-01-08T10:03:54-08:00</lastmod>
+    <lastmod>2019-01-16T09:00:55-08:00</lastmod>
     <priority>0</priority>
   </url>
   
