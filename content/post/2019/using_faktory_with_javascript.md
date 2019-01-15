@@ -1,7 +1,6 @@
 +++
 title = "Using Faktory with JavaScript"
 date = 2019-01-16T09:00:55-08:00
-draft = true
 +++
 
 [Faktory](https://github.com/contribsys/faktory) is my new polyglot background job system, allowing any programming
