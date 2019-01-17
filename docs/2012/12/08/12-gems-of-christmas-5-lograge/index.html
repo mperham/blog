@@ -13,36 +13,41 @@
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
     <link rel="shortcut icon" href="/favicon.ico">
     
-    <link href="/index.xml" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+    
+    
+    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
+    
 </head>
 
   <body>
     <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar-right">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-                
-                    <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-                
-                    <li><a href="/events/" >Events</a></li>
-                
-                    <li><a href="/about/" >About</a></li>
-                
-                
-            </ul>
-        </div>
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
     </div>
+    <div class="collapse navbar-collapse" id="navbar-right">
+      <ul class="nav navbar-nav navbar-right">
+        
+          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
+        
+          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
+        
+          <li><a href="/events/" >Events</a></li>
+        
+          <li><a href="/about/" >About</a></li>
+        
+        
+        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
+        
+      </ul>
+    </div>
+  </div>
 </nav>
 
     <div class="container page-wrap">
@@ -81,26 +86,7 @@ end
 
 <p>Much happier logs lead to much happier developers. Happy logging! Tomorrow I'll cover a gem (or two!?) designed to make email development happier...</p>
 
-        <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
       </div>
     </div>
     <footer class="site-footer">

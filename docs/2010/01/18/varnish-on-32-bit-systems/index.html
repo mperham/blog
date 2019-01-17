@@ -13,36 +13,41 @@
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
     <link rel="shortcut icon" href="/favicon.ico">
     
-    <link href="/index.xml" rel="alternate" type="application/rss+xml" title="Mike Perham" />
+    
+    
+    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
+    
 </head>
 
   <body>
     <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar-right">
-            <ul class="nav navbar-nav navbar-right">
-                
-                    <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-                
-                    <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-                
-                    <li><a href="/events/" >Events</a></li>
-                
-                    <li><a href="/about/" >About</a></li>
-                
-                
-            </ul>
-        </div>
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
     </div>
+    <div class="collapse navbar-collapse" id="navbar-right">
+      <ul class="nav navbar-nav navbar-right">
+        
+          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
+        
+          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
+        
+          <li><a href="/events/" >Events</a></li>
+        
+          <li><a href="/about/" >About</a></li>
+        
+        
+        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
+        
+      </ul>
+    </div>
+  </div>
 </nav>
 
     <div class="container page-wrap">
@@ -57,26 +62,7 @@
 
 <p>We had a few minutes of outage recently due to this architecture. We read some <a href="http://kristian.blog.linpro.no/2009/05/25/common-varnish-issues/">Varnish tuning tips</a> and decided to modify our default configuration. Specifically we raised the minimum thread count from 1 to 500. Because, after all, &quot;* idle threads are cheap*&quot;. But they are only cheap on 64-bit systems where allocating hundreds of MB for extra stack space is a no brainer! When we rolled out this change, the process ran out of memory and couldn't allocate the extra threads. Klaxons went off and I rolled back the changes. Over the next few months, we'll be upgrading our caches to 64 bit so that we don't need to worry about sizing issues moving forward.</p>
 
-        <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "mikeperham" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        
       </div>
     </div>
     <footer class="site-footer">
