@@ -5,9 +5,9 @@ theme = "simple-hugo"
 relativeURLs = false
 publishDir = "docs"
 disableKinds = ["section", "taxonomy", "taxonomyTerm"]
-PygmentsCodeFences = true
+pygmentsCodefences = true
+pygmentsStyle = "monokai"
 rssLimit = 10
-disqusShortname = "mikeperham"
 
 [permalinks]
   post = "/:year/:month/:day/:title/"
