@@ -5,7 +5,7 @@ type: pages
 ---
 
 This is the list of **official** and unofficial Railsconf events. Please RSVP for official,
-sponsored events at the [Rubyconf parties](https://railsconf.com/parties) page.
+sponsored events at the [Railsconf parties](https://railsconf.com/parties) page.
 Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Monday 4/29
