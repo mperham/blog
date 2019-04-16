@@ -10,7 +10,8 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Monday 4/29
 
-* Send me the time, place and a link to more info!
+* [Pre-RailsConf Warm-Up](https://www.eventbrite.com/e/pre-railsconf-warm-up-registration-60456294404), The Local @ 931 Nicollet Mall, 6pm
+* [RubyMN meetup](https://www.meetup.com/ruby-mn/events/lvdntqyzgbdc/), 251 N 1st Ave #400, 6:30pm
 
 ## Tuesday 4/30
 
@@ -19,7 +20,7 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Wednesday 5/1
 
-* Send me the time, place and a link to more info!
+* Railsconf 5k, Hyatt Lobby, 7am
 
 ## Thursday 5/2
 
