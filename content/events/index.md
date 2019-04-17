@@ -15,8 +15,8 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Tuesday 4/30
 
-* **Coinbase Women in Rails Lunch**, Room 102DE, 12:20pm, RSVP above
-* [Board Game Night](https://ti.to/contributed-systems/railsconf-2019-board-game-night), Hyatt, 7pm, RSVP and bring your favorite analog game!
+* **[Coinbase Women in Rails Lunch](https://www.eventbrite.com/e/women-in-rails-lunch-hosted-by-coinbase-tickets-59444121969)**, Room 102DE, 12:20pm
+* [Board Game Night](https://ti.to/contributed-systems/railsconf-2019-board-game-night), Hyatt, 7pm, bring your favorite analog game!
 
 ## Wednesday 5/1
 
