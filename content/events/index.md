@@ -23,7 +23,8 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 ## Wednesday 5/1
 
 * Railsconf 5k, Hyatt Lobby, 7am
-* **[Weedmaps Party](https://www.tixr.com/groups/thephantomprjkt/events/weedmaps-x-railsconf-after-party-13329)**, Aria, 8pm.
+* [The Bike Shed Listener Meetup & 200th Episode AMA](https://twitter.com/thoughtbot/status/1121440980291457029), Minneapolis Sculpture Garden 725 Vineland Pl, 5:30pm
+* **[Weedmaps Party](https://www.tixr.com/groups/thephantomprjkt/events/weedmaps-x-railsconf-after-party-13329)**, Aria, 8pm
 
 ## Thursday 5/2
 
