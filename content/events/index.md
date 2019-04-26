@@ -34,6 +34,9 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 * Send me the time, place and a link to more info!
 
+## Local Guide
+
+One local's [guide to Minneapolis](https://jaimzuber.com/minneapolis-convention-guide.html) with tips on biking, coffee, beer, food and more.
 
 ### Hotel
 
