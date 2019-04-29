@@ -19,6 +19,7 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 * [Board Game Night](https://ti.to/contributed-systems/railsconf-2019-board-game-night), Hyatt, 7pm, bring your favorite analog game!
 * [Zendesk Happy Hour](https://www.eventbrite.com/e/zendesk-hosted-happy-hour-rails-conference-tickets-60543653698), Brit's Pub 1110 Nicollet Mall, 6pm
 * [Rails Tutorial Beerware Night](https://www.eventbrite.com/e/9th-semi-annual-rails-tutorial-beerware-night-tickets-60831358230), Hyatt Hotel Bar, 8pm
+* [Square After Party](http://square.com/go/railsconf2019), Hewing Hotel, 6:30-10pm, Free Lyft code: RAILSCONF2019
 
 ## Wednesday 5/1
 
@@ -36,7 +37,8 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Local Guide
 
-One local's [guide to Minneapolis](https://jaimzuber.com/minneapolis-convention-guide.html) with tips on biking, coffee, beer, food and more.
+* One local's [guide to Minneapolis](https://jaimzuber.com/minneapolis-convention-guide.html) with tips on biking, coffee, beer, food and more.
+* Another [local guide from Chris Arcand](https://chrisarcand.com/railsconf2019/)
 
 ### Hotel
 
