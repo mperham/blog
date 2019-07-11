@@ -8,8 +8,41 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Wed, 16 Jan 2019 09:00:55 -0800</lastBuildDate>
+    <lastBuildDate>Thu, 11 Jul 2019 10:23:50 -0700</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Leaving Twitter</title>
+      <link>https://www.mikeperham.com/2019/07/11/leaving-twitter/</link>
+      <pubDate>Thu, 11 Jul 2019 10:23:50 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2019/07/11/leaving-twitter/</guid>
+      <description>&lt;p&gt;Some have already noticed but I&#39;ve been booted out of Twitter.&lt;/p&gt;
+
+&lt;p&gt;&amp;quot;Why, Mike?&amp;quot;&lt;/p&gt;
+
+&lt;p&gt;Because set my birth year to 2000 in my profile. I
+didn&#39;t think it was anyone&#39;s business, including Twitter, what my age
+was. Since I created the account in 2008, Twitter said I was too young
+to use their service and immediately locked the account.&lt;/p&gt;
+
+&lt;p&gt;Quite possibly the least cool way to get your account locked?&lt;/p&gt;
+
+&lt;p&gt;Eleven years. Tens of thousands of tweets. 9,000+ followers. Daily
+engagement. None of that mattered.&lt;/p&gt;
+
+&lt;p&gt;Yep, I can write to them asking them to unlock my account but
+I see this as the last straw.  Free, centralized social media services
+will always care more about their advertisers and PR optics
+than they care for their users. I don&#39;t want to use a service that continues to
+allow Nazis under the guise of free speech.&lt;/p&gt;
+
+&lt;p&gt;&amp;quot;What&#39;s next?&amp;quot;&lt;/p&gt;
+
+&lt;p&gt;I&#39;ve moved over to Mastodon where I can pick an instance whose policies
+I respect. &lt;a href=&#34;https://mastodon.xyz/@mperham&#34;&gt;I&#39;m here for now&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Using Faktory with JavaScript</title>
@@ -914,106 +947,6 @@ If you have a large Rails app, integrate jemalloc and see significant improvemen
 Let&#39;s give ruby-core all the data they need to make the right decision.&lt;/p&gt;
 
 &lt;p&gt;Ruby-core jemalloc issues: &lt;a href=&#34;https://bugs.ruby-lang.org/issues/13524&#34;&gt;13524&lt;/a&gt;, &lt;a href=&#34;https://bugs.ruby-lang.org/issues/9113&#34;&gt;9113&lt;/a&gt;, &lt;a href=&#34;https://bugs.ruby-lang.org/issues/14718&#34;&gt;14718&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Ruby Optimization with One Magic Comment</title>
-      <link>https://www.mikeperham.com/2018/02/28/ruby-optimization-with-one-magic-comment/</link>
-      <pubDate>Wed, 28 Feb 2018 07:00:00 -0800</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2018/02/28/ruby-optimization-with-one-magic-comment/</guid>
-      <description>
-
-&lt;p&gt;Software performance optimization is simple: find a way to do less. Ruby has a reputation for being slow and, while that impression is a decade out of date, one of the leading offenders has been the garbage collector.&lt;/p&gt;
-
-&lt;p&gt;This leads to the question: can we speed up Ruby by creating less garbage? Absolutely!&lt;/p&gt;
-
-&lt;h2 id=&#34;a-string-primer&#34;&gt;A String Primer&lt;/h2&gt;
-
-&lt;p&gt;Ruby has an unfortunate default semantic that all Strings are mutable:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;string &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
-string &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;This allocates two Strings, &amp;quot;&amp;quot; and &amp;quot;mike&amp;quot;. The first, empty String is then mutated to contain &amp;quot;mike&amp;quot;. However String mutation is quite rare, more common is something like this:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
-  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;123&lt;/span&gt;
-}
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# unnecessary garbage here!&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Every invocation of getmike will allocate a new copy of &amp;quot;mike&amp;quot;, which is then immediately thrown away as garbage, but is required because Ruby just treats the String as a method argument which might be mutated inside &lt;code&gt;Hash#[]&lt;/code&gt;. So wasteful!&lt;/p&gt;
-
-&lt;h2 id=&#34;freeze&#34;&gt;Freeze!&lt;/h2&gt;
-
-&lt;p&gt;Ruby introduced the freeze concept many years ago to minimize allocation. Calling freeze on an object tells Ruby to treat it as immutable. Now Ruby knows that it can treat &amp;quot;mike&amp;quot; as a constant:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;freeze&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The problem? It makes the code uglier and needs to be called everywhere you declare a String.&lt;/p&gt;
-
-&lt;h2 id=&#34;magic-comments&#34;&gt;Magic Comments!&lt;/h2&gt;
-
-&lt;p&gt;Ruby 2.3 introduced a very nice option: each Ruby file can opt into Strings as immutable, meaning all Strings within that file will automatically freeze, with a simple magic comment at the top of the file. This will not allocate an extra String for &amp;quot;mike&amp;quot;.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# frozen_string_literal: true&lt;/span&gt;
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
-  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;123&lt;/span&gt;
-}
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getmike&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;HASH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mike&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;the-real-world&#34;&gt;The Real World&lt;/h2&gt;
-
-&lt;p&gt;Years ago I added a lot of freeze calls to Sidekiq to minimize its impact on the garbage collector and maximize performance.
-Last week &lt;a href=&#34;https://github.com/mperham/sidekiq/pull/3759/files&#34;&gt;I removed all those calls&lt;/a&gt; and added a &lt;code&gt;frozen_string_literal&lt;/code&gt; comment to all Ruby files.&lt;/p&gt;
-
-&lt;p&gt;To see the effect, I ran an experiment with &lt;code&gt;frozen_string_literal&lt;/code&gt; using Sidekiq&#39;s benchmark script by adding &lt;code&gt;GC.disable&lt;/code&gt; and watching the RSS grow. Note how Ruby allows you to enable or disable the feature with a flag:&lt;/p&gt;
-
-&lt;h3 id=&#34;disabled&#34;&gt;Disabled&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;$ RUBYOPT=--disable=frozen-string-literal bundle exec bin/sidekiqload
-Created 30000 jobs
-RSS: 105852 Pending: 25749
-RSS: 178880 Pending: 21514
-RSS: 252804 Pending: 17306
-RSS: 326824 Pending: 12987
-RSS: 399268 Pending: 8810
-RSS: 472620 Pending: 4618
-RSS: 547968 Pending: 319
-RSS: 553568 Pending: 0
-Done
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;enabled&#34;&gt;Enabled&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;$ RUBYOPT=--enable=frozen-string-literal bundle exec bin/sidekiqload
-Created 30000 jobs
-RSS: 105824 Pending: 25687
-RSS: 174948 Pending: 21700
-RSS: 245448 Pending: 17669
-RSS: 316848 Pending: 13559
-RSS: 388544 Pending: 9447
-RSS: 456704 Pending: 5288
-RSS: 450552 Pending: 1160
-RSS: 457536 Pending: 0
-Done
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;frozen_string_literal&lt;/code&gt; reduces the generated garbage by ~100MB or ~20%!&lt;/strong&gt; Free performance by adding a one line comment.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Gem authors: add &lt;code&gt;# frozen_string_literal: true&lt;/code&gt; to the top of all Ruby files in a gem.&lt;/strong&gt;
-It gives a free performance improvement to all your users as long as you don&#39;t use String mutation.&lt;/p&gt;
-
-&lt;h3 id=&#34;notes&#34;&gt;Notes&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;If you do mutate, use &lt;code&gt;String.new&lt;/code&gt; to allocate a mutable String instead of &amp;quot;&amp;quot;.&lt;/li&gt;
-&lt;li&gt;The magic comment will only work on Ruby 2.3+ but since Ruby 2.2 is EOL in one month, I think it&#39;s fair to stop performance tuning for it.&lt;/li&gt;
-&lt;/ol&gt;
 </description>
     </item>
     
