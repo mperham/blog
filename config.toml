@@ -17,7 +17,6 @@ rssLimit = 10
   shortDescription = "Ruby, OSS and the Internet"
   email = "mperham@gmail.com"
   github = "mperham"
-  twitter = "mperham"
 
 [blackfriday]
 smartypants = false

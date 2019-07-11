@@ -583,14 +583,8 @@ Now with a little test coverage I&#39;ve got more confidence that changes won&#3
 &lt;p&gt;I&#39;m preparing to launch &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt; 0.9, a major overhaul to switch
 from RocksDB to Redis as the storage engine.
 The improvement in the development process is amazing.
-But I need to finalize how I distribute Faktory releases, which brings
-up the question:&lt;/p&gt;
-
-&lt;blockquote class=&#34;twitter-tweet&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;Help me figure out how to distribute Faktory!&lt;br&gt;&lt;br&gt;When installing software infrastructure on Linux, I want use:&lt;/p&gt;&amp;mdash; Mike 🍐🐖 (@mperham) &lt;a href=&#34;https://twitter.com/mperham/status/1050047444480753664?ref_src=twsrc%5Etfw&#34;&gt;October 10, 2018&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-
-
-&lt;p&gt;As of right now, that tweet poll shows 58% of people want a deb, 32% want a Docker image, 7% want an rpm and 3% are Linux hipsters that lovingly craft each network packet by hand.&lt;/p&gt;
+But I need to finalize how I distribute Faktory releases.  According to
+a poll I ran, 58% of people want a deb, 32% want a Docker image, 7% want an rpm and 3% are Linux hipsters that lovingly craft each network packet by hand.&lt;/p&gt;
 
 &lt;h2 id=&#34;building-packages&#34;&gt;Building Packages&lt;/h2&gt;
 
