@@ -6,12 +6,8 @@ date = 2018-10-10T13:31:27-07:00
 I'm preparing to launch [Faktory](https://github.com/contribsys/faktory) 0.9, a major overhaul to switch
 from RocksDB to Redis as the storage engine.
 The improvement in the development process is amazing.
-But I need to finalize how I distribute Faktory releases, which brings
-up the question:
-
-{{< tweet 1050047444480753664 >}}
-
-As of right now, that tweet poll shows 58% of people want a deb, 32% want a Docker image, 7% want an rpm and 3% are Linux hipsters that lovingly craft each network packet by hand.
+But I need to finalize how I distribute Faktory releases.  According to
+a poll I ran, 58% of people want a deb, 32% want a Docker image, 7% want an rpm and 3% are Linux hipsters that lovingly craft each network packet by hand.
 
 ## Building Packages
 
