@@ -74,7 +74,7 @@ hours today.  Here's the scoop.</p>
 
 <h2 id="nginx-configuration">nginx Configuration</h2>
 
-<p>First, here's the critical nginx configuration to forward <code>/faktory</code> to
+<p>Here's the nginx configuration to forward <code>/faktory</code> to
 Faktory at its default URL.  We set a number of headers which might be useful in the future
 but only <code>X-Script-Name</code> is critical. Note the <code>/faktory</code> in the first two lines needs to
 stay in sync.</p>
@@ -89,8 +89,6 @@ stay in sync.</p>
   proxy_set_header X-Real-IP $remote_addr;
 }
 </code></pre>
-
-<h2 id="set-the-script-name">Set the Script-Name</h2>
 
 <p><code>SCRIPT_NAME</code> is a legacy of CGI but it's used by Python and Ruby apps
 to know the proxy prefix for requests coming to an app.  We use a properly
@@ -115,18 +113,19 @@ they look like an unproxied request to the app Mux:</p>
 <span style="color:#a6e22e">proxy</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
   <span style="color:#a6e22e">prefix</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;X-Script-Name&#34;</span>)
   <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">prefix</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;&#34;</span> {
-    <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RequestURI</span> = <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Replace</span>(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RequestURI</span>, <span style="color:#a6e22e">prefix</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#ae81ff">1</span>)
-    <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">URL</span>.<span style="color:#a6e22e">Path</span> = <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RequestURI</span> <span style="color:#75715e">// this is super greasy, not sure it&#39;s optimal but Works For Me™
-</span><span style="color:#75715e"></span>  }
+    <span style="color:#75715e">// this is super greasy, not sure it&#39;s optimal but Works For Me™
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RequestURI</span> = <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Replace</span>(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RequestURI</span>, <span style="color:#a6e22e">prefix</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#ae81ff">1</span>)
+    <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">URL</span>.<span style="color:#a6e22e">Path</span> = <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RequestURI</span>
+  }
   <span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">r</span>)
 })</code></pre></div>
 <h2 id="every-link-must-be-relative">Every Link must be Relative</h2>
 
 <p>Within the HTML markup, I had to change every URL and path to use a
 helper to generate the relative path with any necessary prefix.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">relative</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">relpath</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fullpath</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">relpath</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> {
 	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s%s&#34;</span>, <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;X-Script-Name&#34;</span>), <span style="color:#a6e22e">relpath</span>)
-}</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-erb" data-lang="erb">&lt;link href=&#34;&lt;%= relative(req, &#34;/static/application.css&#34;) %&gt;&#34; ...&gt;</code></pre></div>
+}</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-erb" data-lang="erb">&lt;link href=&#34;&lt;%= fullpath(req, &#34;/static/application.css&#34;) %&gt;&#34; ...&gt;</code></pre></div>
 <p><code>req.Header.Get</code> returns <code>&quot;&quot;</code> when there is no value set so the base case is handled smoothly.</p>
 
 <h2 id="conclusion">Conclusion</h2>

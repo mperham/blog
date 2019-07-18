@@ -21,7 +21,7 @@ hours today.  Here's the scoop.
 
 ## nginx Configuration
 
-First, here's the critical nginx configuration to forward `/faktory` to
+Here's the nginx configuration to forward `/faktory` to
 Faktory at its default URL.  We set a number of headers which might be useful in the future
 but only `X-Script-Name` is critical. Note the `/faktory` in the first two lines needs to
 stay in sync.
@@ -37,8 +37,6 @@ location /faktory {
   proxy_set_header X-Real-IP $remote_addr;
 }
 ```
-
-## Set the Script-Name
 
 `SCRIPT_NAME` is a legacy of CGI but it's used by Python and Ruby apps
 to know the proxy prefix for requests coming to an app.  We use a properly
@@ -69,8 +67,9 @@ proxy := http.NewServeMux()
 proxy.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
   prefix := r.Header.Get("X-Script-Name")
   if prefix != "" {
+    // this is super greasy, not sure it's optimal but Works For Me™
     r.RequestURI = strings.Replace(r.RequestURI, prefix, "", 1)
-    r.URL.Path = r.RequestURI // this is super greasy, not sure it's optimal but Works For Me™
+    r.URL.Path = r.RequestURI
   }
   app.ServeHTTP(w, r)
 })
@@ -82,13 +81,13 @@ Within the HTML markup, I had to change every URL and path to use a
 helper to generate the relative path with any necessary prefix.
 
 ```go
-func relative(req *http.Request, relpath string) string {
+func fullpath(req *http.Request, relpath string) string {
 	return fmt.Sprintf("%s%s", req.Header.Get("X-Script-Name"), relpath)
 }
 ```
 
 ```erb
-<link href="<%= relative(req, "/static/application.css") %>" ...>
+<link href="<%= fullpath(req, "/static/application.css") %>" ...>
 ```
 
 `req.Header.Get` returns `""` when there is no value set so the base case is handled smoothly.
