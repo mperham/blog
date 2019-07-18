@@ -8,8 +8,98 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Thu, 11 Jul 2019 10:23:50 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jul 2019 16:26:43 -0700</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Proxying Golang Web Applications</title>
+      <link>https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/</link>
+      <pubDate>Wed, 17 Jul 2019 16:26:43 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/</guid>
+      <description>
+
+&lt;p&gt;Recently someone posted an issue asking if &lt;a href=&#34;https://contribsys/faktory&#34;&gt;Faktory&lt;/a&gt; could support putting
+&lt;code&gt;nginx&lt;/code&gt; in front of Faktory&#39;s Web UI.  Normally you access the Web UI
+like &lt;code&gt;http://localhost:7420/&lt;/code&gt; but they wanted it to look something like
+&lt;code&gt;http://somehost:8080/faktory&lt;/code&gt;.  That&#39;s quite common when trying to wrap
+multiple systems into something that looks like one website to the
+browser.&lt;/p&gt;
+
+&lt;p&gt;The issue is that the Web UI assumed it was at the root, so
+it hardcoded paths like &lt;code&gt;/static/application.css&lt;/code&gt;.  If you mount the Web
+UI at &lt;code&gt;/faktory&lt;/code&gt;, you want that CSS URL to become
+&lt;code&gt;/faktory/static/application.css&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;After thirty minutes of Googling, I could find nothing on how to solve
+this problem so I put on my thinking cap and ground it out over 3-4
+hours today.  Here&#39;s the scoop.&lt;/p&gt;
+
+&lt;h2 id=&#34;nginx-configuration&#34;&gt;nginx Configuration&lt;/h2&gt;
+
+&lt;p&gt;First, here&#39;s the critical nginx configuration to forward &lt;code&gt;/faktory&lt;/code&gt; to
+Faktory at its default URL.  We set a number of headers which might be useful in the future
+but only &lt;code&gt;X-Script-Name&lt;/code&gt; is critical. Note the &lt;code&gt;/faktory&lt;/code&gt; in the first two lines needs to
+stay in sync.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;location /faktory {
+  proxy_set_header X-Script-Name /faktory;
+
+  proxy_pass   http://127.0.0.1:7420;
+  proxy_set_header Host $host;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Scheme $scheme;
+  proxy_set_header X-Real-IP $remote_addr;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;set-the-script-name&#34;&gt;Set the Script-Name&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;SCRIPT_NAME&lt;/code&gt; is a legacy of CGI but it&#39;s used by Python and Ruby apps
+to know the proxy prefix for requests coming to an app.  We use a properly
+named HTTP header, X-Script-Name, in each request to signal this value to Faktory.&lt;/p&gt;
+
+&lt;h2 id=&#34;abstract-that-mux&#34;&gt;Abstract that Mux!&lt;/h2&gt;
+
+&lt;p&gt;Go&#39;s http package exposes a Mux type which acts as the router in a Go
+webapp. We tell it to route all &lt;code&gt;/static/&lt;/code&gt; requests like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;app&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewServeMux&lt;/span&gt;()
+&lt;span style=&#34;color:#a6e22e&#34;&gt;app&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;HandleFunc&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/static/&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;staticHandler&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;But this has one very big problem: it doesn&#39;t know about the &lt;code&gt;/faktory&lt;/code&gt;
+prefix!&lt;/p&gt;
+
+&lt;p&gt;The trick I figured out is to add a special Mux &lt;em&gt;before&lt;/em&gt; the application
+Mux which matches all requests and can unmangle any proxied requests so
+they look like an unproxied request to the app Mux:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;app&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewServeMux&lt;/span&gt;()
+&lt;span style=&#34;color:#a6e22e&#34;&gt;app&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;HandleFunc&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/static/&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;staticHandler&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;proxy&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewServeMux&lt;/span&gt;()
+&lt;span style=&#34;color:#a6e22e&#34;&gt;proxy&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;HandleFunc&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;ResponseWriter&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Request&lt;/span&gt;) {
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;prefix&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Header&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;X-Script-Name&amp;#34;&lt;/span&gt;)
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;prefix&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt; {
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;RequestURI&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;strings&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Replace&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;RequestURI&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;prefix&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;URL&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Path&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;RequestURI&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;// this is super greasy, not sure it&amp;#39;s optimal but Works For Me™
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  }
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;app&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;ServeHTTP&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt;)
+})&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;every-link-must-be-relative&#34;&gt;Every Link must be Relative&lt;/h2&gt;
+
+&lt;p&gt;Within the HTML markup, I had to change every URL and path to use a
+helper to generate the relative path with any necessary prefix.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;relative&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Request&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;relpath&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; {
+	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Sprintf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s%s&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Header&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;X-Script-Name&amp;#34;&lt;/span&gt;), &lt;span style=&#34;color:#a6e22e&#34;&gt;relpath&lt;/span&gt;)
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-erb&#34; data-lang=&#34;erb&#34;&gt;&amp;lt;link href=&amp;#34;&amp;lt;%= relative(req, &amp;#34;/static/application.css&amp;#34;) %&amp;gt;&amp;#34; ...&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;req.Header.Get&lt;/code&gt; returns &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; when there is no value set so the base case is handled smoothly.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;No rocket science here but it was interesting to find a non-trivial HTTP
+edge case in Go without a blog post on the subject and very rewarding to
+solve it myself. &lt;a href=&#34;https://github.com/contribsys/faktory/commit/92d88d33f3a820ad5cc2085b1b12c78b7e5b8ea7&#34;&gt;Here&#39;s the big commit that landed in Faktory to add
+proxy support.&lt;/a&gt;  I hope this helps someone else!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Leaving Twitter</title>
@@ -858,95 +948,6 @@ Nice.&lt;/p&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=b2fI0vGf3Bo&amp;amp;list=PLjeHh2LSCFrWGT5uVjUuFKAcrcj5kSai1&#34;&gt;Batches screencast&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://billing.contribsys.com/spro/new.cgi&#34;&gt;Buy Sidekiq Pro&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Taming Rails memory bloat</title>
-      <link>https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/</link>
-      <pubDate>Wed, 25 Apr 2018 09:00:00 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/</guid>
-      <description>
-
-&lt;p&gt;MRI, the standard Ruby interpreter, has a serious problem with memory bloat in large Rails apps.
-It&#39;s quite common for me to see Sidekiq processes which are 1-2GB in RSS or even larger!
-It turns out that a large part of this memory usage is due to memory fragmentation: MRI uses
-the OS&#39;s memory allocator by default (on Linux, almost always GNU glibc),
-which seems to work poorly with Ruby&#39;s memory allocation patterns.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.speedshop.co/2017/12/04/malloc-doubles-ruby-memory.html&#34;&gt;Nate Berkopec went into great detail&lt;/a&gt; about Ruby memory bloat.  His blog post is a much deeper dive.&lt;/p&gt;
-
-&lt;p&gt;One important note: this behavior is specific to GNU glibc on Linux.
-OSX and BSD appear to have better quality allocators, not as prone to fragmentation.&lt;/p&gt;
-
-&lt;h2 id=&#34;reducing-arenas&#34;&gt;Reducing Arenas&lt;/h2&gt;
-
-&lt;p&gt;The major cause of fragmentation appears to be the large number of glibc memory arenas in heavily multi-threaded programs.
-&amp;quot;Heavily multi-threaded&amp;quot; -- sound familiar?  That&#39;s Sidekiq.
-People on Heroku have discovered that to reduce memory, they should set &lt;code&gt;-c 5&lt;/code&gt; which reduces the number of threads from 25 to 5.
-That reduces the &amp;quot;heavily multi-threaded&amp;quot; trigger and leads to less bloat.&lt;/p&gt;
-
-&lt;p&gt;But the better way is to reduce glibc&#39;s memory arena count.
-Set this environment variable in your dynos, systemd unit files or however you start Sidekiq:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;MALLOC_ARENA_MAX = 2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You should see a noticable reduction in memory usage after rebooting.&lt;/p&gt;
-
-&lt;h2 id=&#34;using-jemalloc&#34;&gt;Using jemalloc&lt;/h2&gt;
-
-&lt;p&gt;Switching Ruby&#39;s allocator to jemalloc looks to be an even more effective solution... for a price.
-One example:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://www.mikeperham.com/images/jemalloc.jpg&#34; alt=&#34;jemalloc&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The results have been described as &amp;quot;miraculous&amp;quot;.
-That&#39;s &lt;strong&gt;40GB&lt;/strong&gt; worth of Sidekiq processes shrunk to &lt;strong&gt;9GB&lt;/strong&gt;, a 4x reduction.
-Much of this space is fragmented memory and switching to jemalloc fixes this wasted space.
-Seeing R14 errors on Heroku?
-&lt;a href=&#34;https://www.levups.com/en/blog/2017/optimize_ruby_memory_usage_jemalloc_heroku_scalingo.html&#34;&gt;Just throw a little jemalloc in there&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The issue with jemalloc is that it can cause problems in different environments.
-For example, it&#39;s had compatibility issues with Alpine Linux so if you are running Ruby in Alpine-based Docker images, you could see segfaults or stack overflows.
-If you want to try jemalloc, be sure you test your app thoroughly before pushing to production.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://oldblog.antirez.com/post/everything-about-redis-24.html&#34;&gt;Redis pulled in jemalloc explicitly to reduce memory fragmentation, with
-big success&lt;/a&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&amp;quot;Since we introduced the specially encoded data types Redis started suffering from fragmentation. We tried different things to fix the problem, but basically the Linux default allocator in glibc sucks really, really hard. [...] Every single case of fragmentation in real world systems was fixed by this change, and also the amount of memory used dropped a bit.&amp;quot;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;trying-jemalloc&#34;&gt;Trying jemalloc&lt;/h2&gt;
-
-&lt;p&gt;Want to try jemalloc on OS X?
-My installed rubies seem to hardcode the memory allocator so you might need to build MRI with jemalloc specifically.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;brew install jemalloc
-&lt;span style=&#34;color:#75715e&#34;&gt;# Now install Ruby with jemalloc enabled&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;#   with rbenv:&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;#     RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install 2.5.1&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;#   with ruby-install&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;#     ruby-install ruby-2.5.1 -- --with-jemalloc&lt;/span&gt;
-chruby ruby-2.5.1
-MALLOC_CONF&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;stats_print:true irb&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;If you see lots of arcane stats print out upon exiting IRB, jemalloc is running in your Ruby.
-Make sure to verify your Ruby is actually running jemalloc; it is easy to misconfigure and have it silently fall back to the default allocator.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I&#39;m convinced that tuning glibc is a no brainer.
-Set &lt;code&gt;MALLOC_ARENA_MAX=2&lt;/code&gt; everywhere you start Sidekiq and enjoy your extra memory.&lt;/p&gt;
-
-&lt;p&gt;Using jemalloc is more complex.
-Memory bloat has been a serious issue in large scale Rails apps as far back as I can remember in Ruby.
-I wish ruby-core would pull in jemalloc as the default allocator but they seem content with glibc.
-Major Rails apps like &lt;a href=&#34;https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3073&#34;&gt;GitLab&lt;/a&gt;, Discourse and &lt;a href=&#34;https://github.com/tootsuite/mastodon/issues/7257&#34;&gt;Mastodon&lt;/a&gt; plan to or have already integrated jemalloc but each app has to do it separately.
-If you have a large Rails app, integrate jemalloc and see significant improvements, please &lt;a href=&#34;https://bugs.ruby-lang.org/issues/new&#34;&gt;open a Ruby issue&lt;/a&gt; with graphs before and after.
-Let&#39;s give ruby-core all the data they need to make the right decision.&lt;/p&gt;
-
-&lt;p&gt;Ruby-core jemalloc issues: &lt;a href=&#34;https://bugs.ruby-lang.org/issues/13524&#34;&gt;13524&lt;/a&gt;, &lt;a href=&#34;https://bugs.ruby-lang.org/issues/9113&#34;&gt;9113&lt;/a&gt;, &lt;a href=&#34;https://bugs.ruby-lang.org/issues/14718&#34;&gt;14718&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
