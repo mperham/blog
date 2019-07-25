@@ -8,8 +8,112 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Wed, 17 Jul 2019 16:26:43 -0700</lastBuildDate>
+    <lastBuildDate>Fri, 19 Jul 2019 10:27:11 -0700</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Something For Nothing</title>
+      <link>https://www.mikeperham.com/2019/07/19/something-for-nothing/</link>
+      <pubDate>Fri, 19 Jul 2019 10:27:11 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2019/07/19/something-for-nothing/</guid>
+      <description>
+
+&lt;p&gt;&lt;img style=&#34;float: right; padding: 10px&#34; src=&#34;https://www.mikeperham.com/images/freebeer.jpg&#34; alt=&#34;freebeer&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;Do you like free things? Would you like to get something for nothing?
+Are you a Sidekiq user? If you answered yes to these questions, I have a
+case study in how one customer effectively got Sidekiq Enterprise for
+free.&lt;/p&gt;
+
+&lt;p&gt;One Friday morning, two engineers jumped into my weekly Happy Hour to ask me about a Sidekiq problem they were having.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;quot;We have two Sidekiq dynos with 40 threads each: we find that after about 5 minutes, they are only using about 20 threads; shouldn&#39;t all 40 threads pick up jobs? The jobs perform image processing.&amp;quot;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;bundle exec sidekiq -c 40
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;They were using two Heroku &lt;code&gt;performance-m&lt;/code&gt; dynos, which cost $250/month each.&lt;/p&gt;
+
+&lt;h2 id=&#34;mri-has-a-limit&#34;&gt;MRI has a Limit&lt;/h2&gt;
+
+&lt;p&gt;If you are a Ruby expert, you might already have an idea of what&#39;s going
+wrong but the crux is this: &lt;strong&gt;one MRI process will only use a single core&lt;/strong&gt;.
+Now consider &lt;strong&gt;image processing is often CPU intensive&lt;/strong&gt;.
+They were crushing a single core on each performance-m dyno while the rest of the cores sat there doing nothing.
+Those extra 20 threads weren&#39;t lazy -- they literally couldn&#39;t get any CPU time scheduled!&lt;/p&gt;
+
+&lt;h2 id=&#34;multi-process-to-the-rescue&#34;&gt;Multi-Process to the Rescue&lt;/h2&gt;
+
+&lt;p&gt;The answer was easy since they were a Sidekiq Enterprise customer:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bundle exec sidekiqswarm -c 10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;sidekiqswarm&lt;/code&gt; is a special binary which &lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process&#34;&gt;forks a Sidekiq process for
+each core on the
+dyno&lt;/a&gt;. We greatly reduce the thread count so each core
+isn&#39;t crushed by image processing.&lt;/p&gt;
+
+&lt;p&gt;In summary:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;Before&lt;/th&gt;
+&lt;th&gt;After&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Dynos&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Threads&lt;/td&gt;
+&lt;td&gt;80 (2 x 40)&lt;/td&gt;
+&lt;td&gt;80 (8 x 10)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;CPU&lt;/td&gt;
+&lt;td&gt;12%&lt;/td&gt;
+&lt;td&gt;100%&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Cost&lt;/td&gt;
+&lt;td&gt;$500&lt;/td&gt;
+&lt;td&gt;$250 + $179&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Savings&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;$71/mo&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Before they had 1 busy core and 7 idle cores on each dyno.  Now they
+have 8 busy cores and can spin down the second dyno instance to save
+$250/mo. Since Sidekiq Enterprise costs $179/mo, this change paid for
+Sidekiq Enterprise, saved an additional $71/mo and ensured that future worker dynos are fully utilized.&lt;/p&gt;
+
+&lt;p&gt;If you are using Performance dynos and not using Sidekiq Enterprise, you
+are likely paying for too many dynos.  &lt;a href=&#34;https://billing.contribsys.com/sent/new.cgi&#34;&gt;Purchasing Sidekiq Enterprise&lt;/a&gt; and
+using &lt;code&gt;sidekiqswarm&lt;/code&gt; to reduce your dyno count may cover the entire
+purchase price.  You get all the Sidekiq Pro and Enterprise features
+effectively for free.  Each sale has a 14 day money back guarantee if
+you want to try it today.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Proxying Golang Web Applications</title>
@@ -835,118 +939,6 @@ and Sidekiq is hanging out with all the Rubyists at &lt;a href=&#34;https://ruby
 &lt;iframe src= &#34;https://ruby.social/@sidekiq/100605401147582858/embed&#34; class=&#34;mastodon-embed&#34; style=&#34;max-width: 100%; border: 0&#34; width=&#34;600&#34; height=&#34;400&#34;&gt;&lt;/iframe&gt;
 
 
-</description>
-    </item>
-    
-    <item>
-      <title>Parallelize your work with Sidekiq Pro</title>
-      <link>https://www.mikeperham.com/2018/08/24/parallelize-your-work-with-sidekiq-pro/</link>
-      <pubDate>Fri, 24 Aug 2018 09:00:00 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2018/08/24/parallelize-your-work-with-sidekiq-pro/</guid>
-      <description>&lt;p&gt;A common issue for Sidekiq users are long jobs: jobs which
-process in serial a long list of things.  Why not parallelize that work
-and make it a lot faster?&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/MapReduce&#34;&gt;Map/Reduce&lt;/a&gt; is a pattern for distributed computing: a list of things is &lt;strong&gt;mapped&lt;/strong&gt; onto a set of jobs.
-Your Sidekiq workers execute those jobs in parallel and store the results of the work.
-Something then &lt;strong&gt;reduces&lt;/strong&gt; those calculations into a single result.
-In this way, large volumes of work can be done in parallel, speeding up batch processing.&lt;/p&gt;
-
-&lt;p&gt;I&#39;ve got a CSV file which needs to be processed.
-Processing each row might involve web crawling or some other intensive work so we can&#39;t process it in serial without it taking hours.
-We&#39;ll create a contrived example where we have a list of webpages and we want to get the bytesize of each page.
-We&#39;ll use Sidekiq Pro&#39;s Batch API to perform the work in parallel:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-csv&#34; data-lang=&#34;csv&#34;&gt;id,name,uri
-1273,Google,https://google.com
-1209,Yahoo,https://yahoo.com
-8273,Sidekiq,https://sidekiq.org&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Now we&#39;ll create a worker which kicks off the CSV processing and a worker which processes each row in the CSV.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;csv&amp;#39;&lt;/span&gt;
-require &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;net/http&amp;#39;&lt;/span&gt;
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CSVProcessor&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Worker&lt;/span&gt;
-
-  &lt;span style=&#34;color:#75715e&#34;&gt;# MAP - create a job for each row&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;perform&lt;/span&gt;(csv_filename&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;./pages.csv&amp;#34;&lt;/span&gt;)
-    batch &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Batch&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new
-    batch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;on(&lt;span style=&#34;color:#e6db74&#34;&gt;:success&lt;/span&gt;, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;class, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;filename&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; csv_filename)
-    batch&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;jobs &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;CSV&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;foreach(csv_filename, &lt;span style=&#34;color:#e6db74&#34;&gt;:headers&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;row&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;RowProcessor&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;perform_async(row&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fields)
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-
-  &lt;span style=&#34;color:#75715e&#34;&gt;# REDUCE - do something with all the results&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;on_success&lt;/span&gt;(status, options)
-    &lt;span style=&#34;color:#75715e&#34;&gt;# Sidekiq Pro will call this once all the RowProcessor jobs are done.&lt;/span&gt;
-    data, _ &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;redis &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;conn&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
-      conn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;multi &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-        conn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hgetall &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;crawl-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;status&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bid&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
-        conn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;del &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;crawl-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;status&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bid&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-
-    data&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;each_pair &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;name, size&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
-      puts &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;name&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; is &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;size&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; bytes&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;RowProcessor&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Worker&lt;/span&gt;
-
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;perform&lt;/span&gt;(row)
-    name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; row&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
-    uri &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; row&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
-    content &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Net&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;HTTP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(&lt;span style=&#34;color:#66d9ef&#34;&gt;URI&lt;/span&gt;(uri))
-
-    &lt;span style=&#34;color:#75715e&#34;&gt;# The only tricky part: we need to store the results&lt;/span&gt;
-    &lt;span style=&#34;color:#75715e&#34;&gt;# somewhere so the callback can gather the data together.&lt;/span&gt;
-    &lt;span style=&#34;color:#75715e&#34;&gt;# Redis is perfect for this.&lt;/span&gt;
-    &lt;span style=&#34;color:#75715e&#34;&gt;# The BID is the Batch ID shared by all jobs in the batch.&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;redis &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;conn&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
-      conn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hset &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;crawl-&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;#{&lt;/span&gt;self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bid&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;, name, content&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bytesize
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The Batch feature tracks the set of jobs and runs any callbacks when all jobs are finished.&lt;/p&gt;
-
-&lt;p&gt;I put that CSV data into ./pages.csv.
-We kick off the entire process with a simple &lt;code&gt;CSVProcessor.perform_async&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here&#39;s the result:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;2018-08-24T15:19:03.279Z 93268 TID-ov9mbken4 CSVProcessor JID-418bed33391e0d9d23c8151d INFO: start
-2018-08-24T15:19:03.286Z 93268 TID-ov9mbken4 CSVProcessor JID-418bed33391e0d9d23c8151d INFO: done: 0.006 sec
-2018-08-24T15:19:03.286Z 93268 TID-ov9mbkeg4 RowProcessor JID-97e9e7e8058a48a4cb5dc9dd BID-zFk-b6ZVqoS-6w INFO: start
-2018-08-24T15:19:03.290Z 93268 TID-ov9mbkeak RowProcessor JID-754a8ecd713507ca396bf3d7 BID-zFk-b6ZVqoS-6w INFO: start
-2018-08-24T15:19:03.294Z 93268 TID-ov9mbkfhk RowProcessor JID-1dfa5546400901f9a16f2181 BID-zFk-b6ZVqoS-6w INFO: start
-2018-08-24T15:19:03.442Z 93268 TID-ov9mbkeg4 RowProcessor JID-97e9e7e8058a48a4cb5dc9dd BID-zFk-b6ZVqoS-6w INFO: done: 0.156 sec
-2018-08-24T15:19:03.487Z 93268 TID-ov9mbkfhk RowProcessor JID-1dfa5546400901f9a16f2181 BID-zFk-b6ZVqoS-6w INFO: done: 0.193 sec
-2018-08-24T15:19:03.647Z 93268 TID-ov9mbkeak RowProcessor JID-754a8ecd713507ca396bf3d7 BID-zFk-b6ZVqoS-6w INFO: done: 0.358 sec
-2018-08-24T15:19:04.414Z 93268 TID-ov9mbka0k Sidekiq::Batch::Callback JID-00672f540b4dcc0f5c3d80e7 INFO: start
-2018-08-24T15:19:04.420Z 93268 TID-ov9mbka0k Sidekiq::Batch::Callback JID-00672f540b4dcc0f5c3d80e7 INFO: done: 0.006 sec
-2018-08-24T15:19:05.428Z 93268 TID-ov9mbkatw Sidekiq::Batch::Callback JID-9cebed28a6fd88f1877dcb46 INFO: start
-Google is 11340 bytes
-Sidekiq is 19475 bytes
-Yahoo is 483535 bytes
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;(Side note: good grief, Yahoo!)&lt;/p&gt;
-
-&lt;p&gt;We built a parallel web crawling system in less than 50 lines of Ruby code + Sidekiq Pro.
-Nice.&lt;/p&gt;
-
-&lt;p&gt;Helpful links:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Batches&#34;&gt;Batches wiki&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=b2fI0vGf3Bo&amp;amp;list=PLjeHh2LSCFrWGT5uVjUuFKAcrcj5kSai1&#34;&gt;Batches screencast&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://billing.contribsys.com/spro/new.cgi&#34;&gt;Buy Sidekiq Pro&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </description>
     </item>
     
