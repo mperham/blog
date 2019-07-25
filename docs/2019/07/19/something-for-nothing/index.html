@@ -86,12 +86,12 @@ Those extra 20 threads weren't lazy -- they literally couldn't get any CPU time 
 
 <p>The answer was easy since they were a Sidekiq Enterprise customer:</p>
 
-<pre><code>bundle exec sidekiqswarm -c 10
+<pre><code>bundle exec sidekiqswarm -c 20
 </code></pre>
 
 <p><code>sidekiqswarm</code> is a special binary which <a href="https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process">forks a Sidekiq process for
 each core on the
-dyno</a>. We greatly reduce the thread count so each core
+dyno</a>. We reduce the thread count so each core
 isn't crushed by image processing.</p>
 
 <p>In summary:</p>
@@ -119,8 +119,8 @@ isn't crushed by image processing.</p>
 </tr>
 
 <tr>
-<td>CPU</td>
-<td>25%</td>
+<td>Core usage</td>
+<td>50%</td>
 <td>100%</td>
 </tr>
 

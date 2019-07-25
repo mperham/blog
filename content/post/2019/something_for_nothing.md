@@ -33,12 +33,12 @@ Those extra 20 threads weren't lazy -- they literally couldn't get any CPU time 
 The answer was easy since they were a Sidekiq Enterprise customer:
 
 ```
-bundle exec sidekiqswarm -c 10
+bundle exec sidekiqswarm -c 20
 ```
 
 `sidekiqswarm` is a special binary which [forks a Sidekiq process for
 each core on the
-dyno](https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process). We greatly reduce the thread count so each core
+dyno](https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process). We reduce the thread count so each core
 isn't crushed by image processing.
 
 In summary:
@@ -47,7 +47,7 @@ In summary:
 ---|---|---
 Dynos | 2 | 1
 Threads | 80 (2 x 40) | 80 (4 x 20)
-CPU | 25% | 100%
+Core usage | 50% | 100%
 Cost | $500 | $250 + $179
 Savings | | $71/mo
 

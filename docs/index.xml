@@ -49,12 +49,12 @@ Those extra 20 threads weren&#39;t lazy -- they literally couldn&#39;t get any C
 
 &lt;p&gt;The answer was easy since they were a Sidekiq Enterprise customer:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;bundle exec sidekiqswarm -c 10
+&lt;pre&gt;&lt;code&gt;bundle exec sidekiqswarm -c 20
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;code&gt;sidekiqswarm&lt;/code&gt; is a special binary which &lt;a href=&#34;https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process&#34;&gt;forks a Sidekiq process for
 each core on the
-dyno&lt;/a&gt;. We greatly reduce the thread count so each core
+dyno&lt;/a&gt;. We reduce the thread count so each core
 isn&#39;t crushed by image processing.&lt;/p&gt;
 
 &lt;p&gt;In summary:&lt;/p&gt;
@@ -82,8 +82,8 @@ isn&#39;t crushed by image processing.&lt;/p&gt;
 &lt;/tr&gt;
 
 &lt;tr&gt;
-&lt;td&gt;CPU&lt;/td&gt;
-&lt;td&gt;25%&lt;/td&gt;
+&lt;td&gt;Core usage&lt;/td&gt;
+&lt;td&gt;50%&lt;/td&gt;
 &lt;td&gt;100%&lt;/td&gt;
 &lt;/tr&gt;
 
