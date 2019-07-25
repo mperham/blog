@@ -46,13 +46,13 @@ In summary:
  | Before | After
 ---|---|---
 Dynos | 2 | 1
-Threads | 80 (2 x 40) | 80 (8 x 10)
-CPU | 12% | 100%
+Threads | 80 (2 x 40) | 80 (4 x 20)
+CPU | 25% | 100%
 Cost | $500 | $250 + $179
 Savings | | $71/mo
 
-Before they had 1 busy core and 7 idle cores on each dyno.  Now they
-have 8 busy cores and can spin down the second dyno instance to save
+Before they had 1 busy core and 3 idle cores on each dyno.  Now they
+have 4 busy cores and can spin down the second dyno instance to save
 $250/mo. Since Sidekiq Enterprise costs $179/mo, this change paid for
 Sidekiq Enterprise, saved an additional $71/mo and ensured that future worker dynos are fully utilized.
 

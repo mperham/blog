@@ -115,12 +115,12 @@ isn't crushed by image processing.</p>
 <tr>
 <td>Threads</td>
 <td>80 (2 x 40)</td>
-<td>80 (8 x 10)</td>
+<td>80 (4 x 20)</td>
 </tr>
 
 <tr>
 <td>CPU</td>
-<td>12%</td>
+<td>25%</td>
 <td>100%</td>
 </tr>
 
@@ -138,8 +138,8 @@ isn't crushed by image processing.</p>
 </tbody>
 </table>
 
-<p>Before they had 1 busy core and 7 idle cores on each dyno.  Now they
-have 8 busy cores and can spin down the second dyno instance to save
+<p>Before they had 1 busy core and 3 idle cores on each dyno.  Now they
+have 4 busy cores and can spin down the second dyno instance to save
 $250/mo. Since Sidekiq Enterprise costs $179/mo, this change paid for
 Sidekiq Enterprise, saved an additional $71/mo and ensured that future worker dynos are fully utilized.</p>
 
