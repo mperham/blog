@@ -8,8 +8,87 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Fri, 19 Jul 2019 10:27:11 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 03 Sep 2019 09:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Welcome to Sidekiq 6.0</title>
+      <link>https://www.mikeperham.com/2019/09/03/welcome-to-sidekiq-6.0/</link>
+      <pubDate>Tue, 03 Sep 2019 09:00:00 +0000</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2019/09/03/welcome-to-sidekiq-6.0/</guid>
+      <description>
+
+&lt;p&gt;I&#39;m happy to announce that Sidekiq 6.0, Sidekiq Pro 5.0 and Sidekiq
+Enterprise 2.0 are now generally available after nine months of work by
+various contributors! 🎉🎂&lt;/p&gt;
+
+&lt;h2 id=&#34;no-more-daemonizing&#34;&gt;No More Daemonizing&lt;/h2&gt;
+
+&lt;p&gt;Sidekiq 6.0 no longer offers the ability to run as an circa-1990s init.d-style daemon by removing the &lt;code&gt;logfile&lt;/code&gt;, &lt;code&gt;pidfile&lt;/code&gt; and
+&lt;code&gt;daemonize&lt;/code&gt; command line flags.
+For a decade, all major Unix systems have offered init tooling that handle these concerns automatically for the developer and sysadmin.
+For the last five years &lt;a href=&#34;https://www.mikeperham.com/2014/09/22/dont-daemonize-your-daemons/&#34;&gt;I&#39;ve blogged about and recommended against&lt;/a&gt; using these flags and
+Sidekiq has provided &lt;a href=&#34;https://github.com/mperham/sidekiq/tree/master/examples&#34;&gt;example systemd and upstart configuration files&lt;/a&gt; since day one.
+No more excuses, good riddence.&lt;/p&gt;
+
+&lt;h2 id=&#34;logging&#34;&gt;Logging&lt;/h2&gt;
+
+&lt;p&gt;Sidekiq&#39;s logging subsystem was overhauled by Andrew Babichev to allow pluggable logging
+formatters, allowing the user to configure JSON-formatted log output in
+production, for instance.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;configure_server &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;config&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
+  config&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;log_formatter &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sidekiq&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Logger&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Formatters&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;JSON&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;new
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;See &lt;code&gt;sidekiq/logger&lt;/code&gt; for implementation details.&lt;/p&gt;
+
+&lt;h2 id=&#34;activejob-integration&#34;&gt;ActiveJob integration&lt;/h2&gt;
+
+&lt;p&gt;I recently added the ability for ActiveJobs to use the &lt;code&gt;sidekiq_options&lt;/code&gt;
+method like any normal &lt;code&gt;Sidekiq::Worker&lt;/code&gt; to control Sidekiq features.
+This makes it  easier to tailor Sidekiq&#39;s retry subsystem to each
+individual ActiveJob&#39;s needs.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ExampleJob&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;ActiveJob&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Base&lt;/span&gt;
+  queue_as &lt;span style=&#34;color:#e6db74&#34;&gt;:critical&lt;/span&gt;
+  sidekiq_options &lt;span style=&#34;color:#66d9ef&#34;&gt;retry&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;backtrace&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;perform&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;args)
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;upgrade-requirements&#34;&gt;Upgrade Requirements&lt;/h2&gt;
+
+&lt;p&gt;Like Rails 6.0, Sidekiq 6.0 has upgraded platform requirements:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ruby 2.5+&lt;/li&gt;
+&lt;li&gt;Redis 4.0+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Your Redis provider should have documenation on how to migrate your
+Redis instance to a supported version.&lt;/p&gt;
+
+&lt;h2 id=&#34;twitter&#34;&gt;Twitter&lt;/h2&gt;
+
+&lt;p&gt;You may or may not have noticed but I&#39;ve deleted my Twitter account.
+I can&#39;t interact with people as easily but it&#39;s debatable whether that is a feature or a bug.
+I&#39;m still lurking in various Ruby places, Mastodon, /r/ruby, some Slack groups, etc and you can always find me
+via email. I strongly encourage Sidekiq users to join me at my weekly &lt;a href=&#34;https://sidekiq.org/support.html&#34;&gt;Happy
+Hour&lt;/a&gt;.  I get to meet you and learn your needs, you get to learn
+Sidekiq straight from me!&lt;/p&gt;
+
+&lt;h2 id=&#34;wrapup&#34;&gt;Wrapup&lt;/h2&gt;
+
+&lt;p&gt;That&#39;s the quick overview, a few changes but mostly Sidekiq has been stable!
+I hope these changes make Sidekiq more useful and reliable than ever to you.
+The actual Upgrade notes can be found here:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/6.0-Upgrade.md&#34;&gt;Sidekiq 6.0&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/Pro-5.0-Upgrade.md&#34;&gt;Sidekiq Pro 5.0&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/Ent-2.0-Upgrade.md&#34;&gt;Sidekiq Enterprise 2.0&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Something For Nothing</title>
@@ -876,69 +955,6 @@ dpkg -i faktory_0.9.0-beta3_amd64.deb&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 They don&#39;t have the benefit of a full-blown package repo but they provide a stable download link for binaries and are far simpler to setup and use from my POV.
 In reality, I would imagine most teams will fetch and install the package via Puppet/Chef/Ansible.
 Hopefully as Faktory gets more popular, it will make its way into the official distro repos.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Moving to Mastodon</title>
-      <link>https://www.mikeperham.com/2018/09/21/moving-to-mastodon/</link>
-      <pubDate>Fri, 21 Sep 2018 09:37:21 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2018/09/21/moving-to-mastodon/</guid>
-      <description>&lt;p&gt;Last month I revived &lt;a href=&#34;https://mastodon.xyz/@mperham&#34;&gt;my Mastodon account&lt;/a&gt; after seeing one more round of
-Twitter giving Nazi accounts acting in bad faith a pass while suspending
-upset liberal accounts acting in good faith.&lt;/p&gt;
-
-&lt;p&gt;I think this concept of acting in good faith vs bad faith is the crux of
-the issue in social media today.  Is this person trying to make things
-better or are they delaying action, spreading confusion
-or uncertainty, harassing others into silence?  Often it is easy to tell
-in the case of red-blooded USA patriot accounts with IP addresses in St.
-Petersburg or anonymous anime fans who make it clear that they hate women.&lt;/p&gt;
-
-&lt;p&gt;But often it&#39;s not clear at all.
-People acting in good faith can still inadvertantly spread FUD and good
-faith itself is not black/white.
-In the end, tech can&#39;t solve a social problem.  There&#39;s no algorithm that can
-correctly classify the sentiment of a 280 character message.&lt;/p&gt;
-
-&lt;p&gt;Until social networks
-demonstrate they can block bad actors at scale, federation is the only workable
-solution.  Mastodon instance admins can document and enforce a Code of
-Conduct and other admins can block/ban users or instances which violate their
-Code.  Already there are blocklists for Mastodon instances which have
-been deemed bad actors for one reason or another.&lt;/p&gt;
-
-&lt;p&gt;It&#39;s not perfect and perhaps it won&#39;t scale very far but it does appear
-to have enough traction to work today. Niche-specific instances like
-&lt;a href=&#34;https://ruby.social&#34;&gt;https://ruby.social&lt;/a&gt; for Ruby developers make for nice, small communities and
-small communities tend to treat each other with more respect than larger
-ones.  &lt;a href=&#34;https://instances.social/&#34;&gt;Find your own community&lt;/a&gt; and wean yourself off Twitter today!&lt;/p&gt;
-
-&lt;p&gt;Mastodon looks pretty similar to Twitter:&lt;/p&gt;
-
-
-
-
-
-
-
-&lt;iframe src= &#34;https://mastodon.xyz/@mperham/100743659488287177/embed&#34; class=&#34;mastodon-embed&#34; style=&#34;max-width: 100%; border: 0&#34; width=&#34;600&#34; height=&#34;230&#34;&gt;&lt;/iframe&gt;
-
-
-
-&lt;p&gt;I&#39;m at &lt;a href=&#34;https://mastodon.xyz/@mperham&#34;&gt;https://mastodon.xyz/@mperham&lt;/a&gt;
-and Sidekiq is hanging out with all the Rubyists at &lt;a href=&#34;https://ruby.social/@sidekiq&#34;&gt;https://ruby.social/@sidekiq&lt;/a&gt;.  I hope you give Mastodon a try.&lt;/p&gt;
-
-
-
-
-
-
-
-&lt;iframe src= &#34;https://ruby.social/@sidekiq/100605401147582858/embed&#34; class=&#34;mastodon-embed&#34; style=&#34;max-width: 100%; border: 0&#34; width=&#34;600&#34; height=&#34;400&#34;&gt;&lt;/iframe&gt;
-
-
 </description>
     </item>
     
