@@ -14,7 +14,7 @@ Sidekiq 6.0 no longer offers the ability to run as an circa-1990s init.d-style d
 For a decade, all major Unix systems have offered init tooling that handle these concerns automatically for the developer and sysadmin.
 For the last five years [I've blogged about and recommended against](/2014/09/22/dont-daemonize-your-daemons/) using these flags and
 Sidekiq has provided [example systemd and upstart configuration files](https://github.com/mperham/sidekiq/tree/master/examples) since day one.
-No more excuses, good riddence.
+No more excuses, good riddance.
 
 ## Logging
 
@@ -54,7 +54,7 @@ Like Rails 6.0, Sidekiq 6.0 has upgraded platform requirements:
 * Ruby 2.5+
 * Redis 4.0+
 
-Your Redis provider should have documenation on how to migrate your
+Your Redis provider should have documentation on how to migrate your
 Redis instance to a supported version.
 
 ## Twitter
