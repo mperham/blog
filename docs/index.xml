@@ -30,7 +30,7 @@ various contributors! 🎉🎂&lt;/p&gt;
 For a decade, all major Unix systems have offered init tooling that handle these concerns automatically for the developer and sysadmin.
 For the last five years &lt;a href=&#34;https://www.mikeperham.com/2014/09/22/dont-daemonize-your-daemons/&#34;&gt;I&#39;ve blogged about and recommended against&lt;/a&gt; using these flags and
 Sidekiq has provided &lt;a href=&#34;https://github.com/mperham/sidekiq/tree/master/examples&#34;&gt;example systemd and upstart configuration files&lt;/a&gt; since day one.
-No more excuses, good riddence.&lt;/p&gt;
+No more excuses, good riddance.&lt;/p&gt;
 
 &lt;h2 id=&#34;logging&#34;&gt;Logging&lt;/h2&gt;
 
@@ -64,7 +64,7 @@ individual ActiveJob&#39;s needs.&lt;/p&gt;
 &lt;li&gt;Redis 4.0+&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Your Redis provider should have documenation on how to migrate your
+&lt;p&gt;Your Redis provider should have documentation on how to migrate your
 Redis instance to a supported version.&lt;/p&gt;
 
 &lt;h2 id=&#34;twitter&#34;&gt;Twitter&lt;/h2&gt;
