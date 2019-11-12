@@ -13,7 +13,7 @@ Send me *public* events so I can list them here: mperham@gmail.com.
 
 ## Tuesday 11/19
 
-* Send me the time, place and a link to more info!
+* Rubyconf 5k, 7:00am, meet at [Riverfront Station](https://goo.gl/maps/11qRsFEyn1dvrVFk9).
 
 ## Wednesday 11/20
 
