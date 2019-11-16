@@ -16,6 +16,7 @@ Send me *public* events so I can list them here: mperham@gmail.com.
 ## Tuesday 11/19
 
 * Rubyconf 5k, 7:00am, meet at [Riverfront Station](https://goo.gl/maps/11qRsFEyn1dvrVFk9).
+* The Very Unofficial Ruby Karaoke, 7:30pm-2am, Santa's Pub
 
 ## Wednesday 11/20
 
