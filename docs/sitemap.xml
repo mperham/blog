@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.mikeperham.com/2019/12/17/workload-isolation-with-queue-sharding/</loc>
+    <lastmod>2019-12-17T10:55:37-08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.mikeperham.com/2019/09/03/welcome-to-sidekiq-6.0/</loc>
     <lastmod>2019-09-03T09:00:00+00:00</lastmod>
   </url>
@@ -1563,7 +1568,7 @@
   
   <url>
     <loc>https://www.mikeperham.com/</loc>
-    <lastmod>2019-09-03T09:00:00+00:00</lastmod>
+    <lastmod>2019-12-17T10:55:37-08:00</lastmod>
     <priority>0</priority>
   </url>
   
