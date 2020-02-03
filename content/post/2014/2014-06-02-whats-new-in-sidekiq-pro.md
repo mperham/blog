@@ -7,7 +7,7 @@ title: What's new in Sidekiq Pro
 url: /2014/06/02/whats-new-in-sidekiq-pro/
 ---
 
-Since the Sidekiq 3.0 release, I've been slowly chipping away at some new features in [Sidekiq Pro][1]. What's new and upcoming?  
+Since the Sidekiq 3.0 release, I've been slowly chipping away at some new features in [Sidekiq Pro][1]. What's new and upcoming?
 <!--more-->
 
 **Conference Sponsorship**
@@ -26,7 +26,7 @@ q.pause!
 
 Jobs will accumulate until the queue is unpaused. As you might guess, the Web UI will show when a queue is paused:
 
-[<img src="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-1.56.37-PM.png" alt="Screen Shot 2014-06-01 at 1.56.37 PM" class="alignnone size-full wp-image-1673" />][3]
+[<img src="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-1.56.37-PM.png" alt="Screen Shot 2014-06-01 at 1.56.37 PM" class="alignnone size-full wp-image-1673" width="808" height="314" />][3]
 
 **Batch tweaks**
 
@@ -38,7 +38,7 @@ Successful batches are now removed from the UI so they don't overwhelm the Batch
 
 roy-sac on DeviantArt was nice enough to make an ANSI art startup banner for Sidekiq Pro. It's amazing what a real artist can do! This will be available in 1.7.4+.
 
-[<img src="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-3.16.46-PM.png" alt="Screen Shot 2014-06-01 at 3.16.46 PM" class="alignnone size-full wp-image-1683" />][4]
+[<img src="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-3.16.46-PM.png" alt="Screen Shot 2014-06-01 at 3.16.46 PM" class="alignnone size-full wp-image-1683" width="705" height="370"/>][4]
 
 **Notification deprecations**
 
