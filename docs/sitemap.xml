@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/</loc>
+    <lastmod>2020-03-09T09:00:00-08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.mikeperham.com/2020/01/08/faktory-enterprise/</loc>
     <lastmod>2020-01-08T09:16:51-08:00</lastmod>
   </url>
@@ -1573,7 +1578,7 @@
   
   <url>
     <loc>https://www.mikeperham.com/</loc>
-    <lastmod>2020-01-08T09:16:51-08:00</lastmod>
+    <lastmod>2020-03-09T09:00:00-08:00</lastmod>
     <priority>0</priority>
   </url>
   

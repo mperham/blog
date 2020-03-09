@@ -8,8 +8,157 @@
     <language>en-us</language>
     <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
     <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
-    <lastBuildDate>Wed, 08 Jan 2020 09:16:51 -0800</lastBuildDate>
+    <lastBuildDate>Mon, 09 Mar 2020 09:00:00 -0800</lastBuildDate>
     <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Creating a private, commercial Docker registry</title>
+      <link>https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/</link>
+      <pubDate>Mon, 09 Mar 2020 09:00:00 -0800</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/</guid>
+      <description>
+
+&lt;p&gt;One thing I&#39;ve come to respect about containers are how easy they make
+packaging and running Linux infrastructure.  No more fighting the distro
+for the right version of a package, a dozen builds for a dozen
+distro-specific packages, etc.  Everything is encapsulated within a
+single container image that runs on any modern Linux.&lt;/p&gt;
+
+&lt;p&gt;It hasn&#39;t escaped my notice that most of my Faktory users are using the
+&lt;a href=&#34;https://hub.docker.com/r/contribsys/faktory&#34;&gt;Docker image&lt;/a&gt; to run Faktory which means that most of my Faktory Pro and
+Enterprise customers will want a Docker image too. How do I distribute
+Docker images which contain my commercial builds? &lt;strong&gt;Run my own Docker
+image registry!&lt;/strong&gt; Here&#39;s how.&lt;/p&gt;
+
+&lt;h2 id=&#34;install-docker-on-your-server&#34;&gt;Install Docker on your Server&lt;/h2&gt;
+
+&lt;p&gt;Docker provides a container image with their &lt;a href=&#34;https://hub.docker.com/_/registry&#34;&gt;proprietary registry
+server&lt;/a&gt; along with &lt;a href=&#34;https://docs.docker.com/registry/deploying/&#34;&gt;documentation on
+how to use it&lt;/a&gt;. It&#39;s not
+open source but it is Apache licensed so anyone can run it for any
+purpose.&lt;/p&gt;
+
+&lt;p&gt;I wasn&#39;t too happy with this step -- I don&#39;t like adding moving parts to my production servers -- but there wasn&#39;t any other supported deployment mechanism.
+I developed this set of commands to install Docker and the registry image.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;apt-get install -y gnupg-agent software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+add-apt-repository &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;deb [arch=amd64] https://download.docker.com/linux/ubuntu &lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;lsb_release -cs&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; stable&amp;#34;&lt;/span&gt;
+apt-get install -y docker-ce docker-ce-cli containerd.io
+docker pull registry:2&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Protip: don&#39;t copy this, what I did in January 2020 can easily change.
+Follow the Linux install directions on docker.com.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;a2enmod headers proxy proxy_http
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Proxying the registry required me to activate these Apache modules. YMMV.&lt;/p&gt;
+
+&lt;h2 id=&#34;configure-apache-proxy&#34;&gt;Configure Apache Proxy&lt;/h2&gt;
+
+&lt;p&gt;I used small portions of the &lt;a href=&#34;https://docs.docker.com/registry/recipes/apache/&#34;&gt;Apache recipe&lt;/a&gt; provided by Docker.
+Take some time to read it carefully.
+The core are these lines:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  ProxyPass        /v2 http://localhost:5000/v2
+  ProxyPassReverse /v2 http://localhost:5000/v2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The registry listens on localhost:5000. Apache proxies any /v2 requests to this port.&lt;/p&gt;
+
+&lt;p&gt;I have an atypical usecase: I have Faktory Pro customers and Faktory Enterprise customers.
+Both should be able to access the registry but the general public should not.
+How can I configure Apache to authenticate users from list A or list B?
+Turns out it was pretty easy with a single trick: &lt;code&gt;AuthBasicProvider&lt;/code&gt; allows multiple sources.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-apache&#34; data-lang=&#34;apache&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# sites-enabled/auth.conf&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;AuthnProviderAlias&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;file fpro&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+	AuthUserFile &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/var/fpro.passwd&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/AuthnProviderAlias&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;AuthnProviderAlias&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;file fent&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+	AuthUserFile &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/var/fent.passwd&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/AuthnProviderAlias&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# sites-enabled/registry.example.com.conf&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;VirtualHost&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;*:443&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+  ServerName &lt;span style=&#34;color:#66d9ef&#34;&gt;registry&lt;/span&gt;.example.com
+
+  &lt;span style=&#34;color:#75715e&#34;&gt;# ... other bits removed ...&lt;/span&gt;
+
+  ProxyPass        &lt;span style=&#34;color:#e6db74&#34;&gt;/v2&lt;/span&gt; http://localhost:5000/v2
+  ProxyPassReverse &lt;span style=&#34;color:#e6db74&#34;&gt;/v2&lt;/span&gt; http://localhost:5000/v2
+
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;Location&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;/v2&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+    Order deny,allow
+    Allow from &lt;span style=&#34;color:#66d9ef&#34;&gt;all&lt;/span&gt;
+    AuthName &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Registry Authentication&amp;#34;&lt;/span&gt;
+    AuthType basic
+    AuthBasicProvider fpro fent
+    Require valid-user
+
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;Limit&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;POST PUT DELETE PATCH&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+      Deny from &lt;span style=&#34;color:#66d9ef&#34;&gt;all&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/Limit&amp;gt;&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/Location&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;/VirtualHost&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Note that write verbs are 100% denied. So with this one block of
+configuration we:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;limit access to fpro and fent customers&lt;/li&gt;
+&lt;li&gt;enforce read-only access&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;pushing-new-images&#34;&gt;Pushing New Images&lt;/h2&gt;
+
+&lt;p&gt;If Apache limits access to read only, how do we push new images?
+Use an SSH tunnel to bypass Apache!
+Since the registry listens on localhost:5000, I build the image on my laptop, open an SSH tunnel to localhost:5000 on the server and push new image:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;ssh -N -f -L &lt;span style=&#34;color:#ae81ff&#34;&gt;5000&lt;/span&gt;:localhost:5000 root@registry.example.com
+sleep &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+docker tag example/&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;NAME&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;:&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt; host.docker.internal:5000/example/&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;NAME&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;:&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# NB: add &amp;#34;host.docker.internal:5000&amp;#34; to insecure registries in Docker Settings&lt;/span&gt;
+docker push host.docker.internal:5000/example/&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;NAME&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;:&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;VERSION&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Here we are forwarding laptop port 5000 to port localhost:5000 on &lt;code&gt;registry.example.com&lt;/code&gt;.
+That&#39;s the Registry running on the server.&lt;/p&gt;
+
+&lt;p&gt;This script has a little bit of magic so let me highlight a few things.
+&lt;code&gt;host.docker.internal&lt;/code&gt; is a special Docker hostname which I think means &amp;quot;the actual host OS Docker is running on&amp;quot; since localhost is specific to each container.
+The SSH tunnel does not shut down automatically so I have to kill it manually, email me if you know how to fix that.
+You have to add &lt;code&gt;host.docker.internal&lt;/code&gt; to Docker&#39;s list of insecure registries so you can push without TLS.
+We don&#39;t need TLS since we are using an SSH tunnel but Docker doesn&#39;t know that.&lt;/p&gt;
+
+&lt;h2 id=&#34;customer-access&#34;&gt;Customer Access&lt;/h2&gt;
+
+&lt;p&gt;Let&#39;s wave our hands a bit: now you have an accessible registry, yay!
+Assume &lt;code&gt;foobar&lt;/code&gt; is a user in the fpro or fent passwd files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ docker login registry.example.com
+Username: foobar
+Password: abc123
+
+$ docker pull registry.example.com/example/somename:1.5.0
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If the customer stops paying, you remove them from the passwd file and they lose the ability to pull images.
+That&#39;s pretty straightfoward, a nice developer experience.&lt;/p&gt;
+
+&lt;h2 id=&#34;redundancy&#34;&gt;Redundancy&lt;/h2&gt;
+
+&lt;p&gt;I run several identical servers A, B and C so that if one does down, any of the others can take over a service.
+The Registry limits itself to serving static files from one directory tree (e.g. &lt;code&gt;/var/www/docker&lt;/code&gt;).
+Pushing an image adds files to that directory tree.
+I configured that directory to be replicated across all my servers so when I push an image, all servers get a copy of the image within seconds.
+If server A goes down, server B can take over as &lt;code&gt;registry.example.com&lt;/code&gt; with a quick DNS swap.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;All this took me a few days to figure out and develop but I have been very happy with the result.
+Yes I had to install Docker on my server but I&#39;ve had zero problems with it so far and it takes very little resources to run.
+In return, Faktory installation and deployment have become much simpler for my customers using Docker.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Faktory Enterprise</title>
@@ -864,88 +1013,6 @@ For the price of one consultant-hour per month, you get a well-maintained and we
 &lt;p&gt;You can &lt;strong&gt;&lt;a href=&#34;https://billing.contribsys.com/fpro/new.cgi&#34;&gt;buy Faktory Pro&lt;/a&gt;&lt;/strong&gt; right here.
 Got questions?
 Check out the &lt;a href=&#34;https://github.com/contribsys/faktory/wiki&#34;&gt;wiki documentation&lt;/a&gt;, &lt;a href=&#34;https://github.com/contribsys/faktory/issues/new&#34;&gt;open an issue&lt;/a&gt; or &lt;a href=&#34;https://gitter.im/contribsys/faktory/&#34;&gt;jump into the chatroom&lt;/a&gt; and say hi!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Faktory 0.9.0 - Hello, Redis!</title>
-      <link>https://www.mikeperham.com/2018/10/16/faktory-0.9.0-hello-redis/</link>
-      <pubDate>Tue, 16 Oct 2018 09:26:18 -0700</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2018/10/16/faktory-0.9.0-hello-redis/</guid>
-      <description>
-
-&lt;p&gt;Faktory is my new background job system which brings Sidekiq-like background jobs to all languages.
-Want Sidekiq in PHP? Python? JavaScript? You got it!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://www.mikeperham.com/images/faktory-ui.png&#34; alt=&#34;faktory ui&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Faktory 0.9 has just been released with a major architectural overhaul.
-I&#39;ve replaced the previous storage engine, RocksDB, with Redis.
-This change had hugely important, very good downstream effects!&lt;/p&gt;
-
-&lt;p&gt;Want to try Faktory?  &lt;a href=&#34;https://github.com/contribsys/faktory/wiki/&#34;&gt;The wiki has everything you need&lt;/a&gt;!&lt;/p&gt;
-
-&lt;h2 id=&#34;why-redis&#34;&gt;Why Redis?&lt;/h2&gt;
-
-&lt;p&gt;So why did I replace RocksDB?
-RocksDB has two advantages over Redis:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;it is very fast&lt;/li&gt;
-&lt;li&gt;it is embeddable (which means it links into your process and provides an API your code calls directly).&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The problem is that &lt;strong&gt;everything else&lt;/strong&gt; is a disadvantage:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;It has dozens of barely documented options&lt;/li&gt;
-&lt;li&gt;It&#39;s written in C++, meaning a much more complex build process to embed it into a Go process&lt;/li&gt;
-&lt;li&gt;It has virtually no usage outside of large corporate silos (e.g. Facebook,
-Yahoo, Pinterest) where internal developers can learn and maintain it.&lt;/li&gt;
-&lt;li&gt;Its API is key/value only, very low-level, with no higher-level structures supported.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Redis, on the other hand:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;has lots of great documentation.&lt;/li&gt;
-&lt;li&gt;used everywhere, by everyone.&lt;/li&gt;
-&lt;li&gt;has lots of commercial support and offerings.&lt;/li&gt;
-&lt;li&gt;has a broad, stable, high-level API&lt;/li&gt;
-&lt;li&gt;is not much slower, only 10-20%.  It&#39;ll still handle 1000s of jobs/sec.&lt;/li&gt;
-&lt;li&gt;and lastly, I have years of experience supporting it in production!&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Now instead of a directory full of obscure files, we have a single
-&lt;code&gt;faktory.rdb&lt;/code&gt; file with all data.  Now we can use &lt;code&gt;redis-cli&lt;/code&gt; and RDB
-tools to introspect the datastore, monitor commands in real-time, use
-existing Redis monitoring integrations to monitor Faktory&#39;s storage.
-&lt;strong&gt;When we build on the shoulders of giants, the view is pretty good.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The only issue I had to solve is how to &amp;quot;embed&amp;quot; Redis?  I can&#39;t link it
-into the process directly so instead I updated Faktory to start Redis as
-a child process and maintain a named socket to it.  By keeping it local,
-using a named socket, we ensure our usage of Redis is both high
-performance and secure (since Redis does not listen on the network).&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://www.mikeperham.com/images/faktory-logo.png&#34; alt=&#34;faktory logo&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;what-s-upcoming&#34;&gt;What&#39;s Upcoming?&lt;/h2&gt;
-
-&lt;p&gt;With 0.9 out, I&#39;m very close to releasing Faktory Pro, my first commercially supported version of Faktory!
-The initial feature list:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Cron jobs - enqueue jobs on a periodic schedule&lt;/li&gt;
-&lt;li&gt;Expiring jobs - throw away jobs which have passed a given expiration date&lt;/li&gt;
-&lt;li&gt;Redis Gateway - expose Redis on a TCP port so you can attach a replica to it for real-time replication&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;em&gt;This feature list is very likely to grow over time.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/contribsys/faktory/wiki/&#34;&gt;See the Faktory wiki for how to install and lots of documentation&lt;/a&gt;.
-Join us in &lt;a href=&#34;https://gitter.im/contribsys/faktory&#34;&gt;the chatroom&lt;/a&gt; or &lt;a href=&#34;https://github.com/contribsys/faktory/issues/&#34;&gt;open an issue&lt;/a&gt; if you have questions.&lt;/p&gt;
 </description>
     </item>
     
