@@ -6,10 +6,21 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Mar 2020 09:00:00 -0800</lastBuildDate>
+    <lastBuildDate>Wed, 29 Apr 2020 09:00:21 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Railsconf 2020 Virtual Hallway</title>
+      <link>https://www.mikeperham.com/2020/04/29/railsconf-2020-virtual-hallway/</link>
+      <pubDate>Wed, 29 Apr 2020 09:00:21 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/04/29/railsconf-2020-virtual-hallway/</guid>
+      <description>I love Rubyconf and Railsconf. I&amp;rsquo;ve attended every one in the last 7 years and was super excited to learn that Railsconf would be held in my home town of Portland this year.
+/play sadtrombone
+Alas, the virus struck and Railsconf was cancelled. Railsconf 2020.2 Couch Edition was announced but my favorite part of conferences is the hallway track: meeting old friends in person, making new friends, talking about our lives and crazy ideas we have to make Ruby and open source better.</description>
+    </item>
     
     <item>
       <title>Creating a private, commercial Docker registry</title>
@@ -104,16 +115,6 @@ We need three pieces for any background job system:</description>
       <guid>https://www.mikeperham.com/2019/01/08/using-faktory-with-python/</guid>
       <description>Faktory is my new polyglot background job system, allowing any programming language to use background jobs. I&amp;rsquo;ve documented how to use Faktory with Ruby and Go as I&amp;rsquo;m an expert in both languages. Today I wanted to step outside my comfort zone and try Faktory with a language I don&amp;rsquo;t know: Python. Let&amp;rsquo;s see how easy it is for me, a noob, to get Python jobs running with Faktory!
 We need three pieces for any background job system:</description>
-    </item>
-    
-    <item>
-      <title>Introducing Faktory Pro</title>
-      <link>https://www.mikeperham.com/2018/12/01/introducing-faktory-pro/</link>
-      <pubDate>Sat, 01 Dec 2018 10:13:45 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2018/12/01/introducing-faktory-pro/</guid>
-      <description>I&amp;rsquo;m happy to announce Faktory Pro, my commercial version of Faktory, is now available for purchase. Faktory is my next generation background job system which brings Sidekiq functionality to all programming languages. If you want background jobs in Python, JavaScript, PHP, Go, Ruby, or Rust, Faktory can work with them all! It gives you a standard job interface and conventions useful for all languages.
-Why Jobs? I believe background jobs are the best architectural pattern for scaling typical business apps to many machines.</description>
     </item>
     
   </channel>
