@@ -1,59 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Mike Perham</title>
-    <link>https://www.mikeperham.com</link>
-    <description>Latest content from Mike Perham</description>
+    <link>https://www.mikeperham.com/</link>
+    <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <managingEditor>mperham@gmail.com (Mike Perham)</managingEditor>
-    <webMaster>mperham@gmail.com (Mike Perham)</webMaster>
     <lastBuildDate>Mon, 09 Mar 2020 09:00:00 -0800</lastBuildDate>
-    <atom:link href="https://www.mikeperham.com/" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
-      <title>About</title>
-      <link>https://www.mikeperham.com/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/about/</guid>
-      <description>&lt;p&gt;I&amp;rsquo;m an independent open source software developer based in Portland, OR where I live with a beautiful wife and energetic little boy.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://www.mikeperham.com/wp-content/uploads/2007/09/family.jpg&#34; alt=&#34;family&#34; width=&#34;827&#34; height=&#34;586&#34; class=&#34;aligncenter size-full wp-image-1332&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;I&amp;rsquo;ve been writing software since 1993 and open source since 1995.&lt;/p&gt;
-&lt;p&gt;Today I&amp;rsquo;m the founder and CEO of &lt;a href=&#34;https://www.contribsys.com&#34;&gt;Contributed Systems&lt;/a&gt;, my own company dedicated to building and supporting
-open-source-based application infrastructure.&lt;/p&gt;
-</description>
+      <title>Creating a private, commercial Docker registry</title>
+      <link>https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/</link>
+      <pubDate>Mon, 09 Mar 2020 09:00:00 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/</guid>
+      <description>One thing I&amp;rsquo;ve come to respect about containers are how easy they make packaging and running Linux infrastructure. No more fighting the distro for the right version of a package, a dozen builds for a dozen distro-specific packages, etc. Everything is encapsulated within a single container image that runs on any modern Linux.
+It hasn&amp;rsquo;t escaped my notice that most of my Faktory users are using the Docker image to run Faktory which means that most of my Faktory Pro and Enterprise customers will want a Docker image too.</description>
     </item>
     
     <item>
-      <title>Rubyconf 2019 Events</title>
-      <link>https://www.mikeperham.com/events/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/events/</guid>
-      <description>&lt;p&gt;This is the list of &lt;strong&gt;official&lt;/strong&gt; and unofficial Rubyconf events.
-Send me &lt;em&gt;public&lt;/em&gt; events so I can list them here: &lt;a href=&#34;mailto:mperham@gmail.com&#34;&gt;mperham@gmail.com&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;monday-1118&#34;&gt;Monday 11/18&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.eventbrite.com/e/10th-semi-annual-rails-tutorial-beerware-night-tickets-80972110763&#34;&gt;Rails Tutorial Beerware Night w/ Michael Hartl&lt;/a&gt;, 8-10:30pm, hotel bar&lt;/li&gt;
-&lt;li&gt;Board Game Night, 7-11pm, Harpeth room, bring your favorite game!&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.eventbrite.com/e/bold-penguin-rubyconf-happy-hour-tickets-81414840981&#34;&gt;Bold Penguin Happy Hour&lt;/a&gt;, 6:30-8:30pm, hotel bar, RSVP at link&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;tuesday-1119&#34;&gt;Tuesday 11/19&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Rubyconf 5k, 7:00am, meet at &lt;a href=&#34;https://goo.gl/maps/11qRsFEyn1dvrVFk9&#34;&gt;Riverfront Station&lt;/a&gt;.&lt;/li&gt;
-&lt;li&gt;The Very Unofficial Ruby Karaoke, 7:30pm-2am, Santa&amp;rsquo;s Pub&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;wednesday-1120&#34;&gt;Wednesday 11/20&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Send me the time, place and a link to more info!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;thursday-1121&#34;&gt;Thursday 11/21&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Send me the time, place and a link to more info!&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;hotel&#34;&gt;Hotel&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://goo.gl/maps/7JWwvgojD162&#34;&gt;JW Marriott Nashville&lt;/a&gt;&lt;/p&gt;
-</description>
+      <title>Faktory Enterprise</title>
+      <link>https://www.mikeperham.com/2020/01/08/faktory-enterprise/</link>
+      <pubDate>Wed, 08 Jan 2020 09:16:51 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/01/08/faktory-enterprise/</guid>
+      <description>The best way to kick off 2020 is by shipping something massive for me: Faktory Enterprise.
+Faktory is an open source, language-independent background job system. If you want to scale your business app to many millions of transactions per day, background jobs are the best way to do it. Celery, Bull, Sidekiq are all popular but they are limited to the one language they are written in (Python, JS and Ruby respectively).</description>
+    </item>
+    
+    <item>
+      <title>Workload Isolation with Queue Sharding</title>
+      <link>https://www.mikeperham.com/2019/12/17/workload-isolation-with-queue-sharding/</link>
+      <pubDate>Tue, 17 Dec 2019 10:55:37 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2019/12/17/workload-isolation-with-queue-sharding/</guid>
+      <description>A number of customers have contacted me with a common problem:
+ We run a multi-tenant system where our users can perform an action which results in a huge number of jobs being enqueued. When this happens, other users see significant delays in their jobs being processed while our Sidekiq cluster works through the backlog for that one user.
+ The issue is this: if you give 100% of your resources to process that user&amp;rsquo;s backlog, 100% of your customers will feel the pain of that backlog delay.</description>
+    </item>
+    
+    <item>
+      <title>Welcome to Sidekiq 6.0</title>
+      <link>https://www.mikeperham.com/2019/09/03/welcome-to-sidekiq-6.0/</link>
+      <pubDate>Tue, 03 Sep 2019 09:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2019/09/03/welcome-to-sidekiq-6.0/</guid>
+      <description>I&amp;rsquo;m happy to announce that Sidekiq 6.0, Sidekiq Pro 5.0 and Sidekiq Enterprise 2.0 are now generally available after nine months of work by various contributors! 🎉🎂
+No More Daemonizing Sidekiq 6.0 no longer offers the ability to run as an circa-1990s init.d-style daemon by removing the logfile, pidfile and daemonize command line flags. For a decade, all major Unix systems have offered init tooling that handle these concerns automatically for the developer and sysadmin.</description>
+    </item>
+    
+    <item>
+      <title>Something For Nothing</title>
+      <link>https://www.mikeperham.com/2019/07/19/something-for-nothing/</link>
+      <pubDate>Fri, 19 Jul 2019 10:27:11 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2019/07/19/something-for-nothing/</guid>
+      <description>Do you like free things? Would you like to get something for nothing? Are you a Sidekiq user? If you answered yes to these questions, I have a case study in how one customer effectively got Sidekiq Enterprise for free.
+One Friday morning, two engineers jumped into my weekly Happy Hour to ask me about a Sidekiq problem they were having.
+ &amp;ldquo;We have two Sidekiq dynos with 40 threads each: we find that after about 5 minutes, they are only using about 20 threads; shouldn&amp;rsquo;t all 40 threads pick up jobs?</description>
+    </item>
+    
+    <item>
+      <title>Proxying Golang Web Applications</title>
+      <link>https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/</link>
+      <pubDate>Wed, 17 Jul 2019 16:26:43 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/</guid>
+      <description>Recently someone posted an issue asking if Faktory could support putting nginx in front of Faktory&amp;rsquo;s Web UI. Normally you access the Web UI like http://localhost:7420/ but they wanted it to look something like http://somehost:8080/faktory. That&amp;rsquo;s quite common when trying to wrap multiple systems into something that looks like one website to the browser.
+The issue is that the Web UI assumed it was at the root, so it hardcoded paths like /static/application.</description>
+    </item>
+    
+    <item>
+      <title>Leaving Twitter</title>
+      <link>https://www.mikeperham.com/2019/07/11/leaving-twitter/</link>
+      <pubDate>Thu, 11 Jul 2019 10:23:50 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2019/07/11/leaving-twitter/</guid>
+      <description>Some have already noticed but I&amp;rsquo;ve been booted out of Twitter.
+&amp;ldquo;Why, Mike?&amp;rdquo;
+Because set my birth year to 2000 in my profile. I didn&amp;rsquo;t think it was anyone&amp;rsquo;s business, including Twitter, what my age was. Since I created the account in 2008, Twitter said I was too young to use their service and immediately locked the account.
+Quite possibly the least cool way to get your account locked?
+Eleven years.</description>
+    </item>
+    
+    <item>
+      <title>Using Faktory with JavaScript</title>
+      <link>https://www.mikeperham.com/2019/01/16/using-faktory-with-javascript/</link>
+      <pubDate>Wed, 16 Jan 2019 09:00:55 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2019/01/16/using-faktory-with-javascript/</guid>
+      <description>Faktory is my new polyglot background job system, allowing any programming language to use background jobs. I&amp;rsquo;ve documented how to use Faktory with Ruby and Go as I&amp;rsquo;m an expert in both languages. Today I wanted to step outside my comfort zone and try Faktory with a language I barely know: JavaScript. Let&amp;rsquo;s see how easy it is for me, a noob, to get JavaScript jobs running with Faktory!
+We need three pieces for any background job system:</description>
+    </item>
+    
+    <item>
+      <title>Using Faktory with Python</title>
+      <link>https://www.mikeperham.com/2019/01/08/using-faktory-with-python/</link>
+      <pubDate>Tue, 08 Jan 2019 10:03:54 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2019/01/08/using-faktory-with-python/</guid>
+      <description>Faktory is my new polyglot background job system, allowing any programming language to use background jobs. I&amp;rsquo;ve documented how to use Faktory with Ruby and Go as I&amp;rsquo;m an expert in both languages. Today I wanted to step outside my comfort zone and try Faktory with a language I don&amp;rsquo;t know: Python. Let&amp;rsquo;s see how easy it is for me, a noob, to get Python jobs running with Faktory!
+We need three pieces for any background job system:</description>
+    </item>
+    
+    <item>
+      <title>Introducing Faktory Pro</title>
+      <link>https://www.mikeperham.com/2018/12/01/introducing-faktory-pro/</link>
+      <pubDate>Sat, 01 Dec 2018 10:13:45 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2018/12/01/introducing-faktory-pro/</guid>
+      <description>I&amp;rsquo;m happy to announce Faktory Pro, my commercial version of Faktory, is now available for purchase. Faktory is my next generation background job system which brings Sidekiq functionality to all programming languages. If you want background jobs in Python, JavaScript, PHP, Go, Ruby, or Rust, Faktory can work with them all! It gives you a standard job interface and conventions useful for all languages.
+Why Jobs? I believe background jobs are the best architectural pattern for scaling typical business apps to many machines.</description>
     </item>
     
   </channel>
