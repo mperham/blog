@@ -1,124 +1,232 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> FiveRuns Dash, now with 100% more rimshot! </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>FiveRuns Dash, now with 100% more rimshot! | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>FiveRuns Dash, now with 100% more rimshot!</h1>
-      <small class="post-meta">Feb 24, 2009</small>
-      <div class="post-content">
-        <p>I'm giving away a free copy of my iPhone app, <a href="http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=301088210&amp;mt=8">Zinger</a>, to every person who gets their app running with our new metrics service, <a href="http://dash.fiveruns.com">Dash</a>. Just email me. Steps (<a href="http://support.fiveruns.com/faqs/dash/rails">documented in more depth here</a>):</p>
-
-<p>1) Request an invite by signing up at <a href="https://dash.fiveruns.com">https://dash.fiveruns.com</a><br />
-2) Log into Dash, create a new Rails application and note your application token.<br />
-3) Install the gem:</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2009-02-24
+  </small>
+  
+</p>
+<p>I&rsquo;m giving away a free copy of my iPhone app, <a href="http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=301088210&amp;mt=8">Zinger</a>, to every person who gets their app running with our new metrics service, <a href="http://dash.fiveruns.com">Dash</a>. Just email me. Steps (<a href="http://support.fiveruns.com/faqs/dash/rails">documented in more depth here</a>):</p>
+<ol>
+<li>Request an invite by signing up at <a href="https://dash.fiveruns.com">https://dash.fiveruns.com</a></li>
+<li>Log into Dash, create a new Rails application and note your application token.</li>
+<li>Install the gem:</li>
+</ol>
 <pre>sudo gem install json
 sudo gem install fiveruns-dash-rails -s http://gems.github.com
 </pre>
-
-<p>4) Add the gem to your <code>config/environment.rb</code></p>
-
+<ol start="4">
+<li>Add the gem to your <code>config/environment.rb</code></li>
+</ol>
 <pre lang="ruby">Rails::Initializer.run do |config|
   config.gem 'json' # needed because of a bug in json_pure
   config.gem 'fiveruns-dash-rails',
              :lib => 'fiveruns_dash_rails',
              :source => 'http://gems.github.com'
 </pre>
-
-<p>5) Add the initializer file <code>config/initializers/dash.rb</code> to start Dash:</p>
-
+<ol start="5">
+<li>Add the initializer file <code>config/initializers/dash.rb</code> to start Dash:</li>
+</ol>
 <pre lang="ruby">if defined?(Fiveruns::Dash)
   Fiveruns::Dash::Rails.start(:production => 'YOUR-APP-TOKEN-HERE')
 end
 </pre>
-
-<p>This will start Dash in the production environment. We don't recommend using Dash in development mode. If you have a staging environment, you can create a separate app for that environment and combine the two like so:</p>
-
+<p>This will start Dash in the production environment. We don&rsquo;t recommend using Dash in development mode. If you have a staging environment, you can create a separate app for that environment and combine the two like so:</p>
 <pre lang="ruby">if defined?(Fiveruns::Dash)
   Fiveruns::Dash::Rails.start(:production => 'PROD-TOKEN', :staging => 'STAGE-TOKEN')
 end
 </pre>
+<p>Email me if you have problems &ndash; I&rsquo;m happy to help people give Dash a test drive. Dash is 100% free right now until we&rsquo;ve worked out pricing models but rest assured there will always be a free tier so you don&rsquo;t have to worry about your app costing you money in the future. I hope your Dash test drive is full of rimshots with no sad trombones!</p>
 
-<p>Email me if you have problems -- I'm happy to help people give Dash a test drive. Dash is 100% free right now until we've worked out pricing models but rest assured there will always be a free tier so you don't have to worry about your app costing you money in the future. I hope your Dash test drive is full of rimshots with no sad trombones!</p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>

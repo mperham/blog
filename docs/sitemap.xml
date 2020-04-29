@@ -1,9 +1,14 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
     <loc>https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/</loc>
+    <lastmod>2020-03-09T09:00:00-08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.mikeperham.com/</loc>
     <lastmod>2020-03-09T09:00:00-08:00</lastmod>
   </url>
   
@@ -978,12 +983,12 @@
   </url>
   
   <url>
-    <loc>https://www.mikeperham.com/2009/03/08/tokyo-cabinet-vs-memcached/</loc>
+    <loc>https://www.mikeperham.com/2009/03/08/memcache-client-170-the-end-of-the-line/</loc>
     <lastmod>2009-03-08T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://www.mikeperham.com/2009/03/08/memcache-client-170-the-end-of-the-line/</loc>
+    <loc>https://www.mikeperham.com/2009/03/08/tokyo-cabinet-vs-memcached/</loc>
     <lastmod>2009-03-08T00:00:00+00:00</lastmod>
   </url>
   
@@ -1338,12 +1343,12 @@
   </url>
   
   <url>
-    <loc>https://www.mikeperham.com/2008/02/09/dsls-and-xml/</loc>
+    <loc>https://www.mikeperham.com/2008/02/09/acts_as_conference-day-1/</loc>
     <lastmod>2008-02-09T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://www.mikeperham.com/2008/02/09/acts_as_conference-day-1/</loc>
+    <loc>https://www.mikeperham.com/2008/02/09/dsls-and-xml/</loc>
     <lastmod>2008-02-09T00:00:00+00:00</lastmod>
   </url>
   
@@ -1574,12 +1579,6 @@
   
   <url>
     <loc>https://www.mikeperham.com/about/</loc>
-  </url>
-  
-  <url>
-    <loc>https://www.mikeperham.com/</loc>
-    <lastmod>2020-03-09T09:00:00-08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

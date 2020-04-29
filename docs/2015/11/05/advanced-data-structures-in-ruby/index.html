@@ -1,73 +1,199 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Advanced Data Structures in Ruby </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Advanced Data Structures in Ruby | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Advanced Data Structures in Ruby</h1>
-      <small class="post-meta">Nov 5, 2015</small>
-      <div class="post-content">
-        
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2015-11-05
+  </small>
+  
+</p>
 <p>Ruby provides several complex data structures out of the box; hash, array, set,
 and queue are all I need 99% of the time.  However knowing about more
 advanced data structures means you know when to reach for something more
-esoteric.  Here's two examples I've used recently.</p>
-
-<h3 id="connectionpool-timedstack">ConnectionPool::TimedStack</h3>
-
+esoteric.  Here&rsquo;s two examples I&rsquo;ve used recently.</p>
+<h3 id="connectionpooltimedstack">ConnectionPool::TimedStack</h3>
 <p>My <code>connection_pool</code> gem implements a <a href="https://github.com/mperham/connection_pool/blob/master/lib/connection_pool/timed_stack.rb">thread-safe Stack</a> with a
 time-limited <code>pop</code> operation.  This can be very useful when coordinating
 time-sensitive operations between threads.  Recently I used it as an alternative
 to <code>sleep</code> so I could wake up a sleeping thread immediately:</p>
-
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
   @done <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
   @sleeper <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">::</span><span style="color:#66d9ef">TimedStack</span><span style="color:#f92672">.</span>new
@@ -92,66 +218,39 @@ to <code>sleep</code> so I could wake up a sleeping thread immediately:</p>
     <span style="color:#66d9ef">end</span>
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
-
 <h3 id="the-algorithms-gem">The algorithms gem</h3>
-
 <p>Although somewhat misnamed, the <a href="https://github.com/kanwei/algorithms">algorithms</a> gem contains a large
 set of advanced data structures for use in Ruby code.  <a href="http://sidekiq.org">Sidekiq
-Enterprise</a>'s cron feature uses a <a href="https://github.com/kanwei/algorithms/blob/master/lib/containers/heap.rb">Heap</a> to store jobs
+Enterprise</a>&lsquo;s cron feature uses a <a href="https://github.com/kanwei/algorithms/blob/master/lib/containers/heap.rb">Heap</a> to store jobs
 in-memory, sorted based on their next occurrence; this makes checking
 for the next job to run a constant time operation, no matter how many
 jobs are defined.</p>
-
-<p>I'd suggest reading over the <a href="https://kanwei.github.io/algorithms/">API documentation</a>, this gem has a lot of
+<p>I&rsquo;d suggest reading over the <a href="https://kanwei.github.io/algorithms/">API documentation</a>, this gem has a lot of
 good structures that can turbocharge your Ruby code: trees, deques, and
 many others.</p>
-
 <h3 id="time-complexity">Time Complexity</h3>
-
 <p>When should you use a Heap?  A Queue?  A Stack?  A Tree?</p>
-
 <p>Part of understanding advanced data structures is understanding the
 complexity of their operations: how long will it take to add an
 element, remove an element, change an element?  The time complexity of an operation can be
 constant (O(1), great), logarithmic (O(log N), good), linear (O(N), meh), or worse,
 where N is the number of elements in the data structure.
 Read more about <a href="https://en.wikipedia.org/wiki/Time_complexity">Time complexity</a> on Wikipedia.</p>
-
 <p>Knowing about more advanced data structures and time complexity will make you a better developer.
 If you understand the operations that your code will perform frequently
 and the expected data structure size, you can pick a structure which best
 suits your own needs.</p>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

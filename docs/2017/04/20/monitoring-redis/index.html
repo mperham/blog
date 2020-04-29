@@ -1,77 +1,201 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Monitoring Redis </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Monitoring Redis | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Monitoring Redis</h1>
-      <small class="post-meta">Apr 20, 2017</small>
-      <div class="post-content">
-        
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2017-04-20
+  </small>
+  
+</p>
 <figure style="float: right; padding-left: 50px">
  <img src="/images/redis.png" width="500"/>
 </figure>
-
 <p>Redis is widely by the Ruby community but, like any complex piece of
-infrastructure, isn't well understood by many of its users.  I wanted to
+infrastructure, isn&rsquo;t well understood by many of its users.  I wanted to
 write a blog post that would answer the question: <strong>How can I check on
-the health of my Redis server?</strong>  Here's a few things you can do to
+the health of my Redis server?</strong>  Here&rsquo;s a few things you can do to
 better understand your Redis server.</p>
-
-<hr />
-
+<hr>
 <h2 id="ask-for-info">Ask for Info</h2>
-
 <p>The <code>info</code> command is the easiest way to get an overall view of Redis:</p>
-
 <pre><code>$ redis-cli info
 # Server
 redis_version:3.2.5
@@ -135,102 +259,72 @@ used_cpu_user_children:0.07
 db4:keys=25,expires=24,avg_ttl=892611707
 db5:keys=37,expires=36,avg_ttl=829671792
 db8:keys=4,expires=2,avg_ttl=4423347833
-</code></pre>
-
-<p>(output trimmed a bit)</p>
-
-<p>There's a few very important pieces to note in the output:</p>
-
+</code></pre><p>(output trimmed a bit)</p>
+<p>There&rsquo;s a few very important pieces to note in the output:</p>
 <ol>
 <li><code>config_file</code> shows where Redis is getting its static configuration.
 If you need to tweak a setting, this is where to go.</li>
 <li><code>connected_clients</code> shows how many network client connections are
-currently connected.  It's normal for this to be in the hundreds or
+currently connected.  It&rsquo;s normal for this to be in the hundreds or
 even thousands for a very busy server.</li>
 <li><code>used_memory_*</code> is important to see how much RAM is used by Redis.</li>
 </ol>
-
 <p>Memory is the most important thing to note here.  Your entire dataset
 size <strong>must</strong> fit into machine RAM.  If it does not, the resulting swapping will lead
 to terrible performance and massive latency spikes.</p>
-
 <p><code>redis-cli --stat</code> will give you the most important details in a real-time view
 you can watch or scrape:</p>
-
 <pre><code>$ redis-cli --stat
 ------- data ------ --------------------- load -------------------- - child -
 keys       mem      clients blocked requests            connections
 31         1009.00K 1       0       681483 (+0)         576
 31         1009.00K 1       0       681484 (+1)         576
 31         1009.00K 1       0       681485 (+1)         576
-</code></pre>
-
-<p><code>redis-cli</code> is a very powerful tool with lots of nice features within
-it.  It's worth running <code>--help</code> and playing with the various options
+</code></pre><p><code>redis-cli</code> is a very powerful tool with lots of nice features within
+it.  It&rsquo;s worth running <code>--help</code> and playing with the various options
 and modes.</p>
-
-<hr />
-
+<hr>
 <h2 id="look-out-for-latency">Look out for Latency</h2>
-
 <p>Latency is the time difference between request and response, e.g. the client sends a
 command and gets a result back in 10ms.  We want this round trip to be as fast as
 possible.
-Really bad latency can trigger &quot;Operation timed out&quot; exceptions in your application.
+Really bad latency can trigger &ldquo;Operation timed out&rdquo; exceptions in your application.
 There are two general latency sources:</p>
-
 <ol>
 <li>Network - the network between the client and Redis can be congested.</li>
 <li>Internal - Redis itself might have commands or internal operations
 which add significant latency.</li>
 </ol>
-
 <h3 id="network">Network</h3>
-
 <p>You can see the current network latency easily:</p>
-
 <pre><code>$ redis-cli --latency
 min: 0, max: 1, avg: 0.29 (632 samples)
-</code></pre>
-
-<p>This shows a minimum of 0ms and max of 1ms, averaging 290µs, latency to
+</code></pre><p>This shows a minimum of 0ms and max of 1ms, averaging 290µs, latency to
 my localhost server.  Ideal conditions.</p>
-
 <p>You can also easily watch latency history, here with a default window of 15 sec:</p>
-
 <pre><code>$ redis-cli --latency-history
 min: 0, max: 7, avg: 0.24 (1321 samples) -- 15.00 seconds range
 min: 0, max: 256, avg: 0.55 (1280 samples) -- 15.01 seconds range
 min: 0, max: 3062, avg: 3.86 (1051 samples) -- 15.98 seconds range
 min: 0, max: 490, avg: 0.69 (1255 samples) -- 15.01 seconds range
-</code></pre>
-
-<p>You can see the first window looks pretty good, the second window had a
+</code></pre><p>You can see the first window looks pretty good, the second window had a
 spike of 256ms, and the third had a spike of 3062ms (ouch!).</p>
-
 <p>I triggered these spikes by running <code>redis-cli debug sleep 0.5</code>.  Not
 recommended in production.</p>
-
 <h3 id="internal">Internal</h3>
-
 <p>Redis also has a latency event and monitoring subsystem to track
 commands execution latency and operations (like forking) which might
 block command processing. Use the <a href="https://redis.io/topics/latency-monitor">LATENCY</a>
 commands to monitor and collect these events.  Some commands can be naturally
 slow, see SLOWLOG below.</p>
-
-<hr />
-
+<hr>
 <h2 id="watch-for-slow-commands">Watch for Slow Commands</h2>
-
-<p>Because it is single-threaded, it's vitally important that all commands
+<p>Because it is single-threaded, it&rsquo;s vitally important that all commands
 to Redis process quickly or one slow command can block everyone else for
 a significant amount of time.  Redis includes a configurable <a href="https://redis.io/commands/slowlog">SLOWLOG</a>
 command to watch for these bad apples.</p>
-
 <p>My Redis is configured by Homebrew to log any commands that take longer than 10ms, a
 sensible default.  Run this on your instance and see if you find anything suspicious:</p>
-
 <pre><code>$ redis-cli slowlog get 10
 1) 1) (integer) 3
    2) (integer) 1492461257
@@ -241,36 +335,29 @@ sensible default.  Run this on your instance and see if you find anything suspic
        4) &quot;{\&quot;queue\&quot;:\&quot;default\&quot;,\&quot;jid\&quot;:\&quot;4989e31cea7ecf78e93b7f9f\&quot;,\&quot;class\&quot;:\&quot;LoadWorker\&quot;,\&quot;args\&quot;:[1],\&quot;created_at\&quot;:1492461257.2084169,\&quot;enqueued_at... (34 more bytes)&quot;
       [snip]
       32) &quot;... (9971 more arguments)&quot;
-</code></pre>
-
-<p>There are four parts to each entry: 3 is a unique identifier, 1492461257 is the timestamp
+</code></pre><p>There are four parts to each entry: 3 is a unique identifier, 1492461257 is the timestamp
 when it happened and 11825 is the number of microseconds for execution, 11.825ms.
 The last part is the command with arguments.</p>
-
-<p>I happen to know that entry is an LPUSH to the <code>default</code> queue of 10,000 jobs.  It's
-a testcase for Sidekiq::Client's <code>push_bulk</code> API.  Since we're
-enqueueing 10,000 jobs at once, it's not surprising that might take almost 12ms.</p>
-
+<p>I happen to know that entry is an LPUSH to the <code>default</code> queue of 10,000 jobs.  It&rsquo;s
+a testcase for Sidekiq::Client&rsquo;s <code>push_bulk</code> API.  Since we&rsquo;re
+enqueueing 10,000 jobs at once, it&rsquo;s not surprising that might take almost 12ms.</p>
 <p><strong>It is safe to run SLOWLOG in production and highly encouraged.</strong>  In
 fact, I would play with <code>slowlog-log-slower-than</code> values until you find
 a setting that catches unexpectedly slow things but does not contain a
-lot of &quot;normal&quot; commands from your application.
+lot of &ldquo;normal&rdquo; commands from your application.
 If you find the slowlog is constantly full, <strong>redesign your system so it
-doesn't run those slow commands</strong>.
-  For instance, if you want to enqueue
+doesn&rsquo;t run those slow commands</strong>.
+For instance, if you want to enqueue
 10,000 jobs, perhaps you could call <code>push_bulk</code> 10 times with 1000 jobs
 each, so each invocation only takes 1/10th as long.
 If a piece of OSS is running a slow comamnd,
-open an issue so the maintainer knows about the problem.  I'm not too
-proud to admit it's
+open an issue so the maintainer knows about the problem.  I&rsquo;m not too
+proud to admit it&rsquo;s
 <a href="https://github.com/mperham/sidekiq/issues/3332">happened</a>
 several times with Sidekiq; I fix them as fast as I can!</p>
-
 <h2 id="extra-credit">Extra Credit</h2>
-
 <p>When I was managing technical operations, my team was
 responsible for monitoring our infrastructure.  We would do things like:</p>
-
 <ol>
 <li>Write a cron job to dump the slowlog to a daily email if it is not empty.
 Treat any entries as issues to be investigated and fixed.</li>
@@ -278,41 +365,20 @@ Treat any entries as issues to be investigated and fixed.</li>
 graphs for <code>connected_clients</code>, <code>instantaneous_ops_per_sec</code>, and <code>used_memory_rss</code>.
 Treat big changes in these graphs as incidents to be investigated.</li>
 </ol>
-
 <p>Part of owning your infrastructure is monitoring its health proactively;
 understanding these tools and having quick access to this data will be
 invaluable when debugging failures and outages.</p>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

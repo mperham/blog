@@ -1,113 +1,213 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> The Three Best Debugging Tools </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>The Three Best Debugging Tools | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>The Three Best Debugging Tools</h1>
-      <small class="post-meta">Sep 12, 2013</small>
-      <div class="post-content">
-        <p><strong>1. Your Coworker</strong></p>
-
-<p>It's happened to me over and over: I'll spend hours trying to track down a problem. In frustration, I'll ask a coworker to look at the code and frequently they will point out the problem in seconds. It's called situational blindness and it means that you will often overlook the bug right in front of your eyes because you've looked at it so much, your mind has started to ignore it.</p>
-
-<p>Your coworker has another valuable trait: they are different than you. They think differently and have a different set of knowledge. A hard bug for you to find might be easy for them. Next time you're frustrated, call over a coworker and see what happens.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2013-09-12
+  </small>
+  
+</p>
+<p><strong>1. Your Coworker</strong></p>
+<p>It&rsquo;s happened to me over and over: I&rsquo;ll spend hours trying to track down a problem. In frustration, I&rsquo;ll ask a coworker to look at the code and frequently they will point out the problem in seconds. It&rsquo;s called situational blindness and it means that you will often overlook the bug right in front of your eyes because you&rsquo;ve looked at it so much, your mind has started to ignore it.</p>
+<p>Your coworker has another valuable trait: they are different than you. They think differently and have a different set of knowledge. A hard bug for you to find might be easy for them. Next time you&rsquo;re frustrated, call over a coworker and see what happens.</p>
 <p><strong>2. Your Creative Side</strong></p>
-
-<p>It's happened to me over and over: I'll build something with a flaw that doesn't quite work right. I'll go to sleep frustrated and wake up the next morning knowing exactly what the problem is.</p>
-
-<p>It's well known that we think in two different manners: creatively and logically. When focused on details (such as debugging a problem), we're 100% logical as we jump from thought A to B to C. But it's your creative side that can jump from thought A to thought Z via intuition. Like your coworker, your creative brain thinks differently from your logical brain. By going to sleep, you're calling over that &quot;creative coworker&quot; and asking for help.</p>
-
+<p>It&rsquo;s happened to me over and over: I&rsquo;ll build something with a flaw that doesn&rsquo;t quite work right. I&rsquo;ll go to sleep frustrated and wake up the next morning knowing exactly what the problem is.</p>
+<p>It&rsquo;s well known that we think in two different manners: creatively and logically. When focused on details (such as debugging a problem), we&rsquo;re 100% logical as we jump from thought A to B to C. But it&rsquo;s your creative side that can jump from thought A to thought Z via intuition. Like your coworker, your creative brain thinks differently from your logical brain. By going to sleep, you&rsquo;re calling over that &ldquo;creative coworker&rdquo; and asking for help.</p>
 <p><strong>3. Your Mental Model of the System</strong></p>
-
-<p>If you don't know the software tools and APIs you are using to solve problems really well, you'll find yourself endlessly debugging. When learning a system like Ruby on Rails for the first few years, debugging is often really just learning how the system works. Software is insanely complex and <strong>every level of the stack is insanely complex</strong>. Abstractions hide much of the complexity and understanding those abstractions well allows you to fit it all within your head.</p>
-
-<p>Malcom Gladwell's maxim that expertise comes with 10,000 hours of practice holds here too. After 5 years of full-time experience (40hrs/wk * 50 wk/yr * 5), you'll have a very strong understanding of your system of choice. That knowledge is very valuable.</p>
-
-<p><strong>Pro tip</strong>: read the documentation for a library that you are going to use, implement your first attempt at using that library, <strong>and then read the documentation again</strong>. The first time will give you an overview and things to look for but frequently you won't comprehend certain aspects due to your inexperience with the library. You almost certainly will comprehend more when you read it the second time.</p>
-
+<p>If you don&rsquo;t know the software tools and APIs you are using to solve problems really well, you&rsquo;ll find yourself endlessly debugging. When learning a system like Ruby on Rails for the first few years, debugging is often really just learning how the system works. Software is insanely complex and <strong>every level of the stack is insanely complex</strong>. Abstractions hide much of the complexity and understanding those abstractions well allows you to fit it all within your head.</p>
+<p>Malcom Gladwell&rsquo;s maxim that expertise comes with 10,000 hours of practice holds here too. After 5 years of full-time experience (40hrs/wk * 50 wk/yr * 5), you&rsquo;ll have a very strong understanding of your system of choice. That knowledge is very valuable.</p>
+<p><strong>Pro tip</strong>: read the documentation for a library that you are going to use, implement your first attempt at using that library, <strong>and then read the documentation again</strong>. The first time will give you an overview and things to look for but frequently you won&rsquo;t comprehend certain aspects due to your inexperience with the library. You almost certainly will comprehend more when you read it the second time.</p>
 <p><strong>Conclusion</strong></p>
-
 <p>All of these things have one thing in common: thought. Debugging is thinking through the execution of code <strong>in your head</strong>. By improving your knowledge and looking at the problem from different angles, you can much more effectively debug those hard problems that can be so frustrating.</p>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

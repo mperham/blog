@@ -1,114 +1,215 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Building Systems and The Cloud </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Building Systems and The Cloud | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Building Systems and The Cloud</h1>
-      <small class="post-meta">Jul 23, 2014</small>
-      <div class="post-content">
-        <p>If you are building a system to run in the cloud, be prepared to spend much of your time building a resilient system.</p>
-
-<p>Not a fast system. Not a very efficient system. Not a system full of fun, quirky features that users love. A resilient system because you will see performance and network issues at every connection point in your system. I hope that's what you want.</p>
-
-<p>Cheap cloud machines are SLOW. Your software will be running on a virtual machine, sharing physical hardware with N other virtual machines. The local hard disk is a shared resource that everyone uses. If one machine hits it hard, the other VMs will see poor disk I/O performance during that time. The local network can be over-provisioned and show poor throughput or latency. This is known as the noisy neighbor problem and it's endemic to cloud providers: EC2, Heroku, Digital Ocean, etc.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2014-07-23
+  </small>
+  
+</p>
+<p>If you are building a system to run in the cloud, be prepared to spend much of your time building a resilient system.</p>
+<p>Not a fast system. Not a very efficient system. Not a system full of fun, quirky features that users love. A resilient system because you will see performance and network issues at every connection point in your system. I hope that&rsquo;s what you want.</p>
+<p>Cheap cloud machines are SLOW. Your software will be running on a virtual machine, sharing physical hardware with N other virtual machines. The local hard disk is a shared resource that everyone uses. If one machine hits it hard, the other VMs will see poor disk I/O performance during that time. The local network can be over-provisioned and show poor throughput or latency. This is known as the noisy neighbor problem and it&rsquo;s endemic to cloud providers: EC2, Heroku, Digital Ocean, etc.</p>
 <p>I see the same problem again and again with Sidekiq users: occasional but regular network timeouts talking to Redis on our Heroku or EC2 instances. There are several options:</p>
-
 <ol>
-<li>Raise the Redis client's network timeout from the default of 1 sec to N seconds. I've seen latencies over 5 seconds. This won't fix the problem but your system will raise fewer errors.</li>
-<li>Use <a href="http://sidekiq.org/">Sidekiq Pro</a>'s reliable client feature. It will catch the timeout error and retry the operation regularly until it succeeds.</li>
-<li>Move onto dedicated hardware where you know the network is high-quality and the machine isn't overloaded.</li>
+<li>Raise the Redis client&rsquo;s network timeout from the default of 1 sec to N seconds. I&rsquo;ve seen latencies over 5 seconds. This won&rsquo;t fix the problem but your system will raise fewer errors.</li>
+<li>Use <a href="http://sidekiq.org/">Sidekiq Pro</a>&lsquo;s reliable client feature. It will catch the timeout error and retry the operation regularly until it succeeds.</li>
+<li>Move onto dedicated hardware where you know the network is high-quality and the machine isn&rsquo;t overloaded.</li>
 </ol>
-
-<p>Note the real solutions, 2 &amp; 3, cost money. When you choose to use a cloud provider, often times you are looking to save a buck. I'm here to tell you that you'll pay that money somewhere: late nights debugging, unhappy customers or a credit card bill. You can save a few bucks by running a small Heroku dyno but I bet you'll find yourself spending days optimizing your system to run in 512MB.</p>
-
-<p>Here's my perfect architecture for building a new business: one dedicated machine, 12 cores, 48GB of memory, 200GB SSD RAID 1. I just priced one at $749/mo at a reasonably priced hosting service and it will scale to tens of millions of hits per day if you know what you are doing. You have no worries about neighbors, you manage one machine and not coordinate 20 different instances. The hosting service should monitor all hardware and provide a 1 hour SLA to replace any dying hardware. One part your accountant will love: well defined operational costs. You know exactly how much you are going to pay each month and I guarantee it will be much cheaper than the equivalent cloud resources.</p>
-
-<p>Once your business starts to take off, you can tackle the work necessary to add resiliency and distribute load across a cluster of servers but you might be surprised: often a single machine will be more reliable than a cluster of machines. Brand name &quot;enterprise&quot; hardware is generally very reliable (e.g. Intel SSDs) and adding more moving parts (i.e. the software and configuration necessary to scale to N machines) rarely makes a system more stable.</p>
-
-<p>There are reasons for using cloud providers but I don't find them compelling for startups. Building a house on top of a foundation made from quicksand seems like poor judgment. Renting reliable hardware from a dedicated hosting service gives you known operational costs while also wasting far less of your time shoring up that quicksand, allowing you to focus on building your product and getting customers.</p>
-
+<p>Note the real solutions, 2 &amp; 3, cost money. When you choose to use a cloud provider, often times you are looking to save a buck. I&rsquo;m here to tell you that you&rsquo;ll pay that money somewhere: late nights debugging, unhappy customers or a credit card bill. You can save a few bucks by running a small Heroku dyno but I bet you&rsquo;ll find yourself spending days optimizing your system to run in 512MB.</p>
+<p>Here&rsquo;s my perfect architecture for building a new business: one dedicated machine, 12 cores, 48GB of memory, 200GB SSD RAID 1. I just priced one at $749/mo at a reasonably priced hosting service and it will scale to tens of millions of hits per day if you know what you are doing. You have no worries about neighbors, you manage one machine and not coordinate 20 different instances. The hosting service should monitor all hardware and provide a 1 hour SLA to replace any dying hardware. One part your accountant will love: well defined operational costs. You know exactly how much you are going to pay each month and I guarantee it will be much cheaper than the equivalent cloud resources.</p>
+<p>Once your business starts to take off, you can tackle the work necessary to add resiliency and distribute load across a cluster of servers but you might be surprised: often a single machine will be more reliable than a cluster of machines. Brand name &ldquo;enterprise&rdquo; hardware is generally very reliable (e.g. Intel SSDs) and adding more moving parts (i.e. the software and configuration necessary to scale to N machines) rarely makes a system more stable.</p>
+<p>There are reasons for using cloud providers but I don&rsquo;t find them compelling for startups. Building a house on top of a foundation made from quicksand seems like poor judgment. Renting reliable hardware from a dedicated hosting service gives you known operational costs while also wasting far less of your time shoring up that quicksand, allowing you to focus on building your product and getting customers.</p>
 <p><strong>Side Note</strong></p>
-
 <p>For the record, the cloud is a good idea in a corporate environment where getting a server from IT can take weeks (!) to go through the proper channels. Use the cloud to prototype the service while doing the paperwork to eventually bring the service in-house on an IT-supported server.</p>
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

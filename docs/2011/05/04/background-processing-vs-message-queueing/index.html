@@ -1,111 +1,215 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Background Processing vs Message Queueing </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Background Processing vs Message Queueing | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Background Processing vs Message Queueing</h1>
-      <small class="post-meta">May 4, 2011</small>
-      <div class="post-content">
-        <p>One common simplification I see engineers make is equating message queueing with background processing. This is what they are missing: <strong>message queueing is a superset of background processing</strong>. All message processing is done in the background but background processing does not have to be done via message queues.</p>
-
-<p>Take a simple use case: &quot;I want to send a welcome email when a user registers&quot;. Commonly you want to send this email in the background so it does not impact the user's experience. Do you need to install ActiveMQ, RabbitMQ or Resque to do this? Certainly not.</p>
-
-<p>Message queueing is a fundamental architectural pattern when building complex systems. Your various system components might be written by different teams but they communicate through messages sent via queues. One component can send a message to another component, saying &quot;please send this email&quot;. But message queueing systems have their cost: they are complex because they are designed to be the foundation of your distributed system. They must be deployed and monitored like the rest of your infrastructure; they must be reliable and highly available.</p>
-
-<p>I think that a lot of people install a message queue to perform simple background processing; it doesn't need to be that complicated. The fundamental question to me is, &quot;Am I communicating between different subsystems or just trying to spin off some work?&quot; The registration email use case comes up almost immediately when building nearly every website. Consider also the case where you want to perform some action that might take 30-60 seconds and have the user's browser poll for the result. Spinning off a separate thread to perform this work is entirely sufficient and much simpler. This is the reasoning behind my <a href="https://github.com/mperham/girl_friday">girl_friday</a> project. I want a simple and reliable way to perform background processing without needing the complexity of an MQ system. Let's examine a few characteristics of girl_friday:</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2011-05-04
+  </small>
+  
+</p>
+<p>One common simplification I see engineers make is equating message queueing with background processing. This is what they are missing: <strong>message queueing is a superset of background processing</strong>. All message processing is done in the background but background processing does not have to be done via message queues.</p>
+<p>Take a simple use case: &ldquo;I want to send a welcome email when a user registers&rdquo;. Commonly you want to send this email in the background so it does not impact the user&rsquo;s experience. Do you need to install ActiveMQ, RabbitMQ or Resque to do this? Certainly not.</p>
+<p>Message queueing is a fundamental architectural pattern when building complex systems. Your various system components might be written by different teams but they communicate through messages sent via queues. One component can send a message to another component, saying &ldquo;please send this email&rdquo;. But message queueing systems have their cost: they are complex because they are designed to be the foundation of your distributed system. They must be deployed and monitored like the rest of your infrastructure; they must be reliable and highly available.</p>
+<p>I think that a lot of people install a message queue to perform simple background processing; it doesn&rsquo;t need to be that complicated. The fundamental question to me is, &ldquo;Am I communicating between different subsystems or just trying to spin off some work?&rdquo; The registration email use case comes up almost immediately when building nearly every website. Consider also the case where you want to perform some action that might take 30-60 seconds and have the user&rsquo;s browser poll for the result. Spinning off a separate thread to perform this work is entirely sufficient and much simpler. This is the reasoning behind my <a href="https://github.com/mperham/girl_friday">girl_friday</a> project. I want a simple and reliable way to perform background processing without needing the complexity of an MQ system. Let&rsquo;s examine a few characteristics of girl_friday:</p>
 <ul>
-<li>In-process -- your background processor is part of your Ruby application and has access to the exact same codebase as your webapp. No need to share ActiveRecord models across projects via git or filesystem trickery. No need to deploy or monitor a separate set of processes.</li>
-<li>Threaded -- huge memory savings because you don't have to spin up other processes which load the exact same code. Threads are notoriously tricky to get correct so girl_friday uses Actors for the equivalent behavior in a simpler and safer API.</li>
+<li>In-process &ndash; your background processor is part of your Ruby application and has access to the exact same codebase as your webapp. No need to share ActiveRecord models across projects via git or filesystem trickery. No need to deploy or monitor a separate set of processes.</li>
+<li>Threaded &ndash; huge memory savings because you don&rsquo;t have to spin up other processes which load the exact same code. Threads are notoriously tricky to get correct so girl_friday uses Actors for the equivalent behavior in a simpler and safer API.</li>
 </ul>
-
 <p>I have issues with the other contenders in the space:</p>
-
 <ul>
-<li>delayed_job -- stores jobs in your RDBMS and polls for jobs which is a terribly unscalable idea. Spins off processes instead of threads.</li>
-<li>resque -- forks a new process for every message. Safe but memory hungry.</li>
+<li>delayed_job &ndash; stores jobs in your RDBMS and polls for jobs which is a terribly unscalable idea. Spins off processes instead of threads.</li>
+<li>resque &ndash; forks a new process for every message. Safe but memory hungry.</li>
 </ul>
+<p>The biggest caveat with girl_friday is threading, of course. Typical Ruby deployments aren&rsquo;t thread-friendly but I&rsquo;d like to help change that. Rainbows! is thread-friendly, as are all the JRuby app servers. The <a href="http://github.com/mperham/girl_friday/wiki">girl_friday wiki</a> gives more specifics about features and usage. Are there any other dimensions to the problem that I&rsquo;m missing? Any other projects that solve a similar problem? Post a comment and let me know!</p>
 
-<p>The biggest caveat with girl_friday is threading, of course. Typical Ruby deployments aren't thread-friendly but I'd like to help change that. Rainbows! is thread-friendly, as are all the JRuby app servers. The <a href="http://github.com/mperham/girl_friday/wiki">girl_friday wiki</a> gives more specifics about features and usage. Are there any other dimensions to the problem that I'm missing? Any other projects that solve a similar problem? Post a comment and let me know!</p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>

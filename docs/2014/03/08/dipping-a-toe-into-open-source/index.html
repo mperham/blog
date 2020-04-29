@@ -1,109 +1,212 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Dipping a Toe into Open Source </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Dipping a Toe into Open Source | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Dipping a Toe into Open Source</h1>
-      <small class="post-meta">Mar 8, 2014</small>
-      <div class="post-content">
-        <p>This is an excerpt from the foreword I wrote for Brandon Hilkert's new e-book, <a href="http://brandonhilkert.com/books/build-a-ruby-gem/">Build a Ruby Gem</a>.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2014-03-08
+  </small>
+  
+</p>
+<p>This is an excerpt from the foreword I wrote for Brandon Hilkert&rsquo;s new e-book, <a href="http://brandonhilkert.com/books/build-a-ruby-gem/">Build a Ruby Gem</a>.</p>
 <p>I was a junior in college when I published my first open source program. It was Fall 1995 and Windows NT 3.5 had this fat and slow interface for launching applications. Windows 95 had an awesome new Start bar and so the answer was obvious: I decided I wanted to learn how to program the new Win32 API and solve my own problem at the same time. I set to write a lighter-weight, fast application launcher in the vein of the Start bar called <a href="http://perham.net/mike/cornell/appbar/">AppBar</a>.</p>
-
-<p>I spent weeks poring over what little information I could find &mdash; mostly MSDN API documentation &mdash; and with a lot of experimentation got something that worked. After a month or two, I released my first version to the public with the full source code to download. Given that few others did it, why did I include the source code and why does anyone choose to publish open source?</p>
-
+<p>I spent weeks poring over what little information I could find — mostly MSDN API documentation — and with a lot of experimentation got something that worked. After a month or two, I released my first version to the public with the full source code to download. Given that few others did it, why did I include the source code and why does anyone choose to publish open source?</p>
 <p>Ultimately I believe open source depends on <a href="https://en.wikipedia.org/wiki/Enlightened_self-interest">enlightened self-interest</a>. By each developer giving a little, we collectively gain a lot. In my case, I enjoyed the process of building AppBar but hated the near-vertical learning curve. Without non-trivial code samples it was easy to grow frustrated. By giving a non-trivial code sample to the world, I did two things:</p>
-
 <ol>
 <li>Provided an example for other developers to follow; and</li>
 <li>Flattened the learning curve slightly for other developers.</li>
 </ol>
-
-<p>Today's world has improved radically since then: open source has become mainstream and services like GitHub, Google and Stack Overflow have improved the lives of millions of developers by hosting orders of magnitude more code and documentation than available to me in 1995. The role of a programmer has gone from one of experimentation and discovery due to lack of information to one of search and filtering due to an abundance of information. In my experience this is a huge improvement: when everything is open, quality improves dramatically.</p>
-
-<p>Since 2007 I've worked primarily with Ruby and published a dozen or so Rubygems. All of those gems started for the same reason: I had a problem I wanted to solve. Of course self-interest is still at work: if people use my code to solve their own problems, my reputation grows within the community and a higher salary and increased job security should follow. Everybody wins.</p>
-
-<p>Open source has another benefit: that same self-interest brings together developers interested in solving a common problem. I've never met the author of this e-book, Brandon Hilkert, in person but he's a committer on my Sidekiq project because he built Sidekiq's beautiful real-time Dashboard. In return for improving my project, he learned a lot, solved a problem he had and improved his own reputation. We both won.</p>
-
+<p>Today&rsquo;s world has improved radically since then: open source has become mainstream and services like GitHub, Google and Stack Overflow have improved the lives of millions of developers by hosting orders of magnitude more code and documentation than available to me in 1995. The role of a programmer has gone from one of experimentation and discovery due to lack of information to one of search and filtering due to an abundance of information. In my experience this is a huge improvement: when everything is open, quality improves dramatically.</p>
+<p>Since 2007 I&rsquo;ve worked primarily with Ruby and published a dozen or so Rubygems. All of those gems started for the same reason: I had a problem I wanted to solve. Of course self-interest is still at work: if people use my code to solve their own problems, my reputation grows within the community and a higher salary and increased job security should follow. Everybody wins.</p>
+<p>Open source has another benefit: that same self-interest brings together developers interested in solving a common problem. I&rsquo;ve never met the author of this e-book, Brandon Hilkert, in person but he&rsquo;s a committer on my Sidekiq project because he built Sidekiq&rsquo;s beautiful real-time Dashboard. In return for improving my project, he learned a lot, solved a problem he had and improved his own reputation. We both won.</p>
 <p>The Ruby community is quite possibly the most open source friendly of all programming language communities, the Rubygems service makes it simple to distribute your gems to the world and GitHub provides an amazing hosting and collaboration platform for open source projects. The time has never been better to jump in, get your hands dirty solving a problem and give back your own solution to the community. Everybody wins.</p>
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

@@ -1,135 +1,231 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Tracking down performance bugs in Sidekiq jobs </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Tracking down performance bugs in Sidekiq jobs | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Tracking down performance bugs in Sidekiq jobs</h1>
-      <small class="post-meta">Jun 5, 2017</small>
-      <div class="post-content">
-        
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2017-06-05
+  </small>
+  
+</p>
 <h2 id="the-problem">The Problem</h2>
-
 <p>A Sidekiq Enterprise customer recently emailed me to ask for help.</p>
-
 <blockquote>
-<p>I'm having trouble trying to figure out why one particular worker I have takes so long per job. Some of the jobs are taking 30 minutes. What the program does is load a spreadsheet to the database. When I run &quot;top&quot;, it looks like this.  What should my next step be?</p>
+<p>I&rsquo;m having trouble trying to figure out why one particular worker I have takes so long per job. Some of the jobs are taking 30 minutes. What the program does is load a spreadsheet to the database. When I run &ldquo;top&rdquo;, it looks like this.  What should my next step be?</p>
 </blockquote>
-
-<p><img src="//www.mikeperham.com/images/debugging-top.jpg" alt="top output" /></p>
-
+<p><img src="//www.mikeperham.com/images/debugging-top.jpg" alt="top output"></p>
 <h2 id="the-explanation">The Explanation</h2>
-
 <p>Great question.  The top screenshot tells me a few things:</p>
-
 <ol>
 <li>Each process is using ~4GB of RAM, which is a lot, but top also notes
-the machine has ~64GB of memory so it's not necessarily unusual.</li>
+the machine has ~64GB of memory so it&rsquo;s not necessarily unusual.</li>
 <li>There are four Ruby 2.1 processes (which I assume are Sidekiq
 processes), each pegging a core at 100%.  We want to track down what
 is causing the CPU to peg.</li>
 </ol>
-
-<p>There's a two step process to get more info:</p>
-
+<p>There&rsquo;s a two step process to get more info:</p>
 <ol>
 <li>Visit the Busy page in the Web UI and see which jobs are running right now.
-See a job that's taking too long?  Note its PID and TID (&quot;13159&quot; and &quot;otqnxjaoc&quot; in the screenshot).</li>
+See a job that&rsquo;s taking too long?  Note its PID and TID (&ldquo;13159&rdquo; and &ldquo;otqnxjaoc&rdquo; in the screenshot).</li>
 <li>Send the TTIN signal to that PID (<code>kill -TTIN 13159</code>) and find the backtrace associated with that TID in the log output.</li>
 </ol>
-
-<p><img src="//www.mikeperham.com/images/debugging-busy.png" alt="busy page" /></p>
-
+<p><img src="//www.mikeperham.com/images/debugging-busy.png" alt="busy page"></p>
 <p>Often the job backtrace will give you the clue you need to solve the performance problem.</p>
-
 <h2 id="the-conclusion">The Conclusion</h2>
-
 <p>In this case, the backtrace did provide the necessary clue and the customer did find a solution.
 He was creating a job per row in an Excel file but each job had to get the header data from
-the Excel file; if there was 1000 rows, he'd create 1000 jobs and <strong>each job would reparse the entire Excel file to get the header info</strong>.
+the Excel file; if there was 1000 rows, he&rsquo;d create 1000 jobs and <strong>each job would reparse the entire Excel file to get the header info</strong>.
 By restructing the job arguments to include the header info, he removed this redundant work and solved
 a problem which had plagued him for months.  Time elapsed: less than an hour!</p>
+<p><strong>Moral of the story: harness the awesome power of Sidekiq&rsquo;s TTIN feature to crush your performance bugs!</strong></p>
 
-<p><strong>Moral of the story: harness the awesome power of Sidekiq's TTIN feature to crush your performance bugs!</strong></p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>

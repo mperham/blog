@@ -1,69 +1,194 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> MiniTest -- Ruby 1.9&#39;s test framework </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>MiniTest -- Ruby 1.9&#39;s test framework | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
-      <h1>MiniTest -- Ruby 1.9&#39;s test framework</h1>
-      <small class="post-meta">Sep 25, 2012</small>
-      <div class="post-content">
-        
-
-<p>(this is a classic post I wrote two years ago for another site which is shutting down, saving here since it's still very useful)</p>
-
-<p>Aaron Patterson gave a talk at GoGaRuCo 2010 about the latest changes in Ruby 1.9.2's standard library and one of the topics he spoke on was MiniTest. The Ruby community has been particularly innovative in the world of testing and Ruby 1.8's Test::Unit library is circa 2003, providing nothing but the most basic testing API. Every Ruby project I've ever worked on has skipped Test::Unit and pulled in many different test gems (e.g. rspec, shoulda, mocha, flexmock) to provide a modern test infrastructure.</p>
-
-<h2 id="test-unit-refresher">Test::Unit Refresher</h2>
-
-<p>With Test::Unit, you just subclass Test::Unit::TestCase, name your methods starting with 'test' and include one or more assertions to verify:</p>
-
+  
+  <div class="container">
+    <article>
+      <h1>MiniTest &ndash; Ruby 1.9&rsquo;s test framework</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2012-09-25
+  </small>
+  
+</p>
+<p>(this is a classic post I wrote two years ago for another site which is shutting down, saving here since it&rsquo;s still very useful)</p>
+<p>Aaron Patterson gave a talk at GoGaRuCo 2010 about the latest changes in Ruby 1.9.2&rsquo;s standard library and one of the topics he spoke on was MiniTest. The Ruby community has been particularly innovative in the world of testing and Ruby 1.8&rsquo;s Test::Unit library is circa 2003, providing nothing but the most basic testing API. Every Ruby project I&rsquo;ve ever worked on has skipped Test::Unit and pulled in many different test gems (e.g. rspec, shoulda, mocha, flexmock) to provide a modern test infrastructure.</p>
+<h2 id="testunit-refresher">Test::Unit Refresher</h2>
+<p>With Test::Unit, you just subclass Test::Unit::TestCase, name your methods starting with &lsquo;test&rsquo; and include one or more assertions to verify:</p>
 <pre lang="ruby">class TestSomething &lt; Test::Unit::TestCase
   def test_foo
     foo = Foo.new
@@ -73,49 +198,31 @@
   end
 end
 </pre>
-
-<p>Believe it or not, Test::Unit is actually rather slow and bloated. It includes a number of GUIs (GTk v1, GTk v2, FxRuby) that are rarely if ever used. A revamp was needed...</p>
-
+<p>Believe it or not, Test::Unit is actually rather slow and bloated. It includes a number of GUIs (GTk v1, GTk v2, FxRuby) that are rarely if ever used. A revamp was needed&hellip;</p>
 <h2 id="enter-minitest">Enter MiniTest</h2>
-
-<p>Ruby 1.9 includes an updated version of the venerable Test::Unit which removes a lot of the more esoteric features, called <a href="http://bfts.rubyforge.org/minitest/">MiniTest</a>. You don't need to do anything to use MiniTest in 1.9, it replaces Test::Unit and provides a backwards compatible API that provides the 90% of Test::Unit that people were using often. You can even use minitest on Ruby 1.8 by installing the `minitest` gem. Aside from the Test::Unit API, several improvements over Test::Unit are included:</p>
-
+<p>Ruby 1.9 includes an updated version of the venerable Test::Unit which removes a lot of the more esoteric features, called <a href="http://bfts.rubyforge.org/minitest/">MiniTest</a>. You don&rsquo;t need to do anything to use MiniTest in 1.9, it replaces Test::Unit and provides a backwards compatible API that provides the 90% of Test::Unit that people were using often. You can even use minitest on Ruby 1.8 by installing the `minitest` gem. Aside from the Test::Unit API, several improvements over Test::Unit are included:</p>
 <p><strong>Randomization</strong></p>
-
 <p>When you run your test suite, you might notice this at the bottom:</p>
-
 <pre>Test run options: --seed 1261
 </pre>
-
-<p>This is because MiniTest by default runs your tests in random order. This is a good thing because it prevents your tests from accidentally becoming order-dependent due to &quot;state leakage&quot;. If you find that your tests are breaking randomly, it is most likely due to this state leakage. You can run your tests with the same seed to reproduce the problem:</p>
-
+<p>This is because MiniTest by default runs your tests in random order. This is a good thing because it prevents your tests from accidentally becoming order-dependent due to &ldquo;state leakage&rdquo;. If you find that your tests are breaking randomly, it is most likely due to this state leakage. You can run your tests with the same seed to reproduce the problem:</p>
 <pre>rake TESTOPTS="--seed=1261"
 </pre>
-
 <p><strong>Skip Tests</strong></p>
-
 <p>MiniTest allows you to easily skip tests that are not working with the `skip` method:</p>
-
 <pre lang="ruby">def test_foo
   skip("Need to debug this...")
   assert_equal false, true
 end
 </pre>
-
 <p>which results in this:</p>
-
 <pre>83 tests, 106 assertions, 0 failures, 0 errors, 1 skips
 </pre>
-
 <p><strong>Verbosity</strong></p>
-
-<p>MiniTest also has a '-v' flag which will print out the time each test takes - excellent for determining those tests which are slowing down your test suite:</p>
-
+<p>MiniTest also has a &lsquo;-v&rsquo; flag which will print out the time each test takes - excellent for determining those tests which are slowing down your test suite:</p>
 <pre>rake TESTOPTS="-v"
 </pre>
-
-<p>which emits a line for each test. It's too bad it doesn't have an option for sorting or a minimum time (like 0.1 sec); this would be useful for suites which have thousands of tests.</p>
-
+<p>which emits a line for each test. It&rsquo;s too bad it doesn&rsquo;t have an option for sorting or a minimum time (like 0.1 sec); this would be useful for suites which have thousands of tests.</p>
 <pre>TestMemCache#test_check_size_off: 0.02 s: .
 TestMemCache#test_check_size_on: 0.01 s: .
 TestMemCache#test_consistent_hashing: 0.11 s: .
@@ -123,11 +230,8 @@ TestMemCache#test_crazy_multithreaded_access: 0.00 s: S
 TestMemCache#test_custom_encoding: 0.00 s: .
 TestMemCache#test_decr: 0.00 s: .
 </pre>
-
 <p><strong>BDD DSL</strong></p>
-
 <p>MiniTest also includes a basic BDD DSL like RSpec:</p>
-
 <pre lang="ruby">require 'minitest/spec'
 
 describe Meme do
@@ -148,39 +252,18 @@ describe Meme do
   end
 end
 </pre>
+<p>It even includes a basic mocking API which you can read about in the <a href="http://bfts.rubyforge.org/minitest/">MiniTest documentation</a>. These changes are a great step forward for Ruby&rsquo;s standard test library. Personally I&rsquo;m going to use MiniTest on my next project and see if I can slim down my test dependencies. Happy coding!</p>
 
-<p>It even includes a basic mocking API which you can read about in the <a href="http://bfts.rubyforge.org/minitest/">MiniTest documentation</a>. These changes are a great step forward for Ruby's standard test library. Personally I'm going to use MiniTest on my next project and see if I can slim down my test dependencies. Happy coding!</p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>

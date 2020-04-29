@@ -1,63 +1,192 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Socket Timeouts in Ruby </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Socket Timeouts in Ruby | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Socket Timeouts in Ruby</h1>
-      <small class="post-meta">Mar 15, 2009</small>
-      <div class="post-content">
-        <p>One of Ruby's weaknesses is its poor networking performance. Much of that has to do with the net/http implementation, which uses Ruby's awful Timeout library. The issues with Timeout are <a href="http://blog.headius.com/2008/02/rubys-threadraise-threadkill-timeoutrb.html">well documented</a>. <a href="http://ph7spot.com/articles/system_timer">SystemTimer</a> provides a reliable alternative that also performs better.</p>
-
-<p>However I started today wondering if there was a better way. Enabling timeouts has a huge performance hit on my memcache-client library and reducing the overhead would go a long way to making it perform safely <strong>and</strong> quickly. Since C programs need socket timeouts also, I figured there had to be a low-level alternative, and indeed there is: the <code>SO_SNDTIMEO</code> and <code>SO_RCVTIMEO</code> socket options. It's a bit involved to create a proper socket with these options but possible:</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2009-03-15
+  </small>
+  
+</p>
+<p>One of Ruby&rsquo;s weaknesses is its poor networking performance. Much of that has to do with the net/http implementation, which uses Ruby&rsquo;s awful Timeout library. The issues with Timeout are <a href="http://blog.headius.com/2008/02/rubys-threadraise-threadkill-timeoutrb.html">well documented</a>. <a href="http://ph7spot.com/articles/system_timer">SystemTimer</a> provides a reliable alternative that also performs better.</p>
+<p>However I started today wondering if there was a better way. Enabling timeouts has a huge performance hit on my memcache-client library and reducing the overhead would go a long way to making it perform safely <strong>and</strong> quickly. Since C programs need socket timeouts also, I figured there had to be a low-level alternative, and indeed there is: the <code>SO_SNDTIMEO</code> and <code>SO_RCVTIMEO</code> socket options. It&rsquo;s a bit involved to create a proper socket with these options but possible:</p>
 <pre lang="ruby">def connect_to(host, port, timeout=nil)
       addr = Socket.getaddrinfo(host, nil)
       sock = Socket.new(Socket.const_get(addr[0][0]), Socket::SOCK_STREAM, 0)
@@ -73,77 +202,46 @@
       sock
     end
 </pre>
-
 <p>There are a few complexities in the code:</p>
-
 <ul>
-<li>We use the low-level operations, <code>Socket.new</code> and <code>connect</code> rather than just <code>TCPSocket.new(host, port)</code> because otherwise we can't set the socket options before the connection is attempted; we want to ensure the connection attempt itself is timed out also.</li>
+<li>We use the low-level operations, <code>Socket.new</code> and <code>connect</code> rather than just <code>TCPSocket.new(host, port)</code> because otherwise we can&rsquo;t set the socket options before the connection is attempted; we want to ensure the connection attempt itself is timed out also.</li>
 <li>We have to look up the host via DNS by hand as some systems (*cough*, OSX) can return either IPv6 or IPv4 addresses and the address family constant used in Socket.new must match the address used in the connect statement.</li>
 <li>The <code>setsockopt</code> method takes a native C struct so we need to construct it using the <code>Array#pack</code> method.</li>
 </ul>
-
-<p>Here's the results, from worst to best:</p>
-
+<p>Here&rsquo;s the results, from worst to best:</p>
 <pre>== memcache-client 1.7.0 with Ruby 1.8.6, normal Ruby timeouts
                                      user     system      total        real
 mixed:ruby:memcache-client      14.240000   7.470000  21.710000 ( 22.173267)
 </pre>
-
 <pre>== memcache-client 1.7.0 with Ruby 1.8.6, SystemTimer 1.1.1
                                      user     system      total        real
 mixed:ruby:memcache-client      12.400000   1.960000  14.360000 ( 14.857924)
 </pre>
-
 <pre>== memcache-client 1.7.0 with Ruby 1.8.6, raw socket timeouts
                                      user     system      total        real
 mixed:ruby:memcache-client       2.750000   0.620000   3.370000 (  5.841545)
 </pre>
-
 <pre>== memcache-client 1.7.0 with Ruby 1.8.6, no socket timeouts
                                      user     system      total        real
 mixed:ruby:memcache-client       2.760000   0.620000   3.380000 (  5.902549)</pre>
-
-<p>Awesome. <strong>With raw socket timeouts, there is no performance impact!</strong> SystemTimer provides an excellent replacement for Timeout if you want to guarantee a ceiling on the time spent in an arbitrary block, but if you just need timeouts for low-level socket operations, nothing beats the operating system's native socket timeout support.</p>
-
-<p>There is a caveat in the paragraph above: <strong>low-level</strong> socket operations. memcache-client uses three IO methods: read, write and gets. The first two are low-level and time out properly, but gets is built on the low-level read operation; it has to ignore the EAGAIN error in order to ensure it returns a full line of text. So we use a hybrid approach, read and write will use the raw socket timeouts and gets will use SystemTimer. It's not quite as fast as with no/raw timeouts but it's definitely an improvement:</p>
-
+<p>Awesome. <strong>With raw socket timeouts, there is no performance impact!</strong> SystemTimer provides an excellent replacement for Timeout if you want to guarantee a ceiling on the time spent in an arbitrary block, but if you just need timeouts for low-level socket operations, nothing beats the operating system&rsquo;s native socket timeout support.</p>
+<p>There is a caveat in the paragraph above: <strong>low-level</strong> socket operations. memcache-client uses three IO methods: read, write and gets. The first two are low-level and time out properly, but gets is built on the low-level read operation; it has to ignore the EAGAIN error in order to ensure it returns a full line of text. So we use a hybrid approach, read and write will use the raw socket timeouts and gets will use SystemTimer. It&rsquo;s not quite as fast as with no/raw timeouts but it&rsquo;s definitely an improvement:</p>
 <pre>== memcache-client 1.7.0 with Ruby 1.8.6, raw socket timeouts and SystemTimer
                                      user     system      total        real
 mixed:ruby:memcache-client       7.490000   1.270000   8.760000 (  9.361547)
 </pre>
+<p>So we&rsquo;ve gone from 22 sec with Timeout to 15 sec with SystemTimer to 9 sec using raw socket timeouts where possible (<a href="http://github.com/mperham/memcache-client/commit/9f5201b77ccb6ef0d021e741cab8468151f2535d">Github commit</a>). For my next trick, I figure I&rsquo;ll rewrite <code>gets</code> to use read so I can remove the need for SystemTimer and Timeout altogether.</p>
 
-<p>So we've gone from 22 sec with Timeout to 15 sec with SystemTimer to 9 sec using raw socket timeouts where possible (<a href="http://github.com/mperham/memcache-client/commit/9f5201b77ccb6ef0d021e741cab8468151f2535d">Github commit</a>). For my next trick, I figure I'll rewrite <code>gets</code> to use read so I can remove the need for SystemTimer and Timeout altogether.</p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>

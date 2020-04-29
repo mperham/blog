@@ -1,102 +1,207 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> How to make $100k in OSS by working hard </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>How to make $100k in OSS by working hard | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>How to make $100k in OSS by working hard</h1>
-      <small class="post-meta">Oct 1, 2013</small>
-      <div class="post-content">
-        <p>My <a href="http://sidekiq.org">Sidekiq</a> project isn't just about building the best background processing framework for Ruby, it's also a venue for me to experiment with ways to make open source software financially sustainable for the developers who work on it hundreds of hours each year (e.g. me). Let's review.</p>
-
-<p>When Sidekiq was first released in Feb 2012, I offered a commercial license for $50. Don't like Sidekiq's standard LGPL license? Upgrade to a commercial license. In nine months of selling commercial licenses, <strong>I sold 33 for $1,650</strong>. If you figure I spent 300 hours building Sidekiq, that's less than minimum wage. Result: failure.</p>
-
-<p>In October last year I announced a big change: I would sell additional functionality in the form of an add-on Rubygem. <a href="http://sidekiq.org/">Sidekiq Pro</a> would cost $500 per company and add several complex but useful features not in the Sidekiq gem. I do little to market it, don't buy ads or sponsor anything; it's sold purely through word of mouth and mentions in the Sidekiq documentation.</p>
-
-<p>In the last year selling Sidekiq Pro, <strong>I sold about 140 copies for $70,000</strong>. Assuming I've spent 700 hours on Sidekiq so far, that's $100/hr. Success! Sales have actually notched up as Sidekiq has become more popular and pervasive: my current sales rate appears to be about $100,000/yr.</p>
-
-<p>This isn't retirement money but it is very respectable money for a side project and one I could make into a full-time job if desired. It makes supporting Sidekiq something I enjoy rather than a chore I dread: in the last year I've released 34 versions of Sidekiq with lots of new features, bug fixes and tons of contributions from the community.</p>
-
-<p>My one open question is how to market Sidekiq Pro now? Sure, I could fill the Sidekiq website with boring whitepaper case studies and sell 24/7 support but... ugh. So far my best response has been at developer conferences: when I meet and network with other Rubyists to answer their questions and soothe their fears, they buy Sidekiq Pro. I wish I had the time and fortitude to travel around the world but a wife and child does not allow this flexibility.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2013-10-01
+  </small>
+  
+</p>
+<p>My <a href="http://sidekiq.org">Sidekiq</a> project isn&rsquo;t just about building the best background processing framework for Ruby, it&rsquo;s also a venue for me to experiment with ways to make open source software financially sustainable for the developers who work on it hundreds of hours each year (e.g. me). Let&rsquo;s review.</p>
+<p>When Sidekiq was first released in Feb 2012, I offered a commercial license for $50. Don&rsquo;t like Sidekiq&rsquo;s standard LGPL license? Upgrade to a commercial license. In nine months of selling commercial licenses, <strong>I sold 33 for $1,650</strong>. If you figure I spent 300 hours building Sidekiq, that&rsquo;s less than minimum wage. Result: failure.</p>
+<p>In October last year I announced a big change: I would sell additional functionality in the form of an add-on Rubygem. <a href="http://sidekiq.org/">Sidekiq Pro</a> would cost $500 per company and add several complex but useful features not in the Sidekiq gem. I do little to market it, don&rsquo;t buy ads or sponsor anything; it&rsquo;s sold purely through word of mouth and mentions in the Sidekiq documentation.</p>
+<p>In the last year selling Sidekiq Pro, <strong>I sold about 140 copies for $70,000</strong>. Assuming I&rsquo;ve spent 700 hours on Sidekiq so far, that&rsquo;s $100/hr. Success! Sales have actually notched up as Sidekiq has become more popular and pervasive: my current sales rate appears to be about $100,000/yr.</p>
+<p>This isn&rsquo;t retirement money but it is very respectable money for a side project and one I could make into a full-time job if desired. It makes supporting Sidekiq something I enjoy rather than a chore I dread: in the last year I&rsquo;ve released 34 versions of Sidekiq with lots of new features, bug fixes and tons of contributions from the community.</p>
+<p>My one open question is how to market Sidekiq Pro now? Sure, I could fill the Sidekiq website with boring whitepaper case studies and sell 24/7 support but&hellip; ugh. So far my best response has been at developer conferences: when I meet and network with other Rubyists to answer their questions and soothe their fears, they buy Sidekiq Pro. I wish I had the time and fortitude to travel around the world but a wife and child does not allow this flexibility.</p>
 <p>As always, thank you to my customers for making this ongoing experiment a success and I hope the results so far encourage other OSS developers to experiment with ways to finance their own hard work.</p>
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

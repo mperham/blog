@@ -1,133 +1,235 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Risk and Startups </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Risk and Startups | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Risk and Startups</h1>
-      <small class="post-meta">Apr 20, 2010</small>
-      <div class="post-content">
-        <p>I've worked at 7-8 startups in the last 12 years, learning along the way that I love the freedom and flexibility that a small company affords. You pay a good price for that freedom though in the form of risk: your job will be measured in terms of months and years, not decades. My parents spent decades at their jobs working for large corporations; that kind of job security does not exist at a startup.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2010-04-20
+  </small>
+  
+</p>
+<p>I&rsquo;ve worked at 7-8 startups in the last 12 years, learning along the way that I love the freedom and flexibility that a small company affords. You pay a good price for that freedom though in the form of risk: your job will be measured in terms of months and years, not decades. My parents spent decades at their jobs working for large corporations; that kind of job security does not exist at a startup.</p>
 <p><strong>An Analogy</strong></p>
-
 <p>Risk is something that you either purposefully manage or you roll the dice with your life, sometimes literally. I ride/race a motorcycle as my main hobby away from the computer. Riding a moto is a risky activity and I do several things to manage that risk:</p>
-
 <ul>
 <li>Always wear a helmet, gloves and jacket</li>
 <li>Ride a relatively low power bike</li>
 <li>Taken every MSF training course available</li>
 <li>Refuse to ride in groups</li>
 </ul>
-
-<p>Do these guarantee I won't crash? Certainly not but I hope they will lessen the odds and minimize any damage if I do.</p>
-
+<p>Do these guarantee I won&rsquo;t crash? Certainly not but I hope they will lessen the odds and minimize any damage if I do.</p>
 <p><strong>Managing Risks</strong></p>
-
 <p>As engineers, what are the risks of working at a startup? The main risk is the company failing and going bankrupt. A second, related risk is being laid off. In both cases, your job and paycheck are at risk. How do we manage those risks? I have three tactics to manage the risk of working at a startup.</p>
-
-<p>1) Make it as easy as possible to find a job</p>
-
+<ol>
+<li>Make it as easy as possible to find a job</li>
+</ol>
 <p>You could make yourself essential to the operation of the company; that helps with layoffs but does not help with bankruptcy and has the drawback that you will start from square one at the next startup. My strategy has been to make myself a valuable developer, independent of any one startup, by working on open source software and maintaining a high quality blog that evangelizes myself and my work. This is a last resort strategy: if anything happens to make my job disappear, ideally I can interview and find another job within days. This recently proved successful when I announced my upcoming move to San Francisco and had 20-30 inquiries over the next few days.</p>
-
-<p>2) Exercise common sense and your math skills</p>
-
-<p>Do you know your startup's monthly burn rate, cash reserves and revenue? I'd bet that the majority of people at startups do not. Get those numbers and figure out how many months the company has before it has no money. Just a few months left? Would it be difficult to raise more money? Are you part of a &quot;layer of fat&quot; that could be laid off to cut the burn rate? Is revenue rising or dropping? Are you getting more customers? These are questions you should be asking yourself every month to evaluate the health of your startup. At some point you will need to leave on your own terms, before you are forced out by bankruptcy or layoffs. I left FiveRuns last year when these questions made bankruptcy look unavoidable. Leaving on my own terms meant I could take a few weeks to interview around to find the right job.</p>
-
-<p>3) Stick with Success</p>
-
-<p>They say failure is the best way to learn but in my experience nothing breeds success more than previous success. I try to stick with entrepreneurs that have past successes. As developers, we want to work with smart developers, yes, but you also want to work with great business guys who have a network of contacts, know how to raise funding and can navigate the company to a successful exit. I can interview a person to learn if they are a good developer but I can't interview a CEO to learn if they are a good CEO. I have only two metrics:</p>
-
+<ol start="2">
+<li>Exercise common sense and your math skills</li>
+</ol>
+<p>Do you know your startup&rsquo;s monthly burn rate, cash reserves and revenue? I&rsquo;d bet that the majority of people at startups do not. Get those numbers and figure out how many months the company has before it has no money. Just a few months left? Would it be difficult to raise more money? Are you part of a &ldquo;layer of fat&rdquo; that could be laid off to cut the burn rate? Is revenue rising or dropping? Are you getting more customers? These are questions you should be asking yourself every month to evaluate the health of your startup. At some point you will need to leave on your own terms, before you are forced out by bankruptcy or layoffs. I left FiveRuns last year when these questions made bankruptcy look unavoidable. Leaving on my own terms meant I could take a few weeks to interview around to find the right job.</p>
+<ol start="3">
+<li>Stick with Success</li>
+</ol>
+<p>They say failure is the best way to learn but in my experience nothing breeds success more than previous success. I try to stick with entrepreneurs that have past successes. As developers, we want to work with smart developers, yes, but you also want to work with great business guys who have a network of contacts, know how to raise funding and can navigate the company to a successful exit. I can interview a person to learn if they are a good developer but I can&rsquo;t interview a CEO to learn if they are a good CEO. I have only two metrics:</p>
 <ul>
 <li>do they have a reasonable business plan with a way to make money?</li>
 <li>have they had previous startup successes?</li>
 </ul>
+<p>The &ldquo;halo&rdquo; effect is very real. VCs are more willing to talk to someone who has previous success and knows the funding process. People are more willing to work at a company run by someone with previous success. Press is easier to get and customers are easier to talk to if they already know the company as the latest effort by a successful entrepreneur.</p>
+<ol start="4">
+<li>Educate yo&rsquo;self (Extra bonus tip!)</li>
+</ol>
+<p>You may know computer science but how much do you know about management or finance? Read a management book. I recommend anything by Peter Drucker &ndash; he literally invented the science of management and his writing really opened my eyes. Read a book on business finance. You&rsquo;re not trying to become an expert in these fields but when you learn a little bit about the other major roles in a startup, you&rsquo;ll be able to evaluate your startup&rsquo;s current situation more accurately.</p>
+<p>Even with all this, you will fail often. I&rsquo;ve been part of two moderately successful exits and several bankruptcies. I&rsquo;ve only been caught flat-footed once and tried to learn as much as I could from that experience. No matter what happens the startup experience is rewarding but with a little foresight you can minimize the inevitable risk to yourself and your livelihood.</p>
 
-<p>The &quot;halo&quot; effect is very real. VCs are more willing to talk to someone who has previous success and knows the funding process. People are more willing to work at a company run by someone with previous success. Press is easier to get and customers are easier to talk to if they already know the company as the latest effort by a successful entrepreneur.</p>
+    </article>
+  </div>
 
-<p>4) Educate yo'self (Extra bonus tip!)</p>
+  
+  
+  
 
-<p>You may know computer science but how much do you know about management or finance? Read a management book. I recommend anything by Peter Drucker -- he literally invented the science of management and his writing really opened my eyes. Read a book on business finance. You're not trying to become an expert in these fields but when you learn a little bit about the other major roles in a startup, you'll be able to evaluate your startup's current situation more accurately.</p>
+  
 
-<p>Even with all this, you will fail often. I've been part of two moderately successful exits and several bankruptcies. I've only been caught flat-footed once and tried to learn as much as I could from that experience. No matter what happens the startup experience is rewarding but with a little foresight you can minimize the inevitable risk to yourself and your livelihood.</p>
+  
+</body>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
-
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
-
-  </body>
 </html>

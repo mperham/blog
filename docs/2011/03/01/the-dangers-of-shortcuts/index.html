@@ -1,99 +1,208 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> The Dangers of Shortcuts </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>The Dangers of Shortcuts | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>The Dangers of Shortcuts</h1>
-      <small class="post-meta">Mar 1, 2011</small>
-      <div class="post-content">
-        <p><a href="http://mongodb.org/">MongoDB</a> has amazing write performance. <a href="http://nodejs.org/">Node.js</a> has great I/O concurrency. <a href="http://www.telehash.org/">Telehash</a> is an extremely efficient wire protocol. All three of these systems have a common theme: they take a shortcut in order to provide a leap in performance over existing systems.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2011-03-01
+  </small>
+  
+</p>
+<p><a href="http://mongodb.org/">MongoDB</a> has amazing write performance. <a href="http://nodejs.org/">Node.js</a> has great I/O concurrency. <a href="http://www.telehash.org/">Telehash</a> is an extremely efficient wire protocol. All three of these systems have a common theme: they take a shortcut in order to provide a leap in performance over existing systems.</p>
 <ul>
-<li>In MongoDB's case, they don't provide true durability so writes can be batched into a large set of writes when actually persisting to disk. This gets them great performance but means they don't provide true ACID transactions. Side note: the latest release has a new <code>--dur</code> flag which gives true durability with the resultant loss in write performance.</li>
+<li>In MongoDB&rsquo;s case, they don&rsquo;t provide true durability so writes can be batched into a large set of writes when actually persisting to disk. This gets them great performance but means they don&rsquo;t provide true ACID transactions. Side note: the latest release has a new <code>--dur</code> flag which gives true durability with the resultant loss in write performance.</li>
 <li>For Node.js, the trade-off is in programming style: everything is done asynchronously so you have to learn an entirely new style of programming. Great performance but great developer learning curve.</li>
 <li>With Telehash, UDP is a more efficient network protocol than TCP by design. TCP is essentially UDP with reliable delivery baked on top, so it suffers from round trip latency and the state required to track the current network packets in flight in order to ensure delivery. You can use UDP but if a router drops a UDP packet, your application will never know.</li>
 </ul>
+<p>When you are looking at a new system that promises better performance or scalability than existing systems, ask yourself &ldquo;what shortcuts did they take to get that performance or scalability?&rdquo; <strong>Sometimes those shortcuts are worth it but it is completely dependent on your own situation.</strong> If you are writing a small, high-traffic network service, Node.js makes sense. Writing a high volume of low-priority logging data with MongoDB makes sense. I would argue there are very few instances where UDP is a good idea, realtime data streaming is the best case I can think of, off hand. Part of being an engineer is learning when these shortcuts are unreasonable and what you are paying for that shortcut.</p>
 
-<p>When you are looking at a new system that promises better performance or scalability than existing systems, ask yourself &quot;what shortcuts did they take to get that performance or scalability?&quot; <strong>Sometimes those shortcuts are worth it but it is completely dependent on your own situation.</strong> If you are writing a small, high-traffic network service, Node.js makes sense. Writing a high volume of low-priority logging data with MongoDB makes sense. I would argue there are very few instances where UDP is a good idea, realtime data streaming is the best case I can think of, off hand. Part of being an engineer is learning when these shortcuts are unreasonable and what you are paying for that shortcut.</p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>

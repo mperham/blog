@@ -1,107 +1,210 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> RubyConf 2007 -- Day One </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>RubyConf 2007 -- Day One | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
-      <h1>RubyConf 2007 -- Day One</h1>
-      <small class="post-meta">Nov 2, 2007</small>
-      <div class="post-content">
-        <p>Hello from Charlotte! I'll be updating this post all day with random thoughts.</p>
+  
+  <div class="container">
+    <article>
+      <h1>RubyConf 2007 &ndash; Day One</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2007-11-02
+  </small>
+  
+</p>
+<p>Hello from Charlotte! I&rsquo;ll be updating this post all day with random thoughts.</p>
+<p>9:22am &ndash; If energy could be generated from t-shirts with nerdy quotes, this place could power the sun.</p>
+<p>10:45 &ndash; Interesting talk from Jim Weirich on &ldquo;how to parse without parsing&rdquo;. Great mind twist on how to use Ruby&rsquo;s dynamic nature to solve problems in a different manner than you might with Java/C++.</p>
+<p>12:37 &ndash; Don&rsquo;t look but there&rsquo;s a fat nerd playing a lute at 3 o&rsquo;clock.</p>
+<p>1:30 &ndash; Next up: a talk on the <a href="http://redhanded.hobix.com/bits/campingAMicroframework.html">Camping micro-framework</a>. Your webapp built in 30 minutes or less or your money back. Speaker&rsquo;s point: micro-frameworks are creative alternatives to the &ldquo;big guys&rdquo; like Rails and provide genetic diversity to the Ruby ecosystem.</p>
+<p>2:23 &ndash; AP4R &ndash; a bit dry. The speaker does not speak English (well); it&rsquo;s a straightforward description of a messaging system built in Ruby which is intended to replace their home-grown Java component.</p>
+<p>3:38 &ndash; Nifty. <a href="http://www.pivotalblabs.com/articles/2007/08/20/treetop-bringing-the-elegance-of-ruby-to-syntactic-analysis">Treetop</a> is a next generation parsing framework. Looks similar to the JavaCC-based EDI parser I wrote years ago but supposedly has some tricky new algorithms that give it a tangy goodness, read the link for eyeball-bleeding parser-speak.</p>
+<p>6:50 &ndash; Buzzed on local microbrewery sampler? Check. Jittery on giant Starbucks mocha? Check. We are locked and loaded for the Friday night keynote. Bring it on, Matz!</p>
+<p>10:43 &ndash; Played my first and second game of Werewolf. My permanent smirk proves to be a huge disadvantage as Chad Fowler decides I&rsquo;m untrustworthy and kills me instead of the actual werewolf. Alas.</p>
 
-<p>9:22am -- If energy could be generated from t-shirts with nerdy quotes, this place could power the sun.</p>
+    </article>
+  </div>
 
-<p>10:45 -- Interesting talk from Jim Weirich on &quot;how to parse without parsing&quot;. Great mind twist on how to use Ruby's dynamic nature to solve problems in a different manner than you might with Java/C++.</p>
+  
+  
+  
 
-<p>12:37 -- Don't look but there's a fat nerd playing a lute at 3 o'clock.</p>
+  
 
-<p>1:30 -- Next up: a talk on the <a href="http://redhanded.hobix.com/bits/campingAMicroframework.html">Camping micro-framework</a>. Your webapp built in 30 minutes or less or your money back. Speaker's point: micro-frameworks are creative alternatives to the &quot;big guys&quot; like Rails and provide genetic diversity to the Ruby ecosystem.</p>
+  
+</body>
 
-<p>2:23 -- AP4R -- a bit dry. The speaker does not speak English (well); it's a straightforward description of a messaging system built in Ruby which is intended to replace their home-grown Java component.</p>
-
-<p>3:38 -- Nifty. <a href="http://www.pivotalblabs.com/articles/2007/08/20/treetop-bringing-the-elegance-of-ruby-to-syntactic-analysis">Treetop</a> is a next generation parsing framework. Looks similar to the JavaCC-based EDI parser I wrote years ago but supposedly has some tricky new algorithms that give it a tangy goodness, read the link for eyeball-bleeding parser-speak.</p>
-
-<p>6:50 -- Buzzed on local microbrewery sampler? Check. Jittery on giant Starbucks mocha? Check. We are locked and loaded for the Friday night keynote. Bring it on, Matz!</p>
-
-<p>10:43 -- Played my first and second game of Werewolf. My permanent smirk proves to be a huge disadvantage as Chad Fowler decides I'm untrustworthy and kills me instead of the actual werewolf. Alas.</p>
-
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
-
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
-
-  </body>
 </html>

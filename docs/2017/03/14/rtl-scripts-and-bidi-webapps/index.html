@@ -1,111 +1,228 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> RTL scripts and BiDi webapps </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>RTL scripts and BiDi webapps | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>RTL scripts and BiDi webapps</h1>
-      <small class="post-meta">Mar 14, 2017</small>
-      <div class="post-content">
-        
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2017-03-14
+  </small>
+  
+</p>
 <p>A user recently submitted a Farsi translation for the Sidekiq
 Web UI and I quickly merged it, happy to see another language supported.</p>
-
 <p><strong>Unfortunately, as you know, no good deed goes unpunished.</strong></p>
-
 <p>I quickly learned that the Farsi language uses an RTL script - it is
 written from right to left.  Like a written page, webapps displaying
 Farsi text should be flipped so they are RTL.</p>
-
 <p>Webapps that can dynamically change text direction are called
-bi-directional, or BiDi.  As you might imagine BiDi support isn't
+bi-directional, or BiDi.  As you might imagine BiDi support isn&rsquo;t
 trivial but can be done.</p>
-
 <p>My i18n goal with the Sidekiq Web UI is simple: be as inclusive as
-reasonably possible.  I can't speak any languages fluently except English
+reasonably possible.  I can&rsquo;t speak any languages fluently except English
 but our open source community has developers that speak hundreds
-of languages and can help in the effort. I'm proud that the Web UI supports
-20+ LTR languages today but it pains me that I can't support Farsi, Hebrew,
+of languages and can help in the effort. I&rsquo;m proud that the Web UI supports
+20+ LTR languages today but it pains me that I can&rsquo;t support Farsi, Hebrew,
 Arabic and other RTL languages.</p>
-
-<p><a href="https://github.com/mperham/sidekiq/issues/3381"><strong>Until now!</strong></a> Here's what I did.</p>
-
+<p><a href="https://github.com/mperham/sidekiq/issues/3381"><strong>Until now!</strong></a> Here&rsquo;s what I did.</p>
 <h3 id="1-flip-that-css">1. Flip that CSS</h3>
-
-<p>There's a number of automated tools for scanning CSS files and outputing
+<p>There&rsquo;s a number of automated tools for scanning CSS files and outputing
 flipped rules to be used when emitting RTL pages.  These rules will override
 your standard LTR rules: where you specify padding-left, you want
 padding-right, etc.</p>
-
-<p>It helped a lot that I've kept the UI to one simple CSS file, with no
+<p>It helped a lot that I&rsquo;ve kept the UI to one simple CSS file, with no
 additional tooling or build process.  Bootstrap 3.x is popular enough that
 other people have created flipped overrides for it already.  The only hard
 work was creating application-rtl.css.</p>
-
 <p>Normal CSS, application.css:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-left</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }</code></pre></div>
-<p>Flipped CSS, application-rtl.css:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }</code></pre></div>
-<h3 id="2-fix-up-the-generated-css">2. Fix up the Generated CSS</h3>
-
-<p>Unfortunately it's not that easy; you'll note that now we have a
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-left</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
+</code></pre></div><p>Flipped CSS, application-rtl.css:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
+</code></pre></div><h3 id="2-fix-up-the-generated-css">2. Fix up the Generated CSS</h3>
+<p>Unfortunately it&rsquo;s not that easy; you&rsquo;ll note that now we have a
 margin on <strong>both</strong> sides when rendering RTL.  What I had to do was go
 through the generated application-rtl.css and update the rules to make
 them true overrides, like so:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">margin-left</span>: <span style="color:#66d9ef">unset</span>; }</code></pre></div>
-<p>Sidekiq's Web UI doesn't have a huge amount of CSS.  It took me less
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">margin-left</span>: <span style="color:#66d9ef">unset</span>; }
+</code></pre></div><p>Sidekiq&rsquo;s Web UI doesn&rsquo;t have a huge amount of CSS.  It took me less
 than an hour to go through 1000 lines, one at a time.</p>
-
 <h3 id="3-include-the-right-css">3. Include the right CSS</h3>
-
 <p>Now you include your application.css as normal and optionally include
 the RTL overrides if rendering an RTL script.  For example, I put this RTL logic in <code>&lt;head&gt;</code>:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/bootstrap.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> /&gt;
@@ -116,78 +233,49 @@ the RTL overrides if rendering an RTL script.  For example, I put this RTL logic
 &lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/application.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> /&gt;
 <span style="color:#960050;background-color:#1e0010">&lt;</span>% if rtl? %&gt;
 &lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/application-rtl.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> /&gt;
-<span style="color:#960050;background-color:#1e0010">&lt;</span>% end %&gt;</code></pre></div>
-<p>The <code>rtl?</code> method is very simple, it just checks for Farsi as the
+<span style="color:#960050;background-color:#1e0010">&lt;</span>% end %&gt;
+</code></pre></div><p>The <code>rtl?</code> method is very simple, it just checks for Farsi as the
 current locale:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rtl?</span>
   <span style="color:#e6db74">&#39;fa&#39;</span> <span style="color:#f92672">==</span> locale
-<span style="color:#66d9ef">end</span></code></pre></div>
-<p>The result (still buggy, note graph axis labels, but usable):</p>
-
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>The result (still buggy, note graph axis labels, but usable):</p>
 <p><img width="640" src="http://www.mikeperham.com/images/issue3381.png" /></p>
-
 <h3 id="standards">Standards</h3>
-
 <p>There are some upcoming standards on the horizon for easier BiDi
-support in CSS so you wouldn't need overrides at all:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { margin-inline-start: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }</code></pre></div>
-<p><code>inline-start</code> maps to <code>right</code> in RTL and <code>left</code> in LTR.  Unfortunately
+support in CSS so you wouldn&rsquo;t need overrides at all:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { margin-inline-start: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
+</code></pre></div><p><code>inline-start</code> maps to <code>right</code> in RTL and <code>left</code> in LTR.  Unfortunately
 only Firefox supports this syntax today or I could have just updated
 application.css directly.  I hope the other browser vendors can
 implement this soon as it greatly eases the burden of BiDi support.</p>
-
 <h3 id="resources">Resources</h3>
-
 <p>This was an extremely brief overview of what I had to do.  Thirty minutes
-of reading blog posts taught me a LOT about this subject.  Here's a few
+of reading blog posts taught me a LOT about this subject.  Here&rsquo;s a few
 links with more detail:</p>
-
 <ul>
 <li><a href="https://hacks.mozilla.org/2015/09/building-rtl-aware-web-apps-and-websites-part-1/">https://hacks.mozilla.org/2015/09/building-rtl-aware-web-apps-and-websites-part-1/</a></li>
 <li><a href="https://hacks.mozilla.org/2015/10/building-rtl-aware-web-apps-websites-part-2/">https://hacks.mozilla.org/2015/10/building-rtl-aware-web-apps-websites-part-2/</a></li>
 </ul>
-
 <h3 id="conclusion">Conclusion</h3>
-
-<p>I've learned after 20 years in the industry that i18n and l10n support
+<p>I&rsquo;ve learned after 20 years in the industry that i18n and l10n support
 is fractal: there is always more complexity that causes problems (date
 and number formatting, pluralization rules and text direction are just three
 examples) but I make the effort so that more people can use Sidekiq
 comfortably.</p>
-
 <p><strong>This BiDi work will be part of Sidekiq 5.0.</strong> If you see a problem in your
 own language/locale, please open an issue or send a pull request to fix it.</p>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

@@ -1,61 +1,191 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> bayes_motel -- Bayesian classification for Ruby </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>bayes_motel -- Bayesian classification for Ruby | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
-      <h1>bayes_motel -- Bayesian classification for Ruby</h1>
-      <small class="post-meta">Apr 28, 2010</small>
-      <div class="post-content">
-        <p><a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Bayesian classification</a> is an algorithm which allows us to categorize documents probabilistically. I recently started playing with Twitter data and realized there was no Ruby gem which would allow me to build a spam detector for tweets. The <code>classifier</code> gem just works on a set of text by figuring out which words appear in a category but a tweet is much more complicated than that. A tweet looks like this:</p>
-
+  
+  <div class="container">
+    <article>
+      <h1>bayes_motel &ndash; Bayesian classification for Ruby</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2010-04-28
+  </small>
+  
+</p>
+<p><a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Bayesian classification</a> is an algorithm which allows us to categorize documents probabilistically. I recently started playing with Twitter data and realized there was no Ruby gem which would allow me to build a spam detector for tweets. The <code>classifier</code> gem just works on a set of text by figuring out which words appear in a category but a tweet is much more complicated than that. A tweet looks like this:</p>
 <pre lang="ruby">{:text=>"Firesale prices, too! RT @nirajc: Time to change your Facebook password. Hacker selling 1.5m accounts. http://bit.ly/dryY7",
 :truncated=>false, :created_at=>"Fri Apr 23 18:26:51 +0000 2010", :coordinates=>nil, :geo=>nil, :favorited=>false,
 :source=>"<a href="http://www.tweetdeck.com" rel="nofollow">TweetDeck</a>",  :place=>nil, :contributors=>nil,
@@ -69,55 +199,29 @@
 :profile_background_tile=>false, :profile_background_color=>"1A1B1F", :id=>16645918, :geo_enabled=>false,
 :utc_offset=>-18000, :followers_count=>174}, :id=>12717456105}
 </pre>
-
-<p>As you can see, a tweet is just a hash of variables. So which variables are a better indicator of spam? I don't know and chances are you don't either. But if we create a corpus of ham tweets and a corpus of spam tweets, we can train a Bayesian classifier with the two datasets and it will figure out which variable values are seen often in spam and which in ham.</p>
-
-<p>Some variables don't work, statistically speaking:</p>
-
+<p>As you can see, a tweet is just a hash of variables. So which variables are a better indicator of spam? I don&rsquo;t know and chances are you don&rsquo;t either. But if we create a corpus of ham tweets and a corpus of spam tweets, we can train a Bayesian classifier with the two datasets and it will figure out which variable values are seen often in spam and which in ham.</p>
+<p>Some variables don&rsquo;t work, statistically speaking:</p>
 <ul>
-<li><strong>:id, :created_at</strong> -- these variables are unique for each tweet which means they are useless for classification. BayesMotel will trim any variable values that don't appear in more than 3% of the corpus.</li>
-<li><strong>:followers_count</strong> -- this is probably a pretty good spam/ham indicator in general, but not as a simple number. There are millions of possible values (@aplusk has 4.5 million followers) but we are only training on hundreds or thousands of tweets. What would be better is the binary logarithm of the followers_count to create discrete buckets: 32-64 followers = 5, 1024-2048 = 10 and so on. I'd bet any tweet with a value greater than 12 or so (i.e. 4096+ followers) is very likely to be ham.</li>
+<li><strong>:id, :created_at</strong> &ndash; these variables are unique for each tweet which means they are useless for classification. BayesMotel will trim any variable values that don&rsquo;t appear in more than 3% of the corpus.</li>
+<li><strong>:followers_count</strong> &ndash; this is probably a pretty good spam/ham indicator in general, but not as a simple number. There are millions of possible values (@aplusk has 4.5 million followers) but we are only training on hundreds or thousands of tweets. What would be better is the binary logarithm of the followers_count to create discrete buckets: 32-64 followers = 5, 1024-2048 = 10 and so on. I&rsquo;d bet any tweet with a value greater than 12 or so (i.e. 4096+ followers) is very likely to be ham.</li>
 </ul>
-
 <p>There are additional things we could do to improve our spam detector:</p>
-
 <ul>
-<li>We aren't deep inspecting the value of the tweet text. It might be useful to have variables like &quot;text_link_count&quot; or &quot;text_hashtag_count&quot; to provide basic metrics for the tweet text content.</li>
-<li>We aren't performing any timeline checks or storing previous tweet state -- spammers tend to tweet the same text over and over and their tweets all contain links. This is beyond the scope of a generic Bayesian system.</li>
+<li>We aren&rsquo;t deep inspecting the value of the tweet text. It might be useful to have variables like &ldquo;text_link_count&rdquo; or &ldquo;text_hashtag_count&rdquo; to provide basic metrics for the tweet text content.</li>
+<li>We aren&rsquo;t performing any timeline checks or storing previous tweet state &ndash; spammers tend to tweet the same text over and over and their tweets all contain links. This is beyond the scope of a generic Bayesian system.</li>
 </ul>
+<p>I wrote <a href="http://github.com/mperham/bayes_motel">bayes_motel</a> based on my research this last weekend. Give it a try and send a pull request if you make changes you&rsquo;d like to see. The test suite gives more detail about the API and has a few thousand tweets to use as sample data. Happy coding!</p>
 
-<p>I wrote <a href="http://github.com/mperham/bayes_motel">bayes_motel</a> based on my research this last weekend. Give it a try and send a pull request if you make changes you'd like to see. The test suite gives more detail about the API and has a few thousand tweets to use as sample data. Happy coding!</p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>

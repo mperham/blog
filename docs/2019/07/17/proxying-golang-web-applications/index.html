@@ -1,84 +1,208 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Proxying Golang Web Applications </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Proxying Golang Web Applications | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Proxying Golang Web Applications</h1>
-      <small class="post-meta">Jul 17, 2019</small>
-      <div class="post-content">
-        
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2019-07-17
+  </small>
+  
+</p>
 <p>Recently someone posted an issue asking if <a href="https://contribsys/faktory">Faktory</a> could support putting
-<code>nginx</code> in front of Faktory's Web UI.  Normally you access the Web UI
+<code>nginx</code> in front of Faktory&rsquo;s Web UI.  Normally you access the Web UI
 like <code>http://localhost:7420/</code> but they wanted it to look something like
-<code>http://somehost:8080/faktory</code>.  That's quite common when trying to wrap
+<code>http://somehost:8080/faktory</code>.  That&rsquo;s quite common when trying to wrap
 multiple systems into something that looks like one website to the
 browser.</p>
-
 <p>The issue is that the Web UI assumed it was at the root, so
 it hardcoded paths like <code>/static/application.css</code>.  If you mount the Web
 UI at <code>/faktory</code>, you want that CSS URL to become
 <code>/faktory/static/application.css</code>.</p>
-
 <p>After thirty minutes of Googling, I could find nothing on how to solve
 this problem so I put on my thinking cap and ground it out over 3-4
-hours today.  Here's the scoop.</p>
-
+hours today.  Here&rsquo;s the scoop.</p>
 <h2 id="nginx-configuration">nginx Configuration</h2>
-
-<p>Here's the nginx configuration to forward <code>/faktory</code> to
+<p>Here&rsquo;s the nginx configuration to forward <code>/faktory</code> to
 Faktory at its default URL.  We set a number of headers which might be useful in the future
 but only <code>X-Script-Name</code> is critical. Note the <code>/faktory</code> in the first two lines needs to
 stay in sync.</p>
-
 <pre><code>location /faktory {
   proxy_set_header X-Script-Name /faktory;
 
@@ -88,21 +212,16 @@ stay in sync.</p>
   proxy_set_header X-Scheme $scheme;
   proxy_set_header X-Real-IP $remote_addr;
 }
-</code></pre>
-
-<p><code>SCRIPT_NAME</code> is a legacy of CGI but it's used by Python and Ruby apps
+</code></pre><p><code>SCRIPT_NAME</code> is a legacy of CGI but it&rsquo;s used by Python and Ruby apps
 to know the proxy prefix for requests coming to an app.  We use a properly
 named HTTP header, X-Script-Name, in each request to signal this value to Faktory.</p>
-
 <h2 id="abstract-that-mux">Abstract that Mux!</h2>
-
-<p>Go's http package exposes a Mux type which acts as the router in a Go
+<p>Go&rsquo;s http package exposes a Mux type which acts as the router in a Go
 webapp. We tell it to route all <code>/static/</code> requests like this:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">app</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
-<span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/static/&#34;</span>, <span style="color:#a6e22e">staticHandler</span>)</code></pre></div>
-<p>But this has one very big problem: it doesn't know about the <code>/faktory</code>
+<span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/static/&#34;</span>, <span style="color:#a6e22e">staticHandler</span>)
+</code></pre></div><p>But this has one very big problem: it doesn&rsquo;t know about the <code>/faktory</code>
 prefix!</p>
-
 <p>The trick I figured out is to add a special Mux <em>before</em> the application
 Mux which matches all requests and can unmangle any proxied requests so
 they look like an unproxied request to the app Mux:</p>
@@ -118,53 +237,31 @@ they look like an unproxied request to the app Mux:</p>
     <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">URL</span>.<span style="color:#a6e22e">Path</span> = <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">RequestURI</span>
   }
   <span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">r</span>)
-})</code></pre></div>
-<h2 id="every-link-must-be-relative">Every Link must be Relative</h2>
-
+})
+</code></pre></div><h2 id="every-link-must-be-relative">Every Link must be Relative</h2>
 <p>Within the HTML markup, I had to change every URL and path to use a
 helper to generate the relative path with any necessary prefix.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fullpath</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">relpath</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> {
 	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s%s&#34;</span>, <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;X-Script-Name&#34;</span>), <span style="color:#a6e22e">relpath</span>)
-}</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-erb" data-lang="erb">&lt;link href=&#34;&lt;%= fullpath(req, &#34;/static/application.css&#34;) %&gt;&#34; ...&gt;</code></pre></div>
-<p><code>req.Header.Get</code> returns <code>&quot;&quot;</code> when there is no value set so the base case is handled smoothly.</p>
-
+}
+</code></pre></div><pre><code class="language-erb" data-lang="erb">&lt;link href=&quot;&lt;%= fullpath(req, &quot;/static/application.css&quot;) %&gt;&quot; ...&gt;
+</code></pre><p><code>req.Header.Get</code> returns <code>&quot;&quot;</code> when there is no value set so the base case is handled smoothly.</p>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>No rocket science here but it was interesting to find a non-trivial HTTP
 edge case in Go without a blog post on the subject and very rewarding to
-solve it myself. <a href="https://github.com/contribsys/faktory/commit/92d88d33f3a820ad5cc2085b1b12c78b7e5b8ea7">Here's the big commit that landed in Faktory to add
+solve it myself. <a href="https://github.com/contribsys/faktory/commit/92d88d33f3a820ad5cc2085b1b12c78b7e5b8ea7">Here&rsquo;s the big commit that landed in Faktory to add
 proxy support.</a>  I hope this helps someone else!</p>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

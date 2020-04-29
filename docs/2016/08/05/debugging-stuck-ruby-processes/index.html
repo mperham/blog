@@ -1,83 +1,204 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Debugging stuck Ruby processes </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Debugging stuck Ruby processes | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Debugging stuck Ruby processes</h1>
-      <small class="post-meta">Aug 5, 2016</small>
-      <div class="post-content">
-        
-
-<p>My Ruby process has stopped doing any work, what's wrong?</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2016-08-05
+  </small>
+  
+</p>
+<p>My Ruby process has stopped doing any work, what&rsquo;s wrong?</p>
 <p>This is an uncommon but occasional problem for many people, especially
 with large applications using lots of native extensions.</p>
-
-<h2 id="step-1-thread-backtraces">Step 1 - Thread backtraces</h2>
-
+<h2 id="step-1---thread-backtraces">Step 1 - Thread backtraces</h2>
 <p>A Sidekiq process will print out the backtrace of every thread when
 you send it the TTIN signal.</p>
-
 <pre><code>kill -TTIN &lt;pid&gt;
-</code></pre>
-
-<blockquote>
+</code></pre><blockquote>
 <p>Side note: YMMV for other types of Ruby processes: resque, unicorn, puma, passenger, etc.  Check
-the gem documentation or open an issue with the maintainers if it's not clear how to get
+the gem documentation or open an issue with the maintainers if it&rsquo;s not clear how to get
 backtraces from your process.</p>
 </blockquote>
-
 <p>Reading these backtraces will tell you what your threads are doing at
-that instant.  Here's an example:</p>
-
+that instant.  Here&rsquo;s an example:</p>
 <pre><code>2016-08-04T16:16:13.535Z 96660 TID-oxpb26trs WARN: Thread TID-oxpbpcmn0
 2016-08-04T16:16:13.535Z 96660 TID-oxpb26trs WARN: /Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:82:in `select'
 /Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:82:in `rescue in _read_from_socket'
@@ -118,50 +239,34 @@ that instant.  Here's an example:</p>
 /Users/mike/src/sidekiq/lib/sidekiq/processor.rb:68:in `run'
 /Users/mike/src/sidekiq/lib/sidekiq/util.rb:17:in `watchdog'
 /Users/mike/src/sidekiq/lib/sidekiq/util.rb:25:in `block in safe_thread'
-</code></pre>
-
-<p>Backtraces look like a big, scary blob of text because they are!  Reading
+</code></pre><p>Backtraces look like a big, scary blob of text because they are!  Reading
 a backtrace is hard and a learned skill: <strong>you will get better at it over
 time</strong>.  Pop open a gem with <code>bundle open &lt;gemname&gt;</code> and navigate to the
 line in the backtrace; getting comfortable with the code in the various
 gems will help your debugging skills a lot.  The key line is here:</p>
-
 <pre><code>/Users/mike/src/sidekiq/lib/sidekiq/fetch.rb:36:in `block in retrieve_work'
-</code></pre>
-
-<p>This is a quiet Sidekiq thread that is waiting for a job from Redis.  It's paused,
-doing nothing, but that's perfectly normal.</p>
-
-<p>Most often with stuck processes you'll see threads paused in the mysql or
+</code></pre><p>This is a quiet Sidekiq thread that is waiting for a job from Redis.  It&rsquo;s paused,
+doing nothing, but that&rsquo;s perfectly normal.</p>
+<p>Most often with stuck processes you&rsquo;ll see threads paused in the mysql or
 postgresql driver, waiting on query results or waiting for a lock.</p>
-
-<h2 id="step-2-gdb">Step 2 - GDB</h2>
-
-<p>If the Sidekiq process doesn't output anything when you send it a TTIN
-signal, that's a sign you've got a deeper problem.  Almost always the
+<h2 id="step-2---gdb">Step 2 - GDB</h2>
+<p>If the Sidekiq process doesn&rsquo;t output anything when you send it a TTIN
+signal, that&rsquo;s a sign you&rsquo;ve got a deeper problem.  Almost always the
 cause is a native extension gem which is performing a long operation
 without releasing the GVL.</p>
-
-<p>This means Ruby can't help - we have to drop down into the bowels of
+<p>This means Ruby can&rsquo;t help - we have to drop down into the bowels of
 the process to understand what is wrong using the GDB debugger.  You can attach
 GDB to a running process like so:</p>
-
 <pre><code>sudo gdb /path/to/ruby/binary [PID]
-</code></pre>
-
-<p>Now to get the thread backtraces dumped to a text file, run these
+</code></pre><p>Now to get the thread backtraces dumped to a text file, run these
 commands:</p>
-
 <pre><code>(gdb) set logging file gdb_output.txt
 (gdb) set logging on
 (gdb) set height 10000
 (gdb) t a a bt
 (gdb) quit
-</code></pre>
-
-<p>A Sidekiq Enterprise customer recently sent me a GDB dump that I will
-use as an example.  Here's the first thread:</p>
-
+</code></pre><p>A Sidekiq Enterprise customer recently sent me a GDB dump that I will
+use as an example.  Here&rsquo;s the first thread:</p>
 <pre><code>Thread 32 (Thread 0x3703 of process 40990):
 #0  0x00007fff94b87db6 in __psynch_cvwait () from /usr/lib/system/libsystem_kernel.dylib
 #1  0x00007fff98cab728 in _pthread_cond_wait () from /usr/lib/system/libsystem_pthread.dylib
@@ -177,9 +282,7 @@ use as an example.  Here's the first thread:</p>
 #11 0x0000000102dbbf0c in rb_thread_s_handle_interrupt ()
 #12 0x0000000102dadee3 in vm_call_cfunc ()
 #13 0x0000000102d925f4 in vm_exec_core ()
-</code></pre>
-
-<p>Note that this is a C-level backtrace.  We're lower-level and have less
+</code></pre><p>Note that this is a C-level backtrace.  We&rsquo;re lower-level and have less
 info available but experience helps fill in the gaps.  The thread is
 calling <code>sock_s_getaddrinfo</code> which is a DNS lookup.  It looks like it
 has finished the DNS lookup and is now calling <code>gvl_acquire_common</code> to
@@ -187,12 +290,10 @@ get the GVL in order to continue executing Ruby code.  It is normal
 for some threads to block, waiting for the GVL, but it is not normal for
 most threads to be waiting for the GVL. This was the case: dozens of
 threads were blocked with that exact same backtrace.</p>
-
 <p>When this happens, look for the odd threads.  20+ threads were blocked with the same
 backtrace as above - you can ignore those.  But one or more threads will be
 doing something else, and indeed there was this backtrace which was
 completely different:</p>
-
 <pre><code>Thread 10 (Thread 0x2103 of process 40990):
 #0  0x00007fff94b892a2 in poll () from /usr/lib/system/libsystem_kernel.dylib
 #1  0x00000001035c892d in pqSocketCheck () from /usr/local/opt/postgresql/lib/libpq.5.dylib
@@ -206,69 +307,41 @@ completely different:</p>
 #9  0x0000000102da9d82 in rb_call0 ()
 #10 0x0000000102cbc969 in rb_class_new_instance ()
 #11 0x0000000102dadee3 in vm_call_cfunc ()
-</code></pre>
-
-<p>Note the long pathnames at the end of the middle lines - they indicate
-we're executing within a native extension: the <code>pg</code> gem which then calls
-into <code>libpq</code>, postgresql's native C API.  The <code>pg</code> gem is calling <code>PQsetClientEncoding</code>
-which looks like it is making a network call since I see terms like &quot;Socket&quot; and &quot;poll&quot;.</p>
-
-<p>Now we find the root issue: there's no GVL release in the backtrace.  MRI's API is
+</code></pre><p>Note the long pathnames at the end of the middle lines - they indicate
+we&rsquo;re executing within a native extension: the <code>pg</code> gem which then calls
+into <code>libpq</code>, postgresql&rsquo;s native C API.  The <code>pg</code> gem is calling <code>PQsetClientEncoding</code>
+which looks like it is making a network call since I see terms like &ldquo;Socket&rdquo; and &ldquo;poll&rdquo;.</p>
+<p>Now we find the root issue: there&rsquo;s no GVL release in the backtrace.  MRI&rsquo;s API is
 excellent in this regard: you should see <code>rb_thread_call_without_gvl</code> in
 the backtrace to indicate that the thread is not holding the GVL.
 Until that network call finishes, the entire process is locked up and
-can't do anything.  Most of the time you won't notice because the network is
+can&rsquo;t do anything.  Most of the time you won&rsquo;t notice because the network is
 usually pretty fast but in the case where the network is stalled, work
 grinds to a halt.</p>
-
-<p>All of this assumes you can use GDB in your production environment.  If you're on
+<p>All of this assumes you can use GDB in your production environment.  If you&rsquo;re on
 Heroku or a similar PaaS, try to reproduce the issue on your local machine or a
 Linux VM.</p>
-
 <h2 id="conclusion">Conclusion</h2>
-
 <p>Performing a network operation while holding the GVL is a huge bug and should be fixed.
 This is a current <a href="https://bitbucket.org/ged/ruby-pg/issues/245/pg-0184">pg bug in &lt;= 0.18.4</a>, filed and acknowledged.</p>
-
 <p>Getting thread dumps from a stuck process is critical to diagnosing the root cause.
 Reading and understanding those backtraces, both in Ruby and in GDB, is a useful skill to have
-when debugging issues.  As you read more code, you'll get better and
+when debugging issues.  As you read more code, you&rsquo;ll get better and
 faster at diagnosing problems.  It took me about 30 seconds to determine
 the problem in the GDB dump above.</p>
+<p>If you are a Sidekiq Pro or Enterprise customer and seeing stuck processes, don&rsquo;t be
+afraid to gist me your GDB dumps - I&rsquo;d be happy to help diagnose.</p>
 
-<p>If you are a Sidekiq Pro or Enterprise customer and seeing stuck processes, don't be
-afraid to gist me your GDB dumps - I'd be happy to help diagnose.</p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>

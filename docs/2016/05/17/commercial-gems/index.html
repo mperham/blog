@@ -1,68 +1,195 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Serving your own Commercial Rubygems </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Serving your own Commercial Rubygems | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Serving your own Commercial Rubygems</h1>
-      <small class="post-meta">May 17, 2016</small>
-      <div class="post-content">
-        
-
-<p>It's not well known but with Rubygems and Bundler, you can distribute access-controlled commercial Rubygems.  My gems, <a href="http://sidekiq.org">Sidekiq Pro and Sidekiq Enterprise</a>, are the most well known example but I'm not a wizard: anyone can distribute gems to a limited set of customers.  Here's how I do it.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2016-05-17
+  </small>
+  
+</p>
+<p>It&rsquo;s not well known but with Rubygems and Bundler, you can distribute access-controlled commercial Rubygems.  My gems, <a href="http://sidekiq.org">Sidekiq Pro and Sidekiq Enterprise</a>, are the most well known example but I&rsquo;m not a wizard: anyone can distribute gems to a limited set of customers.  Here&rsquo;s how I do it.</p>
 <ul>
 <li>A $5/mo DigitalOcean instance running Apache.  No database, no app server.  I have a set of bash scripts which can build a server in 5 minutes.</li>
-<li>To serve gems, you need to have Apache serve a directory of static files.  You'll need a VirtualHost entry with something like this:</li>
+<li>To serve gems, you need to have Apache serve a directory of static files.  You&rsquo;ll need a VirtualHost entry with something like this:</li>
 </ul>
-
 <pre><code>  &lt;VirtualHost *:443&gt;
     ServerName my-server.com
     DocumentRoot /var/www/gems
@@ -76,21 +203,14 @@
       AuthUserFile /var/www/gems-passwd
       Require valid-user
     &lt;/Location&gt;
-</code></pre>
-
-<ul>
-<li>To control access to those gems, you need a <code>/var/www/gems-passwd</code> file which contains your user / password pairs.  The username / passwords are a hash based on the customer's email address.  The contents look like this:</li>
+</code></pre><ul>
+<li>To control access to those gems, you need a <code>/var/www/gems-passwd</code> file which contains your user / password pairs.  The username / passwords are a hash based on the customer&rsquo;s email address.  The contents look like this:</li>
 </ul>
-
 <pre><code>1a7fe3bd:$apr1$0RtyG.1v$D/o5n25i2YmPiTOGAPPI21
 d41be46c:$apr1$.dFnnB5F$Ne2YtTP12q9iM9/ZQvoL01
 09120f77:$apr1$ERLqbLvS$El2Llj6MJlWDWQnJKcrR80
-</code></pre>
-
-<p>The command to generate an entry is <code>htpasswd -nb user pwd</code>.</p>
-
+</code></pre><p>The command to generate an entry is <code>htpasswd -nb user pwd</code>.</p>
 <p>I have a <code>/var/www/gems</code> directory which looks like this:</p>
-
 <pre><code>$ pwd
 /var/www/gems
 $ ls -l
@@ -103,12 +223,9 @@ drwxrwxr-x 2 mike adm  4096 Apr  5 16:25 gems
 drwxrwxr-x 3 mike adm  4096 Apr  5 16:25 quick
 -rw-rw-r-- 1 mike mike 1307 Apr  5 16:25 specs.4.8
 -rw-rw-r-- 1 mike mike  251 Apr  5 16:25 specs.4.8.gz
-</code></pre>
-
-<ul>
-<li>When you buy Sidekiq Pro, Stripe sends my server a webhook.  I have a rake task which looks up the new customer's email address, adds a new user/pwd to the end of the gems-passwd file and then sends them an email with directions to access the Sidekiq Pro gem:</li>
+</code></pre><ul>
+<li>When you buy Sidekiq Pro, Stripe sends my server a webhook.  I have a rake task which looks up the new customer&rsquo;s email address, adds a new user/pwd to the end of the gems-passwd file and then sends them an email with directions to access the Sidekiq Pro gem:</li>
 </ul>
-
 <pre><code>Put this in your Gemfile:
 
     source &quot;https://my-server.com&quot; do
@@ -120,10 +237,8 @@ Run this bundle command:
     bundle config my-server.com username:password
 
 Run `bundle install` and you're done!
-</code></pre>
-
-<ul>
-<li>In addition to the passwd file, the server has a CSV file with <code>email,username,password</code> so I can look up the Apache username for a customer's email and regenerate the passwd file from scratch if necessary.</li>
+</code></pre><ul>
+<li>In addition to the passwd file, the server has a CSV file with <code>email,username,password</code> so I can look up the Apache username for a customer&rsquo;s email and regenerate the passwd file from scratch if necessary.</li>
 <li>If a subscription runs out, Stripe sends the opposite webhook; the server removes them from the CSV and passwd so they can no longer access the gem server.</li>
 <li>I have rake tasks which can push a new gem version, add/remove a customer, send email, etc.</li>
 <li>Pushing a new gem version looks like this, note the <code>generate_index</code> call:</li>
@@ -143,57 +258,30 @@ Run `bundle install` and you're done!
     puts ssh<span style="color:#f92672">.</span>exec!(<span style="color:#e6db74">&#34;gem generate_index --directory /var/www/gems&#34;</span>)
   <span style="color:#66d9ef">end</span>
   puts <span style="color:#e6db74">&#34;Released Sidekiq Pro </span><span style="color:#e6db74">#{</span>ver<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
-<span style="color:#66d9ef">end</span></code></pre></div>
-<ul>
-<li>The Stripe webhook integration is really nice as it automates 90% of my business BUT don't bother until you have sufficient sales to make it worth your while.  For the first two years, I added customers manually when I got the &quot;You just got a sale!&quot; email.  The hard part is dealing with churn - Stripe doesn't email when a subscription ends so you'll need to automate that or at least send yourself email upon that webhook.</li>
-<li>For redundancy, I run two servers at a time so a replica is always available.  I switch out servers every six months so software versions on the server stay reasonably current: create new replica, old replica is promoted to primary, old primary is killed.  The servers are sync'd with BitTorrent Sync, which is the only &quot;shiny&quot; tech I use but I've found nothing better to keep a directory in sync between two servers in near real-time.</li>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><ul>
+<li>The Stripe webhook integration is really nice as it automates 90% of my business BUT don&rsquo;t bother until you have sufficient sales to make it worth your while.  For the first two years, I added customers manually when I got the &ldquo;You just got a sale!&rdquo; email.  The hard part is dealing with churn - Stripe doesn&rsquo;t email when a subscription ends so you&rsquo;ll need to automate that or at least send yourself email upon that webhook.</li>
+<li>For redundancy, I run two servers at a time so a replica is always available.  I switch out servers every six months so software versions on the server stay reasonably current: create new replica, old replica is promoted to primary, old primary is killed.  The servers are sync&rsquo;d with BitTorrent Sync, which is the only &ldquo;shiny&rdquo; tech I use but I&rsquo;ve found nothing better to keep a directory in sync between two servers in near real-time.</li>
 </ul>
-
 <h3 id="end-result">End Result</h3>
-
-<p>When I get a sale, my &quot;Sidekiqbot&quot; script sends me an email that the customer was set up.  It feels pretty awesome to know the onboarding is completely automated.</p>
-
-<p><img src="/images/sale.png" alt="sale" /></p>
-
-<p>That's it: Apache, CSV and some basic Linux/Ruby scripting.  It took me weeks to develop all of this but there's nothing super difficult about it.  I try to keep the server as simple as possible so I can focus on Sidekiq development and support, not operations.  After all, you're buying what's <strong>in</strong> the gems, not what serves them.  This simplicity has real benefits: it's cheap ($10/mo for two servers), easy to maintain and reliable.  If you are thinking about following in my footsteps, I hope this blog post helps light the way.</p>
-
-<p>This article is part of a larger group on the technical nitty gritty of a software business.  Related articles are <a href="/2015/11/23/how-to-charge-for-your-open-source/">Charging for your Open Source</a> (discussion on the money and legal aspects) and <a href="/2015/01/05/cgi-rubys-bare-metal/">CGI: Ruby's bare metal</a> (discussion on handling Stripe webhooks).</p>
-
+<p>When I get a sale, my &ldquo;Sidekiqbot&rdquo; script sends me an email that the customer was set up.  It feels pretty awesome to know the onboarding is completely automated.</p>
+<p><img src="/images/sale.png" alt="sale"></p>
+<p>That&rsquo;s it: Apache, CSV and some basic Linux/Ruby scripting.  It took me weeks to develop all of this but there&rsquo;s nothing super difficult about it.  I try to keep the server as simple as possible so I can focus on Sidekiq development and support, not operations.  After all, you&rsquo;re buying what&rsquo;s <strong>in</strong> the gems, not what serves them.  This simplicity has real benefits: it&rsquo;s cheap ($10/mo for two servers), easy to maintain and reliable.  If you are thinking about following in my footsteps, I hope this blog post helps light the way.</p>
+<p>This article is part of a larger group on the technical nitty gritty of a software business.  Related articles are <a href="/2015/11/23/how-to-charge-for-your-open-source/">Charging for your Open Source</a> (discussion on the money and legal aspects) and <a href="/2015/01/05/cgi-rubys-bare-metal/">CGI: Ruby&rsquo;s bare metal</a> (discussion on handling Stripe webhooks).</p>
 <h3 id="postscript">Postscript</h3>
-
 <p>I became a member of <a href="https://rubytogether.org">Ruby Together</a> because I rely on Bundler and the Rubygems infrastructure.
 The fact that we can do this at all is the beauty of Bundler and Rubygems: they are easily federated using HTTP and static files only.  As an alternative, consider npm; it requires CouchDB, a full copy of the npm dataset to serve and only supports a single package server.  This design is much more complex, requiring a much heavier server, and makes it effectively impossible for an individual to run an npm server due to the operational costs and maintenance required.  I encourage anyone whose business depends on Ruby to join.</p>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

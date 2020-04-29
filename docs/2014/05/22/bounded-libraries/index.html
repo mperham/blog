@@ -1,98 +1,205 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Bounded Libraries </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Bounded Libraries | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Bounded Libraries</h1>
-      <small class="post-meta">May 22, 2014</small>
-      <div class="post-content">
-        <p>I've been noticing a theme in certain Rubygems recently that I like: opinionated designs which explicitly don't allow the user to do certain things. I call these <strong>bounded libraries</strong> because they draw a functional boundary and won't go beyond that point.</p>
-
-<p>Let's face it: when we start a new Open Source project, we just want people to use it. If someone asks us to add a feature, we commonly implement it to make our user happy. <em>But this can be a terrible idea!</em> Good gems are written by expert developers, with many years of experience and a vision for what their gem will do, but the best gems also draw a line at what their gem <strong>will not do, ever</strong>.</p>
-
-<p>Part of earning the users trust is not just providing high quality functionality but also pushing back on requests where our experience tells them they should not go. Most recently this came up in using the <code>minitest</code> gem. For those that don't know, minitest's mocking and stubbing support is far more limited than what is available in rspec, mocha or flexmock <strong>and this is a good thing</strong>. Every time I experience pain testing a component with minitest, it's because I've got some coupling which can't be stubbed or mocked away with minitest. I could do this with the other tools but I would just hurt myself twice: I still have that coupling but now I have brittle test code too! minitest's refusal to provide the extensive mocking and stubbing of the others forces me to write better code.</p>
-
-<p>I've tried to be very clear in Sidekiq's boundaries: I won't provide features which cripple concurrency as this requires distributed locks and coordination. Examples of those features include unique jobs, cron-scheduled jobs, throttling and rate limiting. These features lead to non-deterministic behavior and hit overall performance hard. Lots of people ask for these features but I always point them to 3rd party gems. I can't stop someone from using Sidekiq but I can refuse to help.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2014-05-22
+  </small>
+  
+</p>
+<p>I&rsquo;ve been noticing a theme in certain Rubygems recently that I like: opinionated designs which explicitly don&rsquo;t allow the user to do certain things. I call these <strong>bounded libraries</strong> because they draw a functional boundary and won&rsquo;t go beyond that point.</p>
+<p>Let&rsquo;s face it: when we start a new Open Source project, we just want people to use it. If someone asks us to add a feature, we commonly implement it to make our user happy. <em>But this can be a terrible idea!</em> Good gems are written by expert developers, with many years of experience and a vision for what their gem will do, but the best gems also draw a line at what their gem <strong>will not do, ever</strong>.</p>
+<p>Part of earning the users trust is not just providing high quality functionality but also pushing back on requests where our experience tells them they should not go. Most recently this came up in using the <code>minitest</code> gem. For those that don&rsquo;t know, minitest&rsquo;s mocking and stubbing support is far more limited than what is available in rspec, mocha or flexmock <strong>and this is a good thing</strong>. Every time I experience pain testing a component with minitest, it&rsquo;s because I&rsquo;ve got some coupling which can&rsquo;t be stubbed or mocked away with minitest. I could do this with the other tools but I would just hurt myself twice: I still have that coupling but now I have brittle test code too! minitest&rsquo;s refusal to provide the extensive mocking and stubbing of the others forces me to write better code.</p>
+<p>I&rsquo;ve tried to be very clear in Sidekiq&rsquo;s boundaries: I won&rsquo;t provide features which cripple concurrency as this requires distributed locks and coordination. Examples of those features include unique jobs, cron-scheduled jobs, throttling and rate limiting. These features lead to non-deterministic behavior and hit overall performance hard. Lots of people ask for these features but I always point them to 3rd party gems. I can&rsquo;t stop someone from using Sidekiq but I can refuse to help.</p>
 <p>What are your favorite open source bounded libraries? What boundary lines do they draw?</p>
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

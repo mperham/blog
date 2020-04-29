@@ -1,101 +1,221 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Optimizing Sidekiq </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Optimizing Sidekiq | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Optimizing Sidekiq</h1>
-      <small class="post-meta">Oct 14, 2015</small>
-      <div class="post-content">
-        
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2015-10-14
+  </small>
+  
+</p>
 <p>Sidekiq has a reputation for being much faster than its competition but
-there's always room for improvement. I recently rewrote its internals
-and made it <strong>six times faster</strong>.  Here's how!</p>
-
+there&rsquo;s always room for improvement. I recently rewrote its internals
+and made it <strong>six times faster</strong>.  Here&rsquo;s how!</p>
 <figure style="float: right;">
   <img style="border: solid white 10px;" src="http://cdn.shopify.com/s/files/1/0154/2777/products/Sidekiq_-_Detail_1024x1024.jpg" width="360px" />
 </figure>
-
-<p>It's been quite a while since I've touched Sidekiq's core design.  That
+<p>It&rsquo;s been quite a while since I&rsquo;ve touched Sidekiq&rsquo;s core design.  That
 was intentional: for the last year Sidekiq has stabilized and become
 reliable infrastructure that Ruby developers can trust when
-building their applications.  That didn't stop me from wondering though,
+building their applications.  That didn&rsquo;t stop me from wondering though,
 what would happen if I change this or tweak that?</p>
-
 <p>Recently I decided to embark on an experiment: how hard would it be
 to remove Celluloid?  Could I convert Sidekiq to use bare threads?
 I like Celluloid and how much easier it makes concurrent programming but
-it's also Sidekiq's largest dependency; as Celluloid changes, Sidekiq
+it&rsquo;s also Sidekiq&rsquo;s largest dependency; as Celluloid changes, Sidekiq
 must accomodate those changes.</p>
-
 <h2 id="1-get-a-baseline">1. Get a Baseline</h2>
-
 <p>First thing I did was write a <a href="https://github.com/mperham/sidekiq/blob/master/bin/sidekiqload">load testing script</a> to execute 100,000
 no-op jobs so I could judge whether a change was effective or not.  The
 script creates 100,000 jobs in Redis, boots Sidekiq with 25 worker threads
 and then prints the current state every 2 seconds until the queue is
 drained. This script ran in <strong>125 seconds</strong> on MRI 2.2.3.</p>
-
 <h2 id="2-bare-threads">2. Bare Threads</h2>
-
-<p>Once a baseline was established, I spent a few days porting Sidekiq's
-core to use nothing but plain old Threads.  This wasn't easy but
+<p>Once a baseline was established, I spent a few days porting Sidekiq&rsquo;s
+core to use nothing but plain old Threads.  This wasn&rsquo;t easy but
 after a few days I had a stable system and
 the improvement was impressive: the load testing script now ran in <strong>57
 seconds</strong>.  Every abstraction has a cost and benefit; Celluloid allows
 you to reason about and build a concurrent system much quicker but does
 have a small runtime cost.</p>
-
 <h2 id="3-asynchronous-status">3. Asynchronous Status</h2>
-
 <p>Once the rewritten core was stable and tests passing again, I ran <code>ruby-prof</code>
 on the load testing script to see
 if there was any low hanging fruit.  The profiler showed that the
@@ -105,50 +225,43 @@ called Redis at the start and finish of each job; you get precise status
 but at the cost of two
 network round trips.  To optimize this, I changed the
 processor threads to update a global status structure in memory then
-changed the process's heartbeat, which contacts Redis every few seconds,
+changed the process&rsquo;s heartbeat, which contacts Redis every few seconds,
 to update the status as part of the heartbeat.  If Sidekiq is processing
 1000 jobs/sec, this saves 1999 round trips!  Result?  The load testing
 script ran in <strong>20 seconds</strong>.</p>
-
 <h2 id="4-parallel-fetch">4. Parallel Fetch</h2>
-
 <p>The last major change I made when I noticed that MRI was using 100% of
 CPU and JRuby was using 150% during the script execution.  <em>Only 150%???</em>
-I have four cores in this laptop; why isn't it using 300% or more?
+I have four cores in this laptop; why isn&rsquo;t it using 300% or more?
 I had a hunch: Sidekiq has always used a single Fetcher thread to
 retrieve jobs from Redis one at a time.  To test my theory, I introduced 1ms of latency
-into the Redis network connection using Shopify's nifty <a href="https://github.com/shopify/toxiproxy">Toxiproxy</a>
+into the Redis network connection using Shopify&rsquo;s nifty <a href="https://github.com/shopify/toxiproxy">Toxiproxy</a>
 gadget and immediately the script execution time shot up to over five
 minutes!  The processor threads were starving, waiting for that single
 thread to deliver jobs to them one at a time over the slow network.</p>
-
 <p>I refactored things to move the fetch code into the processor thread
 itself.  Now all 25 processor threads will call Redis and block, waiting
 for a job to appear.  This, along with the async status change, should
 make Sidekiq much more resilient to Redis latency.  With fetch happening
 in parallel, the script ran in <strong>20 seconds</strong> again, even with 1ms of latency.
 JRuby 9000 uses &gt;300% CPU now and processes 7000 jobs/sec!</p>
-
 <h2 id="bonus-memory-and-latency">Bonus: Memory and Latency!</h2>
-
 <p>I also ran the script with GC disabled.  With no optimizations, Sidekiq
 executed 10,000 jobs using 1257MB of memory.  With all optimizations,
 Sidekiq executed the same number of jobs in 151MB of memory.  In other words, the
 optimizations result in <strong>8.3x less garbage</strong>.</p>
-
-<p>But that's not all!  I measured job execution latency before and after:
+<p>But that&rsquo;s not all!  I measured job execution latency before and after:
 the time required for the client in one process to create a job, push it
 to Redis, Sidekiq to pick it up and execute the worker.  Latency dropped
 from 22ms to 10ms.</p>
-
-<p><style>
+<style>
 table {
   border-collapse: separate;
   border-spacing: 0;
   border: 1px solid #000;
-}</p>
+}
 
-<p>th, td, caption {
+th, td, caption {
   border: 1px solid #000;
   padding: 0.5em;
 }
@@ -158,68 +271,41 @@ table {
 <tr><th>3.5.1</th><td>22ms</td><td>1257 MB</td><td>125 sec</td><td>800 job/sec</td></tr>
 <tr><th>4.0.0</th><td>10ms</td><td>151 MB</td><td>22 sec</td><td>4500 jobs/sec</td></tr>
 </table>
-<small>Data collected with MRI 2.2.3 running on my MBP 13-inch w/ 2.8Ghz i7.</small></p>
-
+<small>Data collected with MRI 2.2.3 running on my MBP 13-inch w/ 2.8Ghz i7.</small>
 <h2 id="drawbacks">Drawbacks?</h2>
-
 <p>There are a few trade offs to consider with these changes:</p>
-
 <ul>
 <li>more Redis connections in use.  Previously only the single Fetcher
 thread would block on Redis.  Now each processor thread will block
 on Redis, meaning you <strong>must</strong> have more Redis connections than your
-concurrency setting.  Sidekiq's default connection pool sizing of
+concurrency setting.  Sidekiq&rsquo;s default connection pool sizing of
 (concurrency + 2) will work great.</li>
-<li>job status on the Busy tab in the Web UI isn't real-time when the page
+<li>job status on the Busy tab in the Web UI isn&rsquo;t real-time when the page
 renders, it may be delayed up to a few seconds</li>
 <li>Celluloid is no longer required by Sidekiq so if your application uses
 it, you will need to pull it in and initialize it yourself</li>
 </ul>
-
 <h2 id="conclusion">Conclusion</h2>
-
 <p>Keep in mind what we are talking about: the overhead of executing no-op
 jobs.  This overhead is dwarfed by application job execution time so
-don't expect to see radical speedups in your own application jobs.  That
+don&rsquo;t expect to see radical speedups in your own application jobs.  That
 said, this dramatic lowering of job overhead is still a nice win for
 all Sidekiq users, especially those with lots of very fast jobs.</p>
-
 <p>This effort will become Sidekiq 4.0 coming later this Fall.  All of this
 is made possible by sales of <a href="http://sidekiq.org">Sidekiq Pro</a> and <a href="http://sidekiq.org">Sidekiq Enterprise</a>.
 If you rely on Sidekiq every day, please upgrade and support my work.</p>
-
 <p>See the <a href="https://github.com/mperham/sidekiq/pull/2593">GitHub pull request</a> for all the gory detail.</p>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

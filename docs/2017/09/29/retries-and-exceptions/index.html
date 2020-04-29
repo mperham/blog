@@ -1,90 +1,216 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Retries and Exceptions </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Retries and Exceptions | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Retries and Exceptions</h1>
-      <small class="post-meta">Sep 29, 2017</small>
-      <div class="post-content">
-        <p>Do you hate getting your inbox filled with errors you know you can
-ignore?  Here's one cool trick to make them disappear.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2017-09-29
+  </small>
+  
+</p>
+<p>Do you hate getting your inbox filled with errors you know you can
+ignore?  Here&rsquo;s one cool trick to make them disappear.</p>
 <p>If you are writing a background job, it is best practice to have that
 job retry in the case of unexpected errors.  Networks can be flaky,
-code can be buggy, data can be sketchy -- as they say, &quot;stuff happens&quot;.</p>
-
-<p>Sidekiq's default policy for jobs and retries is simple:</p>
-
+code can be buggy, data can be sketchy &ndash; as they say, &ldquo;stuff happens&rdquo;.</p>
+<p>Sidekiq&rsquo;s default policy for jobs and retries is simple:</p>
 <ul>
 <li>if a job returns normally, it is considered a success.</li>
 <li>if a job raises an error, the error is reported and a retry is
 scheduled.</li>
 </ul>
-
-<p>Many people have asked me: &quot;I have a flaky service, how can I retry the
+<p>Many people have asked me: &ldquo;I have a flaky service, how can I retry the
 job <strong>without</strong> reporting the error to my error service and filling my
-inbox&quot;.  Sometimes the
+inbox&rdquo;.  Sometimes the
 asker will want to disable retries or their error service: no way!
 Retries and error reporting are there to handle <strong>unexpected</strong> problems that you need to
 know about.  They should be
 enabled by default and disabled only if your job is truly optional.</p>
-
-<p>Instead, your job should flag errors that can be ignored; we'll configure our
+<p>Instead, your job should flag errors that can be ignored; we&rsquo;ll configure our
 error service to ignore them.  First we add a flag to the root of all
 errors:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># config/initializers/exceptions.rb</span>
 <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Exception</span>
   <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:ignore_please</span>
-<span style="color:#66d9ef">end</span></code></pre></div>
-<p>Now we update our job to rescue and flag those flaky errors:</p>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Now we update our job to rescue and flag those flaky errors:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># your job/worker class</span>
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>
   <span style="color:#66d9ef">begin</span>
@@ -95,8 +221,8 @@ errors:</p>
     <span style="color:#75715e"># re-raise it so Sidekiq will retry</span>
     <span style="color:#66d9ef">raise</span> ex
   <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span></code></pre></div>
-<p>Now configure your error service gem to ignore those errors.  Here's how
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Now configure your error service gem to ignore those errors.  Here&rsquo;s how
 to do it for Bugsnag and Honeybadger:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># https://docs.bugsnag.com/platforms/ruby/rails/configuration-options/#ignore_classes</span>
 <span style="color:#75715e"># config/initializers/bugsnag.rb</span>
@@ -108,39 +234,19 @@ to do it for Bugsnag and Honeybadger:</p>
 <span style="color:#75715e"># config/initializers/honeybadger.rb</span>
 <span style="color:#66d9ef">Honeybadger</span><span style="color:#f92672">.</span>exception_filter <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>notice<span style="color:#f92672">|</span>
   notice<span style="color:#f92672">[</span><span style="color:#e6db74">:exception</span><span style="color:#f92672">].</span>ignore_please
-<span style="color:#66d9ef">end</span></code></pre></div>
-<p>Done!  Now your inbox should be a little cleaner.</p>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Done!  Now your inbox should be a little cleaner.</p>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

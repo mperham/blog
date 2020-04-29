@@ -1,125 +1,240 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Faktory Enterprise </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Faktory Enterprise | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Faktory Enterprise</h1>
-      <small class="post-meta">Jan 8, 2020</small>
-      <div class="post-content">
-        
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2020-01-08
+  </small>
+  
+</p>
 <p>The best way to kick off 2020 is by shipping something massive for me: <strong>Faktory
 Enterprise</strong>.</p>
-
 <p><a href="https://contribsys.com/faktory">Faktory</a> is an open source, language-independent background job system.
 If you want to scale your business app to many millions of transactions per day, background jobs are the best way to do it.
 <a href="https://www.celeryproject.org">Celery</a>, <a href="https://github.com/OptimalBits/bull">Bull</a>, <a href="https://sidekiq.org">Sidekiq</a> are all popular but they are
 limited to the one language they are written in (Python, JS and Ruby
 respectively).
-Faktory's advantage is that you can use it with <strong>any</strong> programming language; it makes a large, consistent feature set available to all of those languages.</p>
-
-<h2 id="what-s-faktory-enterprise">What's Faktory Enterprise?</h2>
-
+Faktory&rsquo;s advantage is that you can use it with <strong>any</strong> programming language; it makes a large, consistent feature set available to all of those languages.</p>
+<h2 id="whats-faktory-enterprise">What&rsquo;s Faktory Enterprise?</h2>
 <p>Faktory Enterprise is the most feature-rich version of the Faktory job system available.
 If you agree with my statements above and want the best job system for your company and team, you want Faktory Enterprise.
-I'm launching it with two major features.</p>
-
+I&rsquo;m launching it with two major features.</p>
 <h2 id="queue-throttling">Queue Throttling</h2>
-
 <p>This is, without a doubt, the #1 missing feature requested by Sidekiq customers.
-&quot;We want to resize 100,000 images but processing those jobs at
+&ldquo;We want to resize 100,000 images but processing those jobs at
 full blast will crush our servers. How can we throttle those jobs so
 that our workers keep some threads available for other, more critical queues?&quot;.</p>
-
-<p>Easy, <a href="https://github.com/contribsys/faktory/wiki/Ent-Throttling#use-cases">queue throtting</a> couldn't be simpler to configure:</p>
+<p>Easy, <a href="https://github.com/contribsys/faktory/wiki/Ent-Throttling#use-cases">queue throtting</a> couldn&rsquo;t be simpler to configure:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">throttles</span>]
-<span style="color:#a6e22e">bulk</span> = <span style="color:#960050;background-color:#1e0010">{</span> <span style="color:#a6e22e">worker</span> = <span style="color:#ae81ff">5</span>, <span style="color:#a6e22e">timeout</span> = <span style="color:#ae81ff">60</span> <span style="color:#960050;background-color:#1e0010">}</span></code></pre></div>
-<p>Throw those 100,000 jobs into a <code>bulk</code> queue.  That config says that
+<span style="color:#a6e22e">bulk</span> = <span style="color:#960050;background-color:#1e0010">{</span> <span style="color:#a6e22e">worker</span> = <span style="color:#ae81ff">5</span>, <span style="color:#a6e22e">timeout</span> = <span style="color:#ae81ff">60</span> <span style="color:#960050;background-color:#1e0010">}</span>
+</code></pre></div><p>Throw those 100,000 jobs into a <code>bulk</code> queue.  That config says that
 each worker process may only process 5 jobs from <code>bulk</code> at a time.
-If each worker process has 15 threads, you'll have 10 threads left to
+If each worker process has 15 threads, you&rsquo;ll have 10 threads left to
 process other queues.
 Of course it comes with a handy Web UI for monitoring:</p>
-
-<p><img title="queue throttle ui" src="https://raw.githubusercontent.com/contribsys/faktory/master/example/webui-throttle.png" width="100%"/></p>
-
-<p>I've never built this feature in Sidekiq for a number of reasons:</p>
-
-<ol>
+<img title="queue throttle ui" src="https://raw.githubusercontent.com/contribsys/faktory/master/example/webui-throttle.png" width="100%"/>
+<p>I&rsquo;ve never built this feature in Sidekiq for a number of reasons:</p>
+<ol start="0">
 <li>Sidekiq workers talk directly to Redis.</li>
 <li>It makes the job fetch logic much more complex.</li>
-<li>It conflicts with Sidekiq Pro's reliable fetch.</li>
+<li>It conflicts with Sidekiq Pro&rsquo;s reliable fetch.</li>
 <li>It requires Lua.</li>
 </ol>
-
-<p>Faktory doesn't have this same problem because of its different
+<p>Faktory doesn&rsquo;t have this same problem because of its different
 architecture: Faktory workers talk directly to Faktory, not Redis so (1)
 is not true.  I can implement most of the logic within Faktory and keep
 the Redis Lua logic to a minimum (this is really important to minimize
 latency since Redis is single threaded). <a href="https://github.com/contribsys/faktory/wiki/Ent-Throttling">Read more about throttling
 here</a>.</p>
-
 <h2 id="batches">Batches</h2>
-
 <p>Batches continue to be my favorite feature of all time and the one I am
 most proud of.</p>
-
 <ul>
 <li>How can I run 1,000 jobs and be notified when all are done?</li>
 <li>How can I parallelize processing a 10,000 row spreadsheet and then kick
 off more jobs when that work is done?</li>
 </ul>
-
 <p>A background job is a unit of work for your organization.
 Batches allow you to compose more complex, nested workflows of jobs.
-Here's an example defining a batch with several ImageJobs and a success
+Here&rsquo;s an example defining a batch with several ImageJobs and a success
 callback; that callback will execute only once all three ImageJobs have finished
 successfully.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">b <span style="color:#f92672">=</span> <span style="color:#66d9ef">Faktory</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Batch</span><span style="color:#f92672">.</span>new
@@ -128,72 +243,42 @@ b<span style="color:#f92672">.</span>jobs <span style="color:#66d9ef">do</span>
   <span style="color:#66d9ef">ImageJob</span><span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
   <span style="color:#66d9ef">ImageJob</span><span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
   <span style="color:#66d9ef">ImageJob</span><span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
-<span style="color:#66d9ef">end</span></code></pre></div>
-<p>Note that a callback is a background job like everything else.
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Note that a callback is a background job like everything else.
 Of course it comes with a handy Web UI for monitoring but a screenshot is AWOL.
 <a href="https://github.com/contribsys/faktory/wiki/Ent-Batches">Read more about batches here</a>.</p>
-
 <h2 id="docker-repository">Docker Repository</h2>
-
-<p>Most of my customers are running Docker so I've joined the hype. The
+<p>Most of my customers are running Docker so I&rsquo;ve joined the hype. The
 commercial versions of Faktory now have a private Docker repository so you can
 download and run Faktory directly:</p>
-
 <pre><code>$ docker login docker.contribsys.com
 Username:
 Password:
 $ docker pull docker.contribsys.com/contribsys/faktory-ent:1.2.0
 ...
-</code></pre>
-
-<p>The <a href="https://github.com/contribsys/faktory/wiki">Faktory wiki</a> contains full installation details.</p>
-
+</code></pre><p>The <a href="https://github.com/contribsys/faktory/wiki">Faktory wiki</a> contains full installation details.</p>
 <h2 id="conclusion">Conclusion</h2>
-
-<p>That's it! Those features took me many months of full-time work to
-implement. They are some of the most involved code I've ever written but
+<p>That&rsquo;s it! Those features took me many months of full-time work to
+implement. They are some of the most involved code I&rsquo;ve ever written but
 I hope they turn out to be useful and easy to use for customers.</p>
-
-<p>I'm excited because I already have two customers migrating
+<p>I&rsquo;m excited because I already have two customers migrating
 their existing job systems to Faktory Enterprise because of queue
 throttling and polyglot support.</p>
-
-<p>And that's the value: all features are useable by jobs and workers written in any programming language.
+<p>And that&rsquo;s the value: all features are useable by jobs and workers written in any programming language.
 Want to batch jobs written in Rust and Python? Sure!
 Want to scale and throttle your Erlang and Go worker queues differently? Why not!</p>
+<p>Got questions, requests? Ping me at <a href="https://twitter.com/getajobmike">@getajobmike</a> or <a href="mailto:mike@contribsys.com">mike@contribsys.com</a>.</p>
 
-<p>Got questions, requests? Ping me at <a href="https://twitter.com/getajobmike">@getajobmike</a> or mike@contribsys.com.</p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>

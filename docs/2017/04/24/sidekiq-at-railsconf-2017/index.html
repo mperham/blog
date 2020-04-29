@@ -1,84 +1,208 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Sidekiq at Railsconf 2017 </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Sidekiq at Railsconf 2017 | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Sidekiq at Railsconf 2017</h1>
-      <small class="post-meta">Apr 24, 2017</small>
-      <div class="post-content">
-        
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2017-04-24
+  </small>
+  
+</p>
 <p>Every year I attend Rubyconf and Railsconf and this year is no
-different.  I launched Sidekiq 4.0 at Rubyconf 2015 and now I'm excited
- to get down to Phoenix and launch Sidekiq 5.0!
+different.  I launched Sidekiq 4.0 at Rubyconf 2015 and now I&rsquo;m excited
+to get down to Phoenix and launch Sidekiq 5.0!
 I want to meet any Rubyists, new or old, who want to chat.</p>
-
-<p><img src="http://railsconf.com/assets/objects/RailsconfInternal@2x-2c15a28ee162c7f9151c2148adaeccfeb2786fdb748a4f8b3a948a3b1e705d57.png" alt="Railsconf" /></p>
-
+<p><img src="http://railsconf.com/assets/objects/RailsconfInternal@2x-2c15a28ee162c7f9151c2148adaeccfeb2786fdb748a4f8b3a948a3b1e705d57.png" alt="Railsconf"></p>
 <h2 id="a-personal-note">A Personal Note</h2>
-
 <p>I attended my first conference in 2007, Rubyconf, in Charlotte NC.
 I still remember my mental state: <strong>awkwardness, isolation and loneliness
-because I knew about two people there</strong>.  By nature I'm an introvert and
+because I knew about two people there</strong>.  By nature I&rsquo;m an introvert and
 not really good at mingling in crowds (one reason booze is so popular
 at conferences: it can decrease your inhibitions and make you more chatty).
 As my reputation increased in the community, going to conferences became
-easier because people knew me but here's my dirty secret:
-I'm still awkward and not great at socializing with new people.</p>
-
-<p>So I have a guarantee: if you don't know anyone at Railsconf or just
+easier because people knew me but here&rsquo;s my dirty secret:
+I&rsquo;m still awkward and not great at socializing with new people.</p>
+<p>So I have a guarantee: if you don&rsquo;t know anyone at Railsconf or just
 need someone to talk to, find me and say hello.  The first day I always
-wear a Sidekiq t-shirt.  You know my blog and here's some
+wear a Sidekiq t-shirt.  You know my blog and here&rsquo;s some
 topics I will talk endlessly about:</p>
-
 <ul>
 <li>You and your Ruby story</li>
 <li>Performance and scalability</li>
@@ -89,42 +213,20 @@ topics I will talk endlessly about:</p>
 <li>Soccer, Motorcycles and Sports Cars (ask me about the time I crashed a
 race car at Laguna Seca!)</li>
 </ul>
+<p>It&rsquo;s also quite likely that you know my name but I don&rsquo;t know yours and
+I&rsquo;m terrible with names/faces so <strong>please introduce yourself</strong>.</p>
+<p>PS And of course, I&rsquo;m giving away Sidekiq stickers to anyone who asks.</p>
 
-<p>It's also quite likely that you know my name but I don't know yours and
-I'm terrible with names/faces so <strong>please introduce yourself</strong>.</p>
+    </article>
+  </div>
 
-<p>PS And of course, I'm giving away Sidekiq stickers to anyone who asks.</p>
+  
+  
+  
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+</body>
 
-  </body>
 </html>

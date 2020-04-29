@@ -1,110 +1,213 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Don&#39;t Forget What&#39;s Important </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Don&#39;t Forget What&#39;s Important | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
-      <h1>Don&#39;t Forget What&#39;s Important</h1>
-      <small class="post-meta">Jan 18, 2014</small>
-      <div class="post-content">
-        <p>Technologies come and go. We learn and grow as engineers over time but some things are eternal: knowing what is truly important to you is critical in differentiating between a path to misery versus fulfillment. Like your coworkers and your environment, the technology you work with day to day can make a big difference in your job satisfaction.</p>
-
-<p>When I first discovered Ruby and Rails, its ethos and ecosystem resonated with me more than any other project I've worked with:</p>
-
+  
+  <div class="container">
+    <article>
+      <h1>Don&rsquo;t Forget What&rsquo;s Important</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2014-01-18
+  </small>
+  
+</p>
+<p>Technologies come and go. We learn and grow as engineers over time but some things are eternal: knowing what is truly important to you is critical in differentiating between a path to misery versus fulfillment. Like your coworkers and your environment, the technology you work with day to day can make a big difference in your job satisfaction.</p>
+<p>When I first discovered Ruby and Rails, its ethos and ecosystem resonated with me more than any other project I&rsquo;ve worked with:</p>
 <ul>
 <li>Maximize developer happiness</li>
 <li>Convention over configuration</li>
-<li>Very fast prototyping (remember DHH's &quot;Build a blog in 15 minutes&quot; video?)</li>
+<li>Very fast prototyping (remember DHH&rsquo;s &ldquo;Build a blog in 15 minutes&rdquo; video?)</li>
 </ul>
-
 <p>What this boils down to is simple: <strong>Ruby optimizes for me</strong>. Other languages or systems might hold runtime performance, stability or formal correctness paramount but often at the expense of developer happiness. When I test drive a library or framework, I find myself evaluating it against those criteria. Can I get started with it quickly? Do I need to twiddle a lot of knobs or understand a large domain model first? How much code is tedious boilerplate vs truly important application code?</p>
-
-<p>One mistake I often see younger developers make is putting a lot of weight on runtime performance when evaluating a technology, often to the exclusion of almost all other variables. &quot;Library X can frob 1800 times per second whereas library Y only frobs 1100 times per second so I guess I'll use X&quot; This is equivalent to selecting a car based on the amount of horsepower shown on the window sticker. Theoretical maximum performance is merely one dimension of what should be a more nuanced evaluation.</p>
-
-<p>Consider your own choices: what does your language choice and technology stack optimize for? Are its priorities your priorities? Find a set of technologies whose priorities match your own and you'll be that much closer to a sustainable career.</p>
-
-<p><strong>&quot;Look at all the things I'm not doing!&quot;</strong></p>
-
+<p>One mistake I often see younger developers make is putting a lot of weight on runtime performance when evaluating a technology, often to the exclusion of almost all other variables. &ldquo;Library X can frob 1800 times per second whereas library Y only frobs 1100 times per second so I guess I&rsquo;ll use X&rdquo; This is equivalent to selecting a car based on the amount of horsepower shown on the window sticker. Theoretical maximum performance is merely one dimension of what should be a more nuanced evaluation.</p>
+<p>Consider your own choices: what does your language choice and technology stack optimize for? Are its priorities your priorities? Find a set of technologies whose priorities match your own and you&rsquo;ll be that much closer to a sustainable career.</p>
+<p><strong>&ldquo;Look at all the things I&rsquo;m not doing!&quot;</strong></p>
 <p>The original Ruby on Rails screencast, circa 2004.</p>
-
 <p><span class='embed-youtube' style='text-align:center; display: block;'></span></p>
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

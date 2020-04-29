@@ -1,104 +1,211 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> 12 Gems of Christmas #8 -- wicked_pdf </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>12 Gems of Christmas #8 -- wicked_pdf | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
-      <h1>12 Gems of Christmas #8 -- wicked_pdf</h1>
-      <small class="post-meta">Dec 5, 2012</small>
-      <div class="post-content">
-        <p>We recently rolled out gift certificates in time for the holiday shopping season at <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> and one of our major implementation hurdles was a very innocent feature request: send the certificate via email as a PDF.</p>
-
-<p>How on earth do I create a PDF? I'm a web developer -- HTML/CSS is no problem -- but PDF is a binary format and making a PDF with a &quot;nice&quot; design is way out of my bailiwick. <a href="https://github.com/mileszs/wicked_pdf">wicked_pdf</a> to the rescue! wicked_pdf wraps the <code>wkhtmltopdf</code> command line tool which can convert an HTML file into a PDF file for offline access or printing purposes. Our email code is simple: we render the HTML content and then pass it to WickedPdf for conversion.</p>
-
+  
+  <div class="container">
+    <article>
+      <h1>12 Gems of Christmas #8 &ndash; wicked_pdf</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2012-12-05
+  </small>
+  
+</p>
+<p>We recently rolled out gift certificates in time for the holiday shopping season at <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> and one of our major implementation hurdles was a very innocent feature request: send the certificate via email as a PDF.</p>
+<p>How on earth do I create a PDF? I&rsquo;m a web developer &ndash; HTML/CSS is no problem &ndash; but PDF is a binary format and making a PDF with a &ldquo;nice&rdquo; design is way out of my bailiwick. <a href="https://github.com/mileszs/wicked_pdf">wicked_pdf</a> to the rescue! wicked_pdf wraps the <code>wkhtmltopdf</code> command line tool which can convert an HTML file into a PDF file for offline access or printing purposes. Our email code is simple: we render the HTML content and then pass it to WickedPdf for conversion.</p>
 <pre lang="ruby">pdf_str = render_to_string(:template => 'emails/gift_certificate',
                            :layout => false,
                            :locals => { :amount => number_to_currency(amount),
                                         :product_code => pc.code } )
 pdfs &lt;&lt; WickedPdf.new.pdf_from_string(pdf_str)
 </pre>
+<p>With wicked_pdf, we didn&rsquo;t have to sacrifice the tools and technologies we know best in order to support PDF files. We rolled out the feature on time and no web developers were harmed in the process.</p>
+<p>I couldn&rsquo;t resist this platform to plug one of my own gems; tomorrow I&rsquo;ll cover my own favorite, under-utilized creation.</p>
 
-<p>With wicked_pdf, we didn't have to sacrifice the tools and technologies we know best in order to support PDF files. We rolled out the feature on time and no web developers were harmed in the process.</p>
+    </article>
+  </div>
 
-<p>I couldn't resist this platform to plug one of my own gems; tomorrow I'll cover my own favorite, under-utilized creation.</p>
+  
+  
+  
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+</body>
 
-  </body>
 </html>

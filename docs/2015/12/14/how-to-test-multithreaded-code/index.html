@@ -1,132 +1,245 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> How to Test Multithreaded Code </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>How to Test Multithreaded Code | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>How to Test Multithreaded Code</h1>
-      <small class="post-meta">Dec 14, 2015</small>
-      <div class="post-content">
-        
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2015-12-14
+  </small>
+  
+</p>
 <figure style="float: right;">
   <img style="border: solid white 10px;" src="http://yourhigherlevellife.com/wp-content/uploads/2013/02/TangledMess.png" width="260px" />
 </figure>
-
 <p>Multithreaded code is hard to write and even harder to test.
 Since much of my work is dedicated to making Ruby
 threading easier for my users and customers, I thought some might be
-interested in the patterns I've developed to make multithreaded code as simple
+interested in the patterns I&rsquo;ve developed to make multithreaded code as simple
 and testable as possible.</p>
-
 <h2 id="separate-threading-from-work">Separate Threading from Work</h2>
-
 <blockquote>
-<p>If you can't test a big block of code, break it into a set of smaller testable pieces.</p>
+<p>If you can&rsquo;t test a big block of code, break it into a set of smaller testable pieces.</p>
 </blockquote>
-
 <p><a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L24">Sidekiq::Processor</a> is an object which is designed to run in its own
-thread and doesn't have any public API aside from starting/stopping the
+thread and doesn&rsquo;t have any public API aside from starting/stopping the
 thread.</p>
-
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
 p<span style="color:#f92672">.</span>start</code></pre></div>
-
 <p>Interally it has quite a bit of complexity - think of it like an iceberg.
 In order to test those complex internals, I make its <a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L62">internal API public</a> so that the test suite has full
 access to the methods.  The <code>start</code> method spins up a thread which calls a very simple <code>run</code> loop similar this:</p>
-
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>
   <span style="color:#66d9ef">while</span> <span style="color:#f92672">!</span>@done
     job <span style="color:#f92672">=</span> fetch
     process(job) <span style="color:#66d9ef">if</span> job
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
-
-<p>I've kept the run method as simple as possible since we can't call it in
+<p>I&rsquo;ve kept the run method as simple as possible since we can&rsquo;t call it in
 the test suite but we can call <code>fetch</code> and <code>process</code> in order to test them:</p>
-
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_process_fake_job</span>
   p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
   result <span style="color:#f92672">=</span> p<span style="color:#f92672">.</span>process(some_fake_job)
   <span style="color:#75715e"># asserts...</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
-
-<p>In this case, I've kept the thread management code as simple as
+<p>In this case, I&rsquo;ve kept the thread management code as simple as
 possible and pushed as much of the code complexity into separate methods
 which can be called directly by the test suite and deterministically
 verified.</p>
-
-<p>How do I test the thread management code?  Simple: in some cases I don't.  100% test
+<p>How do I test the thread management code?  Simple: in some cases I don&rsquo;t.  100% test
 coverage is for fundamentalists.  Keep the code simple, verify it
-manually and then don't change it.  Code complexity leads to churn which
+manually and then don&rsquo;t change it.  Code complexity leads to churn which
 leads to bugs.  Since most of the complexity in Sidekiq::Processor is in the <code>process</code> and
 <code>fetch</code> methods, they are most likely to change so we test those methods directly.</p>
-
 <h2 id="use-callbacks">Use Callbacks</h2>
-
-<p>If you must test multithreaded code, you'll want to design testability
+<p>If you must test multithreaded code, you&rsquo;ll want to design testability
 into the API.  Ever seen or written a test littered with <code>sleep</code> calls?
-We've all been there but you can test threaded code without sleep calls, I swear!
+We&rsquo;ve all been there but you can test threaded code without sleep calls, I swear!
 Generally the pattern is:</p>
-
 <ol>
 <li>Start the other thread</li>
 <li>Tell the other thread to process something</li>
 <li>Wait for the result</li>
 <li>Assert results</li>
 </ol>
-
-<p>Most people don't know how to do (3) properly so they use <code>sleep</code> as a
-hack.  Here's a complete example of how to do it in Ruby:</p>
-
+<p>Most people don&rsquo;t know how to do (3) properly so they use <code>sleep</code> as a
+hack.  Here&rsquo;s a complete example of how to do it in Ruby:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;thread&#39;</span>
 
 <span style="color:#75715e"># We want to test Upcaser by exercising its full API,</span>
@@ -202,45 +315,23 @@ hack.  Here's a complete example of how to do it in Ruby:</p>
   <span style="color:#75715e"># shut down Upcaser&#39;s internal thread</span>
   a<span style="color:#f92672">.</span>terminate
 <span style="color:#66d9ef">end</span></code></pre></div>
-
-<p>The &quot;trick&quot; is the callback block passed to the <code>process</code> method.  That callback
-will save the results and unlock the main thread once Upcaser's thread is finished processing.  If your API
+<p>The &ldquo;trick&rdquo; is the callback block passed to the <code>process</code> method.  That callback
+will save the results and unlock the main thread once Upcaser&rsquo;s thread is finished processing.  If your API
 exposes a similar callback mechanism, it can be properly tested across threads.</p>
-
 <p>I hope this helps people untangle some of their messy threading.  Got any other
 patterns for making threading easier to manage?  Please link to them in
 the comments.</p>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+    </article>
+  </div>
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
+  
+  
 
-  </body>
+  
+
+  
+</body>
+
 </html>

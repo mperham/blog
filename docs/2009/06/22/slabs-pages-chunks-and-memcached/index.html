@@ -1,103 +1,208 @@
-  <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> Slabs, Pages, Chunks and Memcached </title>
-    
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://www.mikeperham.com/css/theme.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/headshot-icon.png">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    
-    
-    <link href="https://www.mikeperham.com/index.xml" rel="home" type="application/rss+xml" title="Mike Perham" />
-    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Slabs, Pages, Chunks and Memcached | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
 </head>
 
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-right">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://www.mikeperham.com">Mike Perham</a>
-    </div>
-    <div class="collapse navbar-collapse" id="navbar-right">
-      <ul class="nav navbar-nav navbar-right">
-        
-          <li><a href="https://sidekiq.org/" >Sidekiq</a></li>
-        
-          <li><a href="http://contribsys.com/faktory/" >Faktory</a></li>
-        
-          <li><a href="/events/" >Events</a></li>
-        
-          <li><a href="/about/" >About</a></li>
-        
-        
-        <li><a href="https://www.mikeperham.com/index.xml" title="RSS" type="application/rss+xml" target="_blank"><i class="fa fa-fw fa-rss"></i></a></li>
-        
-      </ul>
-    </div>
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+    </ul>
   </div>
 </nav>
 
-    <div class="container page-wrap">
+  
+  <div class="container">
+    <article>
       <h1>Slabs, Pages, Chunks and Memcached</h1>
-      <small class="post-meta">Jun 22, 2009</small>
-      <div class="post-content">
-        <p>Many people don't know this but the latest memcached release (1.2.8 right now) can be about 15% more efficient in its memory usage than older releases. If you have a 600MB memcached server, upgrading will magically &quot;gain&quot; you 100MB of RAM. Why is this?</p>
-
-<p>When you ask memcached to store a value, it looks up the &quot;slab&quot; associated with that value. A slab holds values within a particular size range. Slabs are composed of 1MB pages, which are broken into chunks of the slab's size. Let's say your value is 1001 bytes; memcached will look up the slab which holds values between 1000 and 2000 bytes. It then finds a page with an empty chunk and inserts the value into that chunk. Note that a chunk is fixed in size -- it must be 2000 bytes in order to store the largest value for the slab.</p>
-
+<p>
+  <small class="text-secondary">
+  
+  
+  2009-06-22
+  </small>
+  
+</p>
+<p>Many people don&rsquo;t know this but the latest memcached release (1.2.8 right now) can be about 15% more efficient in its memory usage than older releases. If you have a 600MB memcached server, upgrading will magically &ldquo;gain&rdquo; you 100MB of RAM. Why is this?</p>
+<p>When you ask memcached to store a value, it looks up the &ldquo;slab&rdquo; associated with that value. A slab holds values within a particular size range. Slabs are composed of 1MB pages, which are broken into chunks of the slab&rsquo;s size. Let&rsquo;s say your value is 1001 bytes; memcached will look up the slab which holds values between 1000 and 2000 bytes. It then finds a page with an empty chunk and inserts the value into that chunk. Note that a chunk is fixed in size &ndash; it must be 2000 bytes in order to store the largest value for the slab.</p>
 <p>Now you know why memcached limits values to one megabyte: the value must be stored in a chunk and a page needs to hold the chunk. Since a page is hardcoded as 1MB, it follows that a chunk must also be limited to 1MB.</p>
-
-<p>So we understand the &quot;object model&quot; for memcached memory allocation: a slab has many pages which has many chunks. Each chunk is a fixed size, based on the maximum size for the slab so e.g. the 2000 byte slab will hold values between 1001 and 2000 bytes. Older versions of memcached used slabs sized based on powers of two, so you'd have a 1KB slab, 2KB slab, 4KB slab, ..., all the way to 1MB. If your memcached server was full of 1001 byte values, your memory efficiency would be 50% (1001 / 2000) in the worst case. Assuming you have an even distribution of value sizes, you'll get 75% efficiency (1500 / 2000). Your 600MB memcached server will only hold 450MB of actual data!</p>
-
+<p>So we understand the &ldquo;object model&rdquo; for memcached memory allocation: a slab has many pages which has many chunks. Each chunk is a fixed size, based on the maximum size for the slab so e.g. the 2000 byte slab will hold values between 1001 and 2000 bytes. Older versions of memcached used slabs sized based on powers of two, so you&rsquo;d have a 1KB slab, 2KB slab, 4KB slab, &hellip;, all the way to 1MB. If your memcached server was full of 1001 byte values, your memory efficiency would be 50% (1001 / 2000) in the worst case. Assuming you have an even distribution of value sizes, you&rsquo;ll get 75% efficiency (1500 / 2000). Your 600MB memcached server will only hold 450MB of actual data!</p>
 <p><a href="http://www.mikeperham.com/wp-content/uploads/2009/06/memcached-memory-allocation.png"><img src="http://www.mikeperham.com/wp-content/uploads/2009/06/memcached-memory-allocation.png" alt="memcached-memory-allocation" title="memcached-memory-allocation" width="526" height="481" class="alignnone size-full wp-image-303" /></a></p>
-
 <p>In this image, we see a single slab with two pages. Each page has several chunks, the green chunks are empty and some have orange values. The yellow area is the waste we are talking about.</p>
+<p>One of the improvements Facebook made to memcached last year was moving to a smaller exponential so there is not as much waste in storing values in chunks. Instead of 2^n for the slab allocation, the latest versions of memcached use a much smaller growth exponential, 1.25^n, so you will see slabs with sizes 1KB, 1.25KB, 1.56KB, etc&hellip; This means that instead of 25% waste on average, you should see closer to 10%. Effectively you regain 15% of your memcached memory just by installing the latest version!</p>
 
-<p>One of the improvements Facebook made to memcached last year was moving to a smaller exponential so there is not as much waste in storing values in chunks. Instead of 2^n for the slab allocation, the latest versions of memcached use a much smaller growth exponential, 1.25^n, so you will see slabs with sizes 1KB, 1.25KB, 1.56KB, etc... This means that instead of 25% waste on average, you should see closer to 10%. Effectively you regain 15% of your memcached memory just by installing the latest version!</p>
+    </article>
+  </div>
 
-        
-      </div>
-    </div>
-    <footer class="site-footer">
-	<div class="container">
-		<h4>Mike Perham</h4>
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<p>Ruby, OSS and the Internet</p>
-					<a href="mailto:mperham@gmail.com">mperham@gmail.com</a>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="form-group">
-					<p>
-						<span class="fa fa-fw fa-github"></span>
-						<a href="https://github.com/mperham">mperham</a>
-            <br/>
-						<span class="fa fa-fw fa-twitter"></span>
-            <a href="https://twitter.com/@sidekiq">@sidekiq</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</footer>
+  
+  
+  
 
-    <script src="https://www.mikeperham.com/js/jquery-2.1.4.min.js"></script>
-<script src="https://www.mikeperham.com/js/bootstrap.min.js"></script>
+  
 
-  </body>
+  
+</body>
+
 </html>
