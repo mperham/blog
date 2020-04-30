@@ -21,21 +21,25 @@ I thought: if we can have a virtual conf, why not have a virtual hallway track?
 Jump into a video chat with other Rubyists, introduce yourself and tell
 us something:
 
+* Which videos have you watched and enjoyed?
 * What's your latest or favorite Ruby gem you've discovered?
-* What's a Ruby accomplishment you're proud of?
+* What's a programming accomplishment you're proud of?
 * How has your life changed with the virus?
 
-I've created three video chat rooms, each room has a **12 person limit**.
+I've created a few video chat rooms, each room has a **12 person limit**.
 **[Follow me on Twitter](https://twitter.com/getajobmike)** if you want to get reminders and updates during the day.
 
 **Tues, May 5th all day, drop in and drop out whenever, hallways are random!**
 
 * [whereby.com/railsconf](https://whereby.com/railsconf)
 * [whereby.com/sidekiq](https://whereby.com/sidekiq)
-* [whereby.com/contribsys](https://whereby.com/contribsys)
+
+[Honeybadger](https://honeybadger.io) is running another virtual hallway here:
+
+* [whereby.com/honeybadger-io](https://whereby.com/honeybadger-io)
 
 If the first room is full, jump into the next one! I will try to be in a
-room at the top of each hour (9am-4pm Pacific).
+room at the top of each hour during my work day (9am-4pm Pacific).
 
 ## Etiquette
 
