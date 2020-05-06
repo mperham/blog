@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Apr 2020 09:00:21 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 04 May 2020 13:26:58 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>My Coolest Code</title>
+      <link>https://www.mikeperham.com/2020/05/04/my-coolest-code/</link>
+      <pubDate>Mon, 04 May 2020 13:26:58 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/05/04/my-coolest-code/</guid>
+      <description>What&amp;rsquo;s the coolest code you&amp;rsquo;ve written, for your own definition of cool?
+EDI: the Worst Document Format? From 2003-2006 I worked at a startup building enterprise software for the health care space. We were building a system which allowed doctors offices to submit real-time transactions over the Internet, to migrate offices away from phone, fax or mail. Our first step was allowing real-time inquiry for insurance eligibility and benefits of a patient.</description>
+    </item>
     
     <item>
       <title>Railsconf 2020 Virtual Hallway</title>
@@ -104,16 +114,6 @@ Eleven years.</description>
       
       <guid>https://www.mikeperham.com/2019/01/16/using-faktory-with-javascript/</guid>
       <description>Faktory is my new polyglot background job system, allowing any programming language to use background jobs. I&amp;rsquo;ve documented how to use Faktory with Ruby and Go as I&amp;rsquo;m an expert in both languages. Today I wanted to step outside my comfort zone and try Faktory with a language I barely know: JavaScript. Let&amp;rsquo;s see how easy it is for me, a noob, to get JavaScript jobs running with Faktory!
-We need three pieces for any background job system:</description>
-    </item>
-    
-    <item>
-      <title>Using Faktory with Python</title>
-      <link>https://www.mikeperham.com/2019/01/08/using-faktory-with-python/</link>
-      <pubDate>Tue, 08 Jan 2019 10:03:54 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2019/01/08/using-faktory-with-python/</guid>
-      <description>Faktory is my new polyglot background job system, allowing any programming language to use background jobs. I&amp;rsquo;ve documented how to use Faktory with Ruby and Go as I&amp;rsquo;m an expert in both languages. Today I wanted to step outside my comfort zone and try Faktory with a language I don&amp;rsquo;t know: Python. Let&amp;rsquo;s see how easy it is for me, a noob, to get Python jobs running with Faktory!
 We need three pieces for any background job system:</description>
     </item>
     
