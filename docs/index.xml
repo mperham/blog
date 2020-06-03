@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 04 May 2020 13:26:58 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 02 Jun 2020 15:41:10 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Trimming Dependencies</title>
+      <link>https://www.mikeperham.com/2020/06/02/trimming-dependencies/</link>
+      <pubDate>Tue, 02 Jun 2020 15:41:10 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/06/02/trimming-dependencies/</guid>
+      <description>I&amp;rsquo;ve advocated for fewer dependencies for years now. Every long-running project needs to periodically re-evaluate their usage of each dependency and the value it provides. To that end, I recently considered Sidekiq&amp;rsquo;s dependencies:
+ redis-rb - the Redis client connection_pool - provide threaded access to Redis connections rack - required to standardize Sidekiq&amp;rsquo;s Web UI rack-protection - necessary to provide CSRF protection for write actions in the Web UI  We might be able to remove rack-protection gem if we re-implement the CSRF functionality but none of the other gems are easy to remove (indeed, as I was writing this post, @seuros stepped up and took on issue #4587).</description>
+    </item>
     
     <item>
       <title>My Coolest Code</title>
@@ -105,16 +115,6 @@ The issue is that the Web UI assumed it was at the root, so it hardcoded paths l
 Because set my birth year to 2000 in my profile. I didn&amp;rsquo;t think it was anyone&amp;rsquo;s business, including Twitter, what my age was. Since I created the account in 2008, Twitter said I was too young to use their service and immediately locked the account.
 Quite possibly the least cool way to get your account locked?
 Eleven years.</description>
-    </item>
-    
-    <item>
-      <title>Using Faktory with JavaScript</title>
-      <link>https://www.mikeperham.com/2019/01/16/using-faktory-with-javascript/</link>
-      <pubDate>Wed, 16 Jan 2019 09:00:55 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2019/01/16/using-faktory-with-javascript/</guid>
-      <description>Faktory is my new polyglot background job system, allowing any programming language to use background jobs. I&amp;rsquo;ve documented how to use Faktory with Ruby and Go as I&amp;rsquo;m an expert in both languages. Today I wanted to step outside my comfort zone and try Faktory with a language I barely know: JavaScript. Let&amp;rsquo;s see how easy it is for me, a noob, to get JavaScript jobs running with Faktory!
-We need three pieces for any background job system:</description>
     </item>
     
   </channel>
