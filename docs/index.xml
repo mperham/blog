@@ -6,13 +6,22 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Jun 2020 15:41:10 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 03 Jun 2020 19:57:44 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Trimming Dependencies - concurrent-ruby</title>
+      <title>Trimming Dependencies: rack-protection</title>
+      <link>https://www.mikeperham.com/2020/06/03/trimming-dependencies-rack-protection/</link>
+      <pubDate>Wed, 03 Jun 2020 19:57:44 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/06/03/trimming-dependencies-rack-protection/</guid>
+      <description>Recently I discussed how I was evaluating all of Sidekiq&amp;rsquo;s current dependencies to see if any could be removed or vendored to reduce upstream churn, security issues, and other maintenance chores. I was able to remove concurrent-ruby from Sidekiq Pro and Sidekiq Enterprise, which is a major win considering the size of that gem. A simple benchmark showed removing that gem shrunk a basic Sidekiq Pro process from 60MB to 50MB, a 16% improvement!</description>
+    </item>
+    
+    <item>
+      <title>Trimming Dependencies: concurrent-ruby</title>
       <link>https://www.mikeperham.com/2020/06/02/trimming-dependencies-concurrent-ruby/</link>
       <pubDate>Tue, 02 Jun 2020 15:41:10 -0700</pubDate>
       
@@ -102,19 +111,6 @@ One Friday morning, two engineers jumped into my weekly Happy Hour to ask me abo
       <guid>https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/</guid>
       <description>Recently someone posted an issue asking if Faktory could support putting nginx in front of Faktory&amp;rsquo;s Web UI. Normally you access the Web UI like http://localhost:7420/ but they wanted it to look something like http://somehost:8080/faktory. That&amp;rsquo;s quite common when trying to wrap multiple systems into something that looks like one website to the browser.
 The issue is that the Web UI assumed it was at the root, so it hardcoded paths like /static/application.</description>
-    </item>
-    
-    <item>
-      <title>Leaving Twitter</title>
-      <link>https://www.mikeperham.com/2019/07/11/leaving-twitter/</link>
-      <pubDate>Thu, 11 Jul 2019 10:23:50 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2019/07/11/leaving-twitter/</guid>
-      <description>Some have already noticed but I&amp;rsquo;ve been booted out of Twitter.
-&amp;ldquo;Why, Mike?&amp;rdquo;
-Because set my birth year to 2000 in my profile. I didn&amp;rsquo;t think it was anyone&amp;rsquo;s business, including Twitter, what my age was. Since I created the account in 2008, Twitter said I was too young to use their service and immediately locked the account.
-Quite possibly the least cool way to get your account locked?
-Eleven years.</description>
     </item>
     
   </channel>

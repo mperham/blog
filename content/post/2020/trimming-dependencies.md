@@ -1,5 +1,5 @@
 ---
-title: "Trimming Dependencies - concurrent-ruby"
+title: "Trimming Dependencies: concurrent-ruby"
 date: 2020-06-02T15:41:10-07:00
 publishdate: 2020-06-02
 lastmod: 2020-06-02
