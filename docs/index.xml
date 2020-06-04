@@ -12,11 +12,11 @@
     
     
     <item>
-      <title>Trimming Dependencies</title>
-      <link>https://www.mikeperham.com/2020/06/02/trimming-dependencies/</link>
+      <title>Trimming Dependencies - concurrent-ruby</title>
+      <link>https://www.mikeperham.com/2020/06/02/trimming-dependencies-concurrent-ruby/</link>
       <pubDate>Tue, 02 Jun 2020 15:41:10 -0700</pubDate>
       
-      <guid>https://www.mikeperham.com/2020/06/02/trimming-dependencies/</guid>
+      <guid>https://www.mikeperham.com/2020/06/02/trimming-dependencies-concurrent-ruby/</guid>
       <description>I&amp;rsquo;ve advocated for fewer dependencies for years now. Every long-running project needs to periodically re-evaluate their usage of each dependency and the value it provides. To that end, I recently considered Sidekiq&amp;rsquo;s dependencies:
  redis-rb - the Redis client connection_pool - provide threaded access to Redis connections rack - required to standardize Sidekiq&amp;rsquo;s Web UI rack-protection - necessary to provide CSRF protection for write actions in the Web UI  We might be able to remove rack-protection gem if we re-implement the CSRF functionality but none of the other gems are easy to remove (indeed, as I was writing this post, @seuros stepped up and took on issue #4587).</description>
     </item>
