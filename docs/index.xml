@@ -6,10 +6,22 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 03 Jun 2020 19:57:44 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 10 Sep 2020 18:58:52 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>What&#39;s New in Sidekiq, 2020 edition</title>
+      <link>https://www.mikeperham.com/2020/09/10/whats-new-in-sidekiq-2020-edition/</link>
+      <pubDate>Thu, 10 Sep 2020 18:58:52 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/09/10/whats-new-in-sidekiq-2020-edition/</guid>
+      <description>&amp;ldquo;Your work doesn&amp;rsquo;t matter if no one knows about it&amp;rdquo; &amp;ndash; some marketing genius
+ COVID and wildfires have made this year hellish and really difficult to focus. I sympathize with all of my fellow engineers trying to maintain systems and improve apps while dealing with our rapidly changing society. Be kind to each other. ❤️
+Let&amp;rsquo;s distract ourselves with a Sidekiq family update.
+Sidekiq 6.1 The most visible change in Sidekiq 6.</description>
+    </item>
     
     <item>
       <title>Trimming Dependencies: rack-protection</title>
@@ -101,16 +113,6 @@ No More Daemonizing Sidekiq 6.0 no longer offers the ability to run as an circa-
       <description>Do you like free things? Would you like to get something for nothing? Are you a Sidekiq user? If you answered yes to these questions, I have a case study in how one customer effectively got Sidekiq Enterprise for free.
 One Friday morning, two engineers jumped into my weekly Happy Hour to ask me about a Sidekiq problem they were having.
  &amp;ldquo;We have two Sidekiq dynos with 40 threads each: we find that after about 5 minutes, they are only using about 20 threads; shouldn&amp;rsquo;t all 40 threads pick up jobs?</description>
-    </item>
-    
-    <item>
-      <title>Proxying Golang Web Applications</title>
-      <link>https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/</link>
-      <pubDate>Wed, 17 Jul 2019 16:26:43 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/</guid>
-      <description>Recently someone posted an issue asking if Faktory could support putting nginx in front of Faktory&amp;rsquo;s Web UI. Normally you access the Web UI like http://localhost:7420/ but they wanted it to look something like http://somehost:8080/faktory. That&amp;rsquo;s quite common when trying to wrap multiple systems into something that looks like one website to the browser.
-The issue is that the Web UI assumed it was at the root, so it hardcoded paths like /static/application.</description>
     </item>
     
   </channel>
