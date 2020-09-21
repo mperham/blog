@@ -137,15 +137,9 @@ and Sidekiq Enterprise.  New customers will use those licenses.
 
 ### Pricing
 
-Sidekiq Enterprise is priced on a sliding scale, based on number of workers running in
-your production environment.  Pricing is $1750/yr per 250 workers.
-
-* 250 workers - $1750/yr
-* 251-500 workers - $3500/yr
-* More?  Volume discounts available.
-
-A worker is a thread within a Sidekiq server process.  Ten processes with the default
-concurrency of 25 = 250 workers.
+Sidekiq Enterprise is priced on a sliding scale, based on number of threads running in your production environment.
+Ten processes with the default concurrency of 10 = 100 threads.
+Current pricing is on the [Sidekiq Enterprise purchase page](https://billing.contribsys.com/sent/new.cgi).
 
 Existing Pro subscribers can [contact me][4] to upgrade to Enterprise for the
 prorated difference in price.
