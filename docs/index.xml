@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Sep 2020 18:58:52 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 09 Nov 2020 08:33:40 -0800</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The Leaky Bucket rate limiter</title>
+      <link>https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/</link>
+      <pubDate>Mon, 09 Nov 2020 08:33:40 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/</guid>
+      <description>A few months ago, a customer asked if I could supply a &amp;ldquo;leaky bucket&amp;rdquo; rate limiter as part of Sidekiq Enterprise&amp;rsquo;s rate limiter suite. It took me a while to find the time and energy to work on it (my need to mentally escape the 2020 election eventually did the trick).
+  I went into this process knowing the basics of the leaky bucket algorithm but with no idea how to implement it.</description>
+    </item>
     
     <item>
       <title>What&#39;s New in Sidekiq, 2020 edition</title>
@@ -102,17 +112,6 @@ Faktory is an open source, language-independent background job system. If you wa
       <guid>https://www.mikeperham.com/2019/09/03/welcome-to-sidekiq-6.0/</guid>
       <description>I&amp;rsquo;m happy to announce that Sidekiq 6.0, Sidekiq Pro 5.0 and Sidekiq Enterprise 2.0 are now generally available after nine months of work by various contributors! 🎉🎂
 No More Daemonizing Sidekiq 6.0 no longer offers the ability to run as an circa-1990s init.d-style daemon by removing the logfile, pidfile and daemonize command line flags. For a decade, all major Unix systems have offered init tooling that handle these concerns automatically for the developer and sysadmin.</description>
-    </item>
-    
-    <item>
-      <title>Something For Nothing</title>
-      <link>https://www.mikeperham.com/2019/07/19/something-for-nothing/</link>
-      <pubDate>Fri, 19 Jul 2019 10:27:11 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2019/07/19/something-for-nothing/</guid>
-      <description>Do you like free things? Would you like to get something for nothing? Are you a Sidekiq user? If you answered yes to these questions, I have a case study in how one customer effectively got Sidekiq Enterprise for free.
-One Friday morning, two engineers jumped into my weekly Happy Hour to ask me about a Sidekiq problem they were having.
- &amp;ldquo;We have two Sidekiq dynos with 40 threads each: we find that after about 5 minutes, they are only using about 20 threads; shouldn&amp;rsquo;t all 40 threads pick up jobs?</description>
     </item>
     
   </channel>

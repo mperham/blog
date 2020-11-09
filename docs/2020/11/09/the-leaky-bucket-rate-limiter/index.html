@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>The Leaky Bucket rate limiter | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS">RSS</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>The Leaky Bucket rate limiter</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2020-11-09
+  </small>
+  
+</p>
+<p>A few months ago, a <a href="https://github.com/mperham/sidekiq/issues/4414">customer asked</a> if I could supply a &ldquo;leaky bucket&rdquo;
+rate limiter as part of Sidekiq Enterprise&rsquo;s <a href="https://github.com/mperham/sidekiq/wiki/Ent-Rate-Limiting#leaky-bucket">rate limiter</a> suite. It
+took me a while to find the time and energy to work on it (my need to
+mentally escape the 2020 election eventually did the trick).</p>
+<figure>
+  <img alt="leaky bucket" credit="courtesy of the Cloudflare blog" src="/images/leaky.png" width="50%" style="float: right; padding: 10px;"/>
+</figure>
+<p>I went into this process knowing the basics of the <a href="https://en.wikipedia.org/wiki/Leaky_bucket">leaky bucket</a>
+algorithm but with no idea how to implement it. I&rsquo;m not going to cover
+the algorithm here but check out that Wikipedia page if you want
+to learn the basics.</p>
+<h2 id="research">Research</h2>
+<p>First I did a GitHub search to look for existing implementations and read them to learn how they work.
+This way I can tie the abstract algorithm with specifics about how they are storing data, caveats they ran into, etc.
+It took me a few days to read, ponder and re-read the code to understand.
+<strong>Remember your secret weapons to understanding: sleeping and showering; that&rsquo;s when you&rsquo;ll figure stuff out.</strong></p>
+<p>I saw two different styles of implementation with Redis:</p>
+<ol>
+<li>Using ZSETs to store a timestamp of each successful call</li>
+<li>Using GET/SET with a counter and timestamp</li>
+</ol>
+<p>The first suffers from a major issue: it&rsquo;s O(n) with the bucket size.
+If you allow 10,000 calls every hour, the ZSET can hold up to 10,000 elements.
+I knew I didn&rsquo;t want to go down that path.</p>
+<p>The second is much better; it&rsquo;s O(1) with the bucket size but unnecessarily old school Redis.
+Redis provides newer <a href="https://redis.io/commands#hash">Hash commands</a> which can perform all of the necessary logic while also keeping each limiter as one distinct, logical Hash element within Redis.</p>
+<p>So that&rsquo;s what I implemented: an O(1) storage, Hash-based limiter.</p>
+<h2 id="implementation">Implementation</h2>
+<p>You gotta buy Sidekiq Enterprise if you want the real deal but here&rsquo;s
+the core of the implementation:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lua" data-lang="lua"><span style="color:#75715e">-- Decrement the drops based on the time which has passed since</span>
+<span style="color:#75715e">-- the last call.</span>
+<span style="color:#66d9ef">if</span> drops <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">and</span> (lastcall <span style="color:#f92672">+</span> driprate) <span style="color:#f92672">&lt;</span> current_time <span style="color:#66d9ef">then</span>
+  drops <span style="color:#f92672">=</span> drops <span style="color:#f92672">-</span> math.floor((current_time <span style="color:#f92672">-</span> lastcall) <span style="color:#f92672">/</span> driprate)
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#75715e">-- if the bucket has room for another drop, increment and return</span>
+<span style="color:#66d9ef">if</span> drops <span style="color:#f92672">&lt;</span> size <span style="color:#66d9ef">then</span>
+  redis.call(<span style="color:#e6db74">&#34;hset&#34;</span>, key, <span style="color:#e6db74">&#34;lastcall&#34;</span>, current_time, <span style="color:#e6db74">&#34;drops&#34;</span>, drops<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
+  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#75715e">-- if the bucket is full, send the amount of time necessary to wait</span>
+<span style="color:#75715e">-- for the next drop to drain.</span>
+<span style="color:#66d9ef">return</span> (lastcall <span style="color:#f92672">+</span> driprate) <span style="color:#f92672">-</span> current_time
+</code></pre></div><p>Each time we call the limiter, we check to see if enough time has passed
+for 1 or more drips. If the bucket is full, we return the amount of time
+until the next drip.</p>
+<h2 id="testing-and-use">Testing and Use</h2>
+<p>Of course I wrote some basic tests for the limiter but I wanted to take
+it further and implement a <strong>Rack-based limiter middleware</strong>. Here it
+is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LeakyLimiter</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(app)
+    @app <span style="color:#f92672">=</span> app
+  <span style="color:#66d9ef">end</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(env)
+    remote_ip <span style="color:#f92672">=</span> env<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;REMOTE_ADDR&#34;</span><span style="color:#f92672">].</span>tr(<span style="color:#e6db74">&#39;:&#39;</span>, <span style="color:#e6db74">&#39;_&#39;</span>)
+    <span style="color:#66d9ef">begin</span>
+      limiter <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Limiter</span><span style="color:#f92672">.</span>leaky(<span style="color:#e6db74">&#34;ip-</span><span style="color:#e6db74">#{</span>remote_ip<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>, <span style="color:#e6db74">wait_timeout</span>: <span style="color:#ae81ff">0</span>)
+      limiter<span style="color:#f92672">.</span>within_limit <span style="color:#66d9ef">do</span>
+        @app<span style="color:#f92672">.</span>call(env)
+      <span style="color:#66d9ef">end</span>
+    <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Limiter</span><span style="color:#f92672">::</span><span style="color:#66d9ef">OverLimit</span> <span style="color:#f92672">=&gt;</span> ex
+      <span style="color:#f92672">[</span><span style="color:#ae81ff">429</span>, {
+        <span style="color:#e6db74">&#34;Content-Type&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;text/plain&#34;</span>,
+        <span style="color:#e6db74">&#34;X-Rate-Limited-For&#34;</span> <span style="color:#f92672">=&gt;</span> ex<span style="color:#f92672">.</span>limiter<span style="color:#f92672">.</span>next_drip<span style="color:#f92672">.</span>to_s,
+      }, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;Rate limited&#34;</span><span style="color:#f92672">]]</span>
+    <span style="color:#66d9ef">end</span>
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Note that this uses dynamic limiters, it creates a limiter for every
+single IP address that hits the webapp. For each IP address, we allow 10 calls every 10 seconds. If the IP
+has made more than 10 calls, the limiter will raise OverLimit and we&rsquo;ll
+return them an HTTP 429 status code along with a header that indicates
+when the next drip happens (the drip is when the next call will succeed).
+Here it is in action:</p>
+<pre><code>[...eight previous calls snipped...]
+
+&gt; curl -i http://localhost:9292/api
+HTTP/1.1 200 OK
+Content-Length: 11
+
+Hello world
+&gt; curl -i http://localhost:9292/api
+HTTP/1.1 200 OK
+Content-Length: 11
+
+Hello world
+&gt; curl -i http://localhost:9292/api
+HTTP/1.1 429 Too Many Requests
+Content-Type: text/plain
+X-Rate-Limited-For: 0.77912330627441
+Content-Length: 12
+
+Rate limited
+&gt; curl -i http://localhost:9292/api
+HTTP/1.1 429 Too Many Requests
+Content-Type: text/plain
+X-Rate-Limited-For: 0.54235911369324
+Content-Length: 12
+
+Rate limited
+</code></pre><p>This sample usage revealed an implementation detail that I decided to
+optimize: every request was making <strong>two</strong> round trips to Redis, one to
+create the limiter in Redis and one to check the rate limit.
+I refactored the code to remove the need to call Redis on creation; this
+will makes dynamic usecases like this example much faster.
+Every Rack request now requires only <strong>one</strong> call to Redis.</p>
+<h2 id="benchmarks">Benchmarks</h2>
+<p>Nothing is guaranteed in code until you have benchmarks to prove it,
+right? I wrote a simple benchmark to test the three styles of time-based
+limiters: leaky vs window vs bucket. It shows that the new leaky limiter
+is twice as fast as the other two in this benchmark. This makes perfect
+sense if you consider that the bucket and window limiters suffer from the
+same issue explained above: they call Redis on <code>new</code> and <code>within_limit</code>
+so they make twice as many network round trips as leaky.</p>
+<pre><code>                                     user     system      total        real
+leaky                            0.705626   0.155107   0.860733 (  1.225562)
+bucket                           1.651114   0.418390   2.069504 (  2.331178)
+window                           2.140379   0.590244   2.730623 (  2.929512)
+</code></pre><h2 id="conclusion">Conclusion</h2>
+<p>Writing this new feature was surprisingly fun and inspiring. The work spanned
+the entire engineering lifecycle:</p>
+<ol>
+<li>Research and understand an algorithm.</li>
+<li>Implement.</li>
+<li>Write tests, write benchmarks, write new usecase.</li>
+<li>Optimize based on that feedback.</li>
+<li>Write blog post and release.</li>
+</ol>
+<p>I&rsquo;ve uploaded the source code for the <a href="https://gist.github.com/mperham/d67e5b7e65ad43682c7cc0bdd31ced95">Rack example limiter and benchmark</a>.
+If you&rsquo;re a Sidekiq Enterprise customer, run <code>bundle up sidekiq-ent</code> to pull in v2.2.0 or greater to try out the new leaky bucket limiter.
+<a href="https://github.com/mperham/sidekiq/issues">Open an issue</a> if you have any questions or problems with it.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>
