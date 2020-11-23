@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.69.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Running Ruby on RISC-V | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS">RSS</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>Running Ruby on RISC-V</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2020-11-21
+  </small>
+  
+</p>
+<p>With the release of the new arm64 architecture M1 Macbooks, I started
+wondering about x86 alternatives and came across <a href="https://en.wikipedia.org/wiki/RISC-V">RISC-V</a>.
+RISC-V is an open source ISA (the set of instructions documented by a CPU) which does not cost anything to use.
+Anyone can take the ISA, build a chip which implements the ISA and then
+any software compiled for RISC-V will run on that chip. Several
+generations of RISC ISAs were created at UC Berkeley in the 1980s; RISC-V denotes their fifth generation ISA.</p>
+<p>I believe we&rsquo;ll see more and more low-end Linux devices powered by RISC-V chips from inexpensive Asian fabs.
+Intel doesn&rsquo;t license x86_64 to other chipmakers AFAIK and it&rsquo;s simply too big and unwieldy for anyone to want to.
+ARM&rsquo;s entire business model is licensing its ISA but requires a
+major dollar investment, something which many smaller companies don&rsquo;t have.</p>
+<p>One interesting possibility with RISC-V, as an open source ISA, is the
+ability to add/remove <a href="https://en.wikipedia.org/wiki/RISC-V#ISA_base_and_extensions">standard extensions</a> or even add your own custom instructions. Imagine a handful of
+CPU instructions tuned to dynamic languages like Python or Ruby!
+Companies like <a href="https://www.sifive.com">SiFive</a> now offer the ability to custom design and
+build your own SoC. Want a very small 32-bit chip with no floating point
+math? No problem! Want a general purpose 64-bit desktop-class chip? No problem!</p>
+<h2 id="the-state-of-software">The State of Software</h2>
+<p>Being so widely used and low level, C/C++ are always the first languages to move. The GCC and LLVM compilers both have
+RISC-V support, typically they support the &ldquo;RV64GC&rdquo; ISA which stands for
+&ldquo;RISC-V 64-bit with G and C extensions&rdquo;. RV64GC is the most complex form of
+RISC-V and
+has all the instructions necessary to run basically any modern software; embedded
+compilers targeting smaller chips will support smaller versions of RISC-V like &ldquo;RV32G&rdquo;.
+Golang supports RV64GC starting in the 1.15 release.</p>
+<h2 id="running-risc-v-without-risc-v">Running RISC-V without RISC-V</h2>
+<p>I decided to take RISC-V for a test drive. The
+first step of trying any new CPU is to run it in an emulator; after all
+I don&rsquo;t actually own a RISC-V chip or machine!
+QEMU is the open source gold standard for CPU emulation:</p>
+<pre><code>brew install qemu
+</code></pre><p>QEMU comes with <a href="https://git.qemu.org/?p=qemu.git;a=tree;f=target/riscv;h=4d5374737a3e0c52f60c7cc69738e195d8ba8497;hb=refs/heads/master">RISC-V built-in</a> so there&rsquo;s nothing else to be done
+(click that link if you want to see how to emulate a CPU with 1000s of lines of C code).
+You&rsquo;ll need to download a RISC-V native boot disk, I found instructions and a nice <a href="https://wiki.qemu.org/Documentation/Platforms/RISCV#Booting_64-bit_Fedora">Fedora
+Developer 20200108 image</a> here.
+This developer image contains all the typical Linux developer tools, including GCC.
+I followed those directions except note we are using the <strong>Developer</strong> image, not the
+<strong>Minimal</strong> image. You log in with user:pwd &ldquo;riscv:fedora_rocks!&quot;.</p>
+<pre><code>&gt; curl -LO Fedora-Developer-Rawhide-20200108.n.0-fw_payload-uboot-qemu-virt-smode.elf
+&gt; curl -LO Fedora-Developer-Rawhide-20200108.n.0-sda.raw.xz
+&gt; unxz *.xz
+&gt; qemu-system-riscv64 \
+   -nographic \
+   -machine virt \
+   -smp 4 \
+   -m 2G \
+   -kernel Fedora-Developer-Rawhide-*-fw_payload-uboot-qemu-virt-smode.elf \
+   -bios none \
+   -object rng-random,filename=/dev/urandom,id=rng0 \
+   -device virtio-rng-device,rng=rng0 \
+   -device virtio-blk-device,drive=hd0 \
+   -drive file=Fedora-Developer-Rawhide-20200108.n.0-sda.raw,format=raw,id=hd0 \
+   -device virtio-net-device,netdev=usernet \
+   -netdev user,id=usernet,hostfwd=tcp::10000-:22
+</code></pre><p>Soon I had a Fedora terminal prompt, this was easy so far!
+<em>Alas, storm clouds approached&hellip;</em></p>
+<p>My plan was to start with the latest stable Ruby release. I downloaded the Ruby 2.7.2 source tarball, unpacked it and ran through the usual <code>./configure ; make</code> steps but it did not compile due to some C casting errors.
+I recalled that Ruby 2.7 has been frozen for 1-2 years now; perhaps it was fixed in the latest version?
+I downloaded Ruby 3.0.0-pre1 and ran the same steps.</p>
+<p>🌈✨💪🏼 <strong>It compiled!</strong> 🥰✨🎉</p>
+<p>Natively, Ruby 3.0 took 4 minutes to compile on my 2016 MBP.</p>
+<pre><code>x86_64-darwin19-fake.rb updated
+make  240.65s user 35.12s system 98% cpu 4:40.59 total
+</code></pre><p>Under emulation, it took 123 minutes to compile. I guess you could say there is a bit of
+slowdown under emulation.</p>
+<pre><code>riscv64-linux-fake.rb updated
+real	123m35.402s
+user	93m56.389s
+sys	29m31.974s
+</code></pre><p>In the end, this was the result:</p>
+<pre><code>$ ./miniruby -e &quot;puts RUBY_DESCRIPTION&quot;
+ruby 3.0.0preview1 (2020-09-25 master 0096d2b895) [riscv64-linux]
+</code></pre><h2 id="whats-the-point">What&rsquo;s the Point?</h2>
+<p>At a glance this doesn&rsquo;t look revolutionary.</p>
+<p>I don&rsquo;t expect we&rsquo;ll see RISC-V processors in your next Windows or Mac
+laptop but for companies building their own embedded hardware (e.g. hard
+drive manufacturers) an Open ISA represents one less point of vendor lockin.
+Now companies can go to the RISC-V ecosystem, say &ldquo;I need 100,000 units
+of a RV32G processor with max power draw of less than 1W&rdquo; and many companies can bid for this
+proposal. No IP licensing, no NDAs for hardware datasheets, just cash for chips based on an open standard.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

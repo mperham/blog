@@ -6,10 +6,19 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 Nov 2020 08:33:40 -0800</lastBuildDate>
+    <lastBuildDate>Sat, 21 Nov 2020 16:18:34 -0800</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Running Ruby on RISC-V</title>
+      <link>https://www.mikeperham.com/2020/11/21/running-ruby-on-risc-v/</link>
+      <pubDate>Sat, 21 Nov 2020 16:18:34 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/11/21/running-ruby-on-risc-v/</guid>
+      <description>With the release of the new arm64 architecture M1 Macbooks, I started wondering about x86 alternatives and came across RISC-V. RISC-V is an open source ISA (the set of instructions documented by a CPU) which does not cost anything to use. Anyone can take the ISA, build a chip which implements the ISA and then any software compiled for RISC-V will run on that chip. Several generations of RISC ISAs were created at UC Berkeley in the 1980s; RISC-V denotes their fifth generation ISA.</description>
+    </item>
     
     <item>
       <title>The Leaky Bucket rate limiter</title>
@@ -102,16 +111,6 @@ Faktory is an open source, language-independent background job system. If you wa
       <description>A number of customers have contacted me with a common problem:
  We run a multi-tenant system where our users can perform an action which results in a huge number of jobs being enqueued. When this happens, other users see significant delays in their jobs being processed while our Sidekiq cluster works through the backlog for that one user.
  The issue is this: if you give 100% of your resources to process that user&amp;rsquo;s backlog, 100% of your customers will feel the pain of that backlog delay.</description>
-    </item>
-    
-    <item>
-      <title>Welcome to Sidekiq 6.0</title>
-      <link>https://www.mikeperham.com/2019/09/03/welcome-to-sidekiq-6.0/</link>
-      <pubDate>Tue, 03 Sep 2019 09:00:00 +0000</pubDate>
-      
-      <guid>https://www.mikeperham.com/2019/09/03/welcome-to-sidekiq-6.0/</guid>
-      <description>I&amp;rsquo;m happy to announce that Sidekiq 6.0, Sidekiq Pro 5.0 and Sidekiq Enterprise 2.0 are now generally available after nine months of work by various contributors! 🎉🎂
-No More Daemonizing Sidekiq 6.0 no longer offers the ability to run as an circa-1990s init.d-style daemon by removing the logfile, pidfile and daemonize command line flags. For a decade, all major Unix systems have offered init tooling that handle these concerns automatically for the developer and sysadmin.</description>
     </item>
     
   </channel>
