@@ -14,7 +14,7 @@ any software compiled for RISC-V will run on that chip. Several
 generations of RISC ISAs were created at UC Berkeley in the 1980s; RISC-V denotes their fifth generation ISA.
 
 I believe we'll see more and more low-end Linux devices powered by RISC-V chips from inexpensive Asian fabs.
-Intel doesn't license x86_64 to other chipmakers AFAIK and it's simply too big and unwieldy for anyone to want to.
+Intel doesn't license x86 to other chipmakers AFAIK and it's simply too big and unwieldy for anyone to want to.
 ARM's entire business model is licensing its ISA but requires a
 major dollar investment, something which many smaller companies don't have.
 
