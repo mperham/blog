@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 21 Nov 2020 16:18:34 -0800</lastBuildDate>
+    <lastBuildDate>Mon, 14 Dec 2020 10:03:29 -0800</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Grouping Events for Later Processing</title>
+      <link>https://www.mikeperham.com/2020/12/14/grouping-events-for-later-processing/</link>
+      <pubDate>Mon, 14 Dec 2020 10:03:29 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2020/12/14/grouping-events-for-later-processing/</guid>
+      <description>A customer recently wondered how they could handle aggregate events in Sidekiq. They don&amp;rsquo;t want one background job per event but rather a background job to handle the last N events.
+Let&amp;rsquo;s pretend we work for an ecommerce vendor and we want to track product clicks: User A clicks on Product B. This is a naive way to show interest in a product or category; we want to store this data for long-term data mining purposes.</description>
+    </item>
     
     <item>
       <title>Running Ruby on RISC-V</title>
@@ -100,17 +110,6 @@ It hasn&amp;rsquo;t escaped my notice that most of my Faktory users are using th
       <guid>https://www.mikeperham.com/2020/01/08/faktory-enterprise/</guid>
       <description>The best way to kick off 2020 is by shipping something massive for me: Faktory Enterprise.
 Faktory is an open source, language-independent background job system. If you want to scale your business app to many millions of transactions per day, background jobs are the best way to do it. Celery, Bull, Sidekiq are all popular but they are limited to the one language they are written in (Python, JS and Ruby respectively).</description>
-    </item>
-    
-    <item>
-      <title>Workload Isolation with Queue Sharding</title>
-      <link>https://www.mikeperham.com/2019/12/17/workload-isolation-with-queue-sharding/</link>
-      <pubDate>Tue, 17 Dec 2019 10:55:37 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2019/12/17/workload-isolation-with-queue-sharding/</guid>
-      <description>A number of customers have contacted me with a common problem:
- We run a multi-tenant system where our users can perform an action which results in a huge number of jobs being enqueued. When this happens, other users see significant delays in their jobs being processed while our Sidekiq cluster works through the backlog for that one user.
- The issue is this: if you give 100% of your resources to process that user&amp;rsquo;s backlog, 100% of your customers will feel the pain of that backlog delay.</description>
     </item>
     
   </channel>
