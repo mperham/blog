@@ -3,7 +3,6 @@ title: "Grouping Events for Later Processing"
 date: 2020-12-14T10:03:29-08:00
 publishdate: 2020-12-14
 lastmod: 2020-12-14
-draft: true
 tags: []
 ---
 
