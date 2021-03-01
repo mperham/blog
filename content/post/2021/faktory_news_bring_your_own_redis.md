@@ -6,6 +6,11 @@ lastmod: 2021-03-01
 tags: []
 ---
 
+Faktory is my background job server for use with any programming language.
+It brings the nice patterns and features available in Sidekiq to the rest of the world.
+Using Go, Python, JavaScript, Elixir, or other languages?
+Give [Faktory](https://github.com/contribsys/faktory/wiki) a shot!
+
 Today I've released Faktory, Faktory Pro and Faktory Enterprise 1.5.0.
 What's new?
 

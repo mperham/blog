@@ -17,10 +17,9 @@
       <pubDate>Mon, 01 Mar 2021 09:00:00 -0800</pubDate>
       
       <guid>https://www.mikeperham.com/2021/03/01/faktory-news-pause-rss-and-bring-your-own-redis/</guid>
-      <description>Today I&amp;rsquo;ve released Faktory, Faktory Pro and Faktory Enterprise 1.5.0. What&amp;rsquo;s new?
-Pause / Resume The OSS version of Faktory now allows you to Pause and Resume processing for a queue. When Paused, calling FETCH on a queue will get nothing back. The /queues page has a button to toggle the state.
-There is a new QUEUE command to do this via API:
-QUEUE PAUSE * QUEUE PAUSE nameA nameB .</description>
+      <description>Faktory is my background job server for use with any programming language. It brings the nice patterns and features available in Sidekiq to the rest of the world. Using Go, Python, JavaScript, Elixir, or other languages? Give Faktory a shot!
+Today I&amp;rsquo;ve released Faktory, Faktory Pro and Faktory Enterprise 1.5.0. What&amp;rsquo;s new?
+Pause / Resume The OSS version of Faktory now allows you to Pause and Resume processing for a queue.</description>
     </item>
     
     <item>
