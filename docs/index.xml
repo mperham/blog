@@ -6,10 +6,22 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 14 Dec 2020 10:03:29 -0800</lastBuildDate>
+    <lastBuildDate>Mon, 01 Mar 2021 09:00:00 -0800</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Faktory News: Pause, RSS and Bring your own Redis</title>
+      <link>https://www.mikeperham.com/2021/03/01/faktory-news-pause-rss-and-bring-your-own-redis/</link>
+      <pubDate>Mon, 01 Mar 2021 09:00:00 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2021/03/01/faktory-news-pause-rss-and-bring-your-own-redis/</guid>
+      <description>Today I&amp;rsquo;ve released Faktory, Faktory Pro and Faktory Enterprise 1.5.0. What&amp;rsquo;s new?
+Pause / Resume The OSS version of Faktory now allows you to Pause and Resume processing for a queue. When Paused, calling FETCH on a queue will get nothing back. The /queues page has a button to toggle the state.
+There is a new QUEUE command to do this via API:
+QUEUE PAUSE * QUEUE PAUSE nameA nameB .</description>
+    </item>
     
     <item>
       <title>Grouping Events for Later Processing</title>
@@ -100,16 +112,6 @@ Alas, the virus struck and Railsconf was cancelled. Railsconf 2020.2 Couch Editi
       <guid>https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/</guid>
       <description>One thing I&amp;rsquo;ve come to respect about containers are how easy they make packaging and running Linux infrastructure. No more fighting the distro for the right version of a package, a dozen builds for a dozen distro-specific packages, etc. Everything is encapsulated within a single container image that runs on any modern Linux.
 It hasn&amp;rsquo;t escaped my notice that most of my Faktory users are using the Docker image to run Faktory which means that most of my Faktory Pro and Enterprise customers will want a Docker image too.</description>
-    </item>
-    
-    <item>
-      <title>Faktory Enterprise</title>
-      <link>https://www.mikeperham.com/2020/01/08/faktory-enterprise/</link>
-      <pubDate>Wed, 08 Jan 2020 09:16:51 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2020/01/08/faktory-enterprise/</guid>
-      <description>The best way to kick off 2020 is by shipping something massive for me: Faktory Enterprise.
-Faktory is an open source, language-independent background job system. If you want to scale your business app to many millions of transactions per day, background jobs are the best way to do it. Celery, Bull, Sidekiq are all popular but they are limited to the one language they are written in (Python, JS and Ruby respectively).</description>
     </item>
     
   </channel>
