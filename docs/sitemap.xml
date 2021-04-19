@@ -2,10 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://www.mikeperham.com/2021/03/01/faktory-news-pause-rss-and-bring-your-own-redis/</loc>
-    <lastmod>2021-03-01T00:00:00+00:00</lastmod>
+    <loc>https://www.mikeperham.com/2021/04/20/a-tour-of-the-sidekiq-api/</loc>
+    <lastmod>2021-04-20T09:00:00-07:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/</loc>
+    <lastmod>2021-04-20T09:00:00-07:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/2021/03/01/faktory-news-pause-rss-and-bring-your-own-redis/</loc>
     <lastmod>2021-03-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2020/12/14/grouping-events-for-later-processing/</loc>

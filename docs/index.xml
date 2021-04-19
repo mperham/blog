@@ -6,10 +6,21 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Mar 2021 09:00:00 -0800</lastBuildDate>
+    <lastBuildDate>Tue, 20 Apr 2021 09:00:00 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>A Tour of the Sidekiq API</title>
+      <link>https://www.mikeperham.com/2021/04/20/a-tour-of-the-sidekiq-api/</link>
+      <pubDate>Tue, 20 Apr 2021 09:00:00 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2021/04/20/a-tour-of-the-sidekiq-api/</guid>
+      <description>Sidekiq provides an underappreciated but powerful tool for all users: the Sidekiq API. The API gives comprehensive and idiomatic access to Sidekiq&amp;rsquo;s underlying real-time job and queue data within Redis.
+The Glossary To explore the API, first it helps to understand the basic entities in Sidekiq&amp;rsquo;s universe:
+ A job is a unit of work in your Ruby application A queue is a list of jobs which are ready to execute right now A process is a Sidekiq process with one or more threads for executing jobs.</description>
+    </item>
     
     <item>
       <title>Faktory News: Pause, RSS and Bring your own Redis</title>
@@ -101,16 +112,6 @@ EDI: the Worst Document Format? From 2003-2006 I worked at a startup building en
       <description>I love Rubyconf and Railsconf. I&amp;rsquo;ve attended every one in the last 7 years and was super excited to learn that Railsconf would be held in my home town of Portland this year.
 /play sadtrombone
 Alas, the virus struck and Railsconf was cancelled. Railsconf 2020.2 Couch Edition was announced but my favorite part of conferences is the hallway track: meeting old friends in person, making new friends, talking about our lives and crazy ideas we have to make Ruby and open source better.</description>
-    </item>
-    
-    <item>
-      <title>Creating a private, commercial Docker registry</title>
-      <link>https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/</link>
-      <pubDate>Mon, 09 Mar 2020 09:00:00 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/</guid>
-      <description>One thing I&amp;rsquo;ve come to respect about containers are how easy they make packaging and running Linux infrastructure. No more fighting the distro for the right version of a package, a dozen builds for a dozen distro-specific packages, etc. Everything is encapsulated within a single container image that runs on any modern Linux.
-It hasn&amp;rsquo;t escaped my notice that most of my Faktory users are using the Docker image to run Faktory which means that most of my Faktory Pro and Enterprise customers will want a Docker image too.</description>
     </item>
     
   </channel>
