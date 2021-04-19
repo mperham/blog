@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -194,7 +194,7 @@ blockquote,
 <p>I see the same problem again and again with Sidekiq users: occasional but regular network timeouts talking to Redis on our Heroku or EC2 instances. There are several options:</p>
 <ol>
 <li>Raise the Redis client&rsquo;s network timeout from the default of 1 sec to N seconds. I&rsquo;ve seen latencies over 5 seconds. This won&rsquo;t fix the problem but your system will raise fewer errors.</li>
-<li>Use <a href="http://sidekiq.org/">Sidekiq Pro</a>&lsquo;s reliable client feature. It will catch the timeout error and retry the operation regularly until it succeeds.</li>
+<li>Use <a href="http://sidekiq.org/">Sidekiq Pro</a>&rsquo;s reliable client feature. It will catch the timeout error and retry the operation regularly until it succeeds.</li>
 <li>Move onto dedicated hardware where you know the network is high-quality and the machine isn&rsquo;t overloaded.</li>
 </ol>
 <p>Note the real solutions, 2 &amp; 3, cost money. When you choose to use a cloud provider, often times you are looking to save a buck. I&rsquo;m here to tell you that you&rsquo;ll pay that money somewhere: late nights debugging, unhappy customers or a credit card bill. You can save a few bucks by running a small Heroku dyno but I bet you&rsquo;ll find yourself spending days optimizing your system to run in 512MB.</p>

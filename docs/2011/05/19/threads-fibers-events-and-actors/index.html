@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -188,7 +188,7 @@ blockquote,
   </small>
   
 </p>
-<p>I presented (from 3000 miles away!) today at <a href="//emrubyconf.com">EMRubyConf</a>. My talk, &ldquo;<a href="http://vimeo.com/23933313">Threads Fibers Events and Actors</a>&quot;, is a short 13min chat on current trends in Ruby scalability and concurrency. To summarize:</p>
+<p>I presented (from 3000 miles away!) today at <a href="//emrubyconf.com">EMRubyConf</a>. My talk, &ldquo;<a href="http://vimeo.com/23933313">Threads Fibers Events and Actors</a>&rdquo;, is a short 13min chat on current trends in Ruby scalability and concurrency. To summarize:</p>
 <p>Ruby&rsquo;s threading has historically been terrible. So we turned to event-based systems like EventMachine but the reactor pattern brings its own set of drawbacks. So we turned to Fibers to solve some of those problems but they bring along another set of drawbacks. In the end though, all of this is a workaround for Ruby&rsquo;s historically terrible threading implementation. But what if Ruby&rsquo;s threading didn&rsquo;t suck?</p>
 <p>JRuby has great threads. Rubinius will soon have great threads. Both have really matured into excellent, stable runtimes over the last year. Make no mistake threads have issues too; locks and race conditions are notoriously hard to write well and Ruby code can&rsquo;t be autoloaded safely in a multithreaded system. The former is what Actors attempt to solve: making concurrency simpler and safer by passing messages rather than sharing mutable state and requiring locks.</p>
 <p>I think the Ruby community needs to give threads another chance: ensure their gems are thread-safe and use Actors when needing to write safe multithreaded code. <a href="https://github.com/tarcieri/celluloid">Celluloid</a> and the <a href="http://rubini.us/doc/en/systems/concurrency/">Rubinius Actor API</a> are two APIs which provide Actors to Ruby. My new gem <a href="http://mperham.github.com/girl_friday">girl_friday</a> leverages actors for safe concurrency. The autoloading problem is the only hard problem remaining; I hope some time and effort can determine ways around this issue.</p>

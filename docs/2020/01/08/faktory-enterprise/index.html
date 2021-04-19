@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -204,10 +204,10 @@ I&rsquo;m launching it with two major features.</p>
 <p>This is, without a doubt, the #1 missing feature requested by Sidekiq customers.
 &ldquo;We want to resize 100,000 images but processing those jobs at
 full blast will crush our servers. How can we throttle those jobs so
-that our workers keep some threads available for other, more critical queues?&quot;.</p>
+that our workers keep some threads available for other, more critical queues?&rdquo;.</p>
 <p>Easy, <a href="https://github.com/contribsys/faktory/wiki/Ent-Throttling#use-cases">queue throtting</a> couldn&rsquo;t be simpler to configure:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">throttles</span>]
-<span style="color:#a6e22e">bulk</span> = <span style="color:#960050;background-color:#1e0010">{</span> <span style="color:#a6e22e">worker</span> = <span style="color:#ae81ff">5</span>, <span style="color:#a6e22e">timeout</span> = <span style="color:#ae81ff">60</span> <span style="color:#960050;background-color:#1e0010">}</span>
+<span style="color:#a6e22e">bulk</span> = { <span style="color:#a6e22e">worker</span> = <span style="color:#ae81ff">5</span>, <span style="color:#a6e22e">timeout</span> = <span style="color:#ae81ff">60</span> }
 </code></pre></div><p>Throw those 100,000 jobs into a <code>bulk</code> queue.  That config says that
 each worker process may only process 5 jobs from <code>bulk</code> at a time.
 If each worker process has 15 threads, you&rsquo;ll have 10 threads left to

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -188,7 +188,7 @@ blockquote,
   </small>
   
 </p>
-<p>Some quick performance numbers around bulk insert of data into MySQL.  This test inserts 1000 rows into a table.  Rails 2.1.0, ar-extensions 0.8.0 and MySQL 5.0.45 on a MacBook Pro running Leopard.  I tested a number of configurations but the interesting ones are plain old iteration calling save, using ar-extensions&rsquo; import method and bare metal execute.</p>
+<p>Some quick performance numbers around bulk insert of data into MySQL.  This test inserts 1000 rows into a table.  Rails 2.1.0, ar-extensions 0.8.0 and MySQL 5.0.45 on a MacBook Pro running Leopard.  I tested a number of configurations but the interesting ones are plain old iteration calling save, using ar-extensions' import method and bare metal execute.</p>
 <ul>
 <li>@objects.each { |obj| obj.save! } <strong>3.417227 sec</strong></li>
 <li>Metric.import(@objects) <strong>1.374610 sec</strong></li>

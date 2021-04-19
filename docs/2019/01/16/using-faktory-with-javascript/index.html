@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -225,10 +225,10 @@ create an <code>adder</code> job with two random integers for arguments:</p>
 
 <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">faktory</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;faktory-worker&#39;</span>);
 
-<span style="color:#a6e22e">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">createJob</span>() {
-  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">client</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">await</span> <span style="color:#a6e22e">faktory</span>.<span style="color:#a6e22e">connect</span>();
-  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">jid</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">await</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">job</span>(<span style="color:#e6db74">&#39;adder&#39;</span>, <span style="color:#a6e22e">randInt</span>(), <span style="color:#a6e22e">randInt</span>()).<span style="color:#a6e22e">push</span>();
-  <span style="color:#a6e22e">await</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">close</span>();
+<span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">createJob</span>() {
+  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">client</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">faktory</span>.<span style="color:#a6e22e">connect</span>();
+  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">jid</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">job</span>(<span style="color:#e6db74">&#39;adder&#39;</span>, <span style="color:#a6e22e">randInt</span>(), <span style="color:#a6e22e">randInt</span>()).<span style="color:#a6e22e">push</span>();
+  <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">close</span>();
   <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;Job&#34;</span>, <span style="color:#a6e22e">jid</span>)
   <span style="color:#a6e22e">setTimeout</span>(<span style="color:#a6e22e">createJob</span>, <span style="color:#ae81ff">1000</span>)
 }
@@ -240,7 +240,7 @@ executes them.  We register the set of job types we know about and then
 wait for jobs from Faktory.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">faktory</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;faktory-worker&#39;</span>);
 
-<span style="color:#a6e22e">faktory</span>.<span style="color:#a6e22e">register</span>(<span style="color:#e6db74">&#39;adder&#39;</span>, <span style="color:#a6e22e">async</span> (<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>) =&gt; {
+<span style="color:#a6e22e">faktory</span>.<span style="color:#a6e22e">register</span>(<span style="color:#e6db74">&#39;adder&#39;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>) =&gt; {
   <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;${a} + ${b} = ${a+b}&#34;</span>)
 });
 

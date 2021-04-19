@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -194,7 +194,7 @@ blockquote,
 <p>Ruby has an unfortunate default semantic that all Strings are mutable:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
 string <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;mike&#34;</span>
-</code></pre></div><p>This allocates two Strings, &quot;&rdquo; and &ldquo;mike&rdquo;. The first, empty String is then mutated to contain &ldquo;mike&rdquo;. However String mutation is quite rare, more common is something like this:</p>
+</code></pre></div><p>This allocates two Strings, &quot;&quot; and &ldquo;mike&rdquo;. The first, empty String is then mutated to contain &ldquo;mike&rdquo;. However String mutation is quite rare, more common is something like this:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">HASH</span> <span style="color:#f92672">=</span> {
   <span style="color:#e6db74">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>
 }
@@ -254,7 +254,7 @@ Done
 It gives a free performance improvement to all your users as long as you don&rsquo;t use String mutation.</p>
 <h3 id="notes">Notes</h3>
 <ol>
-<li>If you do mutate, use <code>String.new</code> to allocate a mutable String instead of &ldquo;&quot;.</li>
+<li>If you do mutate, use <code>String.new</code> to allocate a mutable String instead of &ldquo;&rdquo;.</li>
 <li>The magic comment will only work on Ruby 2.3+ but since Ruby 2.2 is EOL in one month, I think it&rsquo;s fair to stop performance tuning for it.</li>
 </ol>
 

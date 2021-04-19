@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -194,7 +194,8 @@ and what I found was neat yet unsurprising.</p>
 <p>The expvar package allows a Go process to <strong>exp</strong>ose <strong>var</strong>iables to the public via an HTTP endpoint that emits
 JSON.  The simplest usage requires you to do two things in your custom code:</p>
 <p>1. Import the package - this has the side effect of registering the <code>/debug/vars</code> HTTP endpoint.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;expvar&#34;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;expvar&#34;</span>
+</code></pre></div>
 <p>2. Start up an HTTP server for your process to handle HTTP requests:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">sock</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Listen</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#e6db74">&#34;localhost:8123&#34;</span>)
 <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
@@ -203,7 +204,8 @@ JSON.  The simplest usage requires you to do two things in your custom code:</p>
 <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
   <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;HTTP now available at port 8123&#34;</span>)
   <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Serve</span>(<span style="color:#a6e22e">sock</span>, <span style="color:#66d9ef">nil</span>)
-}()</code></pre></div>
+}()
+</code></pre></div>
 <p>If you hit <a href="http://localhost:8123/debug/vars">http://localhost:8123/debug/vars</a>, you should see something like this:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
 <span style="color:#f92672">&#34;cmdline&#34;</span>: [<span style="color:#e6db74">&#34;/var/folders/bc/27hv15_d2zvcc3n3s9dxmfg00000gn/T/go-build421732654/command-line-arguments/_obj/exe/main&#34;</span>,<span style="color:#e6db74">&#34;-l&#34;</span>,<span style="color:#e6db74">&#34;debug&#34;</span>,<span style="color:#e6db74">&#34;-s&#34;</span>,<span style="color:#e6db74">&#34;i.sock&#34;</span>,<span style="color:#e6db74">&#34;-c&#34;</span>,<span style="color:#e6db74">&#34;realtest&#34;</span>],
@@ -225,7 +227,8 @@ You can see in the JSON blob above how they appear when exported:</p>
 <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">init</span>() {
   <span style="color:#a6e22e">counts</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;a&#34;</span>, <span style="color:#ae81ff">10</span>)
   <span style="color:#a6e22e">counts</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;b&#34;</span>, <span style="color:#ae81ff">10</span>)
-}</code></pre></div>
+}
+</code></pre></div>
 <h2 id="wherein-i-mix-in-some-awesome">Wherein I Mix in some Awesome</h2>
 <p>Well, I&rsquo;m even more excited because the next version of <a href="http://contribsys.com/inspeqtor">Inspeqtor Pro</a> will have a Web UI for visualizing the
 memory and GC data which the Go runtime exposes.  This type of functionality is always what I&rsquo;ve wanted in

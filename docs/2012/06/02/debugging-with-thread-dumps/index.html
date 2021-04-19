@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -197,7 +197,7 @@ blockquote,
   end
 end
 </pre>
-<p>Now just find the PID for your ruby process and run &ldquo;kill -TTIN _PID_&quot;. Once I ran that, I realized the infinite loop was deep in the redis client and a few lines up was the tell-tale sign of a monkeypatch in one of our Rails initializers:</p>
+<p>Now just find the PID for your ruby process and run &ldquo;kill -TTIN _PID_&rdquo;. Once I ran that, I realized the infinite loop was deep in the redis client and a few lines up was the tell-tale sign of a monkeypatch in one of our Rails initializers:</p>
 <pre>/Users/mperham/.rvm/gems/ruby-1.9.3-p125@theclymb3/gems/redis-3.0.0/lib/redis/client.rb:242:in `logging'
 /Users/mperham/.rvm/gems/ruby-1.9.3-p125@theclymb3/gems/redis-3.0.0/lib/redis/client.rb:166:in `process'
 /Users/mperham/.rvm/gems/ruby-1.9.3-p125@theclymb3/gems/redis-3.0.0/lib/redis/client.rb:78:in `call'

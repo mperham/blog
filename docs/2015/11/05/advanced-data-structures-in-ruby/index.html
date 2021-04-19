@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -224,7 +224,7 @@ to <code>sleep</code> so I could wake up a sleeping thread immediately:</p>
 <h3 id="the-algorithms-gem">The algorithms gem</h3>
 <p>Although somewhat misnamed, the <a href="https://github.com/kanwei/algorithms">algorithms</a> gem contains a large
 set of advanced data structures for use in Ruby code.  <a href="http://sidekiq.org">Sidekiq
-Enterprise</a>&lsquo;s cron feature uses a <a href="https://github.com/kanwei/algorithms/blob/master/lib/containers/heap.rb">Heap</a> to store jobs
+Enterprise</a>&rsquo;s cron feature uses a <a href="https://github.com/kanwei/algorithms/blob/master/lib/containers/heap.rb">Heap</a> to store jobs
 in-memory, sorted based on their next occurrence; this makes checking
 for the next job to run a constant time operation, no matter how many
 jobs are defined.</p>

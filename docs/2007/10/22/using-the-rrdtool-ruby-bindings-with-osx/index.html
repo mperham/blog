@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.69.2" />
+  <meta name="generator" content="Hugo 0.82.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -197,7 +197,7 @@ Expected in: flat namespace</p>
 </blockquote>
 <p>This error is due to the Ruby binding not being able to find the native RRD library, librrd. When you install rrdtool via Mac Ports, it installs everything in /opt/local, not /usr/local. What you need to do is update <code>extconf.rb</code> in <code>rrdtool-1.2.x/bindings/ruby</code> and change the following line so that the binding will look in the proper location for the Mac Ports install:</p>
 <blockquote>
-<p>dir_config(&ldquo;rrd&rdquo;,&quot;../../src&rdquo;,&quot;/opt/local/lib&rdquo;)</p>
+<p>dir_config(&ldquo;rrd&rdquo;,&quot;../../src&quot;,&quot;/opt/local/lib&quot;)</p>
 </blockquote>
 <p>Now run <code>ruby extconf.rb ; make ; sudo make install</code> to install the modified Ruby binding.</p>
 
