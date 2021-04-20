@@ -31,11 +31,13 @@ scalable and will put a heavy load on Redis. If you are using those
 operations in your app, you can cause serious harm to your application
 at scale.
 
-For example: if you are scanning a queue to look for duplicates before
-enqueuing a certain type of job, this might work fine in development
-when the queue has 10-20 jobs in it but it will utterly fail in the case
-where your production queue has 10,000+ jobs in it. **Do not** use these
-APIs to implement your own Sidekiq functionality.
+For example: lets say you want to build a unique jobs feature.
+This prevents enqueuing a new job when an identical copy of that job is already enqueued.
+Your first thought is to use the Sidekiq API to iterate through each job in the queue and check if it matches the new job.
+This might work fine in development when the queue has 10-20 jobs in it but it will utterly fail in the case
+where your production queue has 10,000+ jobs in it.
+**Achtung!** **Cuidado!** **Warning!**
+Take care when using these APIs in production.
 
 To use the API, you need to require it:
 
@@ -122,9 +124,12 @@ Maybe you have thousands of jobs in the queue.
 Maybe you have hundreds of Sidekiq threads pulling jobs from this queue at the same moment.
 Will it find your job?  `¯\_(ツ)_/¯`
 
+But Mike, why provide these operations at all if they are dangerous?
+Because sometimes, hopefully rarely, you might need to handle some production emergency manually; finding that one rogue job could be critical.
+
 ## Sorted Sets
 
-Sidekiq uses the Sorted Sets structure to hold jobs sorted by a timestamp when Sidekiq should take some action.
+Sidekiq uses the Sorted Set structure to hold jobs sorted by a timestamp when Sidekiq should take some action.
 These sets represent the Retries, Scheduled and Dead tabs in the Web UI.
 For Scheduled, the timestamp is when the job is scheduled to run.
 For Retry, the timestamp is when the job will retry next.
@@ -196,6 +201,9 @@ rs.select { |j| j.display_class == "AJob" }.count
 rs.scan("AJob").select { |j| j.display_class == "AJob" }.map(&:delete)
 rs.scan("AJob").count { |j| j.display_class == "AJob" }
 ```
+
+If there are 10,000 elements in the Retry set but only 100 AJobs, my
+version will run ~100x faster than their initial suggestion.
 
 ## Processes
 

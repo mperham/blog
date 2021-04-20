@@ -211,11 +211,13 @@ operations slowly.</strong> The API exposes some operations which are not
 scalable and will put a heavy load on Redis. If you are using those
 operations in your app, you can cause serious harm to your application
 at scale.</p>
-<p>For example: if you are scanning a queue to look for duplicates before
-enqueuing a certain type of job, this might work fine in development
-when the queue has 10-20 jobs in it but it will utterly fail in the case
-where your production queue has 10,000+ jobs in it. <strong>Do not</strong> use these
-APIs to implement your own Sidekiq functionality.</p>
+<p>For example: lets say you want to build a unique jobs feature.
+This prevents enqueuing a new job when an identical copy of that job is already enqueued.
+Your first thought is to use the Sidekiq API to iterate through each job in the queue and check if it matches the new job.
+This might work fine in development when the queue has 10-20 jobs in it but it will utterly fail in the case
+where your production queue has 10,000+ jobs in it.
+<strong>Achtung!</strong> <strong>Cuidado!</strong> <strong>Warning!</strong>
+Take care when using these APIs in production.</p>
 <p>To use the API, you need to require it:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;sidekiq/api&#39;</span>
 </code></pre></div><p>It&rsquo;s impossible for this blog post to fully document every last method
@@ -284,8 +286,10 @@ the Queue, parse each JSON and check the JID attribute.</p>
 Maybe you have thousands of jobs in the queue.
 Maybe you have hundreds of Sidekiq threads pulling jobs from this queue at the same moment.
 Will it find your job?  <code>¯\_(ツ)_/¯</code></p>
+<p>But Mike, why provide these operations at all if they are dangerous?
+Because sometimes, hopefully rarely, you might need to handle some production emergency manually; finding that one rogue job could be critical.</p>
 <h2 id="sorted-sets">Sorted Sets</h2>
-<p>Sidekiq uses the Sorted Sets structure to hold jobs sorted by a timestamp when Sidekiq should take some action.
+<p>Sidekiq uses the Sorted Set structure to hold jobs sorted by a timestamp when Sidekiq should take some action.
 These sets represent the Retries, Scheduled and Dead tabs in the Web UI.
 For Scheduled, the timestamp is when the job is scheduled to run.
 For Retry, the timestamp is when the job will retry next.
@@ -337,7 +341,9 @@ rs<span style="color:#f92672">.</span>select { <span style="color:#f92672">|</sp
 <span style="color:#75715e"># my optimizations</span>
 rs<span style="color:#f92672">.</span>scan(<span style="color:#e6db74">&#34;AJob&#34;</span>)<span style="color:#f92672">.</span>select { <span style="color:#f92672">|</span>j<span style="color:#f92672">|</span> j<span style="color:#f92672">.</span>display_class <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;AJob&#34;</span> }<span style="color:#f92672">.</span>map(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:delete</span>)
 rs<span style="color:#f92672">.</span>scan(<span style="color:#e6db74">&#34;AJob&#34;</span>)<span style="color:#f92672">.</span>count { <span style="color:#f92672">|</span>j<span style="color:#f92672">|</span> j<span style="color:#f92672">.</span>display_class <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;AJob&#34;</span> }
-</code></pre></div><h2 id="processes">Processes</h2>
+</code></pre></div><p>If there are 10,000 elements in the Retry set but only 100 AJobs, my
+version will run ~100x faster than their initial suggestion.</p>
+<h2 id="processes">Processes</h2>
 <p>Each Sidekiq process sends a heartbeat to Redis every 5 seconds with
 runtime info about the jobs it is working on and various other
 metrics.
