@@ -43,7 +43,7 @@ isn't crushed by image processing.
 
 In summary:
 
- | Before | After
+| | Before | After |
 ---|---|---
 Dynos | 2 | 1
 Threads | 80 (2 x 40) | 80 (4 x 20)
