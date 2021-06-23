@@ -6,10 +6,21 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 20 Apr 2021 09:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 23 Jun 2021 15:08:02 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Using Tags with Sidekiq Jobs</title>
+      <link>https://www.mikeperham.com/2021/06/23/using-tags-with-sidekiq-jobs/</link>
+      <pubDate>Wed, 23 Jun 2021 15:08:02 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2021/06/23/using-tags-with-sidekiq-jobs/</guid>
+      <description>A customer recently opened issue to point out a bug in Sidekiq&amp;rsquo;s tag filtering support and I realized: I haven&amp;rsquo;t told people that tags exist. Oops. Here is your notification. 😁
+Sidekiq 6.0.1 added support for per-job tags. Tags are an Array of Strings within the job payload. Maybe you want to tag the sports related to a given job:
+class SomeWorker include Sidekiq::Worker sidekiq_options tags: [&amp;#39;alpha&amp;#39;] There&amp;rsquo;s plenty of ideas for job tagging:</description>
+    </item>
     
     <item>
       <title>A Tour of the Sidekiq API</title>
@@ -101,17 +112,6 @@ Sidekiq 6.1 The most visible change in Sidekiq 6.</description>
       <guid>https://www.mikeperham.com/2020/05/04/my-coolest-code/</guid>
       <description>What&amp;rsquo;s the coolest code you&amp;rsquo;ve written, for your own definition of cool?
 EDI: the Worst Document Format? From 2003-2006 I worked at a startup building enterprise software for the health care space. We were building a system which allowed doctors offices to submit real-time transactions over the Internet, to migrate offices away from phone, fax or mail. Our first step was allowing real-time inquiry for insurance eligibility and benefits of a patient.</description>
-    </item>
-    
-    <item>
-      <title>Railsconf 2020 Virtual Hallway</title>
-      <link>https://www.mikeperham.com/2020/04/29/railsconf-2020-virtual-hallway/</link>
-      <pubDate>Wed, 29 Apr 2020 09:00:21 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2020/04/29/railsconf-2020-virtual-hallway/</guid>
-      <description>I love Rubyconf and Railsconf. I&amp;rsquo;ve attended every one in the last 7 years and was super excited to learn that Railsconf would be held in my home town of Portland this year.
-/play sadtrombone
-Alas, the virus struck and Railsconf was cancelled. Railsconf 2020.2 Couch Edition was announced but my favorite part of conferences is the hallway track: meeting old friends in person, making new friends, talking about our lives and crazy ideas we have to make Ruby and open source better.</description>
     </item>
     
   </channel>
