@@ -6,10 +6,21 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 23 Jun 2021 15:08:02 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 15 Jul 2021 09:29:54 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>On Multi-Platform Docker images</title>
+      <link>https://www.mikeperham.com/2021/07/15/on-multi-platform-docker-images/</link>
+      <pubDate>Thu, 15 Jul 2021 09:29:54 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2021/07/15/on-multi-platform-docker-images/</guid>
+      <description>Until recently, Faktory only supported the x86_64 platform. With the rise of the Apple Silicon chip and AWS Graviton, it was obvious that I would need to roll out ARM64 support soon. This week I spent several days fighting Docker&amp;rsquo;s support for multi-platform images and wanted to document what I learned.
+Faktory OSS The Faktory OSS build was relatively straightforward, with three steps for each platform:
+ Build the ./faktory binary on the host.</description>
+    </item>
     
     <item>
       <title>Using Tags with Sidekiq Jobs</title>
@@ -102,16 +113,6 @@ Sidekiq 6.1 The most visible change in Sidekiq 6.</description>
       <guid>https://www.mikeperham.com/2020/06/02/trimming-dependencies-concurrent-ruby/</guid>
       <description>I&amp;rsquo;ve advocated for fewer dependencies for years now. Every long-running project needs to periodically re-evaluate their usage of each dependency and the value it provides. To that end, I recently considered Sidekiq&amp;rsquo;s dependencies:
  redis-rb - the Redis client connection_pool - provide threaded access to Redis connections rack - required to standardize Sidekiq&amp;rsquo;s Web UI rack-protection - necessary to provide CSRF protection for write actions in the Web UI  We might be able to remove rack-protection gem if we re-implement the CSRF functionality but none of the other gems are easy to remove (indeed, as I was writing this post, @seuros stepped up and took on issue #4587).</description>
-    </item>
-    
-    <item>
-      <title>My Coolest Code</title>
-      <link>https://www.mikeperham.com/2020/05/04/my-coolest-code/</link>
-      <pubDate>Mon, 04 May 2020 13:26:58 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2020/05/04/my-coolest-code/</guid>
-      <description>What&amp;rsquo;s the coolest code you&amp;rsquo;ve written, for your own definition of cool?
-EDI: the Worst Document Format? From 2003-2006 I worked at a startup building enterprise software for the health care space. We were building a system which allowed doctors offices to submit real-time transactions over the Internet, to migrate offices away from phone, fax or mail. Our first step was allowing real-time inquiry for insurance eligibility and benefits of a patient.</description>
     </item>
     
   </channel>

@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.83.1" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>On Multi-Platform Docker images | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS">RSS</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>On Multi-Platform Docker images</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2021-07-15
+  </small>
+  
+</p>
+<p>Until recently, <a href="https://contribsys.com/faktory">Faktory</a> only supported the x86_64 platform. With the
+rise of the Apple Silicon chip and AWS Graviton, it was obvious that I
+would need to roll out ARM64 support soon. This week
+I spent several days fighting Docker&rsquo;s support for multi-platform images and wanted to document what I learned.</p>
+<h2 id="faktory-oss">Faktory OSS</h2>
+<p>The <a href="https://github.com/contribsys/faktory/blob/master/Makefile">Faktory OSS build</a> was relatively straightforward, with three steps
+for each platform:</p>
+<ol>
+<li>Build the ./faktory binary on the host.</li>
+<li>Compress the binary with upx (this cuts the binary in half, 10MB -&gt; 5MB)</li>
+<li>Run buildx for that platform to copy the binary into the platform-specific image and load it into the
+local registry for testing.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">dimg</span><span style="color:#f92672">:</span> clean generate <span style="color:#75715e">## Make cross-platform Docker images for the current version
+</span><span style="color:#75715e"></span>	GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>amd64 go build -o faktory cmd/faktory/daemon.go
+	upx -qq ./faktory
+	docker buildx build --platform linux/amd64 --tag contribsys/faktory:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span> --tag contribsys/faktory:latest --load .
+	GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>arm64 go build -o faktory cmd/faktory/daemon.go
+	upx -qq ./faktory
+	docker buildx build --platform linux/arm64 --tag contribsys/faktory:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span> --tag contribsys/faktory:latest --load .
+</code></pre></div><p>Once that is done, a simple <code>push</code> sends the built images to docker.io:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">dpush</span><span style="color:#f92672">:</span>
+	docker push contribsys/faktory:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
+	docker push contribsys/faktory:latest
+</code></pre></div><p>Note a couple of things about this build process:</p>
+<ol>
+<li>I&rsquo;m not using multi-stage builds. The Go binary is built locally on
+the host machine, not inside an image, and COPY&rsquo;d into the image.
+That&rsquo;s why I can&rsquo;t use buildx to build multiple platforms
+simultaneously. The ./faktory binary is specific to the platform.</li>
+<li>You can see the resulting multi-platform manifest with this command:
+<code>docker manifest inspect contribsys/faktory:1.5.2</code></li>
+<li>Perhaps I should consider a multi-stage Dockerfile with CI integration to build and push OSS images, rather than doing it locally?
+This would make the release process extremely easy but I&rsquo;ve never done it before, pointers welcome.</li>
+</ol>
+<h2 id="faktory-enterprise">Faktory Enterprise</h2>
+<p>Because Faktory Enterprise uses my own private Docker registry, I used a
+different approach. <strong>I&rsquo;m still not sure which approach is better or worse</strong>
+but here&rsquo;s what I did.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">dpush</span><span style="color:#f92672">:</span> clean generate
+	GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>amd64 go build -o tmp/linux/amd64 cmd/daemon/main.go
+	GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>arm64 go build -o tmp/linux/arm64 cmd/daemon/main.go
+	upx -qq ./tmp/linux/amd64
+	upx -qq ./tmp/linux/arm64
+	ssh -N -f -L 9999:localhost:9999 root@docker.contribsys.com
+	sleep <span style="color:#ae81ff">2</span>
+	docker buildx --builder focused_saha build --platform<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;linux/amd64,linux/arm64&#34;</span> -t host.docker.internal:9999/contribsys/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span> --push .
+</code></pre></div><p>Here&rsquo;s the trick: I&rsquo;m building multiple binaries and naming them according to Docker&rsquo;s
+TARGETPLATFORM variable, e.g. &ldquo;linux/amd64&rdquo;. Now I can use a proper multi-platform build
+and the Dockerfile will pull in the right binary with this trick:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-docker" data-lang="docker"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:3.13</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ARG</span> TARGETPLATFORM<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apk add --no-cache redis ca-certificates socat<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./tmp/$TARGETPLATFORM /faktory<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>Docker will pull the right Alpine image for each platform, copy the platform-specific binary and push the resulting images to my registry with one command:</p>
+<pre><code>docker buildx --builder focused_saha build --platform=&quot;linux/amd64,linux/arm64&quot; -t host.docker.internal:9999/contribsys/faktory-ent:$(VERSION) --push .
+</code></pre><p>(The custom &ldquo;focused_saha&rdquo; builder is required to disable HTTPS and allow
+an &ldquo;insecure&rdquo; registry. It&rsquo;s not really insecure because of the SSH tunnel.)</p>
+<p>I&rsquo;m not a Docker expert by any means so I can&rsquo;t tell which approach is
+right or wrong or what the tradeoffs might be. I hope this helps
+someone; tweet at @getajobmike if you have a comment or suggestion.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>
