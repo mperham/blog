@@ -11,16 +11,16 @@ here.
 ## Monday 11/8
 
 * Happy Hour - 3-5pm, Pre-Function/Registration Area
-* WNB.rb Networking Reception - 6:00-10:00pm, Earl's: 1600 Glenarm Place, Denver, CO 80202 - [RSVP here](https://ti.to/rubyconf/rubyconf-2021)
+* WNB.rb Networking Reception - 6-10pm, Earl's: 1600 Glenarm Place, Denver, CO 80202 - [RSVP here](https://ti.to/rubyconf/rubyconf-2021)
 * Board Game Night - 7-11pm, Hyatt - Mineral Foyer, Bring your favorite game!
 
 ## Tuesday 11/9
 
-* Weedmaps Party - 7:00-10:00pm, Great Divide Brewing Co - The Bottling Hall, [RSVP here](https://ti.to/rubyconf/rubyconf-2021)
+* Weedmaps Party - 7-10pm, Great Divide Brewing Co - The Bottling Hall, [RSVP here](https://ti.to/rubyconf/rubyconf-2021)
 
 ## Wednesday 11/10
 
-* WNB.rb Breakfast Social - 8:00-9:00am, Hyatt - Mineral Foyer, [RSVP here](https://ti.to/rubyconf/rubyconf-2021)
+* WNB.rb Breakfast Social - 8-9am, Hyatt - Mineral Foyer, [RSVP here](https://ti.to/rubyconf/rubyconf-2021)
 
 ## Thursday 11/11
 
