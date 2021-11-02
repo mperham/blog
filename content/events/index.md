@@ -5,8 +5,7 @@ type: pages
 ---
 
 This is the list of **official** and unofficial Rubyconf 2021 events.
-Send me a [pull request](https://github.com/mperham/blog/blob/master/content/events/index.md) with your **public** event so they will be listed
-here.
+To include your event, please [click this link](https://github.com/mperham/blog/blob/master/content/events/index.md) and hit "Edit this file" to send me a PR.
 
 ## Monday 11/8
 
