@@ -7,6 +7,10 @@ type: pages
 This is the list of **official** and unofficial Rubyconf 2021 events.
 To include your event, please [click this link](https://github.com/mperham/blog/blob/master/content/events/index.md) and hit "Edit this file" to send me a PR.
 
+## Sunday 11/7
+
+* Orbit Meetup in Denver - 6-8:30pm, The Curtis Hotel Rooftop: 1405 Curtis Street, Denver, CO 80202 - [RSVP Here](https://lu.ma/orbit-denver)
+
 ## Monday 11/8
 
 * Happy Hour - 3-5pm, Pre-Function/Registration Area
