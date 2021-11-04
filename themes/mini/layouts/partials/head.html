@@ -1,7 +1,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  
+
   {{ hugo.Generator }}
 
   {{ with .Site.Params.description }}
@@ -28,7 +28,7 @@
   <meta name="theme-color" content="{{ .Site.Params.faviconThemeColor }}">
 
   {{ $bootstrapCss := "css/bootstrap.min.css" }}
-  <link rel="stylesheet" href="{{ $bootstrapCss | absURL }}" />
+  <link rel="stylesheet" href="{{ $bootstrapCss | absURL }}" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
   <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
 
   {{ if .IsHome }}
