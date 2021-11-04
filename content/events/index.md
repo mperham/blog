@@ -5,7 +5,7 @@ type: pages
 ---
 
 This is the list of **official** and unofficial Rubyconf 2021 events.
-To include your event, please [click this link](https://github.com/mperham/blog/blob/master/content/events/index.md) and hit "Edit this file" to send me a PR.
+To include your event, please [click this link](https://github.com/mperham/blog/blob/main/content/events/index.md) and hit "Edit this file" to send me a PR.
 
 ## Sunday 11/7
 
@@ -17,6 +17,7 @@ To include your event, please [click this link](https://github.com/mperham/blog/
 * Happy Hour - 3-5pm, Pre-Function/Registration Area
 * WNB.rb Networking Reception - 6-10pm, Earl's: 1600 Glenarm Place, Denver, CO 80202 - [RSVP here](https://ti.to/rubyconf/rubyconf-2021)
 * Board Game Night - 7-11pm, Hyatt - Mineral Foyer, Bring your favorite game!
+* Epion Health reception - 6-9pm, Henry's Tavern, 500 16th St Mall (2 blocks from the Convention Center). No RSVP required.
 
 ## Tuesday 11/9
 
