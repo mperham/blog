@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -200,13 +200,13 @@ for a queue. When Paused, calling FETCH on a queue will get nothing
 back. The <code>/queues</code> page has a button to toggle the state.</p>
 <p><img src="/images/faktory-pause.png" alt="pause UI"></p>
 <p>There is a new QUEUE command to do this via API:</p>
-<pre><code>QUEUE PAUSE *
+<pre tabindex="0"><code>QUEUE PAUSE *
 QUEUE PAUSE nameA nameB ...
 QUEUE RESUME *
 QUEUE RESUME nameA nameB ...
 </code></pre><p>and of course the Go and Ruby clients have been updated so you can issue
 these commands:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;faktory&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;faktory&#39;</span>
 
 client <span style="color:#f92672">=</span> <span style="color:#66d9ef">Faktory</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">.</span>new
 client<span style="color:#f92672">.</span>pause_queue <span style="color:#f92672">[</span><span style="color:#e6db74">:default</span>, <span style="color:#e6db74">:low</span><span style="color:#f92672">]</span>

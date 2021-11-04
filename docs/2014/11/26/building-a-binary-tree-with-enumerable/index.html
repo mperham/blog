@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -200,7 +200,7 @@ tree structure too.  Here&rsquo;s what a binary tree &ldquo;looks&rdquo; like.</
 <p>Let&rsquo;s build a binary tree in Ruby; you will be amazed at how little code it actually takes.</p>
 <p>Funny thing about a binary tree is that every part of the tree looks like the same: you have a node with some <code>data</code>,
 along with <code>left</code> and <code>right</code> pointers to the child nodes.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
   <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:data</span>, <span style="color:#e6db74">:left</span>, <span style="color:#e6db74">:right</span>
   <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(data)
     @data <span style="color:#f92672">=</span> data
@@ -216,7 +216,7 @@ methods in return!  <code>each</code> knows how to iterate through elements in y
 that to implement lots of other functionality.</p>
 <p>Remember I said that every part of a binary tree looks the same: that&rsquo;s a hallmark of a recursive data structure.
 We&rsquo;ll use recursion to iterate through the tree in our <code>each</code> method:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Enumerable</span>
 
   <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:data</span>, <span style="color:#e6db74">:left</span>, <span style="color:#e6db74">:right</span>
@@ -243,7 +243,7 @@ This comparison operator is commonly called the &ldquo;spaceship&rdquo; operator
 like a spaceship if you squint.  Note we delegate the <code>&lt;=&gt;</code> call to the <code>data</code> itself.  We assume
 the tree is storing comparable data: integers, strings, or a value object which itself
 implements <code>&lt;=&gt;</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Enumerable</span>
 
   <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:data</span>, <span style="color:#e6db74">:left</span>, <span style="color:#e6db74">:right</span>

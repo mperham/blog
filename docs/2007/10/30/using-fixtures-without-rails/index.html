@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -189,10 +189,10 @@ blockquote,
   
 </p>
 <p>We&rsquo;ve got several applications internal to FiveRuns which are Ruby but not Rails. They use ActiveRecord for database access but not the rest of the Rails stack. We still wanted to use fixtures to provide a foundation of data for our testing though so I spent a few hours figuring out how to get fixtures working in a non-Rails world. In essence you need to add this to your test_helper.rb:<br>
-<code>&lt;br /&gt; ENV[&quot;RAILS_ENV&quot;] = &quot;test&quot;&lt;br /&gt; RAILS_ENV = &quot;test&quot;&lt;br /&gt; require 'rubygems'&lt;br /&gt; require 'test/unit'&lt;br /&gt; require 'active_record'&lt;br /&gt; require 'active_record/fixtures'&lt;br /&gt; filename = File.join(File.dirname(__FILE__), &quot;../config/database.yml&quot;)&lt;br /&gt; ActiveRecord::Base.configurations = YAML::load(ERB.new(IO.read(filename)).result)&lt;br /&gt; ActiveRecord::Base.establish_connection&lt;br /&gt; Test::Unit::TestCase.use_instantiated_fixtures = false&lt;br /&gt; Test::Unit::TestCase.use_transactional_fixtures = true&lt;br /&gt; Test::Unit::TestCase.fixture_path = File.join(File.dirname(__FILE__), 'fixtures')&lt;br /&gt;</code><br>
+<code>&lt;br /&gt; ENV[&quot;RAILS_ENV&quot;] = &quot;test&quot;&lt;br /&gt; RAILS_ENV = &quot;test&quot;&lt;br /&gt; require 'rubygems'&lt;br /&gt; require 'test/unit'&lt;br /&gt; require 'active_record'&lt;br /&gt; require 'active_record/fixtures'&lt;br /&gt; filename = File.join(File.dirname(__FILE__), &quot;../config/database.yml&quot;)&lt;br /&gt; ActiveRecord::Base.configurations = YAML::load(ERB.new(IO.read(filename)).result)&lt;br /&gt; ActiveRecord::Base.establish_connection&lt;br /&gt; Test::Unit::TestCase.use_instantiated_fixtures = false&lt;br /&gt; Test::Unit::TestCase.use_transactional_fixtures = true&lt;br /&gt; Test::Unit::TestCase.fixture_path = File.join(File.dirname(__FILE__), 'fixtures')&lt;br /&gt; </code><br>
 The only Rails-ism you need to copy is the config/database.yml file. The setup above expects your fixtures to live in a &ldquo;fixtures&rdquo; directory below the test_helper.rb, which is how Rails does it also. The first two lines are hacks so that ActiveRecord will know the current environment without having to pull in the config/environment.rb stuff that Rails uses.</p>
 <p>Now in your tests, you can access your fixtures via the standard mechanism:<br>
-<code>&lt;br /&gt; assert_not_nil accounts(:fiveruns)&lt;br /&gt;</code><br>
+<code>&lt;br /&gt; assert_not_nil accounts(:fiveruns)&lt;br /&gt; </code><br>
 Once you have fixtures working, try the <a href="http://svn.geeksomnia.com/rathole/trunk/README">Rathole</a> plugin which makes fixtures even better!</p>
 <p>PS Apologies for the miserable formatting.  WordPress really tries too hard to be smart and , as a result, just makes everyone look dumb.</p>
 

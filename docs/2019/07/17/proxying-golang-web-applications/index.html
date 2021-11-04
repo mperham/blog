@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -206,7 +206,7 @@ hours today.  Here&rsquo;s the scoop.</p>
 Faktory at its default URL.  We set a number of headers which might be useful in the future
 but only <code>X-Script-Name</code> is critical. Note the <code>/faktory</code> in the first two lines needs to
 stay in sync.</p>
-<pre><code>location /faktory {
+<pre tabindex="0"><code>location /faktory {
   proxy_set_header X-Script-Name /faktory;
 
   proxy_pass   http://127.0.0.1:7420;
@@ -221,14 +221,14 @@ named HTTP header, X-Script-Name, in each request to signal this value to Faktor
 <h2 id="abstract-that-mux">Abstract that Mux!</h2>
 <p>Go&rsquo;s http package exposes a Mux type which acts as the router in a Go
 webapp. We tell it to route all <code>/static/</code> requests like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">app</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">app</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
 <span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/static/&#34;</span>, <span style="color:#a6e22e">staticHandler</span>)
 </code></pre></div><p>But this has one very big problem: it doesn&rsquo;t know about the <code>/faktory</code>
 prefix!</p>
 <p>The trick I figured out is to add a special Mux <em>before</em> the application
 Mux which matches all requests and can unmangle any proxied requests so
 they look like an unproxied request to the app Mux:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">app</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">app</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
 <span style="color:#a6e22e">app</span>.<span style="color:#a6e22e">HandleFunc</span>(<span style="color:#e6db74">&#34;/static/&#34;</span>, <span style="color:#a6e22e">staticHandler</span>)
 
 <span style="color:#a6e22e">proxy</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
@@ -244,10 +244,10 @@ they look like an unproxied request to the app Mux:</p>
 </code></pre></div><h2 id="every-link-must-be-relative">Every Link must be Relative</h2>
 <p>Within the HTML markup, I had to change every URL and path to use a
 helper to generate the relative path with any necessary prefix.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fullpath</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">relpath</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fullpath</span>(<span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>, <span style="color:#a6e22e">relpath</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">string</span> {
 	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s%s&#34;</span>, <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#e6db74">&#34;X-Script-Name&#34;</span>), <span style="color:#a6e22e">relpath</span>)
 }
-</code></pre></div><pre><code class="language-erb" data-lang="erb">&lt;link href=&quot;&lt;%= fullpath(req, &quot;/static/application.css&quot;) %&gt;&quot; ...&gt;
+</code></pre></div><pre tabindex="0"><code class="language-erb" data-lang="erb">&lt;link href=&quot;&lt;%= fullpath(req, &quot;/static/application.css&quot;) %&gt;&quot; ...&gt;
 </code></pre><p><code>req.Header.Get</code> returns <code>&quot;&quot;</code> when there is no value set so the base case is handled smoothly.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>No rocket science here but it was interesting to find a non-trivial HTTP

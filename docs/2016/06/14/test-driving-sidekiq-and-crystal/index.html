@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -208,7 +208,7 @@ with <code>./sidekiq -q crystal</code>.  Sidekiq.cr is now listening for jobs on
 the <code>crystal</code> queue only.  Any Ruby-based jobs should use other queues
 so the Crystal worker will never see them - exactly what we want.</p>
 <p>We&rsquo;ve defined one Worker in the Crystal app:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">module</span> Sample
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">module</span> Sample
   <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyWorker</span>
     <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
 
@@ -220,10 +220,10 @@ so the Crystal worker will never see them - exactly what we want.</p>
   <span style="color:#66d9ef">end</span>
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>Open up an IRB console and run this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#34;sidekiq&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#34;sidekiq&#34;</span>
 <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">.</span>push(<span style="color:#e6db74">&#34;class&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;Sample::MyWorker&#34;</span>, <span style="color:#e6db74">&#34;args&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;Ruby&#34;</span>, <span style="color:#ae81ff">3</span><span style="color:#f92672">]</span>, <span style="color:#e6db74">&#34;queue&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;crystal&#34;</span>)
 </code></pre></div><p>Immediately you should see Sidekiq.cr print out three lines:</p>
-<pre><code>2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Start
+<pre tabindex="0"><code>2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Start
 2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
 2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!
 2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Hello, Ruby!

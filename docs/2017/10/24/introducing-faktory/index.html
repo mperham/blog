@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -199,7 +199,7 @@ last five years in Sidekiq <strong>to every programming language</strong>.</p>
 <p>Faktory is a server daemon which provides a simple API to produce and
 consume background jobs.  Here&rsquo;s the chatter to create and execute
 a background job:</p>
-<pre><code>&gt; PUSH {&quot;jid&quot;:&quot;1238abc712&quot;,&quot;jobtype&quot;:&quot;SomeJob&quot;,&quot;args&quot;:[1,2,&quot;hello&quot;],&quot;queue&quot;:&quot;default&quot;}
+<pre tabindex="0"><code>&gt; PUSH {&quot;jid&quot;:&quot;1238abc712&quot;,&quot;jobtype&quot;:&quot;SomeJob&quot;,&quot;args&quot;:[1,2,&quot;hello&quot;],&quot;queue&quot;:&quot;default&quot;}
 &lt; OK
 &gt; FETCH critical default low
 &lt; {&quot;jid&quot;:&quot;1238abc712&quot;,&quot;jobtype&quot;:&quot;SomeJob&quot;,&quot;args&quot;:[1,2,&quot;hello&quot;],&quot;queue&quot;:&quot;default&quot;}

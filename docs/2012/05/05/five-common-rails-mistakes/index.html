@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -191,14 +191,14 @@ blockquote,
 <p>I&rsquo;ve worked with Rails for quite a while now and in that time I&rsquo;ve seen a lot of Rails applications and both read and written a lot of bad Ruby code. Here&rsquo;s five common mistakes that I see in almost every Rails codebase.</p>
 <p><strong>1. Migrations with no schema specifics</strong></p>
 <p>Your data model is the core of your application. Without schema constraints, your data will slowly corrode due to bugs in your codebase until you can&rsquo;t depend on any fields being populated. Here&rsquo;s a Contact schema:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">create_table <span style="color:#e6db74">&#34;contacts&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>t<span style="color:#f92672">|</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">create_table <span style="color:#e6db74">&#34;contacts&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>t<span style="color:#f92672">|</span>
   t<span style="color:#f92672">.</span>integer  <span style="color:#e6db74">&#34;user_id&#34;</span>
   t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;name&#34;</span>
   t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;phone&#34;</span>
   t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;email&#34;</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p>What is required? Presumably a Contact must belong_to a User and have a name — use database constraints to guarantee this. By adding <code>:null =&gt; false</code>, we ensure that the model is always consistent even if we have bugs in our validation because the database will not allow a model to be saved if it fails those constraints.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">create_table <span style="color:#e6db74">&#34;contacts&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>t<span style="color:#f92672">|</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">create_table <span style="color:#e6db74">&#34;contacts&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>t<span style="color:#f92672">|</span>
   t<span style="color:#f92672">.</span>integer  <span style="color:#e6db74">&#34;user_id&#34;</span>, <span style="color:#e6db74">:null</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
   t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#e6db74">:null</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
   t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;phone&#34;</span>
@@ -210,22 +210,22 @@ blockquote,
 <p><strong>Bonus points</strong>: introduce facades for any 3rd-party services you call. Provide a mock facade for use in your tests so that you don&rsquo;t actually call the 3rd party service in your test suite.</p>
 <p><strong>3. Concatenating HTML in helpers</strong></p>
 <p>If you are creating helper methods, kudos, at least you trying to keep your view layer clean. But developers often don&rsquo;t know the basics of creating tags within helpers, leading to messy string concatenation or interpolation:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;li class=&#39;vehicle_list&#39;&gt;&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;li class=&#39;vehicle_list&#39;&gt;&#34;</span>
 str <span style="color:#f92672">+=</span> link_to(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">#{</span>vehicle<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>upcase<span style="color:#e6db74">}</span><span style="color:#e6db74"> Sale&#34;</span>, show_all_styles_path(vehicle<span style="color:#f92672">.</span>id, vehicle<span style="color:#f92672">.</span>url_title))
 str <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;&lt;/li&gt;&#34;</span>
 str<span style="color:#f92672">.</span>html_safe</code></pre></div>
 <p>Yikes, it&rsquo;s ugly and can easily lead to XSS security holes! <code>content_tag</code> is your friend.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">content_tag <span style="color:#e6db74">:li</span>, <span style="color:#e6db74">:class</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;vehicle_list&#39;</span> <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">content_tag <span style="color:#e6db74">:li</span>, <span style="color:#e6db74">:class</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;vehicle_list&#39;</span> <span style="color:#66d9ef">do</span>
   link_to(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">#{</span>vehicle<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>upcase<span style="color:#e6db74">}</span><span style="color:#e6db74"> Sale&#34;</span>, show_all_styles_path(vehicle<span style="color:#f92672">.</span>id, vehicle<span style="color:#f92672">.</span>url_title))
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p><strong>Bonus points</strong>: start introducing helper methods that take blocks. Nested blocks are a natural fit when generating nested HTML.</p>
 <p><strong>4. Giant queries loading everything into memory</strong></p>
 <p>You need to fix some data so you&rsquo;ll just iterate through it all and fix it, right?</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">User</span><span style="color:#f92672">.</span>has_purchased(<span style="color:#66d9ef">true</span>)<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>customer<span style="color:#f92672">|</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">User</span><span style="color:#f92672">.</span>has_purchased(<span style="color:#66d9ef">true</span>)<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>customer<span style="color:#f92672">|</span>
   customer<span style="color:#f92672">.</span>grant_role(<span style="color:#e6db74">:customer</span>)
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p>You have an ecommerce site with a million customers. Let&rsquo;s say each User object takes 500 bytes. This code will take 500MB of memory at runtime! Better:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">User</span><span style="color:#f92672">.</span>has_purchased(<span style="color:#66d9ef">true</span>)<span style="color:#f92672">.</span>find_each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>customer<span style="color:#f92672">|</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">User</span><span style="color:#f92672">.</span>has_purchased(<span style="color:#66d9ef">true</span>)<span style="color:#f92672">.</span>find_each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>customer<span style="color:#f92672">|</span>
   customer<span style="color:#f92672">.</span>grant_role(<span style="color:#e6db74">:customer</span>)
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p><code>find_each</code> uses <code>find_in_batches</code> to pull in 1000 records at a time, dramatically lowering the runtime memory requirements.</p>

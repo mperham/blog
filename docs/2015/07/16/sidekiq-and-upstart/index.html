@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -199,13 +199,13 @@ they tell Upstart when and how to start the associated processes.</p>
 <p>The <code>workers</code> service is a &ldquo;fake&rdquo; service which knows how to start/stop N sidekiq
 processes.  Upon machine boot, Upstart will start <code>workers</code> which will start those N
 processes.  Within <code>workers.conf</code> we&rsquo;ve declared how many processes we want to start:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">env <span style="color:#66d9ef">NUM_WORKERS</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">env <span style="color:#66d9ef">NUM_WORKERS</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2</span></code></pre></div>
 <p>If you want to quickly shut down all Sidekiq processes, run <code>stop workers</code>. Start
 them back up with <code>start workers</code>.  Of course you can do both with <code>restart workers</code>.
 It literally can&rsquo;t be any easier!</p>
 <p>The <code>sidekiq</code> service is an &ldquo;instance&rdquo; service, allowing you to create N processes.
 It requires an index parameter to define which instance you are controlling:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ start sidekiq index<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ start sidekiq index<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
 $ start sidekiq index<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
 $ stop sidekiq index<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>
 etc...</code></pre></div>
@@ -216,7 +216,7 @@ as late as possible.</p>
 <p>During a deployment, we want to signal Sidekiq to stop processing jobs as early as possible so
 Sidekiq has as much time as possible to finish any jobs in progress.  We do this by sending
 each process the USR1 signal, here&rsquo;s a Capistrano task which does that:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:quiet</span> <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:quiet</span> <span style="color:#66d9ef">do</span>
   on roles(<span style="color:#e6db74">:worker</span>) <span style="color:#66d9ef">do</span>
     puts capture(<span style="color:#e6db74">&#34;sudo pgrep -f &#39;sidekiq&#39; | xargs kill -USR1&#34;</span>)
   <span style="color:#66d9ef">end</span>
@@ -224,10 +224,10 @@ each process the USR1 signal, here&rsquo;s a Capistrano task which does that:</p
 <p>Note that <code>workers</code> does not support reload since it doesn&rsquo;t map to a single process so we have to
 use that pgrep hack.</p>
 <p>You can use Upstart&rsquo;s <code>reload</code> command to quiet a specific instance:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ reload sidekiq index<span style="color:#f92672">=</span>X</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ reload sidekiq index<span style="color:#f92672">=</span>X</code></pre></div>
 <h3 id="restarting-sidekiq">Restarting Sidekiq</h3>
 <p>Restarting is easy: <code>restart workers</code>.  This will actually stop and then start the processes.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:restart</span> <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:restart</span> <span style="color:#66d9ef">do</span>
   on roles(<span style="color:#e6db74">:worker</span>) <span style="color:#66d9ef">do</span>
     puts capture(<span style="color:#e6db74">&#34;sudo restart workers&#34;</span>)
   <span style="color:#66d9ef">end</span>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -218,7 +218,7 @@ Redis provides newer <a href="https://redis.io/commands#hash">Hash commands</a> 
 <h2 id="implementation">Implementation</h2>
 <p>You gotta buy Sidekiq Enterprise if you want the real deal but here&rsquo;s
 the core of the implementation:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lua" data-lang="lua"><span style="color:#75715e">-- Decrement the drops based on the time which has passed since</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lua" data-lang="lua"><span style="color:#75715e">-- Decrement the drops based on the time which has passed since</span>
 <span style="color:#75715e">-- the last call.</span>
 <span style="color:#66d9ef">if</span> drops <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">and</span> (lastcall <span style="color:#f92672">+</span> driprate) <span style="color:#f92672">&lt;</span> current_time <span style="color:#66d9ef">then</span>
   drops <span style="color:#f92672">=</span> drops <span style="color:#f92672">-</span> math.floor((current_time <span style="color:#f92672">-</span> lastcall) <span style="color:#f92672">/</span> driprate)
@@ -240,7 +240,7 @@ until the next drip.</p>
 <p>Of course I wrote some basic tests for the limiter but I wanted to take
 it further and implement a <strong>Rack-based limiter middleware</strong>. Here it
 is:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LeakyLimiter</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LeakyLimiter</span>
   <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(app)
     @app <span style="color:#f92672">=</span> app
   <span style="color:#66d9ef">end</span>
@@ -266,7 +266,7 @@ has made more than 10 calls, the limiter will raise OverLimit and we&rsquo;ll
 return them an HTTP 429 status code along with a header that indicates
 when the next drip happens (the drip is when the next call will succeed).
 Here it is in action:</p>
-<pre><code>[...eight previous calls snipped...]
+<pre tabindex="0"><code>[...eight previous calls snipped...]
 
 &gt; curl -i http://localhost:9292/api
 HTTP/1.1 200 OK
@@ -306,7 +306,7 @@ is twice as fast as the other two in this benchmark. This makes perfect
 sense if you consider that the bucket and window limiters suffer from the
 same issue explained above: they call Redis on <code>new</code> and <code>within_limit</code>
 so they make twice as many network round trips as leaky.</p>
-<pre><code>                                     user     system      total        real
+<pre tabindex="0"><code>                                     user     system      total        real
 leaky                            0.705626   0.155107   0.860733 (  1.225562)
 bucket                           1.651114   0.418390   2.069504 (  2.331178)
 window                           2.140379   0.590244   2.730623 (  2.929512)

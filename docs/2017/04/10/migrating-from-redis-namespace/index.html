@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -197,7 +197,7 @@ that no one should use.  Redis
 already has a native solution if you want to share a Redis instance: databases.
 The default database is 0.  Here&rsquo;s how to point Sidekiq to use database
 1 instead:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_client <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_client <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
   <span style="color:#75715e"># these are equivalent</span>
   config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">url</span>: <span style="color:#e6db74">&#34;redis://localhost:6379/1&#34;</span> }
   config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">db</span>: <span style="color:#ae81ff">1</span> }
@@ -230,14 +230,14 @@ Continue onward for the nittiest of gritty, dear reader.</p>
 <p>You want to start two Sidekiq processes: old and new.  The old
 process(es) will continue to process any retries and scheduled jobs in
 the old data.  The new process(es) will process all new jobs.</p>
-<pre><code># Starting an old and new process
+<pre tabindex="0"><code># Starting an old and new process
 OLD=1 bundle exec sidekiq ...
 bundle exec sidekiq ...
 </code></pre><p>We specifically want the client configuration to only point to the new
 system so that any new jobs from Puma/Unicorn/etc will go to the new
 system.  In this example, the old Redis is using the <code>foo</code> namespace in
 database 0.  We want the new system to use database 1 with no namespace.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Note that the client ALWAYS pushes to the new process</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Note that the client ALWAYS pushes to the new process</span>
 <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_client <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
   config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">db</span>: <span style="color:#ae81ff">1</span> }
 <span style="color:#66d9ef">end</span>
@@ -253,7 +253,7 @@ database 0.  We want the new system to use database 1 with no namespace.</p>
 </code></pre></div><p>If you are a Sidekiq Pro customer you can monitor both old and new in the Web UI with Sidekiq Pro&rsquo;s
 <a href="https://github.com/mperham/sidekiq/wiki/Pro-Web-UI#sharding">Web UI Sharding support</a>,
 just mount a copy for the old and new config in your <code>config/routes.rb</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">NEWPOOL</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">.</span>new { <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">db</span>: <span style="color:#ae81ff">1</span>) }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">NEWPOOL</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">.</span>new { <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">db</span>: <span style="color:#ae81ff">1</span>) }
 <span style="color:#66d9ef">OLDPOOL</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">.</span>new { <span style="color:#66d9ef">Redis</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Namespace</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:foo</span>, <span style="color:#e6db74">:redis</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">db</span>: <span style="color:#ae81ff">0</span>)) }
 
 mount <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">.</span>with(<span style="color:#e6db74">redis_pool</span>: <span style="color:#66d9ef">NEWPOOL</span>), <span style="color:#e6db74">at</span>: <span style="color:#e6db74">&#39;/sidekiqnew&#39;</span>, <span style="color:#e6db74">as</span>: <span style="color:#e6db74">&#39;sidekiqnew&#39;</span>
@@ -268,7 +268,7 @@ run the migration script, and start everything with the new setup once it&rsquo;
 <p>How long will it take?</p>
 </blockquote>
 <p>This is an excellent question, look at the size of your databases:</p>
-<pre><code>$ redis-cli info
+<pre tabindex="0"><code>$ redis-cli info
 [snip]
 
 # Keyspace
@@ -286,7 +286,7 @@ this).</p>
 <p><strong>WARNING: Depending on the amount of data in Redis, this script may
 crush your Redis instance for a long time.  Do not use it while other
 things are using that Redis instance.</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># remove_ns.rb</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># remove_ns.rb</span>
 require <span style="color:#e6db74">&#39;redis&#39;</span>
 
 <span style="color:#75715e">################################</span>
@@ -321,7 +321,7 @@ nothing is coming over the wire.</li>
 <h2 id="testing">Testing</h2>
 <p>I created a script which creates 500 plain keys and 500 namespaced keys
 to verify that 500 keys are migrated:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">gem <span style="color:#e6db74">&#39;redis&#39;</span>, <span style="color:#e6db74">&#34;&lt; 4&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">gem <span style="color:#e6db74">&#39;redis&#39;</span>, <span style="color:#e6db74">&#34;&lt; 4&#34;</span>
 require <span style="color:#e6db74">&#39;redis&#39;</span>
 
 redis <span style="color:#f92672">=</span> <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">db</span>: <span style="color:#ae81ff">4</span>)
@@ -337,7 +337,7 @@ rn <span style="color:#f92672">=</span> <span style="color:#66d9ef">Redis</span>
   rn<span style="color:#f92672">.</span>set(idx, idx)
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>The result:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ ruby remove_ns.rb
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ ruby remove_ns.rb
 Complete, migrated <span style="color:#ae81ff">500</span> keys in 0.003167 sec
 </code></pre></div><p>The keyspace count goes from 1000 to 500 with the migration.  Please
 note that this migration script blindly renames keys so if you have keys named

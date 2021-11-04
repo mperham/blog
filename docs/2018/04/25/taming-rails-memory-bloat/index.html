@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -203,7 +203,7 @@ People on Heroku have discovered that to reduce memory, they should set <code>-c
 That reduces the &ldquo;heavily multi-threaded&rdquo; trigger and leads to less bloat.</p>
 <p>But the better way is to reduce glibc&rsquo;s memory arena count.
 Set this environment variable in your dynos, systemd unit files or however you start Sidekiq:</p>
-<pre><code>MALLOC_ARENA_MAX = 2
+<pre tabindex="0"><code>MALLOC_ARENA_MAX = 2
 </code></pre><p>You should see a noticable reduction in memory usage after rebooting.</p>
 <h2 id="using-jemalloc">Using jemalloc</h2>
 <p>Switching Ruby&rsquo;s allocator to jemalloc looks to be an even more effective solution&hellip; for a price.
@@ -225,7 +225,7 @@ big success</a>:</p>
 <h2 id="trying-jemalloc">Trying jemalloc</h2>
 <p>Want to try jemalloc on OS X?
 My installed rubies seem to hardcode the memory allocator so you might need to build MRI with jemalloc specifically.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">brew install jemalloc
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">brew install jemalloc
 <span style="color:#75715e"># Now install Ruby with jemalloc enabled</span>
 <span style="color:#75715e">#   with rbenv:</span>
 <span style="color:#75715e">#     RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install 2.5.1</span>

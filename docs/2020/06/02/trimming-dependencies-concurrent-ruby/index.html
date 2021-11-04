@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -210,7 +210,7 @@ for accessing Redis. By forcing all Processor threads to get a token
 before calling Redis, we can limit concurrent access to Redis. After
 refactoring connection_pool a bit, I was able to replace Concurrent
 usage with just a few lines of ConnectionPool code.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff"><span style="color:#f92672">-        @pool ||= Concurrent::ThreadPoolExecutor.new(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff"><span style="color:#f92672">-        @pool ||= Concurrent::ThreadPoolExecutor.new(
 </span><span style="color:#f92672">-          min_threads: 1,
 </span><span style="color:#f92672">-          max_threads: 2,
 </span><span style="color:#f92672">-          max_queue: options[:concurrency]
@@ -247,7 +247,7 @@ We can&rsquo;t really remove this gem as customers use the <code>einhorn</code> 
 a Sidekiq process for each core. It turns out that Ruby already provides
 this API in <code>Etc.nprocessors</code>, awesome!!! With this change, we can
 completely remove the <code>concurrent-ruby</code> gem from all Sidekiq variants.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff"><span style="color:#75715e">@@ -46,7 +45,7 @@ module Sidekiq
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff"><span style="color:#75715e">@@ -46,7 +45,7 @@ module Sidekiq
 </span><span style="color:#75715e"></span>         @signal = signal
          @io = STDOUT
  

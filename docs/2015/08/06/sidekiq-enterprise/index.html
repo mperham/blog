@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -201,7 +201,7 @@ their concurrency so a 3rd party API is not crushed by a huge number
 of Sidekiq workers at the same time.  The new <code>Sidekiq::Limiter</code> API
 allows you to declare and enforce rate limits across all your Ruby
 processes, Sidekiq or not:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Allow up to 50 concurrent operations to the ERP service</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Allow up to 50 concurrent operations to the ERP service</span>
 <span style="color:#66d9ef">ERP_LIMITER</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Limiter</span><span style="color:#f92672">.</span>concurrent(<span style="color:#e6db74">:erp</span>, <span style="color:#ae81ff">50</span>)
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">...</span>)
@@ -225,7 +225,7 @@ pick one machine to run cron jobs.</p>
 Jobs are created according to the specified schedule and any Sidekiq process can pick up the job.
 As a side benefit, your system will no longer have that cron machine as a single point of failure.
 It&rsquo;s dead simple to register a periodic job:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># config/initializers/sidekiq.rb</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># config/initializers/sidekiq.rb</span>
 <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
   config<span style="color:#f92672">.</span>periodic <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>mgr<span style="color:#f92672">|</span>
     mgr<span style="color:#f92672">.</span>register <span style="color:#e6db74">&#34;* * * * *&#34;</span>, <span style="color:#66d9ef">MinutelyWorker</span>, <span style="color:#66d9ef">retry</span>: <span style="color:#ae81ff">1</span>
@@ -245,10 +245,10 @@ along with their recent execution history.</p>
 any jobs already pending within Redis.  If you create a job every time your
 user presses a button, you might not want a storm of clicks to create a storm of jobs.</p>
 <p>To activate the feature, add this line:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># config/initializers/sidekiq.rb</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># config/initializers/sidekiq.rb</span>
 <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Enterprise</span><span style="color:#f92672">.</span>unique! <span style="color:#66d9ef">unless</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>testing?</code></pre></div>
 <p>Your workers must declare their uniqueness TTL with the <code>unique_for</code> option:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyWorker</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyWorker</span>
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
   sidekiq_options <span style="color:#e6db74">unique_for</span>: <span style="color:#ae81ff">10</span><span style="color:#f92672">.</span>minutes
 

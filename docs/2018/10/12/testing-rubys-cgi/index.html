@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -217,7 +217,7 @@ You point Webrick to your <code>DocumentRoot</code> as normal.  Note that since
 Capybara is going to be driving the tests, we need Webrick to execute in
 another thread so both the HTTP client and server can execute
 concurrently:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">WEBRICK</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">WEBRICK</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
   require <span style="color:#e6db74">&#39;webrick&#39;</span>
 
   server <span style="color:#f92672">=</span> <span style="color:#66d9ef">WEBrick</span><span style="color:#f92672">::</span><span style="color:#66d9ef">HTTPServer</span><span style="color:#f92672">.</span>new(
@@ -234,10 +234,10 @@ concurrently:</p>
 only one trick necessary: since we are starting our own custom Webrick
 server in a separate thread, we need to tell Capybara not to start a
 server on its own and point it to ours instead.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>run_server <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>run_server <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
 <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>app_host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://localhost:8999&#39;</span>
 </code></pre></div><p>After an hour of fiddling, here&rsquo;s the <code>test/helper.rb</code> I came up with:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>report_on_exception <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>report_on_exception <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
 
 require <span style="color:#e6db74">&#39;minitest/autorun&#39;</span>
 require <span style="color:#e6db74">&#39;capybara/minitest&#39;</span>
@@ -284,7 +284,7 @@ require <span style="color:#e6db74">&#39;capybara/poltergeist&#39;</span>
 <span style="color:#75715e"># give webrick time to boot before the tests can run</span>
 sleep <span style="color:#ae81ff">1</span>
 </code></pre></div><p>Now I create <code>test/smoke_test.rb</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require_relative <span style="color:#e6db74">&#39;./helper&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require_relative <span style="color:#e6db74">&#39;./helper&#39;</span>
 
 <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SmokeTest</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">CGITest</span>
   <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_pro_navigation</span>

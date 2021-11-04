@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -202,7 +202,7 @@ No more excuses, good riddance.</p>
 <p>Sidekiq&rsquo;s logging subsystem was overhauled by Andrew Babichev to allow pluggable logging
 formatters, allowing the user to configure JSON-formatted log output in
 production, for instance.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
   config<span style="color:#f92672">.</span>log_formatter <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Logger</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Formatters</span><span style="color:#f92672">::</span><span style="color:#66d9ef">JSON</span><span style="color:#f92672">.</span>new
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>See <code>sidekiq/logger</code> for implementation details.</p>
@@ -211,7 +211,7 @@ production, for instance.</p>
 method like any normal <code>Sidekiq::Worker</code> to control Sidekiq features.
 This makes it  easier to tailor Sidekiq&rsquo;s retry subsystem to each
 individual ActiveJob&rsquo;s needs.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ExampleJob</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">ActiveJob</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ExampleJob</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">ActiveJob</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span>
   queue_as <span style="color:#e6db74">:critical</span>
   sidekiq_options <span style="color:#66d9ef">retry</span>: <span style="color:#ae81ff">5</span>, <span style="color:#e6db74">backtrace</span>: <span style="color:#ae81ff">10</span>
 

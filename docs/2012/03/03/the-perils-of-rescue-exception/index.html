@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -189,13 +189,13 @@ blockquote,
   
 </p>
 <p>Ruby&rsquo;s standard exception handling looks like this.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">begin</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">begin</span>
   do_something
 <span style="color:#66d9ef">rescue</span> <span style="color:#f92672">=&gt;</span> ex
   <span style="color:#75715e"># do something with the error</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p>This will catch all StandardErrors and its subclasses. A frequent issue I see in Ruby code is this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">begin</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">begin</span>
   do_something
 <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Exception</span> <span style="color:#f92672">=&gt;</span> ex
   <span style="color:#75715e"># Apparently I REALLY want to know if this</span>
@@ -203,7 +203,7 @@ blockquote,
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p>This is a BAD, BAD idea, dear reader, and here&rsquo;s why. Ruby uses Exceptions for other things than your application code errors. One example is the Interrupt class which is a SignalException. Ruby sends this Exception to all threads so that when the process gets an INT/Ctrl-C signal, all the threads will unwind and the process will shutdown. If you rescue Exception, you will potentially catch this exception and ignore it, making your thread and process an unkillable computing zombie. Your only choice will be to pull out your kill -9 shotgun and aim for the head.</p>
 <p>Here&rsquo;s an example of a Ruby script you cannot shutdown gracefully. Run it and you&rsquo;ll see exactly the behavior I&rsquo;ve described.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">while</span> <span style="color:#66d9ef">true</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">while</span> <span style="color:#66d9ef">true</span>
   <span style="color:#66d9ef">begin</span>
     sleep <span style="color:#ae81ff">5</span>
     puts <span style="color:#e6db74">&#39;ping&#39;</span>

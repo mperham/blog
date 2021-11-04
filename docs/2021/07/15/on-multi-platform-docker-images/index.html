@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -201,7 +201,7 @@ for each platform:</p>
 <li>Run buildx for that platform to copy the binary into the platform-specific image and load it into the
 local registry for testing.</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">dimg</span><span style="color:#f92672">:</span> clean generate <span style="color:#75715e">## Make cross-platform Docker images for the current version
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">dimg</span><span style="color:#f92672">:</span> clean generate <span style="color:#75715e">## Make cross-platform Docker images for the current version
 </span><span style="color:#75715e"></span>	GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>amd64 go build -o faktory cmd/faktory/daemon.go
 	upx -qq ./faktory
 	docker buildx build --platform linux/amd64 --tag contribsys/faktory:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span> --tag contribsys/faktory:latest --load .
@@ -209,7 +209,7 @@ local registry for testing.</li>
 	upx -qq ./faktory
 	docker buildx build --platform linux/arm64 --tag contribsys/faktory:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span> --tag contribsys/faktory:latest --load .
 </code></pre></div><p>Once that is done, a simple <code>push</code> sends the built images to docker.io:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">dpush</span><span style="color:#f92672">:</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">dpush</span><span style="color:#f92672">:</span>
 	docker push contribsys/faktory:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
 	docker push contribsys/faktory:latest
 </code></pre></div><p>Note a couple of things about this build process:</p>
@@ -227,7 +227,7 @@ This would make the release process extremely easy but I&rsquo;ve never done it 
 <p>Because Faktory Enterprise uses my own private Docker registry, I used a
 different approach. <strong>I&rsquo;m still not sure which approach is better or worse</strong>
 but here&rsquo;s what I did.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">dpush</span><span style="color:#f92672">:</span> clean generate
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">dpush</span><span style="color:#f92672">:</span> clean generate
 	GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>amd64 go build -o tmp/linux/amd64 cmd/daemon/main.go
 	GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>arm64 go build -o tmp/linux/arm64 cmd/daemon/main.go
 	upx -qq ./tmp/linux/amd64
@@ -238,12 +238,12 @@ but here&rsquo;s what I did.</p>
 </code></pre></div><p>Here&rsquo;s the trick: I&rsquo;m building multiple binaries and naming them according to Docker&rsquo;s
 TARGETPLATFORM variable, e.g. &ldquo;linux/amd64&rdquo;. Now I can use a proper multi-platform build
 and the Dockerfile will pull in the right binary with this trick:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-docker" data-lang="docker"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:3.13</span><span style="color:#960050;background-color:#1e0010">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-docker" data-lang="docker"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:3.13</span><span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ARG</span> TARGETPLATFORM<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apk add --no-cache redis ca-certificates socat<span style="color:#960050;background-color:#1e0010">
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> ./tmp/$TARGETPLATFORM /faktory<span style="color:#960050;background-color:#1e0010">
 </span></code></pre></div><p>Docker will pull the right Alpine image for each platform, copy the platform-specific binary and push the resulting images to my registry with one command:</p>
-<pre><code>docker buildx --builder focused_saha build --platform=&quot;linux/amd64,linux/arm64&quot; -t host.docker.internal:9999/contribsys/faktory-ent:$(VERSION) --push .
+<pre tabindex="0"><code>docker buildx --builder focused_saha build --platform=&quot;linux/amd64,linux/arm64&quot; -t host.docker.internal:9999/contribsys/faktory-ent:$(VERSION) --push .
 </code></pre><p>(The custom &ldquo;focused_saha&rdquo; builder is required to disable HTTPS and allow
 an &ldquo;insecure&rdquo; registry. It&rsquo;s not really insecure because of the SSH tunnel.)</p>
 <p>I&rsquo;m not a Docker expert by any means so I can&rsquo;t tell which approach is

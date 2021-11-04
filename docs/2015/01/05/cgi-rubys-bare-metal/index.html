@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -211,7 +211,7 @@ Ruby&rsquo;s <code>cgi</code> library will parse the request coming from STDIN a
 your code can use to generate HTML responses.</p>
 <p>In my case, Stripe POSTs a blob of JSON in the request body. Since I&rsquo;m responding to the Stripe robot, it only
 needs to see a 200 OK response — no fancy view rendering layer required.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
 require <span style="color:#e6db74">&#39;json&#39;</span>
 require <span style="color:#e6db74">&#39;cgi&#39;</span>
 
@@ -226,7 +226,7 @@ cgi<span style="color:#f92672">.</span>out(<span style="color:#e6db74">&#34;stat
   <span style="color:#e6db74">&#34;Success&#34;</span>
 <span style="color:#66d9ef">end</span></code></pre></div>
 <p>I configured Apache to know to execute my CGI script by adding this inside the vhost configuration:</p>
-<pre><code class="language-conf" data-lang="conf">ScriptAlias /stripe/ /opt/stripe/
+<pre tabindex="0"><code class="language-conf" data-lang="conf">ScriptAlias /stripe/ /opt/stripe/
 
 &lt;Directory /opt/stripe/&gt;
   Require all granted

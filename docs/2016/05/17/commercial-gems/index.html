@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -193,7 +193,7 @@ blockquote,
 <li>A $5/mo DigitalOcean instance running Apache.  No database, no app server.  I have a set of bash scripts which can build a server in 5 minutes.</li>
 <li>To serve gems, you need to have Apache serve a directory of static files.  You&rsquo;ll need a VirtualHost entry with something like this:</li>
 </ul>
-<pre><code>  &lt;VirtualHost *:443&gt;
+<pre tabindex="0"><code>  &lt;VirtualHost *:443&gt;
     ServerName my-server.com
     DocumentRoot /var/www/gems
 
@@ -209,12 +209,12 @@ blockquote,
 </code></pre><ul>
 <li>To control access to those gems, you need a <code>/var/www/gems-passwd</code> file which contains your user / password pairs.  The username / passwords are a hash based on the customer&rsquo;s email address.  The contents look like this:</li>
 </ul>
-<pre><code>1a7fe3bd:$apr1$0RtyG.1v$D/o5n25i2YmPiTOGAPPI21
+<pre tabindex="0"><code>1a7fe3bd:$apr1$0RtyG.1v$D/o5n25i2YmPiTOGAPPI21
 d41be46c:$apr1$.dFnnB5F$Ne2YtTP12q9iM9/ZQvoL01
 09120f77:$apr1$ERLqbLvS$El2Llj6MJlWDWQnJKcrR80
 </code></pre><p>The command to generate an entry is <code>htpasswd -nb user pwd</code>.</p>
 <p>I have a <code>/var/www/gems</code> directory which looks like this:</p>
-<pre><code>$ pwd
+<pre tabindex="0"><code>$ pwd
 /var/www/gems
 $ ls -l
 total 36
@@ -229,7 +229,7 @@ drwxrwxr-x 3 mike adm  4096 Apr  5 16:25 quick
 </code></pre><ul>
 <li>When you buy Sidekiq Pro, Stripe sends my server a webhook.  I have a rake task which looks up the new customer&rsquo;s email address, adds a new user/pwd to the end of the gems-passwd file and then sends them an email with directions to access the Sidekiq Pro gem:</li>
 </ul>
-<pre><code>Put this in your Gemfile:
+<pre tabindex="0"><code>Put this in your Gemfile:
 
     source &quot;https://my-server.com&quot; do
       gem &quot;sidekiq-pro&quot;
@@ -246,7 +246,7 @@ Run `bundle install` and you're done!
 <li>I have rake tasks which can push a new gem version, add/remove a customer, send email, etc.</li>
 <li>Pushing a new gem version looks like this, note the <code>generate_index</code> call:</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:push</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">:release</span> <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:push</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">:release</span> <span style="color:#66d9ef">do</span>
   require <span style="color:#e6db74">&#39;net/ssh&#39;</span>
   require <span style="color:#e6db74">&#39;net/scp&#39;</span>
   require <span style="color:#e6db74">&#39;sidekiq/pro/version&#39;</span>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -238,7 +238,7 @@ dependencies than their value warrants.  Example of a bad gem: the
 and most of which are unnecessary.</p>
 <p>Lastly, make sure you only load the gem when necessary.  Use Bundler&rsquo;s
 group support to disable test gems when not testing:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">group <span style="color:#e6db74">:test</span> <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">group <span style="color:#e6db74">:test</span> <span style="color:#66d9ef">do</span>
   gem <span style="color:#e6db74">&#39;rspec&#39;</span>
   gem <span style="color:#e6db74">&#39;timecop&#39;</span>
   <span style="color:#75715e"># etc</span>

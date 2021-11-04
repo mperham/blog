@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -193,7 +193,7 @@ filtering support and I realized: <strong>I haven&rsquo;t told people that tags
 exist</strong>. <strong>Oops.</strong> Here is your notification. 😁</p>
 <p><a href="https://github.com/mperham/sidekiq/blob/master/Changes.md#601">Sidekiq 6.0.1</a> added support for per-job tags. Tags are an Array of Strings
 within the job payload. Maybe you want to tag the sports related to a given job:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SomeWorker</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SomeWorker</span>
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
   sidekiq_options <span style="color:#e6db74">tags</span>: <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;alpha&#39;</span><span style="color:#f92672">]</span>
 </code></pre></div><p>There&rsquo;s plenty of ideas for job tagging:</p>
@@ -206,12 +206,12 @@ within the job payload. Maybe you want to tag the sports related to a given job:
 with that tag</strong>.</p>
 <p>For example, assume we have a bunch of jobs which are associated with different sports.
 First we&rsquo;ll create a bunch of jobs with random tags:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">sports <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>:<span style="color:#960050;background-color:#1e0010">⚽️</span>, :<span style="color:#960050;background-color:#1e0010">🏈</span>, :<span style="color:#960050;background-color:#1e0010">⛳️</span>, :<span style="color:#960050;background-color:#1e0010">⚾️</span>, :<span style="color:#960050;background-color:#1e0010">🏀</span>, :<span style="color:#960050;background-color:#1e0010">🎾</span>, :<span style="color:#960050;background-color:#1e0010">🏐</span>, :<span style="color:#960050;background-color:#1e0010">🥊</span>, :<span style="color:#960050;background-color:#1e0010">🎳</span>, :<span style="color:#960050;background-color:#1e0010">🏓</span><span style="color:#f92672">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">sports <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>:<span style="color:#960050;background-color:#1e0010">⚽️</span>, :<span style="color:#960050;background-color:#1e0010">🏈</span>, :<span style="color:#960050;background-color:#1e0010">⛳️</span>, :<span style="color:#960050;background-color:#1e0010">⚾️</span>, :<span style="color:#960050;background-color:#1e0010">🏀</span>, :<span style="color:#960050;background-color:#1e0010">🎾</span>, :<span style="color:#960050;background-color:#1e0010">🏐</span>, :<span style="color:#960050;background-color:#1e0010">🥊</span>, :<span style="color:#960050;background-color:#1e0010">🎳</span>, :<span style="color:#960050;background-color:#1e0010">🏓</span><span style="color:#f92672">]</span>
 <span style="color:#ae81ff">100</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span>
   <span style="color:#66d9ef">SimpleWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">tags</span>: sports<span style="color:#f92672">.</span>sample(<span style="color:#ae81ff">2</span>))<span style="color:#f92672">.</span>perform_async(<span style="color:#e6db74">&#34;abc&#34;</span>)
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>In Redis, tags are an Array within each job&rsquo;s JSON payload.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
   <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;SimpleWorker&#34;</span>,
   <span style="color:#f92672">&#34;args&#34;</span>: [<span style="color:#e6db74">&#34;abc&#34;</span>],
   <span style="color:#f92672">&#34;tags&#34;</span>: [<span style="color:#e6db74">&#34;⚽️&#34;</span>, <span style="color:#e6db74">&#34;🏈&#34;</span>],

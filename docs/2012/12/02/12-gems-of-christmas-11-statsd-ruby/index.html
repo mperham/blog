@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -190,7 +190,7 @@ blockquote,
 </p>
 <p>As software developers, it&rsquo;s often our job to monitor the systems we build. Step one is to collect the data necessary for monitoring.</p>
 <p>Statsd is a nice metrics aggregation server open sourced by Etsy. We use Statsd at <a href="http://www.theclymb.com/invite-from/mperham">The Clymb</a> to collect and aggregate various technical and business metrics before uploading them to Librato Metrics for storage and display on our dashboards.</p>
-<p><img alt="" src="http://sidekiq.org/examples/librato.png" title="metrics" class="alignleft" width="320" height="200" /></p>
+<img alt="" src="http://sidekiq.org/examples/librato.png" title="metrics" class="alignleft" width="320" height="200" />
 <p>The <a href="https://github.com/reinh/statsd" title="statsd-ruby">statsd-ruby</a> client sends metrics from all our Unicorn and Sidekiq processes to statsd. One thing I really like about statsd is that it uses UDP for network transport so sending a metric doesn&rsquo;t incur much overhead at all and I don&rsquo;t have to have statsd installed locally or in staging &ndash; the metric send will just silently fail. We set up a global METRICS variable with a Statsd client instance (instances are thread-safe so this is ok, even with Sidekiq) so our code can send metrics trivially:</p>
 <pre lang="ruby">statsd_host = Rails.env.production? ? '10.10.1.100' : '127.0.0.1'
 METRICS = Statsd.new(statsd_host, 8125)

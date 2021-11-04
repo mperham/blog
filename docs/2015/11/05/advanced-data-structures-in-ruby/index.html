@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -197,7 +197,7 @@ esoteric.  Here&rsquo;s two examples I&rsquo;ve used recently.</p>
 time-limited <code>pop</code> operation.  This can be very useful when coordinating
 time-sensitive operations between threads.  Recently I used it as an alternative
 to <code>sleep</code> so I could wake up a sleeping thread immediately:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
   @done <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
   @sleeper <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">::</span><span style="color:#66d9ef">TimedStack</span><span style="color:#f92672">.</span>new
 <span style="color:#66d9ef">end</span>

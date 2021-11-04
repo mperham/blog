@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -219,7 +219,7 @@ We&rsquo;ll use it to push and fetch jobs.</p>
 <h2 id="client-script">Client Script</h2>
 <p>We&rsquo;ll create a script to send a new job to Faktory every second.  Here we
 create an <code>adder</code> job with two random integers for arguments:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">randInt</span>(<span style="color:#a6e22e">min</span><span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">max</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">randInt</span>(<span style="color:#a6e22e">min</span><span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">max</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>) {
   <span style="color:#66d9ef">return</span> Math.<span style="color:#a6e22e">floor</span>(Math.<span style="color:#a6e22e">random</span>() <span style="color:#f92672">*</span> (<span style="color:#a6e22e">max</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">min</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)) <span style="color:#f92672">+</span> <span style="color:#a6e22e">min</span>
 }
 
@@ -238,7 +238,7 @@ create an <code>adder</code> job with two random integers for arguments:</p>
 <p>The worker is the long-running process which fetches jobs from Faktory and
 executes them.  We register the set of job types we know about and then
 wait for jobs from Faktory.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">faktory</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;faktory-worker&#39;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">faktory</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;faktory-worker&#39;</span>);
 
 <span style="color:#a6e22e">faktory</span>.<span style="color:#a6e22e">register</span>(<span style="color:#e6db74">&#39;adder&#39;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>) =&gt; {
   <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;${a} + ${b} = ${a+b}&#34;</span>)
@@ -249,14 +249,14 @@ wait for jobs from Faktory.</p>
 </span></code></pre></div><h2 id="the-result">The Result</h2>
 <p>Finally I created a <code>Procfile</code> which runs all three parts and used
 foreman to run it:</p>
-<pre><code>$ gem install foreman
+<pre tabindex="0"><code>$ gem install foreman
 $ cat Procfile
 faktory: /usr/local/bin/faktory
 client: /usr/local/bin/node ./fclient.js
 worker: /usr/local/bin/node ./fworker.js
 $ foreman start
 </code></pre><p>The output:</p>
-<pre><code>$ foreman start
+<pre tabindex="0"><code>$ foreman start
 12:37:31 faktory.1 | started with pid 40472
 12:37:31 client.1  | started with pid 40473
 12:37:31 worker.1  | started with pid 40474

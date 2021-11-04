@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -209,12 +209,12 @@ enabled by default and disabled only if your job is truly optional.</p>
 <p>Instead, your job should flag errors that can be ignored; we&rsquo;ll configure our
 error service to ignore them.  First we add a flag to the root of all
 errors:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># config/initializers/exceptions.rb</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># config/initializers/exceptions.rb</span>
 <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Exception</span>
   <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:ignore_please</span>
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>Now we update our job to rescue and flag those flaky errors:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># your job/worker class</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># your job/worker class</span>
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>
   <span style="color:#66d9ef">begin</span>
     sketchy_service<span style="color:#f92672">.</span>call
@@ -227,7 +227,7 @@ errors:</p>
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>Now configure your error service gem to ignore those errors.  Here&rsquo;s how
 to do it for Bugsnag and Honeybadger:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># https://docs.bugsnag.com/platforms/ruby/rails/configuration-options/#ignore_classes</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># https://docs.bugsnag.com/platforms/ruby/rails/configuration-options/#ignore_classes</span>
 <span style="color:#75715e"># config/initializers/bugsnag.rb</span>
 <span style="color:#66d9ef">Bugsnag</span><span style="color:#f92672">.</span>configure <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
   config<span style="color:#f92672">.</span>ignore_classes <span style="color:#f92672">&lt;&lt;</span> lambda {<span style="color:#f92672">|</span>ex<span style="color:#f92672">|</span> ex<span style="color:#f92672">.</span>ignore_please }

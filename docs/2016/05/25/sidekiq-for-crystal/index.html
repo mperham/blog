@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -214,7 +214,7 @@ the language at all a week ago and had the core job processor running in 3 days.
 <h2 id="gimme">Gimme!</h2>
 <p>The project resides at <a href="https://github.com/mperham/sidekiq.cr">mperham/sidekiq.cr</a>.  To get
 started:</p>
-<pre><code>brew update
+<pre tabindex="0"><code>brew update
 brew install crystal-lang
 # brew install redis
 git clone git://github.com/mperham/sidekiq.cr.git
@@ -222,7 +222,7 @@ cd sidekiq.cr
 crystal deps
 make
 </code></pre><p>If you have Redis and the <code>sidekiq</code> gem installed, you can run the benchmarks:</p>
-<pre><code>brew install redis
+<pre tabindex="0"><code>brew install redis
 gem install sidekiq
 make bench
 </code></pre><p>This is the result for me: <strong>with zero optimization on my part, Crystal is 3.6x faster and 3x smaller</strong>.
@@ -259,7 +259,7 @@ To process 100,000 noop jobs:</p>
 </table>
 <h2 id="the-codebase-is-a-trainwreck-though-right">The codebase is a trainwreck though, right?</h2>
 <p>The code is shockingly similar to Ruby in many cases.  Take a gander at this testcase:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#34;./spec_helper&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#34;./spec_helper&#34;</span>
 
 <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyWorker</span>
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -199,7 +199,7 @@ better understand your Redis server.</p>
 <hr>
 <h2 id="ask-for-info">Ask for Info</h2>
 <p>The <code>info</code> command is the easiest way to get an overall view of Redis:</p>
-<pre><code>$ redis-cli info
+<pre tabindex="0"><code>$ redis-cli info
 # Server
 redis_version:3.2.5
 tcp_port:6379
@@ -277,7 +277,7 @@ size <strong>must</strong> fit into machine RAM.  If it does not, the resulting 
 to terrible performance and massive latency spikes.</p>
 <p><code>redis-cli --stat</code> will give you the most important details in a real-time view
 you can watch or scrape:</p>
-<pre><code>$ redis-cli --stat
+<pre tabindex="0"><code>$ redis-cli --stat
 ------- data ------ --------------------- load -------------------- - child -
 keys       mem      clients blocked requests            connections
 31         1009.00K 1       0       681483 (+0)         576
@@ -300,12 +300,12 @@ which add significant latency.</li>
 </ol>
 <h3 id="network">Network</h3>
 <p>You can see the current network latency easily:</p>
-<pre><code>$ redis-cli --latency
+<pre tabindex="0"><code>$ redis-cli --latency
 min: 0, max: 1, avg: 0.29 (632 samples)
 </code></pre><p>This shows a minimum of 0ms and max of 1ms, averaging 290µs, latency to
 my localhost server.  Ideal conditions.</p>
 <p>You can also easily watch latency history, here with a default window of 15 sec:</p>
-<pre><code>$ redis-cli --latency-history
+<pre tabindex="0"><code>$ redis-cli --latency-history
 min: 0, max: 7, avg: 0.24 (1321 samples) -- 15.00 seconds range
 min: 0, max: 256, avg: 0.55 (1280 samples) -- 15.01 seconds range
 min: 0, max: 3062, avg: 3.86 (1051 samples) -- 15.98 seconds range
@@ -328,7 +328,7 @@ a significant amount of time.  Redis includes a configurable <a href="https://re
 command to watch for these bad apples.</p>
 <p>My Redis is configured by Homebrew to log any commands that take longer than 10ms, a
 sensible default.  Run this on your instance and see if you find anything suspicious:</p>
-<pre><code>$ redis-cli slowlog get 10
+<pre tabindex="0"><code>$ redis-cli slowlog get 10
 1) 1) (integer) 3
    2) (integer) 1492461257
    3) (integer) 11825

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -194,7 +194,7 @@ with large applications using lots of native extensions.</p>
 <h2 id="step-1---thread-backtraces">Step 1 - Thread backtraces</h2>
 <p>A Sidekiq process will print out the backtrace of every thread when
 you send it the TTIN signal.</p>
-<pre><code>kill -TTIN &lt;pid&gt;
+<pre tabindex="0"><code>kill -TTIN &lt;pid&gt;
 </code></pre><blockquote>
 <p>Side note: YMMV for other types of Ruby processes: resque, unicorn, puma, passenger, etc.  Check
 the gem documentation or open an issue with the maintainers if it&rsquo;s not clear how to get
@@ -202,7 +202,7 @@ backtraces from your process.</p>
 </blockquote>
 <p>Reading these backtraces will tell you what your threads are doing at
 that instant.  Here&rsquo;s an example:</p>
-<pre><code>2016-08-04T16:16:13.535Z 96660 TID-oxpb26trs WARN: Thread TID-oxpbpcmn0
+<pre tabindex="0"><code>2016-08-04T16:16:13.535Z 96660 TID-oxpb26trs WARN: Thread TID-oxpbpcmn0
 2016-08-04T16:16:13.535Z 96660 TID-oxpb26trs WARN: /Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:82:in `select'
 /Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:82:in `rescue in _read_from_socket'
 /Users/mike/.gem/ruby/2.3.0/gems/redis-3.3.1/lib/redis/connection/ruby.rb:78:in `_read_from_socket'
@@ -247,7 +247,7 @@ a backtrace is hard and a learned skill: <strong>you will get better at it over
 time</strong>.  Pop open a gem with <code>bundle open &lt;gemname&gt;</code> and navigate to the
 line in the backtrace; getting comfortable with the code in the various
 gems will help your debugging skills a lot.  The key line is here:</p>
-<pre><code>/Users/mike/src/sidekiq/lib/sidekiq/fetch.rb:36:in `block in retrieve_work'
+<pre tabindex="0"><code>/Users/mike/src/sidekiq/lib/sidekiq/fetch.rb:36:in `block in retrieve_work'
 </code></pre><p>This is a quiet Sidekiq thread that is waiting for a job from Redis.  It&rsquo;s paused,
 doing nothing, but that&rsquo;s perfectly normal.</p>
 <p>Most often with stuck processes you&rsquo;ll see threads paused in the mysql or
@@ -260,17 +260,17 @@ without releasing the GVL.</p>
 <p>This means Ruby can&rsquo;t help - we have to drop down into the bowels of
 the process to understand what is wrong using the GDB debugger.  You can attach
 GDB to a running process like so:</p>
-<pre><code>sudo gdb /path/to/ruby/binary [PID]
+<pre tabindex="0"><code>sudo gdb /path/to/ruby/binary [PID]
 </code></pre><p>Now to get the thread backtraces dumped to a text file, run these
 commands:</p>
-<pre><code>(gdb) set logging file gdb_output.txt
+<pre tabindex="0"><code>(gdb) set logging file gdb_output.txt
 (gdb) set logging on
 (gdb) set height 10000
 (gdb) t a a bt
 (gdb) quit
 </code></pre><p>A Sidekiq Enterprise customer recently sent me a GDB dump that I will
 use as an example.  Here&rsquo;s the first thread:</p>
-<pre><code>Thread 32 (Thread 0x3703 of process 40990):
+<pre tabindex="0"><code>Thread 32 (Thread 0x3703 of process 40990):
 #0  0x00007fff94b87db6 in __psynch_cvwait () from /usr/lib/system/libsystem_kernel.dylib
 #1  0x00007fff98cab728 in _pthread_cond_wait () from /usr/lib/system/libsystem_pthread.dylib
 #2  0x0000000102dbd5b3 in gvl_acquire_common ()
@@ -297,7 +297,7 @@ threads were blocked with that exact same backtrace.</p>
 backtrace as above - you can ignore those.  But one or more threads will be
 doing something else, and indeed there was this backtrace which was
 completely different:</p>
-<pre><code>Thread 10 (Thread 0x2103 of process 40990):
+<pre tabindex="0"><code>Thread 10 (Thread 0x2103 of process 40990):
 #0  0x00007fff94b892a2 in poll () from /usr/lib/system/libsystem_kernel.dylib
 #1  0x00000001035c892d in pqSocketCheck () from /usr/local/opt/postgresql/lib/libpq.5.dylib
 #2  0x00000001035c87f9 in pqWaitTimed () from /usr/local/opt/postgresql/lib/libpq.5.dylib

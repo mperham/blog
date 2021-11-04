@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -219,14 +219,14 @@ where your production queue has 10,000+ jobs in it.
 <strong>Achtung!</strong> <strong>Cuidado!</strong> <strong>Warning!</strong>
 Take care when using these APIs in production.</p>
 <p>To use the API, you need to require it:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;sidekiq/api&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;sidekiq/api&#39;</span>
 </code></pre></div><p>It&rsquo;s impossible for this blog post to fully document every last method
 in the API, this post covers about 10% of what&rsquo;s there. Please dig into
 <a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/api.rb"><code>sidekiq/api</code></a>
 if you want to see the full majesty 👑 of the Sidekiq API.</p>
 <h2 id="jobs">Jobs</h2>
 <p>Sidekiq stores each job as a Hash of JSON data:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#960050;background-color:#1e0010">$</span> bin<span style="color:#f92672">/</span>rails console
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#960050;background-color:#1e0010">$</span> bin<span style="color:#f92672">/</span>rails console
 
 <span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">SecretWorker</span><span style="color:#f92672">.</span>perform_async(<span style="color:#e6db74">&#34;foo&#34;</span>, <span style="color:#ae81ff">123</span>)
 <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;1704fc9272746d0cba87c2f6&#34;</span>
@@ -272,7 +272,7 @@ Redis doesn&rsquo;t have any efficient way to index data within a queue so a sea
 <p>The implementation is tiny but will not scale well.
 We leverage the Enumerable module&rsquo;s <code>detect</code> method to scan through each element in
 the Queue, parse each JSON and check the JID attribute.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Queue</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Queue</span>
   <span style="color:#75715e">##</span>
   <span style="color:#75715e"># Find the job with the given JID within this queue.</span>
   <span style="color:#75715e">#</span>
@@ -298,7 +298,7 @@ Every N seconds, Sidekiq checks the timestamp of the first element. If
 it is less than now, Sidekiq takes action. Rinse. Repeat.</p>
 <p>Each sorted set has a cooresponding class in the API, here&rsquo;s a random
 sampling:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">RetrySet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>size
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">RetrySet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>size
 <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">DeadSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>clear
 <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">ScheduledSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>each {<span style="color:#f92672">|</span>job<span style="color:#f92672">|</span> job<span style="color:#f92672">.</span>add_to_queue }
 <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">RetrySet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>each {<span style="color:#f92672">|</span>job<span style="color:#f92672">|</span> job<span style="color:#f92672">.</span>kill }
@@ -308,7 +308,7 @@ API method.</p>
 <h2 id="scanning-and-filtering">Scanning and Filtering</h2>
 <p>Sorted sets have the ability to quickly perform a server-side scan of
 the contents as a filter:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">RetrySet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>scan <span style="color:#e6db74">&#34;some_value&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>job<span style="color:#f92672">|</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">RetrySet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>scan <span style="color:#e6db74">&#34;some_value&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>job<span style="color:#f92672">|</span>
   <span style="color:#75715e"># job payload contains some_value</span>
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>Remember how I was saying that some API calls are really, really slow?
@@ -316,7 +316,7 @@ That&rsquo;s true if you are iterating for each element in the Set.
 This is a good example of how to speed up your API logic: use
 <code>scan</code> as a server-side filter to ensure the only jobs you work on are
 likely to be relevant:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">delete_retries_by_class</span>(klass)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">delete_retries_by_class</span>(klass)
   <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">RetrySet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>scan klass<span style="color:#f92672">.</span>to_s <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>job<span style="color:#f92672">|</span>
     <span style="color:#75715e"># we still need this `if` because the job payload may contain the</span>
     <span style="color:#75715e"># class name for other reasons, remember that `scan` is a</span>
@@ -333,7 +333,7 @@ Sidekiq::Workers.</p>
 this blog post in response. The author has the right idea but is
 generally missing the <code>scan</code> call to filter and minimize the number
 of jobs processed in Ruby.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># their suggestions</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># their suggestions</span>
 rs <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">RetrySet</span><span style="color:#f92672">.</span>new
 rs<span style="color:#f92672">.</span>select { <span style="color:#f92672">|</span>j<span style="color:#f92672">|</span> j<span style="color:#f92672">.</span>display_class <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;AJob&#34;</span> }<span style="color:#f92672">.</span>map(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:delete</span>)
 rs<span style="color:#f92672">.</span>select { <span style="color:#f92672">|</span>j<span style="color:#f92672">|</span> j<span style="color:#f92672">.</span>display_class <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;AJob&#34;</span> }<span style="color:#f92672">.</span>count
@@ -349,7 +349,7 @@ runtime info about the jobs it is working on and various other
 metrics.
 The Busy page lists those processes and jobs.
 <code>Sidekiq::ProcessSet.new</code> gives you the current set of processes.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#f92672">&gt;</span> ps <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">ProcessSet</span><span style="color:#f92672">.</span>new
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#f92672">&gt;</span> ps <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">ProcessSet</span><span style="color:#f92672">.</span>new
 <span style="color:#f92672">&gt;</span> ps<span style="color:#f92672">.</span>total_concurrency
 <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">75</span>
 <span style="color:#f92672">&gt;</span> ps<span style="color:#f92672">.</span>total_rss_in_kb
@@ -365,18 +365,18 @@ tasks.</p>
 <p>The Busy page also lists all of the work happening in your Sidekiq
 cluster. The <code>Sidekiq::WorkSet</code> will yield the process and thread ids
 for every job in progress.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">WorkSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>each {<span style="color:#f92672">|</span>process_id, thread_id, work<span style="color:#f92672">|</span> <span style="color:#f92672">...</span> }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">WorkSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>each {<span style="color:#f92672">|</span>process_id, thread_id, work<span style="color:#f92672">|</span> <span style="color:#f92672">...</span> }
 </code></pre></div><h2 id="commercial-features">Commercial Features</h2>
 <p>Remember: if you see it in the Web UI, there is an underlying API for it in Ruby.
 That&rsquo;s true even of the commercial features:</p>
 <p>Batches provide <code>Sidekiq::BatchSet</code> which allows access to every open batch.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">BatchSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>any? {<span style="color:#f92672">|</span>status<span style="color:#f92672">|</span> status<span style="color:#f92672">.</span>complete? }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">BatchSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>any? {<span style="color:#f92672">|</span>status<span style="color:#f92672">|</span> status<span style="color:#f92672">.</span>complete? }
 </code></pre></div><p>Periodic jobs provide <code>Sidekiq::Periodic::LoopSet</code> which allows access to every
 registered periodic job, a.k.a. a Loop.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Periodic</span><span style="color:#f92672">::</span><span style="color:#66d9ef">LoopSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>map {<span style="color:#f92672">|</span>loupe<span style="color:#f92672">|</span> <span style="color:#f92672">[</span>loupe<span style="color:#f92672">.</span>schedule,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Periodic</span><span style="color:#f92672">::</span><span style="color:#66d9ef">LoopSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>map {<span style="color:#f92672">|</span>loupe<span style="color:#f92672">|</span> <span style="color:#f92672">[</span>loupe<span style="color:#f92672">.</span>schedule,
 loupe<span style="color:#f92672">.</span>history<span style="color:#f92672">]</span> }
 </code></pre></div><p>Rate limiters provide <code>Sidekiq::LimiterSet</code> which gives a status object for each limiter.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">LimiterSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>map {<span style="color:#f92672">|</span>limiter<span style="color:#f92672">|</span> <span style="color:#f92672">[</span>limiter<span style="color:#f92672">.</span>name, limiter<span style="color:#f92672">.</span>type<span style="color:#f92672">]</span> }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">LimiterSet</span><span style="color:#f92672">.</span>new<span style="color:#f92672">.</span>map {<span style="color:#f92672">|</span>limiter<span style="color:#f92672">|</span> <span style="color:#f92672">[</span>limiter<span style="color:#f92672">.</span>name, limiter<span style="color:#f92672">.</span>type<span style="color:#f92672">]</span> }
 </code></pre></div><p>There&rsquo;s lots of APIs here which can power arcane features or specialized devops logic.
 I strongly urge readers to skim through the
 <a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/api.rb"><code>sidekiq/api</code></a> file and consider the possibilities.

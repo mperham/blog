@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -191,13 +191,13 @@ blockquote,
 <p>The recent <a href="http://www.slideshare.net/sensepost/cache-on-delivery">memcached security exposé</a> highlighted the fact that simple vulnerabilities require constant vigilance and education for new developers.</p>
 <p>Rule #1 of Network Security: <strong>Don&rsquo;t expose services which are not designed to be exposed.</strong></p>
 <p>Web and app servers will usually have 2-3 ports open to the public: ssh, http and https. All others should be vetted to determine if they should be public or not. Here&rsquo;s the current state of mikeperham.com:</p>
-<p><code>&lt;br /&gt; mike@perham:~$ netstat -a | grep LIST&lt;br /&gt; tcp        0      0 localhost:mysql         *:*                     LISTEN&lt;br /&gt; tcp        0      0 *:www                   *:*                     LISTEN&lt;br /&gt; tcp        0      0 *:ssh                   *:*                     LISTEN&lt;br /&gt; tcp        0      0 localhost:smtp          *:*                     LISTEN&lt;br /&gt;</code></p>
+<p><code>&lt;br /&gt; mike@perham:~$ netstat -a | grep LIST&lt;br /&gt; tcp        0      0 localhost:mysql         *:*                     LISTEN&lt;br /&gt; tcp        0      0 *:www                   *:*                     LISTEN&lt;br /&gt; tcp        0      0 *:ssh                   *:*                     LISTEN&lt;br /&gt; tcp        0      0 localhost:smtp          *:*                     LISTEN&lt;br /&gt; </code></p>
 <p>There&rsquo;s two types of ports in this list. &lsquo;localhost&rsquo; means that my database is just listening locally:</p>
 <p><strong>localhost:mysql</strong></p>
 <p>whereas the star indicates my web server is listening on all network interfaces, including the public:</p>
 <p>*<strong>:www</strong></p>
 <p>In the case of memcached, you want to configure it to listen locally only if you just have a single memcached instance. In Ubuntu/Debian, you would edit <code>/etc/memcached.conf</code> and ensure that:<br>
-<code>&lt;br /&gt; -l 127.0.0.1&lt;br /&gt;</code></p>
+<code>&lt;br /&gt; -l 127.0.0.1&lt;br /&gt; </code></p>
 <p>is in the file. Otherwise memcached will by default listen on all interfaces and be exposed publicly.</p>
 <p>Firewall configuration brings another dimension of variability into the mix but I prefer to configure my services to listen correctly first and then determine any additional firewall rules necessary based on the network topology. Using Memcached servers on multiple machine might require some fancy firewall rules to ensure that they can talk to each other while not being exposed publicly. One nice thing about Amazon&rsquo;s EC2 service is that it forces you to explicitly open ports to the public via firewall rules, everything else is internal by default.</p>
 <p>In summary, I always perform a quick port audit of all machines after I&rsquo;m done configuring them to ensure that they are as secure as possible before putting them in production. A quick <code>netstat</code> command can go a long way to ensure a sound night&rsquo;s sleep.</p>

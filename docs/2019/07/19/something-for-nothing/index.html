@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -197,7 +197,7 @@ free.</p>
 <blockquote>
 <p>&ldquo;We have two Sidekiq dynos with 40 threads each: we find that after about 5 minutes, they are only using about 20 threads; shouldn&rsquo;t all 40 threads pick up jobs? The jobs perform image processing.&rdquo;</p>
 </blockquote>
-<pre><code>bundle exec sidekiq -c 40
+<pre tabindex="0"><code>bundle exec sidekiq -c 40
 </code></pre><p>They were using two Heroku <code>performance-m</code> dynos, which cost $250/month each.</p>
 <h2 id="mri-has-a-limit">MRI has a Limit</h2>
 <p>If you are a Ruby expert, you might already have an idea of what&rsquo;s going
@@ -207,7 +207,7 @@ They were crushing a single core on each performance-m dyno while the rest of th
 Those extra 20 threads weren&rsquo;t lazy &ndash; they literally couldn&rsquo;t get any CPU time scheduled!</p>
 <h2 id="multi-process-to-the-rescue">Multi-Process to the Rescue</h2>
 <p>The answer was easy since they were a Sidekiq Enterprise customer:</p>
-<pre><code>bundle exec sidekiqswarm -c 20
+<pre tabindex="0"><code>bundle exec sidekiqswarm -c 20
 </code></pre><p><code>sidekiqswarm</code> is a special binary which <a href="https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process">forks a Sidekiq process for
 each core on the
 dyno</a>. We reduce the thread count so each core

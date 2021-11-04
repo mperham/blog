@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -227,7 +227,7 @@ and test cautiously.</p>
 <p>Enterprise got the same Statsd cleanup that Pro got.</p>
 <p>Finally, a nice option for ActiveJob users: ActiveJobs can now
 use Enterprise&rsquo;s unique jobs feature directly:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyJob</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">ApplicationJob</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyJob</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">ApplicationJob</span>
   sidekiq_options <span style="color:#e6db74">unique_for</span>: <span style="color:#ae81ff">10</span><span style="color:#f92672">.</span>minutes
 
   <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)

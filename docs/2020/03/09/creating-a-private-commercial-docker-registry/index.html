@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -206,27 +206,27 @@ open source but it is Apache licensed so anyone can run it for any
 purpose.</p>
 <p>I wasn&rsquo;t too happy with this step &ndash; I don&rsquo;t like adding moving parts to my production servers &ndash; but there wasn&rsquo;t any other supported deployment mechanism.
 I developed this set of commands to install Docker and the registry image.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">apt-get install -y gnupg-agent software-properties-common
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">apt-get install -y gnupg-agent software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository <span style="color:#e6db74">&#34;deb [arch=amd64] https://download.docker.com/linux/ubuntu </span><span style="color:#66d9ef">$(</span>lsb_release -cs<span style="color:#66d9ef">)</span><span style="color:#e6db74"> stable&#34;</span>
 apt-get install -y docker-ce docker-ce-cli containerd.io
 docker pull registry:2
 </code></pre></div><p>Protip: don&rsquo;t copy this, what I did in January 2020 can easily change.
 Follow the Linux install directions on docker.com.</p>
-<pre><code>a2enmod headers proxy proxy_http
+<pre tabindex="0"><code>a2enmod headers proxy proxy_http
 </code></pre><p>Proxying the registry required me to activate these Apache modules. YMMV.</p>
 <h2 id="configure-apache-proxy">Configure Apache Proxy</h2>
 <p>I used small portions of the <a href="https://docs.docker.com/registry/recipes/apache/">Apache recipe</a> provided by Docker.
 Take some time to read it carefully.
 The core are these lines:</p>
-<pre><code>  ProxyPass        /v2 http://localhost:5000/v2
+<pre tabindex="0"><code>  ProxyPass        /v2 http://localhost:5000/v2
   ProxyPassReverse /v2 http://localhost:5000/v2
 </code></pre><p>The registry listens on localhost:5000. Apache proxies any /v2 requests to this port.</p>
 <p>I have an atypical usecase: I have Faktory Pro customers and Faktory Enterprise customers.
 Both should be able to access the registry but the general public should not.
 How can I configure Apache to authenticate users from list A or list B?
 Turns out it was pretty easy with a single trick: <code>AuthBasicProvider</code> allows multiple sources.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-apache" data-lang="apache"><span style="color:#75715e"># sites-enabled/auth.conf</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-apache" data-lang="apache"><span style="color:#75715e"># sites-enabled/auth.conf</span>
 <span style="color:#f92672">&lt;AuthnProviderAlias</span> <span style="color:#e6db74">file fpro</span><span style="color:#f92672">&gt;</span>
 	AuthUserFile <span style="color:#e6db74">&#34;/var/fpro.passwd&#34;</span>
 <span style="color:#f92672">&lt;/AuthnProviderAlias&gt;</span>
@@ -267,7 +267,7 @@ configuration we:</p>
 <p>If Apache limits access to read only, how do we push new images?
 Use an SSH tunnel to bypass Apache!
 Since the registry listens on localhost:5000, I build the image on my laptop, open an SSH tunnel to localhost:5000 on the server and push new image:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -N -f -L 5000:localhost:5000 root@registry.example.com
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -N -f -L 5000:localhost:5000 root@registry.example.com
 sleep <span style="color:#ae81ff">2</span>
 docker tag example/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span> host.docker.internal:5000/example/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
 <span style="color:#75715e"># NB: add &#34;host.docker.internal:5000&#34; to insecure registries in Docker Settings</span>
@@ -282,7 +282,7 @@ We don&rsquo;t need TLS since we are using an SSH tunnel but Docker doesn&rsquo;
 <h2 id="customer-access">Customer Access</h2>
 <p>Let&rsquo;s wave our hands a bit: now you have an accessible registry, yay!
 Assume <code>foobar</code> is a user in the fpro or fent passwd files:</p>
-<pre><code>$ docker login registry.example.com
+<pre tabindex="0"><code>$ docker login registry.example.com
 Username: foobar
 Password: abc123
 

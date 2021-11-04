@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -203,7 +203,7 @@ But since we now control the low-level storage details in Faktory, we can minimi
 Want something to go to the front of a queue, give it a high priority like 9.
 Want it to drop to the back?
 Simple as:</p>
-<pre><code>{ &quot;jobtype&quot;:&quot;MyJob&quot;,&quot;args&quot;:[1,2,3],&quot;queue&quot;:&quot;encoding&quot;,&quot;priority&quot;:1 }
+<pre tabindex="0"><code>{ &quot;jobtype&quot;:&quot;MyJob&quot;,&quot;args&quot;:[1,2,3],&quot;queue&quot;:&quot;encoding&quot;,&quot;priority&quot;:1 }
 </code></pre><p>@andrewstucki did the hard work to design an efficient implementation using a data structure I&rsquo;d never heard of: the <a href="https://en.wikipedia.org/wiki/Brodal_queue">Brodal queue</a>.
 Nice to see some real Computer Science data structure theory paying off here!</p>
 <h2 id="reliability">Reliability</h2>

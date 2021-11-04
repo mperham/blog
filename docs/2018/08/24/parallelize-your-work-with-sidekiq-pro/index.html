@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -199,12 +199,12 @@ In this way, large volumes of work can be done in parallel, speeding up batch pr
 Processing each row might involve web crawling or some other intensive work so we can&rsquo;t process it in serial without it taking hours.
 We&rsquo;ll create a contrived example where we have a list of webpages and we want to get the bytesize of each page.
 We&rsquo;ll use Sidekiq Pro&rsquo;s Batch API to perform the work in parallel:</p>
-<pre><code class="language-csv" data-lang="csv">id,name,uri
+<pre tabindex="0"><code class="language-csv" data-lang="csv">id,name,uri
 1273,Google,https://google.com
 1209,Yahoo,https://yahoo.com
 8273,Sidekiq,https://sidekiq.org
 </code></pre><p>Now we&rsquo;ll create a worker which kicks off the CSV processing and a worker which processes each row in the CSV.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;csv&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;csv&#39;</span>
 require <span style="color:#e6db74">&#39;net/http&#39;</span>
 
 <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CSVProcessor</span>
@@ -258,7 +258,7 @@ require <span style="color:#e6db74">&#39;net/http&#39;</span>
 <p>I put that CSV data into ./pages.csv.
 We kick off the entire process with a simple <code>CSVProcessor.perform_async</code>.</p>
 <p>Here&rsquo;s the result:</p>
-<pre><code>2018-08-24T15:19:03.279Z 93268 TID-ov9mbken4 CSVProcessor JID-418bed33391e0d9d23c8151d INFO: start
+<pre tabindex="0"><code>2018-08-24T15:19:03.279Z 93268 TID-ov9mbken4 CSVProcessor JID-418bed33391e0d9d23c8151d INFO: start
 2018-08-24T15:19:03.286Z 93268 TID-ov9mbken4 CSVProcessor JID-418bed33391e0d9d23c8151d INFO: done: 0.006 sec
 2018-08-24T15:19:03.286Z 93268 TID-ov9mbkeg4 RowProcessor JID-97e9e7e8058a48a4cb5dc9dd BID-zFk-b6ZVqoS-6w INFO: start
 2018-08-24T15:19:03.290Z 93268 TID-ov9mbkeak RowProcessor JID-754a8ecd713507ca396bf3d7 BID-zFk-b6ZVqoS-6w INFO: start

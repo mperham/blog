@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -221,14 +221,14 @@ running against a single Redis instance.</p>
 queue but in reality your app will enqueue those jobs into eight shards: bulk0 - bulk7.</p>
 <p>You have 8 Sidekiq processes and each process will process <code>critical</code>,
 <code>default</code> and 2 bulk shards.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">shards <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">shards <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>
 shards<span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
   other <span style="color:#f92672">=</span> idx<span style="color:#f92672">.</span>succ <span style="color:#f92672">%</span> shards
   <span style="color:#e6db74">&#34;bundle exec sidekiq -q critical -q default -q bulk</span><span style="color:#e6db74">#{</span>idx<span style="color:#e6db74">}</span><span style="color:#e6db74"> -q bulk</span><span style="color:#e6db74">#{</span>other<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>Now each user&rsquo;s operation should dynamically target a bulk shard.
 If you have a random ID for the overall operation, you can do something as simple as:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">q <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;bulk</span><span style="color:#e6db74">#{</span>operationID <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">q <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;bulk</span><span style="color:#e6db74">#{</span>operationID <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
 <span style="color:#ae81ff">100_000</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
   <span style="color:#75715e"># push 100,000 jobs to a bulk shard</span>
   <span style="color:#66d9ef">SomeWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>:q)<span style="color:#f92672">.</span>perform_async(idx)

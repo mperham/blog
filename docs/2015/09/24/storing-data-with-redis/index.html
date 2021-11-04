@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -190,7 +190,7 @@ blockquote,
 </p>
 <p>Would you stuff all of your data into one database table?  <em>That&rsquo;s crazy, Mike,
 don&rsquo;t be silly!</em>  What if I told you most people do just that with Redis?</p>
-<p><img src="/images/redis.png" width="740px" /></p>
+<img src="/images/redis.png" width="740px" />
 <p>Redis users often have several distinct datasets in Redis: long-lived transactional data, background job queues,
 ephemeral cached data, etc.  At the same time I see lots of people using Redis in the most naive way possible:
 put everything into one database.</p>
@@ -221,7 +221,7 @@ to any number from 0-15 (and you can configure Redis to support more databases, 
 provides a distinct keyspace, independent from the others.  Use <code>SELECT n</code> to change databases.  Use <code>FLUSHDB</code> to flush the
 current database.  You can <code>MOVE</code> a key from the current database to another database.</p>
 <p>Want to put all your Sidekiq job data in a separate database?</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Use DB 4 for all job data</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Use DB 4 for all job data</span>
 redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">url</span>: <span style="color:#e6db74">&#39;redis://localhost:6379/4&#39;</span> }
 <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_client <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
   config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> redis

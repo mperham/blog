@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -217,7 +217,7 @@ Golang supports RV64GC starting in the 1.15 release.</p>
 first step of trying any new CPU is to run it in an emulator; after all
 I don&rsquo;t actually own a RISC-V chip or machine!
 QEMU is the open source gold standard for CPU emulation:</p>
-<pre><code>brew install qemu
+<pre tabindex="0"><code>brew install qemu
 </code></pre><p>QEMU comes with <a href="https://git.qemu.org/?p=qemu.git;a=tree;f=target/riscv;h=4d5374737a3e0c52f60c7cc69738e195d8ba8497;hb=refs/heads/master">RISC-V built-in</a> so there&rsquo;s nothing else to be done
 (click that link if you want to see how to emulate a CPU with 1000s of lines of C code).
 You&rsquo;ll need to download a RISC-V native boot disk, I found instructions and a nice <a href="https://wiki.qemu.org/Documentation/Platforms/RISCV#Booting_64-bit_Fedora">Fedora
@@ -225,7 +225,7 @@ Developer 20200108 image</a> here.
 This developer image contains all the typical Linux developer tools, including GCC.
 I followed those directions except note we are using the <strong>Developer</strong> image, not the
 <strong>Minimal</strong> image. You log in with user:pwd &ldquo;riscv:fedora_rocks!&rdquo;.</p>
-<pre><code>&gt; curl -LO Fedora-Developer-Rawhide-20200108.n.0-fw_payload-uboot-qemu-virt-smode.elf
+<pre tabindex="0"><code>&gt; curl -LO Fedora-Developer-Rawhide-20200108.n.0-fw_payload-uboot-qemu-virt-smode.elf
 &gt; curl -LO Fedora-Developer-Rawhide-20200108.n.0-sda.raw.xz
 &gt; unxz *.xz
 &gt; qemu-system-riscv64 \
@@ -248,16 +248,16 @@ I recalled that Ruby 2.7 has been frozen for 1-2 years now; perhaps it was fixed
 I downloaded Ruby 3.0.0-pre1 and ran the same steps.</p>
 <p>🌈✨💪🏼 <strong>It compiled!</strong> 🥰✨🎉</p>
 <p>Natively, Ruby 3.0 took 4 minutes to compile on my 2016 MBP.</p>
-<pre><code>x86_64-darwin19-fake.rb updated
+<pre tabindex="0"><code>x86_64-darwin19-fake.rb updated
 make  240.65s user 35.12s system 98% cpu 4:40.59 total
 </code></pre><p>Under emulation, it took 123 minutes to compile. I guess you could say there is a bit of
 slowdown under emulation.</p>
-<pre><code>riscv64-linux-fake.rb updated
+<pre tabindex="0"><code>riscv64-linux-fake.rb updated
 real	123m35.402s
 user	93m56.389s
 sys	29m31.974s
 </code></pre><p>In the end, this was the result:</p>
-<pre><code>$ ./miniruby -e &quot;puts RUBY_DESCRIPTION&quot;
+<pre tabindex="0"><code>$ ./miniruby -e &quot;puts RUBY_DESCRIPTION&quot;
 ruby 3.0.0preview1 (2020-09-25 master 0096d2b895) [riscv64-linux]
 </code></pre><h2 id="whats-the-point">What&rsquo;s the Point?</h2>
 <p>At a glance this doesn&rsquo;t look revolutionary.</p>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -195,7 +195,7 @@ background job to handle the last N events.</p>
 an ecommerce vendor and we want to track product clicks: User A clicks
 on Product B. This is a naive way to show interest in a product or
 category; we want to store this data for long-term data mining purposes.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># example method that is called each time the user clicks a product</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># example method that is called each time the user clicks a product</span>
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">click</span>(uid)
   product_id <span style="color:#f92672">=</span> rand(<span style="color:#ae81ff">1_000_000</span>)
   <span style="color:#75715e"># create a background job for each click</span>
@@ -211,7 +211,7 @@ click(<span style="color:#ae81ff">12</span>)
 into a background job. We want to aggregate the clicks and process them
 regularly. There&rsquo;s several ways to do this; I&rsquo;m going to show you how
 to implement it using a cron job running every minute.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">click</span>(uid)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">click</span>(uid)
   product_id <span style="color:#f92672">=</span> rand(<span style="color:#ae81ff">1_000_000</span>)
   <span style="color:#75715e"># put a JSON payload of click data into a custom Redis list to be processed later</span>
   <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>redis <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>conn<span style="color:#f92672">|</span>
@@ -221,7 +221,7 @@ to implement it using a cron job running every minute.</p>
 <span style="color:#66d9ef">end</span>
 </code></pre></div><p>Now we need to create a cron job which will process this list in Redis
 every minute.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AggregateClickJob</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AggregateClickJob</span>
   <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
 
   <span style="color:#66d9ef">DAY</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">60</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">60</span>
@@ -280,7 +280,7 @@ in bulk! Rails 6.0 added official bulk loading support via <code>insert_all</cod
 always fall back to raw SQL and database-specific tools.</p>
 <p>We need to configure our aggregate processing job to run every minute.
 This is how you do it with Sidekiq Enterprise.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
   config<span style="color:#f92672">.</span>periodic <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>mgr<span style="color:#f92672">|</span>
     mgr<span style="color:#f92672">.</span>register(<span style="color:#e6db74">&#34;* * * * *&#34;</span>, <span style="color:#e6db74">&#34;AggregateClickJob&#34;</span>)
   <span style="color:#66d9ef">end</span>

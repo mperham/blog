@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.83.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -189,7 +189,7 @@ blockquote,
   
 </p>
 <p>Occasionally Sidekiq users report workers that are &ldquo;stuck&rdquo; processing jobs for a long time. Usually this means that there are entries in the Workers page in the Web UI that linger for a long time. This post explains what you can do as a Sidekiq user to track down what is happening.</p>
-<p><img src="http://www.mikeperham.com/wp-content/uploads/2013/05/Screen_Shot_2013-05-03_at_4.52.02_PM.png" alt="Screen_Shot_2013-05-03_at_4.52.02_PM" width="998" height="245" class="aligncenter size-full wp-image-1302" /></p>
+<img src="http://www.mikeperham.com/wp-content/uploads/2013/05/Screen_Shot_2013-05-03_at_4.52.02_PM.png" alt="Screen_Shot_2013-05-03_at_4.52.02_PM" width="998" height="245" class="aligncenter size-full wp-image-1302" />
 <p>In the Web UI, the Workers page shows you a listing of all worker status entries in Redis. When a Worker starts processing a job, it adds a status entry to Redis. When the job is complete, the worker removes its entry from Redis. If you see one or more entries linger for much longer, this is a symptom of a bigger problem:</p>
 <ol>
 <li>The worker thread has locked up or is blocked by some other issue</li>
