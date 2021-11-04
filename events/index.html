@@ -32,6 +32,7 @@
 
   
   <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
 
   
   <title>Rubyconf 2021 Events | Mike Perham</title>
@@ -40,33 +41,23 @@
   <style>
 body {
   min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
 }
 
 .custom-navbar {
   margin-bottom: 1em;
-  height: 60px;
-}
-
-.custom-navbar a {
-  display: inline-block; 
-  padding: 18px 0;
-  margin-right: 1em; 
-  font-weight: bold; 
-}
-
-.custom-navbar a:hover,
-.custom-navbar a:focus {
-  text-decoration: none; 
 }
 
 @media print {
   .custom-navbar {
     display: none;
   }
-}
-
-article {
-  padding-bottom: 1em;
 }
 
 img {
@@ -164,14 +155,27 @@ blockquote,
 }
 
 </style>
+
 </head>
 
+
 <body>
-  <nav class="custom-navbar">
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
   <div class="container">
-    
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="https://sidekiq.org">Sidekiq</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://contribsys.com/faktory">Faktory</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS">RSS</a></li>
+    </ul>
   </div>
 </nav>
+
   
   <div class="container">
     <article>
