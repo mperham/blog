@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>A Guide to Varnish VCL | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>A Guide to Varnish VCL</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2009-05-19
+  </small>
+  
+</p>
+<p>I&rsquo;ve been working with Varnish 2.0 for the last two weeks, going from complete n00b to someone who knows enough to feel I can improve the terrible lack of documentation for Varnish and VCL. There&rsquo;s not a lot out there and what&rsquo;s there is hard to find and sometimes erroneous. I&rsquo;m hoping this post will help others like me who are struggling with Varnish and VCL.</p>
+<p><strong>Basics</strong></p>
+<p>VCL is essentially a set of stubs which you can override to provide your own behavior. It is very limited in what it can do, primarily for performance reasons. You don&rsquo;t have access to the filesystem and the language has no variables or loops.</p>
+<p>The two stubs you will most often use:</p>
+<ul>
+<li><strong>vcl_recv</strong> &ndash; called at the start of a request. This is primarily used to canonicalize the input URL and headers, determine whether to bypass the cache, etc.</li>
+<li><strong>vcl_fetch</strong> &ndash; called when the response has been gathered from the backend before placing it in the cache. You can configure a grace period, enable ESI processing, configure different TTLs, remove user-specific cookies, etc before inserting the response into the cache.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<p>The Varnish VCL examples are rather sparse; here&rsquo;s a few more which may fill in some gaps. These work with Varnish 2.0.4.</p>
+<pre lang="c"># If the requested URL starts like "/link/?" then immediately pass it to the given
+# backend and DO NOT cache the result ("pass" basically means "bypass the cache").
+if (req.url ~ "^/link/?") {
+  set req.backend = web;
+  pass;
+}
+</pre>
+<pre lang="c">if (req.url ~ "/$") {
+  # Handle URLs with a trailing slash by appending index.html
+  # (Useful if you are pulling from S3 which does not have default document logic)
+  # Note there's no explicit string append operator.
+  set req.url = req.url "index.html";
+}
+</pre>
+<pre lang="c"># strip port from the Host header
+# (useful when testing against a local Varnish instance on port 6081)
+set req.http.Host = regsub(req.http.Host, ":[0-9]+", "");
+
+# /foo/bar.embed -> /foo/bar/embed.js
+set req.url = regsub(req.url, "(.*).embed$", "1/embed.js");
+
+# Support feed URLs of the form "/foo/bar.atom" --> "/foo/bar/feed.atom"
+if ((req.url ~ ".(rss|atom)$") &#038;&#038; !(req.url ~ "feed.(atom|rss)$")) {
+    set req.url = regsub(req.url, "(.*).(.*)$", "1/feed.2");
+}
+</pre>
+<p>The biggest pain in all of this was the very limited logic you can perform on req.url. You don&rsquo;t have variables in VCL so you need to think in terms of regular expression groups like in the RSS/ATOM regexp above when trying to restructure the URL.</p>
+<pre lang="c"># use this in vcl_fetch, don't want 404s filling up our cache, so just
+  # immediately return a client error and bypass the cache.
+  if (obj.status == 404) {
+    error 404 "No such file";
+  }
+</pre>
+<p><strong>Resources</strong></p>
+<p>Here&rsquo;s the best VCL resources I could find:</p>
+<ul>
+<li><a href="http://varnish.projects.linpro.no/wiki/VCL">Varnish VCL</a></li>
+<li><a href="http://varnish.projects.linpro.no/wiki/VCLExamples">Varnish VCL Examples</a></li>
+<li><a href="http://phk.freebsd.dk/pubs/varnish_vcl.pdf">VCL Overview (PDF)</a></li>
+</ul>
+<p>Good luck!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

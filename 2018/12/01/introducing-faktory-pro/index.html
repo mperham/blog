@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Introducing Faktory Pro | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Introducing Faktory Pro</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2018-12-01
+  </small>
+  
+</p>
+<p>I&rsquo;m happy to announce Faktory Pro, my commercial version of <a href="https://github.com/contribsys/faktory">Faktory</a>, is now available for purchase.
+Faktory is my next generation background job system which brings Sidekiq functionality to <strong>all programming languages</strong>.
+If you want background jobs in Python, JavaScript, PHP, Go, Ruby, or Rust, Faktory can work with them all!
+It gives you a standard job interface and conventions useful for all languages.</p>
+<p><img src="/images/faktory-ui.png" alt="faktory ui"></p>
+<h2 id="why-jobs">Why Jobs?</h2>
+<p>I believe background jobs are the best architectural pattern for scaling typical
+business apps to many machines.  Sidekiq has been enormously successful
+because it implements that pattern and adds opinionated conventions
+which make the average developer&rsquo;s life much easier:</p>
+<ul>
+<li>A standard mechanism for implementing and creating a unit of work</li>
+<li>A standard process for error handling with automatic retries and backoff</li>
+<li>&ldquo;All-in-one&rdquo; packaging so the base package includes everything necessary: client API, worker process, management APIs, and a beautiful Web UI translated to 25 languages</li>
+</ul>
+<p>If you want to build and maintain your own low-level infrastructure, Faktory is not
+for you. If you want to build and scale a traditional business app as quickly and
+painlessly as possible, Faktory is designed for you.</p>
+<h2 id="features">Features</h2>
+<p>This initial launch includes these features but <strong>the Pro feature list here will grow over time</strong>.
+Notably I will implement as many of the <a href="https://sidekiq.org">commercial Sidekiq features</a> as possible.</p>
+<ol>
+<li><a href="https://github.com/contribsys/faktory/wiki/Pro-Cron">Cron jobs</a> - kick off jobs on a regular schedule.</li>
+<li><a href="https://github.com/contribsys/faktory/wiki/Pro-Redis-Gateway">Redis Gateway</a> - expose Redis to the network so you can take backups, set up a replica, etc.</li>
+<li><a href="https://github.com/contribsys/faktory/wiki/Pro-Expiring-Jobs">Expiring jobs</a> - configure jobs to expire if they have not successfully processed within some time interval</li>
+</ol>
+<p>Future features might include metrics, batches, unique jobs, encryption, Web UI search, etc.
+Faktory&rsquo;s different architecture means some features aren&rsquo;t possible but enables others that Sidekiq couldn&rsquo;t do well, like queue throttling.
+I&rsquo;m excited to see what new things are possible!</p>
+<h2 id="how-to-try-it">How to Try It</h2>
+<p>There is a macOS binary of Faktory Pro available for free trial on your
+local laptop on the <a href="https://github.com/contribsys/faktory/releases">Faktory releases</a> page.
+Additionally each sale comes with a 14 day trial period &ndash; you won&rsquo;t be charged for two weeks.</p>
+<h2 id="pricing">Pricing</h2>
+<p>Faktory Pro is a server you run and is priced <em>per production instance</em> at $149/mo for the first server and $49/mo for each additional server.
+Each Faktory Pro server can handle thousands of jobs per second under
+normal conditions.
+Testing, staging and development instances are unlimited and free.
+For the price of one consultant-hour per month, you get a well-maintained and well-supported feature-rich job system.</p>
+<p>You can <strong><a href="https://billing.contribsys.com/fpro/new.cgi">buy Faktory Pro</a></strong> right here.
+Got questions?
+Check out the <a href="https://github.com/contribsys/faktory/wiki">wiki documentation</a>, <a href="https://github.com/contribsys/faktory/issues/new">open an issue</a> or <a href="https://gitter.im/contribsys/faktory/">jump into the chatroom</a> and say hi!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

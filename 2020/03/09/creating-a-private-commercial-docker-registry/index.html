@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Creating a private, commercial Docker registry | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Creating a private, commercial Docker registry</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2020-03-09
+  </small>
+  
+</p>
+<p>One thing I&rsquo;ve come to respect about containers are how easy they make
+packaging and running Linux infrastructure.  No more fighting the distro
+for the right version of a package, a dozen builds for a dozen
+distro-specific packages, etc.  Everything is encapsulated within a
+single container image that runs on any modern Linux.</p>
+<p>It hasn&rsquo;t escaped my notice that most of my Faktory users are using the
+<a href="https://hub.docker.com/r/contribsys/faktory">Docker image</a> to run Faktory which means that most of my Faktory Pro and
+Enterprise customers will want a Docker image too. How do I distribute
+Docker images which contain my commercial builds? <strong>Run my own Docker
+image registry!</strong> Here&rsquo;s how.</p>
+<h2 id="install-docker-on-your-server">Install Docker on your Server</h2>
+<p>Docker provides a container image with their <a href="https://hub.docker.com/_/registry">proprietary registry
+server</a> along with <a href="https://docs.docker.com/registry/deploying/">documentation on
+how to use it</a>. It&rsquo;s not
+open source but it is Apache licensed so anyone can run it for any
+purpose.</p>
+<p>I wasn&rsquo;t too happy with this step &ndash; I don&rsquo;t like adding moving parts to my production servers &ndash; but there wasn&rsquo;t any other supported deployment mechanism.
+I developed this set of commands to install Docker and the registry image.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">apt-get install -y gnupg-agent software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+add-apt-repository <span style="color:#e6db74">&#34;deb [arch=amd64] https://download.docker.com/linux/ubuntu </span><span style="color:#66d9ef">$(</span>lsb_release -cs<span style="color:#66d9ef">)</span><span style="color:#e6db74"> stable&#34;</span>
+apt-get install -y docker-ce docker-ce-cli containerd.io
+docker pull registry:2
+</code></pre></div><p>Protip: don&rsquo;t copy this, what I did in January 2020 can easily change.
+Follow the Linux install directions on docker.com.</p>
+<pre tabindex="0"><code>a2enmod headers proxy proxy_http
+</code></pre><p>Proxying the registry required me to activate these Apache modules. YMMV.</p>
+<h2 id="configure-apache-proxy">Configure Apache Proxy</h2>
+<p>I used small portions of the <a href="https://docs.docker.com/registry/recipes/apache/">Apache recipe</a> provided by Docker.
+Take some time to read it carefully.
+The core are these lines:</p>
+<pre tabindex="0"><code>  ProxyPass        /v2 http://localhost:5000/v2
+  ProxyPassReverse /v2 http://localhost:5000/v2
+</code></pre><p>The registry listens on localhost:5000. Apache proxies any /v2 requests to this port.</p>
+<p>I have an atypical usecase: I have Faktory Pro customers and Faktory Enterprise customers.
+Both should be able to access the registry but the general public should not.
+How can I configure Apache to authenticate users from list A or list B?
+Turns out it was pretty easy with a single trick: <code>AuthBasicProvider</code> allows multiple sources.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-apache" data-lang="apache"><span style="color:#75715e"># sites-enabled/auth.conf</span>
+<span style="color:#f92672">&lt;AuthnProviderAlias</span> <span style="color:#e6db74">file fpro</span><span style="color:#f92672">&gt;</span>
+	AuthUserFile <span style="color:#e6db74">&#34;/var/fpro.passwd&#34;</span>
+<span style="color:#f92672">&lt;/AuthnProviderAlias&gt;</span>
+
+<span style="color:#f92672">&lt;AuthnProviderAlias</span> <span style="color:#e6db74">file fent</span><span style="color:#f92672">&gt;</span>
+	AuthUserFile <span style="color:#e6db74">&#34;/var/fent.passwd&#34;</span>
+<span style="color:#f92672">&lt;/AuthnProviderAlias&gt;</span>
+
+<span style="color:#75715e"># sites-enabled/registry.example.com.conf</span>
+<span style="color:#f92672">&lt;VirtualHost</span> <span style="color:#e6db74">*:443</span><span style="color:#f92672">&gt;</span>
+  ServerName <span style="color:#66d9ef">registry</span>.example.com
+
+  <span style="color:#75715e"># ... other bits removed ...</span>
+
+  ProxyPass        <span style="color:#e6db74">/v2</span> http://localhost:5000/v2
+  ProxyPassReverse <span style="color:#e6db74">/v2</span> http://localhost:5000/v2
+
+  <span style="color:#f92672">&lt;Location</span> <span style="color:#e6db74">/v2</span><span style="color:#f92672">&gt;</span>
+    Order deny,allow
+    Allow from <span style="color:#66d9ef">all</span>
+    AuthName <span style="color:#e6db74">&#34;Registry Authentication&#34;</span>
+    AuthType basic
+    AuthBasicProvider fpro fent
+    Require valid-user
+
+    <span style="color:#f92672">&lt;Limit</span> <span style="color:#e6db74">POST PUT DELETE PATCH</span><span style="color:#f92672">&gt;</span>
+      Deny from <span style="color:#66d9ef">all</span>
+    <span style="color:#f92672">&lt;/Limit&gt;</span>
+  <span style="color:#f92672">&lt;/Location&gt;</span>
+<span style="color:#f92672">&lt;/VirtualHost&gt;</span>
+</code></pre></div><p>Note that write verbs are 100% denied. So with this one block of
+configuration we:</p>
+<ol>
+<li>limit access to fpro and fent customers</li>
+<li>enforce read-only access</li>
+</ol>
+<h2 id="pushing-new-images">Pushing New Images</h2>
+<p>If Apache limits access to read only, how do we push new images?
+Use an SSH tunnel to bypass Apache!
+Since the registry listens on localhost:5000, I build the image on my laptop, open an SSH tunnel to localhost:5000 on the server and push new image:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">ssh -N -f -L 5000:localhost:5000 root@registry.example.com
+sleep <span style="color:#ae81ff">2</span>
+docker tag example/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span> host.docker.internal:5000/example/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
+<span style="color:#75715e"># NB: add &#34;host.docker.internal:5000&#34; to insecure registries in Docker Settings</span>
+docker push host.docker.internal:5000/example/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
+</code></pre></div><p>Here we are forwarding laptop port 5000 to port localhost:5000 on <code>registry.example.com</code>.
+That&rsquo;s the Registry running on the server.</p>
+<p>This script has a little bit of magic so let me highlight a few things.
+<code>host.docker.internal</code> is a special Docker hostname which I think means &ldquo;the actual host OS Docker is running on&rdquo; since localhost is specific to each container.
+The SSH tunnel does not shut down automatically so I have to kill it manually, email me if you know how to fix that.
+You have to add <code>host.docker.internal</code> to Docker&rsquo;s list of insecure registries so you can push without TLS.
+We don&rsquo;t need TLS since we are using an SSH tunnel but Docker doesn&rsquo;t know that.</p>
+<h2 id="customer-access">Customer Access</h2>
+<p>Let&rsquo;s wave our hands a bit: now you have an accessible registry, yay!
+Assume <code>foobar</code> is a user in the fpro or fent passwd files:</p>
+<pre tabindex="0"><code>$ docker login registry.example.com
+Username: foobar
+Password: abc123
+
+$ docker pull registry.example.com/example/somename:1.5.0
+...
+</code></pre><p>If the customer stops paying, you remove them from the passwd file and they lose the ability to pull images.
+That&rsquo;s pretty straightfoward, a nice developer experience.</p>
+<h2 id="redundancy">Redundancy</h2>
+<p>I run several identical servers A, B and C so that if one does down, any of the others can take over a service.
+The Registry limits itself to serving static files from one directory tree (e.g. <code>/var/www/docker</code>).
+Pushing an image adds files to that directory tree.
+I configured that directory to be replicated across all my servers so when I push an image, all servers get a copy of the image within seconds.
+If server A goes down, server B can take over as <code>registry.example.com</code> with a quick DNS swap.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>All this took me a few days to figure out and develop but I have been very happy with the result.
+Yes I had to install Docker on my server but I&rsquo;ve had zero problems with it so far and it takes very little resources to run.
+In return, Faktory installation and deployment have become much simpler for my customers using Docker.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

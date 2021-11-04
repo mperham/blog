@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Something For Nothing | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Something For Nothing</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2019-07-19
+  </small>
+  
+</p>
+<img style="float: right; padding: 10px" src="/images/freebeer.jpg" alt="freebeer"/>
+<p>Do you like free things? Would you like to get something for nothing?
+Are you a Sidekiq user? If you answered yes to these questions, I have a
+case study in how one customer effectively got Sidekiq Enterprise for
+free.</p>
+<p>One Friday morning, two engineers jumped into my weekly Happy Hour to ask me about a Sidekiq problem they were having.</p>
+<blockquote>
+<p>&ldquo;We have two Sidekiq dynos with 40 threads each: we find that after about 5 minutes, they are only using about 20 threads; shouldn&rsquo;t all 40 threads pick up jobs? The jobs perform image processing.&rdquo;</p>
+</blockquote>
+<pre tabindex="0"><code>bundle exec sidekiq -c 40
+</code></pre><p>They were using two Heroku <code>performance-m</code> dynos, which cost $250/month each.</p>
+<h2 id="mri-has-a-limit">MRI has a Limit</h2>
+<p>If you are a Ruby expert, you might already have an idea of what&rsquo;s going
+wrong but the crux is this: <strong>one MRI process will only use a single core</strong>.
+Now consider <strong>image processing is often CPU intensive</strong>.
+They were crushing a single core on each performance-m dyno while the rest of the cores sat there doing nothing.
+Those extra 20 threads weren&rsquo;t lazy &ndash; they literally couldn&rsquo;t get any CPU time scheduled!</p>
+<h2 id="multi-process-to-the-rescue">Multi-Process to the Rescue</h2>
+<p>The answer was easy since they were a Sidekiq Enterprise customer:</p>
+<pre tabindex="0"><code>bundle exec sidekiqswarm -c 20
+</code></pre><p><code>sidekiqswarm</code> is a special binary which <a href="https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process">forks a Sidekiq process for
+each core on the
+dyno</a>. We reduce the thread count so each core
+isn&rsquo;t crushed by image processing.</p>
+<p>In summary:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dynos</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Threads</td>
+<td>80 (2 x 40)</td>
+<td>80 (4 x 20)</td>
+</tr>
+<tr>
+<td>Core usage</td>
+<td>50%</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>$500</td>
+<td>$250 + $179</td>
+</tr>
+<tr>
+<td>Savings</td>
+<td></td>
+<td>$71/mo</td>
+</tr>
+</tbody>
+</table>
+<p>Before they had 1 busy core and 3 idle cores on each dyno.  Now they
+have 4 busy cores and can spin down the second dyno instance to save
+$250/mo. Since Sidekiq Enterprise costs $179/mo, this change paid for
+Sidekiq Enterprise, saved an additional $71/mo and ensured that future worker dynos are fully utilized.</p>
+<p>If you are using Performance dynos and not using Sidekiq Enterprise, you
+are likely paying for too many dynos.  <a href="https://billing.contribsys.com/sent/new.cgi">Purchasing Sidekiq Enterprise</a> and
+using <code>sidekiqswarm</code> to reduce your dyno count may cover the entire
+purchase price.  You get all the Sidekiq Pro and Enterprise features
+effectively for free.  Each sale has a 14 day money back guarantee if
+you want to try it today.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

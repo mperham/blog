@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Don&#39;t Daemonize your Daemons! | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Don&rsquo;t Daemonize your Daemons!</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2014-09-22
+  </small>
+  
+</p>
+<p>For years developers have followed the same arcane <a href="http://0pointer.de/public/systemd-man/daemon.html#SysV%20Daemons">dozen steps</a> to create a long-lived daemon process on Unix-based systems. <strong>These steps were state of the art in 2000 but they are no longer best practice today.</strong> <a href="http://codeincomplete.com/posts/2014/9/15/ruby_daemons/">Jake Gordon&rsquo;s recent blog post on daemonizing Ruby processes</a> is 100% factual but his approach is not recommended these days. Your application code should not be dealing with PID files, log redirection or other low-level concerns.</p>
+<p><strong>Best Practices</strong></p>
+<p>Don&rsquo;t take my word for it, read <a href="http://0pointer.de/public/systemd-man/daemon.html#New-Style%20Daemons">systemd&rsquo;s daemon man page</a>. There&rsquo;s a lot of systemd-specific cruft in that list but the net is:</p>
+<ol>
+<li>Log to stdout.</li>
+<li>Shut down on TERM/INT.</li>
+<li>Reload config on HUP.</li>
+<li>Provide the necessary config file for your favorite init system to control your daemon.</li>
+</ol>
+<p>This makes developing a modern daemon <strong>much</strong> easier. The init config file is what you use to configure logging, run as a user, and many other things you previous did in code. You tweak a few init config settings; your code focuses less on housekeeping and more on functionality.</p>
+<p>What&rsquo;s the result? In development mode, your process will run in the foreground, as yourself and log to stdout: perfect for developers. In production mode, the init system will run your process as a configured user with logging sent to a specific location and log rotated automatically. Less system administration, easier debugging, simpler code, all because you leveraged the init system to do the work for you!</p>
+<p><strong>Worst Practices</strong></p>
+<p>Using a deployment tool like Capistrano to directly start any process is a bad idea. What happens when that process crashes? (Most likely it disappears and now your application is broken.) Who rotates the logs to ensure they don&rsquo;t fill the disk? (Most likely you after filling the disk the first time.) Instead, integrate your daemon into the init system, configure it to respawn if it crashes and have Capistrano manage the process via init:</p>
+<pre class="brush: ruby; title: ; notranslate" title="">task :restart do
+  run "initctl restart sidekiq"
+end
+</pre>
+<p>As always, KISS. Let your operating system handle daemons, respawning and logging while you focus on your application features and users.</p>
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

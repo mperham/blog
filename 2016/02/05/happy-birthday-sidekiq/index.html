@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Happy 4th Birthday, Sidekiq | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Happy 4th Birthday, Sidekiq</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2016-02-05
+  </small>
+  
+</p>
+<p>Four years ago today I shipped Sidekiq 0.5.0.  110 versions later, it&rsquo;s
+still changing every day.  Pretty amazing.  So what&rsquo;s new?</p>
+<h2 id="sidekiq-enterprise">Sidekiq Enterprise</h2>
+<p>Sidekiq Enterprise gained two major new features this month.</p>
+<h3 id="historical-metrics">Historical Metrics</h3>
+<p>Sidekiq Enterprise can now send the global counts you see at
+the top of the Web UI to Statsd for monitoring and
+display within your metrics dashboard. <a href="https://github.com/mperham/sidekiq/wiki/Ent-Historical-Metrics">Read More</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">STATSD</span> <span style="color:#f92672">=</span> <span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>new(<span style="color:#f92672">...</span>)
+
+<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  config<span style="color:#f92672">.</span>save_history(<span style="color:#66d9ef">STATSD</span>)
+<span style="color:#66d9ef">end</span></code></pre></div>
+<h3 id="multi-process">Multi-Process</h3>
+<p>If you start N Sidekiq processes, each process is completely separate
+and must be managed individually.</p>
+<p>Sidekiq Enterprise has a new binary, <code>sidekiqswarm</code>,
+which will spin up N child Sidekiq processes.  Those child processes
+will share memory with the parent process, leading to increased memory efficiency.
+If a child process dies, the parent will restart it immediately.
+Quieting and stopping the parent does the same to all children so you
+don&rsquo;t need to manage individual child processes.  With this new
+multi-process support, it&rsquo;s really simple to scale Sidekiq across all
+cores.  <a href="https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process">Read More</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">COUNT</span><span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> bundle exec sidekiqswarm <span style="color:#f92672">-</span>e production</code></pre></div>
+<h2 id="sidekiq-pro">Sidekiq Pro</h2>
+<p>Until today you had to be running reliable fetch in order to pause
+queues.  This is no longer required!  Anyone running Sidekiq Pro 3.x can now
+pause queues.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">q <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new
+q<span style="color:#f92672">.</span>pause!
+sleep <span style="color:#ae81ff">10</span>
+q<span style="color:#f92672">.</span>unpause!</code></pre></div>
+<p><a href="https://github.com/mperham/sidekiq/blob/master/Pro-Changes.md">Read More</a></p>
+<h2 id="sidekiq">Sidekiq</h2>
+<p>Sidekiq gained support for an ActiveJob-style <code>set</code> method, to set options
+dynamically:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">SomeWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#39;high&#39;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>)</code></pre></div>
+<p>Also, the Web UI now shows a tag next to any process which is quiet (has
+received the USR1 signal). <a href="https://github.com/mperham/sidekiq/blob/master/Changes.md">Read More</a></p>
+<h2 id="rails">Rails</h2>
+<p>When you buy <a href="http://sidekiq.org">Sidekiq Pro or Sidekiq Enterprise</a>, part of the deal is that
+I can work to improve Sidekiq <strong>and</strong> the Ruby ecosystem.  I&rsquo;ve
+recently spent some time simplifying Rails 5 and cutting out unnecessary
+gem dependencies.  I&rsquo;ll have another blog post about that work next
+week.</p>
+<p>Until then, ciao!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

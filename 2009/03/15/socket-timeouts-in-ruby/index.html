@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Socket Timeouts in Ruby | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Socket Timeouts in Ruby</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2009-03-15
+  </small>
+  
+</p>
+<p>One of Ruby&rsquo;s weaknesses is its poor networking performance. Much of that has to do with the net/http implementation, which uses Ruby&rsquo;s awful Timeout library. The issues with Timeout are <a href="http://blog.headius.com/2008/02/rubys-threadraise-threadkill-timeoutrb.html">well documented</a>. <a href="http://ph7spot.com/articles/system_timer">SystemTimer</a> provides a reliable alternative that also performs better.</p>
+<p>However I started today wondering if there was a better way. Enabling timeouts has a huge performance hit on my memcache-client library and reducing the overhead would go a long way to making it perform safely <strong>and</strong> quickly. Since C programs need socket timeouts also, I figured there had to be a low-level alternative, and indeed there is: the <code>SO_SNDTIMEO</code> and <code>SO_RCVTIMEO</code> socket options. It&rsquo;s a bit involved to create a proper socket with these options but possible:</p>
+<pre lang="ruby">def connect_to(host, port, timeout=nil)
+      addr = Socket.getaddrinfo(host, nil)
+      sock = Socket.new(Socket.const_get(addr[0][0]), Socket::SOCK_STREAM, 0)
+
+      if timeout
+        secs = Integer(timeout)
+        usecs = Integer((timeout - secs) * 1_000_000)
+        optval = [secs, usecs].pack("l_2")
+        sock.setsockopt Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, optval
+        sock.setsockopt Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, optval
+      end
+      sock.connect(Socket.pack_sockaddr_in(port, addr[0][3]))
+      sock
+    end
+</pre>
+<p>There are a few complexities in the code:</p>
+<ul>
+<li>We use the low-level operations, <code>Socket.new</code> and <code>connect</code> rather than just <code>TCPSocket.new(host, port)</code> because otherwise we can&rsquo;t set the socket options before the connection is attempted; we want to ensure the connection attempt itself is timed out also.</li>
+<li>We have to look up the host via DNS by hand as some systems (*cough*, OSX) can return either IPv6 or IPv4 addresses and the address family constant used in Socket.new must match the address used in the connect statement.</li>
+<li>The <code>setsockopt</code> method takes a native C struct so we need to construct it using the <code>Array#pack</code> method.</li>
+</ul>
+<p>Here&rsquo;s the results, from worst to best:</p>
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, normal Ruby timeouts
+                                     user     system      total        real
+mixed:ruby:memcache-client      14.240000   7.470000  21.710000 ( 22.173267)
+</pre>
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, SystemTimer 1.1.1
+                                     user     system      total        real
+mixed:ruby:memcache-client      12.400000   1.960000  14.360000 ( 14.857924)
+</pre>
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, raw socket timeouts
+                                     user     system      total        real
+mixed:ruby:memcache-client       2.750000   0.620000   3.370000 (  5.841545)
+</pre>
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, no socket timeouts
+                                     user     system      total        real
+mixed:ruby:memcache-client       2.760000   0.620000   3.380000 (  5.902549)</pre>
+<p>Awesome. <strong>With raw socket timeouts, there is no performance impact!</strong> SystemTimer provides an excellent replacement for Timeout if you want to guarantee a ceiling on the time spent in an arbitrary block, but if you just need timeouts for low-level socket operations, nothing beats the operating system&rsquo;s native socket timeout support.</p>
+<p>There is a caveat in the paragraph above: <strong>low-level</strong> socket operations. memcache-client uses three IO methods: read, write and gets. The first two are low-level and time out properly, but gets is built on the low-level read operation; it has to ignore the EAGAIN error in order to ensure it returns a full line of text. So we use a hybrid approach, read and write will use the raw socket timeouts and gets will use SystemTimer. It&rsquo;s not quite as fast as with no/raw timeouts but it&rsquo;s definitely an improvement:</p>
+<pre>== memcache-client 1.7.0 with Ruby 1.8.6, raw socket timeouts and SystemTimer
+                                     user     system      total        real
+mixed:ruby:memcache-client       7.490000   1.270000   8.760000 (  9.361547)
+</pre>
+<p>So we&rsquo;ve gone from 22 sec with Timeout to 15 sec with SystemTimer to 9 sec using raw socket timeouts where possible (<a href="http://github.com/mperham/memcache-client/commit/9f5201b77ccb6ef0d021e741cab8468151f2535d">Github commit</a>). For my next trick, I figure I&rsquo;ll rewrite <code>gets</code> to use read so I can remove the need for SystemTimer and Timeout altogether.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

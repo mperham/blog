@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Storing Data with Redis | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Storing Data with Redis</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2015-09-24
+  </small>
+  
+</p>
+<p>Would you stuff all of your data into one database table?  <em>That&rsquo;s crazy, Mike,
+don&rsquo;t be silly!</em>  What if I told you most people do just that with Redis?</p>
+<img src="/images/redis.png" width="740px" />
+<p>Redis users often have several distinct datasets in Redis: long-lived transactional data, background job queues,
+ephemeral cached data, etc.  At the same time I see lots of people using Redis in the most naive way possible:
+put everything into one database.</p>
+<p>There are several questions to answer when determining how to use Redis for different datasets:</p>
+<ol>
+<li>Can I flush the dataset without affecting other datasets?</li>
+<li>Can I <a href="http://redis.io/topics/persistence">tune the persistence strategy</a> per dataset?
+For transactional data, you want real-time persistence with AOF.
+For cache, you want infrequent RDB snapshots or no persistence at all.</li>
+<li>Can I scale Redis per dataset?  Redis is single-threaded and can perform X ops/sec so consider that your
+performance &ldquo;budget&rdquo;.  <em>Datasets in the same Redis instance will share that budget.</em>  What happens when your
+traffic spikes and the cache data uses the entire budget?  Now your job queue slows to a crawl.</li>
+</ol>
+<h2 id="data-partitioning">Data Partitioning</h2>
+<p>You have several different options when it comes to splitting up your data:</p>
+<h3 id="namespaces">Namespaces</h3>
+<p>This is the most naive option.  With namespaces, the Redis client prefixes every key with the
+namespace, e.g. &ldquo;cache&rdquo;, so the keys for &ldquo;cache&rdquo; don&rsquo;t conflict with the keys for &ldquo;transactional&rdquo;.  Namespacing
+increases the size of every key by the size of the prefix.  You don&rsquo;t get to tune Redis for the
+individual needs of &ldquo;cache&rdquo; and &ldquo;transactional&rdquo;.  <strong>I strongly recommend avoiding namespaces</strong>.
+I see people use namespaces to share a single Redis across multiple apps and/or multiple environments.
+Consider this for hobbyists only who only want to pay for a single Redis database from a SaaS;
+you do not want to build a business on top of this hack.  <strong>Answers: No, No, No</strong>.</p>
+<h3 id="databases">Databases</h3>
+<p>Out of the box, every Redis instance supports 16 databases.  The database index is the number you see
+at the end of a Redis URL: <code>redis://localhost:6379/0</code>.  The default database is 0 but you can change that
+to any number from 0-15 (and you can configure Redis to support more databases, look in redis.conf).  Each database
+provides a distinct keyspace, independent from the others.  Use <code>SELECT n</code> to change databases.  Use <code>FLUSHDB</code> to flush the
+current database.  You can <code>MOVE</code> a key from the current database to another database.</p>
+<p>Want to put all your Sidekiq job data in a separate database?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Use DB 4 for all job data</span>
+redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">url</span>: <span style="color:#e6db74">&#39;redis://localhost:6379/4&#39;</span> }
+<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_client <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> redis
+<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> redis
+<span style="color:#66d9ef">end</span></code></pre></div>
+<p>Using separate databases is an easy way to put a &ldquo;firewall&rdquo; between datasets without any additional administrative
+overhead.  Now you can FLUSHDB one dataset without affecting another dataset.  Protip: configure your test suites
+to use a different database than your development environment so the test suite can FLUSHDB without destroying development data.
+<strong>Answers: Yes, No, No</strong>.</p>
+<h3 id="instances">Instances</h3>
+<p>Running separate instances of Redis on different ports is the most flexible approach but adds significant administrative
+overhead.  If you are using Redis for caching (and you should probably use memcached<sup>1</sup> instead), use a separate instance
+so you can <a href="http://redis.io/topics/lru-cache">tune the configuration</a> and dedicate 100% of Redis&rsquo;s single thread to serving high-traffic cache data.
+Configure another Redis instance to handle lower-traffic transactional and job data with more appropriate persistence.
+<strong>Answers: Yes, Yes, Yes</strong>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>My main goal of this blog post is educate people on the drawbacks of stuffing everything into one Redis database.
+Namespaces are a poor solution for splitting up datasets in almost every case.</p>
+<hr/>
+1. I recommend memcached because it is designed for caching: it performs no disk I/O at all and is multithreaded so it can scale
+across all cores, handling 100,000s of requests per second.  Redis is limited to a single core so it will hit a scalability
+limit before memcached.  Using Redis for caching is totally reasonable if you want to stick
+with one tool and are comfortable with the necessary configuration and lower scalability limit per process.  Redis does
+have a nice advantage that it can persist the cache, making it much faster to warm up upon restart.
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

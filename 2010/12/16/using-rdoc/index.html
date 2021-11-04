@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Using RDoc | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Using RDoc</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2010-12-16
+  </small>
+  
+</p>
+<p>One longstanding weakness with the Ruby community is subpar documentation. I think many Rubyists tend to look down on actual API documentation, preferring instead to just read source code directly. I&rsquo;ve been guilty of this too and I think some of this is due simply to unfamiliarity with RDoc. Let&rsquo;s change that now.</p>
+<p><strong>Creating RDoc</strong></p>
+<p>I&rsquo;ve never found an easily accessible RDoc markup reference. The only one I know of is unlinkable, buried at the bottom of the RDoc readme instead of front and center as it should be. So I extracted the <a href="http://www.mikeperham.com/wp-content/uploads/2010/12/rdoc.html">RDoc markup reference</a> for your reading pleasure. Jan Varwig created a great <a href="http://jan.varwig.org/wp-content/uploads/2006/09/Rdoc%20Cheat%20Sheet.pdf">RDoc cheatsheet PDF</a> for local or offline access.</p>
+<p>Next time you&rsquo;re working on a gem, take 10 minutes to read the reference and document the main class for the gem. It&rsquo;ll make you a better Rubyist, I guarantee it.</p>
+<p><strong>Generating RDoc</strong></p>
+<p>Ok, so you&rsquo;ve learned RDoc markup and your code is documented like a champ. What do you do now? You&rsquo;ve got several choices:</p>
+<ul>
+<li>Generate rdoc by hand &ndash; the <code>rdoc</code> command ships with Ruby and by default generates all .rb files in or below the current directory. You probably want something like <code>rdoc lib</code> to just include your project&rsquo;s main Ruby code.</li>
+<li>Integrate RDoc into Rake &ndash; Rake has an <a href="http://rake.rubyforge.org/classes/Rake/RDocTask.html">RDocTask</a> which can be configured for your project, so you can just run <code>rake rdoc</code>.</li>
+</ul>
+<p>Once generated, you can view the generated output at <code>doc/index.html</code>.</p>
+<p><strong>Viewing RDoc</strong></p>
+<p>Rubygems has built-in support for generating and viewing the RDoc for installed gems. rdoc is generated when the gem is installed (using <code>gem install --no-rdoc [name]</code> skips the local rdoc generation). You can then use <code>gem server</code> to view your local gem rdoc at <a href="http://localhost:8808">http://localhost:8808</a>.</p>
+<p><strong>Check out YARD</strong></p>
+<p><a href="http://yardoc.org">YARD</a> is an interesting project by Loren Segal to create a next generation Ruby documentation system. <a href="http://rubydoc.info/docs/yard/file/docs/GettingStarted.md">Getting started with YARD</a> is well documented; try it out if you want an alternative to RDoc. YARD&rsquo;s syntax is a superset of RDoc&rsquo;s so backwards compatibility should not be an issue. The <a href="http://rubydoc.info/github/mperham/dalli/master/frames">generated documentation</a> looks pretty awesome (note the support for Markdown-formatted README files, which RDoc does not have).</p>
+<p>The YARD team also created <a href="http://rubydoc.info/">RubyDoc.info</a>, which hosts documentation for popular gems and is a great resource for finding linkable documentation.</p>
+<p>I hope this helps de-mystify rdoc for people. Any other rdoc tips, please leave a comment. Happy documenting!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

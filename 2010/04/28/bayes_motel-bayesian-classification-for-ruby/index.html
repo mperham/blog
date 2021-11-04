@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>bayes_motel -- Bayesian classification for Ruby | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>bayes_motel &ndash; Bayesian classification for Ruby</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2010-04-28
+  </small>
+  
+</p>
+<p><a href="http://en.wikipedia.org/wiki/Naive_Bayes_classifier">Bayesian classification</a> is an algorithm which allows us to categorize documents probabilistically. I recently started playing with Twitter data and realized there was no Ruby gem which would allow me to build a spam detector for tweets. The <code>classifier</code> gem just works on a set of text by figuring out which words appear in a category but a tweet is much more complicated than that. A tweet looks like this:</p>
+<pre lang="ruby">{:text=>"Firesale prices, too! RT @nirajc: Time to change your Facebook password. Hacker selling 1.5m accounts. http://bit.ly/dryY7",
+:truncated=>false, :created_at=>"Fri Apr 23 18:26:51 +0000 2010", :coordinates=>nil, :geo=>nil, :favorited=>false,
+:source=>"<a href="http://www.tweetdeck.com" rel="nofollow">TweetDeck</a>",  :place=>nil, :contributors=>nil,
+:user=>{:verified=>false, :profile_text_color=>"666666", :friends_count=>226, :created_at=>"Wed Oct 08 07:15:23 +0000 2008",
+:profile_link_color=>"2FC2EF", :favourites_count=>12, :description=>"All the news that's fit to tweet (and most that isn't)",
+:lang=>"en", :profile_sidebar_fill_color=>"252429", :location=>"Brooklyn, NY", :following=>nil, :notifications=>nil,
+:time_zone=>"Eastern Time (US &#038; Canada)", :statuses_count=>981, :profile_sidebar_border_color=>"181A1E",
+:profile_image_url=>"http://a1.twimg.com/profile_images/834612904/Photo_on_2010-04-16_at_00.38__3_normal.jpg",
+:profile_background_image_url=>"http://s.twimg.com/a/1271725794/images/themes/theme9/bg.gif", :protected=>false,
+:contributors_enabled=>false, :url=>"http://www.aolnews.com", :screen_name=>"carlfranzen", :name=>"Carl Franzen",
+:profile_background_tile=>false, :profile_background_color=>"1A1B1F", :id=>16645918, :geo_enabled=>false,
+:utc_offset=>-18000, :followers_count=>174}, :id=>12717456105}
+</pre>
+<p>As you can see, a tweet is just a hash of variables. So which variables are a better indicator of spam? I don&rsquo;t know and chances are you don&rsquo;t either. But if we create a corpus of ham tweets and a corpus of spam tweets, we can train a Bayesian classifier with the two datasets and it will figure out which variable values are seen often in spam and which in ham.</p>
+<p>Some variables don&rsquo;t work, statistically speaking:</p>
+<ul>
+<li><strong>:id, :created_at</strong> &ndash; these variables are unique for each tweet which means they are useless for classification. BayesMotel will trim any variable values that don&rsquo;t appear in more than 3% of the corpus.</li>
+<li><strong>:followers_count</strong> &ndash; this is probably a pretty good spam/ham indicator in general, but not as a simple number. There are millions of possible values (@aplusk has 4.5 million followers) but we are only training on hundreds or thousands of tweets. What would be better is the binary logarithm of the followers_count to create discrete buckets: 32-64 followers = 5, 1024-2048 = 10 and so on. I&rsquo;d bet any tweet with a value greater than 12 or so (i.e. 4096+ followers) is very likely to be ham.</li>
+</ul>
+<p>There are additional things we could do to improve our spam detector:</p>
+<ul>
+<li>We aren&rsquo;t deep inspecting the value of the tweet text. It might be useful to have variables like &ldquo;text_link_count&rdquo; or &ldquo;text_hashtag_count&rdquo; to provide basic metrics for the tweet text content.</li>
+<li>We aren&rsquo;t performing any timeline checks or storing previous tweet state &ndash; spammers tend to tweet the same text over and over and their tweets all contain links. This is beyond the scope of a generic Bayesian system.</li>
+</ul>
+<p>I wrote <a href="http://github.com/mperham/bayes_motel">bayes_motel</a> based on my research this last weekend. Give it a try and send a pull request if you make changes you&rsquo;d like to see. The test suite gives more detail about the API and has a few thousand tweets to use as sample data. Happy coding!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

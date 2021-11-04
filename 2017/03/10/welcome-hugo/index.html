@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Welcome, Hugo | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Welcome, Hugo</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2017-03-10
+  </small>
+  
+</p>
+<p>I&rsquo;m trying out a new blogging system after using Jekyll for a few
+years.</p>
+<h2 id="a-little-history">A Little History</h2>
+<p>I&rsquo;ve been blogging personally since 2003 or so and professionally since
+2007 (when I started my Ruby career).  I started on a self-hosted
+Movable Type install and migrated to self-hosted Wordpress in ~2009 but
+the administrivia and complexities of those systems wore me down.  I
+made the decision to wind down my own server and move to hosted
+services, like GitHub Pages, after hearing about the hundredth
+Wordpress security breach.  Since Ruby is my jam, I
+selected Jekyll, a static site generator written in Ruby.</p>
+<h2 id="jekyll">Jekyll</h2>
+<p><a href="http://jekyllrb.com/">Jekyll</a> was a refreshing change because everything is flat files and
+static content.  No SQL database of content, no server to administer.
+For setup, you have a Gemfile with the <code>github-pages</code> gem in it and
+everything is installed for you by Bundler.</p>
+<p>All is not perfect though:</p>
+<ol>
+<li>that one gem requires <strong>74</strong> dependent gems.</li>
+<li>I could not figure out an easy workflow for creating a post, seeing
+it while I authored it despite reading the docs many times.</li>
+<li>It took 5-6 seconds to rebuild my site everytime I wanted to preview
+a content change, incremental builds did not work for me.</li>
+</ol>
+<h2 id="hugo">Hugo</h2>
+<img class="img img-responsive pull-right" width="300" src="https://gohugo.io/img/hugo.png"/>
+<p><a href="https://gohugo.io">Hugo</a> is a static site generator written in Go which solves many of those
+problems.  Things I love so far:</p>
+<ol>
+<li>Easy install with one 17MB binary by running <code>brew install hugo</code></li>
+<li>Fast: complete site build takes 300ms by running <code>hugo</code></li>
+<li>I can preview my entire site by running <code>hugo server</code> and livereload just magically works: I can see content changes
+immediately in the browser, without even needing to hit the refresh
+button</li>
+</ol>
+<p>Things I don&rsquo;t like or I&rsquo;m worried about:</p>
+<ol>
+<li>Lots of open issues/PRs.</li>
+<li>Large Go codebase, Go is not a terse language.</li>
+<li>Overly complex: archtetypes, taxonomies, tags are all things I don&rsquo;t need.
+Instead of choosing one config format, they support three!</li>
+</ol>
+<p>We&rsquo;ll see how the project continues over the next few years.
+I&rsquo;d love to see a site generator written in Crystal, a fast, higher-level language
+that has most of the advantages of Go while also being more terse.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

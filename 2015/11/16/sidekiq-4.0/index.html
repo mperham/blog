@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Sidekiq 4.0! | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Sidekiq 4.0!</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2015-11-16
+  </small>
+  
+</p>
+<figure style="float: right;">
+  <img style="border: solid white 10px;" src="http://cdn.shopify.com/s/files/1/0154/2777/products/Sidekiq_-_Detail_1024x1024.jpg" width="260px" />
+</figure>
+<p>I&rsquo;m happy to announce that <strong>Sidekiq 4.0</strong> is now available!</p>
+<p>I&rsquo;m happy to announce that <strong>Sidekiq Pro 3.0</strong> is now available!!</p>
+<p>I&rsquo;m happy to announce that <strong>Sidekiq Enterprise 1.0</strong> is now
+available!!!</p>
+<h2 id="sidekiq">Sidekiq</h2>
+<p>Sidekiq 4.0 is a major optimization release.  Sidekiq&rsquo;s core has
+been redesigned to remove dependencies and now goes down to the <a href="http://www.boblee.com/images/bear_guitar.jpg">bear metal</a>.
+Benchmarks show job overhead is reduced <strong>six times</strong>,
+garbage creation reduced by <strong>eight times</strong> and job latency cut in half.</p>
+<p><strong>Redis 2.8 or greater is now required</strong>.</p>
+<p>There are no public Sidekiq API changes so this version upgrade should be very easy.</p>
+<p>Please read the <a href="https://github.com/mperham/sidekiq/blob/master/4.0-Upgrade.md">Sidekiq 4.0 release notes</a> for all the detail.</p>
+<table width="100%">
+<tr><th>Version</th><th>Latency</th><th>Garbage created when<br/> processing 10,000 jobs</th><th>Time to process<br/> 100,000 jobs</th><th>Throughput</th></tr>
+<tr><th>Sidekiq 4.0.0</th><td>10ms</td><td>151 MB</td><td>22 sec</td><td><b>4500 jobs/sec</b></td></tr>
+<tr><th>Sidekiq 3.5.1</th><td>22ms</td><td>1257 MB</td><td>125 sec</td><td>800 job/sec</td></tr>
+<tr><th>Resque 1.25.2</th><td>-</td><td>-</td><td>420 sec</td><td>240 jobs/sec</td></tr>
+<tr><th>DelayedJob 4.1.1</th><td>-</td><td>-</td><td>465 sec</td><td>215 jobs/sec</td></tr>
+</table>
+<small>
+Data collected with MRI 2.2.3 running on my MBP 13-inch w/ 2.8Ghz i7.
+Resque started via <tt>COUNT=25 QUEUE=default rake resque:workers</tt>
+</small>
+<h2 id="sidekiq-pro">Sidekiq Pro</h2>
+<p>Sidekiq Pro 3.0 is designed to work with Sidekiq 4.0&rsquo;s new core design.
+Reliable fetch has been reimplemented but the semantics should remain
+identical.  Pausing and unpausing queues now takes effect in real-time
+due to the redesign, no more polling or 10 second delay.</p>
+<p>Platforms without persistent hostnames, notably Heroku and Docker, get
+official support for reliable fetch through the new <code>ephemeral_hostname</code> option.</p>
+<p>Read the <a href="https://github.com/mperham/sidekiq/blob/master/Pro-3.0-Upgrade.md">Sidekiq Pro 3.0 release notes</a>.</p>
+<h2 id="sidekiq-enterprise">Sidekiq Enterprise</h2>
+<p>The newest member of the Sidekiq family, Sidekiq Enterprise, has
+solidified over the last three months with a handful of bugs fixed
+and almost one hundred customers running it in production.
+At this point I think it&rsquo;s stable enough to call 1.0.
+As with Sidekiq Pro, some features have been re-implemented
+to work with the new Sidekiq 4.0 core.</p>
+<p>There are no release notes because there&rsquo;s nothing to note: no new
+features and the semantics are identical to 0.x.</p>
+<h2 id="support">Support</h2>
+<p>Sidekiq 3.x and Sidekiq Pro 2.x are stable and now in maintenance mode; they will get critical bug fixes
+through 2016.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The demand for both Sidekiq and its commercial siblings continues to amaze me
+since I released Sidekiq Pro three years ago.  Today Sidekiq has passed
+5 million downloads on Rubygems, Sidekiq Pro has many hundreds of customers and
+Sidekiq Enterprise approaches its first hundred.
+Thank you to my customers; you make it possible for me to support and work
+full-time on Sidekiq.</p>
+<p><a href="http://sidekiq.org">You can buy Sidekiq Pro or Sidekiq Enterprise here and be up and
+running in minutes.</a></p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

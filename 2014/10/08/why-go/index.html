@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Why Go? | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Why Go?</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2014-10-08
+  </small>
+  
+</p>
+<p>When I decided to build <a href="https://github.com/mperham/inspeqtor">Inspeqtor</a>, I had a fundamental choice: what language should I build it in? I&rsquo;ve worked in Ruby for the last 8 years so it was a natural choice: &ldquo;use the tool you know best&rdquo; is never a bad choice when solving your own problem.</p>
+<p>However I&rsquo;m not building something for myself: I&rsquo;m building a product that will be used by thousands of others. Since Inspeqtor is an infrastructure monitoring tool, it needs to run 24/7 efficiently and reliably. I also want everyone to be able to install and use Inspeqtor with the absolute bare minimum of hassle. This means minimizing third-party dependencies like the Ruby VM itself, gems, etc. In the end, I needed to select the right tool for the job, not just the tool I know.</p>
+<p>Ultimately these requirements led me to two options: Go or Rust. Both can build binaries which have no runtime dependencies at all. Both are reliable and fast. Rust has a huge amount of potential but version 1.0 is still not ready yet — they&rsquo;re still working out syntax details — and learning their memory ownership model has a definite learning curve. I chose Go because of its maturity and the simplicity of the language.</p>
+<p>I want to call out two features that make Go so nice to work with:</p>
+<p><strong>Easy concurrency</strong></p>
+<p>Modern languages <strong>must</strong> have a better concurrency story than &ldquo;thin wrapper around the POSIX thread API&rdquo;. Go&rsquo;s goroutines and channels are a simple but powerful abstraction and easier to use safely than traditional threads. Here Inspeqtor <a href="https://github.com/mperham/inspeqtor/blob/master/inspeqtor.go#L241">gathers the current metrics in parallel</a> for the entities it is monitoring. I&rsquo;m still trying to figure out best practices for handling errors and ensuring timeouts in goroutines. Google&rsquo;s <a href="http://blog.golang.org/context">Context</a> pattern looks like a strong contender to solve that problem.</p>
+<p><strong>Full development workflow</strong></p>
+<p>To paraphrase the poet John Donne: &ldquo;No programming language is an island&rdquo;. Go ships with tools for testing, code profiling, documentation, cross compiling and syntax formatting. There was only one thing I felt that Go should provide that it doesn&rsquo;t: an assert package for test code. Here&rsquo;s <a href="https://github.com/mperham/inspeqtor/blob/master/events_test.go#L25">some example code</a> which uses a 3rd party assert package I like. Adding if blocks here for every check would really hurt the readability of the code.</p>
+<p>So far I&rsquo;m very pleased with how well Go has worked out for Inspeqtor. I&rsquo;ve been running Inspeqtor on my server for about two months now and never once has it gone over 10MB of RAM or any significant CPU usage. Here&rsquo;s Inspeqtor monitoring itself:</p>
+<pre class="brush: plain; gutter: false; title: ; notranslate" title="">$ sudo inspeqtorctl status
+Inspeqtor Pro 0.5.0, uptime: 54h14m14s, pid: 11645
+
+Service: inspeqtor [Up/11645]
+  cpu:system                  0.1%           
+  cpu:total_system            0.0%           
+  cpu:total_user              0.1%           
+  cpu:user                    0.1%       90%
+  memory:rss                  8.97m      10m
+</pre>
+<p>Every language has strengths and weaknesses. For this purpose, Go has worked out great.</p>
+<p>PS C and C++ were never considered. I vowed in 1997 to never manage my own memory again and not for a single day have I ever regretted that decision.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

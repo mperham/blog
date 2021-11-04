@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Scraping with Typhoeus and Nokogiri | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Scraping with Typhoeus and Nokogiri</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2009-06-12
+  </small>
+  
+</p>
+<p>I&rsquo;ve been working on some cool new functionality at <a href="http://www.onespot.com">OneSpot</a>. We want to provide a widget that can give the reader more context about a given article. <a href="http://www.zemanta.com">Zemanta</a> takes the article text and hands us back a set of semantic entities, including links to their Wikipedia page, but we wanted to get a nice blurb about each entity and figured that the opening paragraph from the Wikipedia page would be reasonable.</p>
+<p>To do this, we use <a href="http://github.com/pauldix/typhoeus">Typhoeus</a> to fetch the Wikipedia pages in parallel and <a href="http://github.com/tenderlove/nokogiri">Nokogiri</a> to pull the relevant content using a custom XPath expression for Wikipedia&rsquo;s page layout.</p>
+<p>Some notes:</p>
+<ul>
+<li>We configure Typhoeus to use Rails&rsquo;s cache store for its own cache store. We cache the Wikipedia response for 7 days in order to be good Netizens and not overburden their servers.</li>
+<li>Wikipedia links do not specify a hostname so we make them absolute so the links will work embedded in another page.</li>
+<li>We tried Curl::Multi but it was giving us occasional bus errors.</li>
+<li>My wordpress syntax highlighter is obviously subpar when it comes to regular expressions.</li>
+</ul>
+<pre lang="ruby">require 'typhoeus'
+require 'nokogiri'
+
+class Wikipedia
+  include Typhoeus
+  #self.cache = Rails.cache.instance_variable_get(:@data)
+
+  remote_defaults :cache_responses => 7*24*60*60,
+      :user_agent => 'typhoeus crawler',
+      :timeout => 5
+
+  define_remote_method :extract,
+      :on_success => lambda {|response| Wikipedia.extract_first_paragraph(response.body) }
+
+  def self.extract_first_paragraph(content)
+    nh = Nokogiri::HTML(content)
+    str = nh.xpath("//div[@id='bodyContent']/p[1]").inner_html
+    str.gsub /href="/wiki/, 'href="http://en.wikipedia.org/wiki'
+  end
+end
+</pre>
+<p>And here&rsquo;s how you use it.</p>
+<pre lang="ruby">entities = %w(
+
+http://en.wikipedia.org/wiki/Garth_Marenghi's_Darkplace
+
+
+http://en.wikipedia.org/wiki/Bus_error
+
+
+http://en.wikipedia.org/wiki/Washington
+
+)
+    content = entities.map do |url|
+      Wikipedia.extract(:base_uri => url)
+    end
+    p content
+</pre>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

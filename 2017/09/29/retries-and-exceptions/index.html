@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Retries and Exceptions | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Retries and Exceptions</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2017-09-29
+  </small>
+  
+</p>
+<p>Do you hate getting your inbox filled with errors you know you can
+ignore?  Here&rsquo;s one cool trick to make them disappear.</p>
+<p>If you are writing a background job, it is best practice to have that
+job retry in the case of unexpected errors.  Networks can be flaky,
+code can be buggy, data can be sketchy &ndash; as they say, &ldquo;stuff happens&rdquo;.</p>
+<p>Sidekiq&rsquo;s default policy for jobs and retries is simple:</p>
+<ul>
+<li>if a job returns normally, it is considered a success.</li>
+<li>if a job raises an error, the error is reported and a retry is
+scheduled.</li>
+</ul>
+<p>Many people have asked me: &ldquo;I have a flaky service, how can I retry the
+job <strong>without</strong> reporting the error to my error service and filling my
+inbox&rdquo;.  Sometimes the
+asker will want to disable retries or their error service: no way!
+Retries and error reporting are there to handle <strong>unexpected</strong> problems that you need to
+know about.  They should be
+enabled by default and disabled only if your job is truly optional.</p>
+<p>Instead, your job should flag errors that can be ignored; we&rsquo;ll configure our
+error service to ignore them.  First we add a flag to the root of all
+errors:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># config/initializers/exceptions.rb</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Exception</span>
+  <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:ignore_please</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Now we update our job to rescue and flag those flaky errors:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># your job/worker class</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>
+  <span style="color:#66d9ef">begin</span>
+    sketchy_service<span style="color:#f92672">.</span>call
+  <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">FlakyError</span> <span style="color:#f92672">=&gt;</span> ex
+    <span style="color:#75715e"># flag it to be ignored</span>
+    ex<span style="color:#f92672">.</span>ignore_please <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+    <span style="color:#75715e"># re-raise it so Sidekiq will retry</span>
+    <span style="color:#66d9ef">raise</span> ex
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Now configure your error service gem to ignore those errors.  Here&rsquo;s how
+to do it for Bugsnag and Honeybadger:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># https://docs.bugsnag.com/platforms/ruby/rails/configuration-options/#ignore_classes</span>
+<span style="color:#75715e"># config/initializers/bugsnag.rb</span>
+<span style="color:#66d9ef">Bugsnag</span><span style="color:#f92672">.</span>configure <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  config<span style="color:#f92672">.</span>ignore_classes <span style="color:#f92672">&lt;&lt;</span> lambda {<span style="color:#f92672">|</span>ex<span style="color:#f92672">|</span> ex<span style="color:#f92672">.</span>ignore_please }
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#75715e"># http://docs.honeybadger.io/ruby/getting-started/ignoring-errors.html#ignore-programmatically</span>
+<span style="color:#75715e"># config/initializers/honeybadger.rb</span>
+<span style="color:#66d9ef">Honeybadger</span><span style="color:#f92672">.</span>exception_filter <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>notice<span style="color:#f92672">|</span>
+  notice<span style="color:#f92672">[</span><span style="color:#e6db74">:exception</span><span style="color:#f92672">].</span>ignore_please
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>Done!  Now your inbox should be a little cleaner.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

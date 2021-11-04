@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Cassandra Internals -- Tricks! | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Cassandra Internals &ndash; Tricks!</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2010-03-20
+  </small>
+  
+
+<small><code><a href="https://www.mikeperham.com/tags/cassandra">cassandra</a></code></small>
+
+</p>
+<p>In my previous posts, I covered how Cassandra <a href="/2010/03/17/cassandra-internals-reading/">reads</a> and <a href="/2010/03/13/cassandra-internals-writing/">writes</a> data. In this post, I want to explain some of the trickery that Cassandra uses to provide a scalable distributed system.</p>
+<p><strong>Gossip</strong></p>
+<p>Cassandra is a cluster of individual nodes &ndash; there&rsquo;s no &ldquo;master&rdquo; node or single point of failure &ndash; so each node must actively verify the state of the other cluster members. They do this with a mechanism known as <a href="http://wiki.apache.org/cassandra/ArchitectureGossip">gossip</a>. Each node &lsquo;gossips&rsquo; to 1-3 other nodes every second about the state of each node in the cluster. The gossip data is versioned so that any change for a node will quickly propagate throughout the entire cluster. In this way, every node will know the current state of every other node: whether it is bootstrapping, running normally, etc.</p>
+<p><strong>Hinted Handoff</strong></p>
+<p>In <a href="/2010/03/13/cassandra-internals-writing/">writing</a>, I mentioned that Cassandra stores a copy of the data on N nodes. The client can select a consistency level for a write based on the importance of the data &ndash; for example, ConsistencyLevel.QUORUM means that a majority of those N nodes must reply success for the write to be considered successful.</p>
+<p>What happens if one of those nodes goes down? How do those writes propagate to that node later? Cassandra uses a technique known as <a href="http://wiki.apache.org/cassandra/HintedHandoff">hinted handoff</a>, where the data is written to anther random node X to be stored and replayed for node Y when it comes back online (remember that gossip will quickly tell X when Y comes online). Hinted handoff ensures that node Y will quickly match the rest of the cluster. Note that read repair would still eventually &ldquo;fix&rdquo; the old data if hinted handoff did not work for some reason but only once the client asked for that data.</p>
+<p>Hinted writes are not readable (since node X is not officially one of the N copies) so they don&rsquo;t count toward write consistency. If Cassandra is configured for three copies and two of those nodes are down, it would be impossible to fulfill a ConsistencyLevel.QUORUM write.</p>
+<p><strong>Anti-Entropy</strong></p>
+<p>The final trick up Cassandra&rsquo;s proverbial sleeve is <a href="http://wiki.apache.org/cassandra/ArchitectureAntiEntropy">anti-entropy</a>. AE explicitly ensures that the nodes in the cluster agree on the current data. If read repair or hinted handoff don&rsquo;t work due to some set of circumstances, the AE service will ensure that nodes reach eventual consistency. The AE service runs during &ldquo;major compactions&rdquo; (the equivalent of rebuilding a table in an RDBMS) so it is a relatively heavyweight process that runs infrequently. AE uses a <a href="http://en.wikipedia.org/wiki/Hash_tree">Merkle Tree</a> to determine where within the tree of column family data the nodes disagree and then repairs each of those branches.</p>
+<p>This is the last post in my series on Cassandra. I hope you enjoyed them! Please leave a comment if you have questions or if I&rsquo;ve made an error above.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

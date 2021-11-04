@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Sidekiq 3.0! | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Sidekiq 3.0!</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2014-03-28
+  </small>
+  
+</p>
+<p>After tons of work on <a href="http://sidekiq.org">Sidekiq</a> 2.x for the last 18 months, I decided it was time for some deeper refactoring and cleanup necessitating a major version bump.</p>
+<p>Sidekiq 3.0 is the result of three months of hacking, cleanup and community suggestions. There&rsquo;s an huge amount of stuff in here so hang on to your hats&hellip;</p>
+<h2 id="dead-jobs">Dead Jobs</h2>
+<p>Before 3.0, jobs which failed all their retries would simply be discarded. Now they are forwarded to a Dead Job Queue. Dead jobs can be manually retried but Sidekiq will ignore them otherwise. Dead jobs will be pruned after six months or 10,000 jobs accumulate so the DJQ doesn&rsquo;t become a memory leak in Redis.</p>
+<p>Along with the new UI features, we&rsquo;ve got 4 new translations: Chinese, Greek, Swedish and Czech. Did you know the Sidekiq Web UI is available in 15 languages?</p>
+<h2 id="process-heartbeat">Process Heartbeat</h2>
+<p>Each Sidekiq process now pings Redis with its current state every 5 seconds and the Web UI &ldquo;Workers&rdquo; tab has been redesigned to show a real-time view of the Sidekiq processes and the jobs they are processing. This required a large refactoring of Sidekiq&rsquo;s internal data structures in Redis, which were really based on the original Resque structures I cloned so Sidekiq 1.0 would work with resque-web. These structures were reasonable for Resque&rsquo;s process-based designed but didn&rsquo;t work well when a process had many worker threads. Ideally this redesign will fix the &ldquo;stuck worker&rdquo; problems that many people saw when their Sidekiq processes crashed.</p>
+<p>Note also I&rsquo;ve completely removed the term &ldquo;Worker&rdquo; from Sidekiq where possible in favor of the more clear &ldquo;Process&rdquo;, &ldquo;Thread&rdquo; or &ldquo;Job&rdquo;.</p>
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/03/Screen-Shot-2014-03-19-at-8.13.19-PM.png"><img src="/wp-content/uploads/2014/03/Screen-Shot-2014-03-19-at-8.13.19-PM.png" alt="busy tab" class="aligncenter size-full wp-image-1590" /></a></p>
+<h2 id="process-lifecycle-events">Process Lifecycle Events</h2>
+<p>You can register blocks of code to run at three points during the life of a Sidekiq process:</p>
+<ol>
+<li><strong>startup</strong> &ndash; run after Sidekiq has finished booting but before any work has started</li>
+<li><strong>quiet</strong> &ndash; triggered by the USR1 signal, run when Sidekiq stops accepting new work</li>
+<li><strong>shutdown</strong> &ndash; run as the last code executed by Sidekiq before it exits</li>
+</ol>
+<p>It&rsquo;ll look something like this:</p>
+<pre>
+Sidekiq.configure_server do |config|
+  config.on(:shutdown) do
+    puts "Goodbye cruel world!"
+  end
+end
+</pre>
+<h2 id="error-handlers">Error Handlers</h2>
+<p>Instead of relying on middleware to catch errors, Sidekiq 3.0 allows you to define one or more global error handlers to process errors generated anywhere within the Sidekiq process. All of the major error services have been contacted and some have already released gem updates to support this new feature. If yours hasn&rsquo;t, please contact support and politely notify them.</p>
+<h2 id="client-sharding">Client Sharding</h2>
+<p>Sidekiq 2.x has a scalability limit: one Redis server. In practice the limit is greater than 5000 jobs per second on good hardware so to most it wasn&rsquo;t a big deal but some of the more intense Sidekiq users were hitting that limit. An updated Sidekiq::Client API allows you to specify a Redis connection pool to use, rather than assuming the <code>Sidekiq.redis</code> global pool previously, allowing you to target different types of jobs to different Redis servers. Now you can scale Sidekiq to infinity and beyond!</p>
+<p>The API is almost entirely backwards compatible: <strong>the only breaking change is in client-side middleware</strong>. See the upgrade notes for more detail.</p>
+<h2 id="cleanup">Cleanup</h2>
+<p>3.0 sees a bunch of deprecated APIs removed and general cleanup:</p>
+<p><strong>MRI 1.9</strong> &ndash; It seems like just yesterday that MRI 1.9 was state of the art but MRI 2.1.1 was recently released and MRI 2.0 has been very stable for a year now. Sidekiq&rsquo;s official support policy is to support the current and previous major releases of MRI and Rails and that means MRI 2.0 and 2.1 along with Rails 3.2 and 4.0. To be clear, Sidekiq <strong>might</strong> work perfectly fine on MRI 1.9 &ndash; I just don&rsquo;t test on it anymore.</p>
+<p><strong>Capistrano</strong> &ndash; we don&rsquo;t use the official Capistrano recipes at The Clymb and there have never been any tests for them so they&rsquo;ve proven brittle and hard to maintain. In practice, coming up with a standard deployment recipe that is usable for most people has proven difficult. I strongly recommend using Upstart, runit or another modern init system to manage your ruby daemons rather than &ldquo;bundle exec&rsquo;ing&rdquo; directly from a capistrano recipe. Sidekiq 2.x&rsquo;s capistrano recipes have moved into the <a href="https://github.com/seuros/capistrano-sidekiq">capistrano-sidekiq</a> gem if you wish to continue using them.</p>
+<p><strong>connection_pool 2.0</strong> &ndash; Eric Hodel aka drbrain was kind enough to contribute a patch to connection_pool making it lazy. Now you can create a pool of size 1000 but it will only establish connections on an as needed basis, meaning you should see a lot less connections in practice, a great upgrade if you are watching your connection counts closely. Fun fact: my first Rubygem was memcache-client, which I took over maintenance from drbrain in 2008!</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Now that 3.0 is out, I&rsquo;ll be turning my focus to <a href="http://sidekiq.org/">Sidekiq Pro</a> 2.0. I&rsquo;ve already got a few ideas for new features; if you want a feature in Pro, please enter a Sidekiq issue and let me know. Happy &lsquo;kiqing!</p>
+<p>For a more comprehensive listing, please see the <a href="https://github.com/mperham/sidekiq/blob/master/Changes.md#300">changelog</a> and <a href="https://github.com/mperham/sidekiq/blob/master/3.0-Upgrade.md">upgrade notes</a>.</p>
+<p>PS I&rsquo;m happy to chat with podcasters and bloggers about Sidekiq 3.0, actors/concurrency/threading, sustainable OSS development, OSS business models and the Ruby community. <a href="mailto:mperham@gmail.com">Email me</a> and we&rsquo;ll work something out.</p>
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

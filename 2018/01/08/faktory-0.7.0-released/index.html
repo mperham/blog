@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Faktory 0.7.0 Released | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Faktory 0.7.0 Released</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2018-01-08
+  </small>
+  
+</p>
+<p>Faktory is my brand-new background job system for every programming language.
+If you want to learn more, see <a href="http://www.mikeperham.com/2017/10/24/introducing-faktory/">the intro</a>.
+It&rsquo;s been three months since the initial launch in October and I&rsquo;ve heard of several successful rollouts to production.
+If you were reluctant to try out Faktory before, it&rsquo;s time to start looking into it because
+the biggest release of Faktory yet is now available to all.
+November and December saw lots of changes and improvements; here&rsquo;s a recap.</p>
+<img style="float: right; padding: 3px" src="http://www.mikeperham.com/images/faktory-logo.png" alt="logo"/>
+<h2 id="job-priorities">Job Priorities</h2>
+<p><strong>Jobs can now be prioritized from 1-9 within a queue!</strong>
+The initial release of Faktory was focused on replicating Sidekiq&rsquo;s existing functionality but Faktory&rsquo;s different architecture allows us to implement features that were impossible in Sidekiq.
+Many, many people have asked for a simple job prioritization scheme but I&rsquo;ve never implemented it in Sidekiq because of the high runtime cost.
+But since we now control the low-level storage details in Faktory, we can minimize those costs!
+Want something to go to the front of a queue, give it a high priority like 9.
+Want it to drop to the back?
+Simple as:</p>
+<pre tabindex="0"><code>{ &quot;jobtype&quot;:&quot;MyJob&quot;,&quot;args&quot;:[1,2,3],&quot;queue&quot;:&quot;encoding&quot;,&quot;priority&quot;:1 }
+</code></pre><p>@andrewstucki did the hard work to design an efficient implementation using a data structure I&rsquo;d never heard of: the <a href="https://en.wikipedia.org/wiki/Brodal_queue">Brodal queue</a>.
+Nice to see some real Computer Science data structure theory paying off here!</p>
+<h2 id="reliability">Reliability</h2>
+<p>Recovered jobs (jobs which kill their worker process, aka poison pills) now use the retry process.
+This ensures that recovered jobs are exponentially backed off and won&rsquo;t retry every 30 minutes forever as before.</p>
+<p>Faktory now automatically creates backups every hour when in production mode, keeping 24.
+This gives you a full day of backups to recover in case of disaster.</p>
+<p>Note #1: remember that Faktory is a queue system and queues are normally empty.
+It is typical for Faktory&rsquo;s dataset to be less than 10MB in size unless you are scheduling or retrying lots of jobs.</p>
+<p>Note #2: background jobs will run <strong>at least</strong> once.
+Restoring a backup is one way to see duplicate job execution.
+You should always strive for <a href="https://github.com/mperham/sidekiq/wiki/Best-Practices#2-make-your-job-idempotent-and-transactional">idempotency</a> when writing jobs.</p>
+<h2 id="newsletter">Newsletter</h2>
+<p>I&rsquo;ve created a newsletter for those who want the latest news ASAP.
+Subscribers will get Faktory-related posts like this a day early.
+You can subscribe right here or on the <a href="http://contribsys.com/faktory/">Faktory home page</a>.</p>
+<!-- Begin MailChimp Signup Form -->
+<link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+	#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+</style>
+<div id="mc_embed_signup">
+<form action="https://contribsys.us17.list-manage.com/subscribe/post?u=c04c3b4f7f54b0a65d156c7e4&amp;id=e3d75d426c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+	<label for="mce-EMAIL">Subscribe to Faktory Insiders</label>
+	<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_c04c3b4f7f54b0a65d156c7e4_e3d75d426c" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+<!--End mc_embed_signup-->
+<h2 id="faktory-as-a-service">Faktory-as-a-Service</h2>
+<p>Two different companies have sprung up, aimed at providing Faktory as a service.
+If you have an application on Heroku, you can start using Faktory in minutes!
+Check out <a href="https://www.ackfoundry.com/">Ackfoundry</a> and <a href="http://konglomerate.io/">Konglomerate</a> for the latest details.</p>
+<h2 id="worker-packages">Worker Packages</h2>
+<p>Several Faktory <a href="https://github.com/contribsys/faktory/wiki/Related-Projects">worker packages</a> are seeing solid support and regular improvements.
+Take a look at the Rust, Elixir, Python and Node packages for example.</p>
+<p>Don&rsquo;t see one for your language?
+Jump into the <a href="https://gitter.im/contribsys/faktory">chatroom</a> and ask!</p>
+<h2 id="security">Security</h2>
+<p>Faktory&rsquo;s security design has been one of the toughest engineering problems to solve.
+By default we want both an easy development experience and a secure production deployment.
+To that end, we&rsquo;ve made several major <a href="https://github.com/contribsys/faktory/wiki/Security">security policy</a> changes:</p>
+<h3 id="faktory-will-not-terminate-tls">Faktory will not terminate TLS</h3>
+<p>Since most deployments these days are using Docker or another container, we&rsquo;ve decided the Faktory server will not terminate TLS.
+Instead your network architecture should provide any necessary TLS frontend using haproxy, spiped, stunnel, nginx, etc.</p>
+<p>Faktory clients will all continue to support TLS by including &ldquo;tls&rdquo; in the URL scheme, e.g. <code>tcp+tls://faktory.example.com:7419</code>.</p>
+<h3 id="passwords-are-mandatory-in-production">Passwords are mandatory in production</h3>
+<p>Faktory is one of the few pieces of infrastructure which bake in the idea of &ldquo;environment&rdquo; (production and development are the two choices).
+Going forward, a production server must be started with a FAKTORY_PASSWORD environment variable in order to authenticate all connections.</p>
+<p>It&rsquo;s easy to include the password in the connection URL: <code>tcp+tls://:mypassword123@faktory.example.com:7419</code>.</p>
+<h3 id="csrf-protection">CSRF protection</h3>
+<p>@vosmith was nice enough to provide a pull request adding CSRF protection to the Web UI.
+CSRF protection prevents a malicious webpage from using your browser to submit a form request, e.g. to clear a queue.
+Further security improvements to the Web UI are always welcome.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>That&rsquo;s it for now!
+<a href="https://gitter.im/contribsys/faktory">Jump into the chatroom</a> if you have questons or concerns.
+And as I said before, I&rsquo;ve heard of several successful rollouts to production.
+If you were reluctant to try out Faktory before, it&rsquo;s time to start looking into it!
+See my <a href="http://www.mikeperham.com/2017/11/13/getting-started-with-faktory/">Getting Started</a> guide.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

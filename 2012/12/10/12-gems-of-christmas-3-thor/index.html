@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>12 Gems of Christmas #3 -- thor | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>12 Gems of Christmas #3 &ndash; thor</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2012-12-10
+  </small>
+  
+</p>
+<p>Ever try to write a rake task that took one or more arguments? How about calling a rake task from another task? Rake makes basic invocation simple but everything else obtuse. Enter <a href="http://github.com/wycats/thor">thor</a>, courtesy of the unstoppable Yehuda Katz. Thor aims to make command line script development simpler by making your scripts standard Ruby objects and providing <a href="http://github.com/wycats/thor/wiki">good documentation in its wiki</a> for many common use cases. Consider a simple example, create a task to process a CSV file:</p>
+<pre lang="ruby"># inventory.thor
+class Inventory &lt; Thor
+  include Thor::Actions
+
+  desc "process_csv FILE", "process the nightly inventory update"
+  method_option :delete, :aliases => "-d", :desc => "Delete the file after parsing it"
+  def process_csv(file)
+    # do something, maybe like:
+    #require 'inventory_file'
+    #InventoryFile.new(file).process!
+    remove_file(file) if options[:delete]
+  end
+end
+</pre>
+<p>You invoke the task via <code>thor inventory:process_csv some_file.csv</code>. Tasks are just public methods within a subclass of Thor. The <code>desc</code> and <code>method_option</code> methods describe those tasks and any expected options on the command line. <code>Thor::Actions</code> gives us some filesystem helper methods, like <code>remove_file</code>. The wiki goes into further detail on things like inter-task dependencies, task grouping, namespaces, etc. Next time you need to write a command line script, give Thor a try and see if it doesn&rsquo;t make your life easier.</p>
+<p>Tomorrow, I&rsquo;ll show you a tool for detecting and fixing a common Rails performance problem.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

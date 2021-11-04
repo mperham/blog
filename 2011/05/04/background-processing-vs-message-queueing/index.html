@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Background Processing vs Message Queueing | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Background Processing vs Message Queueing</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2011-05-04
+  </small>
+  
+</p>
+<p>One common simplification I see engineers make is equating message queueing with background processing. This is what they are missing: <strong>message queueing is a superset of background processing</strong>. All message processing is done in the background but background processing does not have to be done via message queues.</p>
+<p>Take a simple use case: &ldquo;I want to send a welcome email when a user registers&rdquo;. Commonly you want to send this email in the background so it does not impact the user&rsquo;s experience. Do you need to install ActiveMQ, RabbitMQ or Resque to do this? Certainly not.</p>
+<p>Message queueing is a fundamental architectural pattern when building complex systems. Your various system components might be written by different teams but they communicate through messages sent via queues. One component can send a message to another component, saying &ldquo;please send this email&rdquo;. But message queueing systems have their cost: they are complex because they are designed to be the foundation of your distributed system. They must be deployed and monitored like the rest of your infrastructure; they must be reliable and highly available.</p>
+<p>I think that a lot of people install a message queue to perform simple background processing; it doesn&rsquo;t need to be that complicated. The fundamental question to me is, &ldquo;Am I communicating between different subsystems or just trying to spin off some work?&rdquo; The registration email use case comes up almost immediately when building nearly every website. Consider also the case where you want to perform some action that might take 30-60 seconds and have the user&rsquo;s browser poll for the result. Spinning off a separate thread to perform this work is entirely sufficient and much simpler. This is the reasoning behind my <a href="https://github.com/mperham/girl_friday">girl_friday</a> project. I want a simple and reliable way to perform background processing without needing the complexity of an MQ system. Let&rsquo;s examine a few characteristics of girl_friday:</p>
+<ul>
+<li>In-process &ndash; your background processor is part of your Ruby application and has access to the exact same codebase as your webapp. No need to share ActiveRecord models across projects via git or filesystem trickery. No need to deploy or monitor a separate set of processes.</li>
+<li>Threaded &ndash; huge memory savings because you don&rsquo;t have to spin up other processes which load the exact same code. Threads are notoriously tricky to get correct so girl_friday uses Actors for the equivalent behavior in a simpler and safer API.</li>
+</ul>
+<p>I have issues with the other contenders in the space:</p>
+<ul>
+<li>delayed_job &ndash; stores jobs in your RDBMS and polls for jobs which is a terribly unscalable idea. Spins off processes instead of threads.</li>
+<li>resque &ndash; forks a new process for every message. Safe but memory hungry.</li>
+</ul>
+<p>The biggest caveat with girl_friday is threading, of course. Typical Ruby deployments aren&rsquo;t thread-friendly but I&rsquo;d like to help change that. Rainbows! is thread-friendly, as are all the JRuby app servers. The <a href="http://github.com/mperham/girl_friday/wiki">girl_friday wiki</a> gives more specifics about features and usage. Are there any other dimensions to the problem that I&rsquo;m missing? Any other projects that solve a similar problem? Post a comment and let me know!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Securing Network Services | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Securing Network Services</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2010-08-05
+  </small>
+  
+</p>
+<p>The recent <a href="http://www.slideshare.net/sensepost/cache-on-delivery">memcached security exposé</a> highlighted the fact that simple vulnerabilities require constant vigilance and education for new developers.</p>
+<p>Rule #1 of Network Security: <strong>Don&rsquo;t expose services which are not designed to be exposed.</strong></p>
+<p>Web and app servers will usually have 2-3 ports open to the public: ssh, http and https. All others should be vetted to determine if they should be public or not. Here&rsquo;s the current state of mikeperham.com:</p>
+<p><code>&lt;br /&gt; mike@perham:~$ netstat -a | grep LIST&lt;br /&gt; tcp        0      0 localhost:mysql         *:*                     LISTEN&lt;br /&gt; tcp        0      0 *:www                   *:*                     LISTEN&lt;br /&gt; tcp        0      0 *:ssh                   *:*                     LISTEN&lt;br /&gt; tcp        0      0 localhost:smtp          *:*                     LISTEN&lt;br /&gt; </code></p>
+<p>There&rsquo;s two types of ports in this list. &lsquo;localhost&rsquo; means that my database is just listening locally:</p>
+<p><strong>localhost:mysql</strong></p>
+<p>whereas the star indicates my web server is listening on all network interfaces, including the public:</p>
+<p>*<strong>:www</strong></p>
+<p>In the case of memcached, you want to configure it to listen locally only if you just have a single memcached instance. In Ubuntu/Debian, you would edit <code>/etc/memcached.conf</code> and ensure that:<br>
+<code>&lt;br /&gt; -l 127.0.0.1&lt;br /&gt; </code></p>
+<p>is in the file. Otherwise memcached will by default listen on all interfaces and be exposed publicly.</p>
+<p>Firewall configuration brings another dimension of variability into the mix but I prefer to configure my services to listen correctly first and then determine any additional firewall rules necessary based on the network topology. Using Memcached servers on multiple machine might require some fancy firewall rules to ensure that they can talk to each other while not being exposed publicly. One nice thing about Amazon&rsquo;s EC2 service is that it forces you to explicitly open ports to the public via firewall rules, everything else is internal by default.</p>
+<p>In summary, I always perform a quick port audit of all machines after I&rsquo;m done configuring them to ensure that they are as secure as possible before putting them in production. A quick <code>netstat</code> command can go a long way to ensure a sound night&rsquo;s sleep.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

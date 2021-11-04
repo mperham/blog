@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Sidekiq -- simple, efficient messaging for Rails | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Sidekiq &ndash; simple, efficient messaging for Rails</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2012-02-07
+  </small>
+  
+</p>
+<p>I introduced my latest project, <a href="http://mperham.github.com/sidekiq">Sidekiq</a>, this morning. Sidekiq is the culmination of several years of research and development into message processing with Ruby. I first wrote a single-threaded mysql-backed queue called QBert for FiveRuns in 2008 before delayed_job was introduced. Next I wrote a single-threaded SQS-based processor called Jobber and then a Fiber-based, RabbitMQ-backed processor called Qanat for OneSpot. Most recently I wrote <a href="http://mperham.github.com/girl_friday">girl_friday</a>, an Actor-based, redis-backed processor and a custom multi-threaded version of Resque for a Carbon Five client.</p>
+<p>So yeah, messaging and I have a history but I think that&rsquo;s because Ruby still doesn&rsquo;t have a simple, scalable option for message processing. Sidekiq is my attempt to solve that need.</p>
+<p><strong>Simple</strong></p>
+<p>Sidekiq integrates tightly with Rails 3 so your application&rsquo;s worker code is nearby and easy for Sidekiq to find and load. I&rsquo;d like to support plain Ruby applications but I need a replacement for the nice integration Rails 3 gives me.</p>
+<p><strong>Efficient</strong></p>
+<p>Sidekiq uses multiple threads so you can process hundreds of messages in parallel if you desire without the overhead of hundreds of processes. Internally Sidekiq uses the Celluloid actor library to make threading easier and safer to manage.</p>
+<p><strong>Developer Friendly</strong></p>
+<p>I&rsquo;ve tried to make Sidekiq developer friendly in two ways:</p>
+<ul>
+<li>Resque-compatible &ndash; I love conventions, why reinvent the wheel when you can stick closely to what someone else has done and leverage that work? I aim to make Sidekiq easy to integrate into an existing Resque project and monitorable via resque-ui.</li>
+<li>Middleware &ndash; Sidekiq pulls in a middleware API similar to Rack for running code before/after/around a processed message and ships with middleware that helps with ActiveRecord and Airbrake.</li>
+</ul>
+<p>Please let me know how you like Sidekiq &ndash; I love hearing stories about how people are using it.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

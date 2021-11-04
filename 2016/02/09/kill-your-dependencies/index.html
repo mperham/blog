@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Kill Your Dependencies | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Kill Your Dependencies</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2016-02-09
+  </small>
+  
+</p>
+<figure style="float: right;">
+  <img style="border: solid white 0px;" src="http://wookiehangover.github.io/dependency-injection-for-fun-and-profit/img/dependency-graph2.png" width="400px" />
+</figure>
+<p>This post talks about Ruby but it&rsquo;s true of every language community: Python, JavaScript, Java, etc.  The scourge of dependencies spares no one.</p>
+<p>This is a dependency visualization of every Rails app I&rsquo;ve ever used.  Does any of this
+sound familiar:</p>
+<ul>
+<li>Gemfile with 100s of entries.</li>
+<li>Test gems loading in production.</li>
+<li>Each Rails process takes 100s of megabytes of RAM.</li>
+</ul>
+<p>The Rubygems system is commendable for how easy it makes packaging up
+Ruby for others to reuse.  But that very ease means it&rsquo;s also quite easy for
+those gems to pull in other gems transitively, leading to Rails apps
+which &ldquo;download the Internet&rdquo; and have hundreds of dependencies.</p>
+<p>When you publish a Rubygem, every one of your dependencies transitively
+becomes a dependency for any app using your gem.  This multiplies the
+impact of bugs in those gems.</p>
+<h3 id="the-curious-case-of-mime-types">The curious case of mime-types</h3>
+<p>The <code>mime-types</code> gem <a href="https://github.com/mime-types/ruby-mime-types/issues/94">recently optimized its memory usage</a>
+and saved megabytes of RAM.
+Literally every Rails app in existence can benefit from this optimization because Rails depends on
+the mime-types gem transitively: <code>rails -&gt; actionmailer -&gt; mail -&gt; mime-types</code>.</p>
+<p>In other words, this gem wasn&rsquo;t used by your app.  It wasn&rsquo;t used by Rails
+directly.  It wasn&rsquo;t used by ActionMailer directly.  It was used deep in the bowels of the ActionMailer
+implementation <strong>and it was using far too much memory</strong>.  Every single
+Rails app in existence was using 10MB too much due to this issue.</p>
+<h2 id="app-developers-listen-up">App Developers, Listen Up!</h2>
+<p>Every dependency in your application has the potential to bloat your
+app, to destabilize your app, to inject odd behavior via monkeypatching
+or buggy native code.
+When you are considering adding a dependency to your Rails app, it&rsquo;s a
+good idea to do a quick sanity check, in order of preference:</p>
+<ol>
+<li>Do I really need this at all?  Kill it.</li>
+<li>Can I implement the required minimal functionality myself?  Own it.</li>
+</ol>
+<p>If you need a gem:</p>
+<ol>
+<li>Does the gem have a native extension?  Look for pure ruby alternatives.</li>
+<li>Does the gem transitively pull in a lot of other gems?  Look for
+simpler alternatives.</li>
+</ol>
+<p>Gems with native extensions can destabilize your system; they can be
+the source of mysterious bugs and crashes.  Avoid gems which pull in more
+dependencies than their value warrants.  Example of a bad gem: the
+<code>fog</code> gem which pulls in 39 gems, more dependencies than rails itself
+and most of which are unnecessary.</p>
+<p>Lastly, make sure you only load the gem when necessary.  Use Bundler&rsquo;s
+group support to disable test gems when not testing:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">group <span style="color:#e6db74">:test</span> <span style="color:#66d9ef">do</span>
+  gem <span style="color:#e6db74">&#39;rspec&#39;</span>
+  gem <span style="color:#e6db74">&#39;timecop&#39;</span>
+  <span style="color:#75715e"># etc</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
+<h2 id="gem-developers-listen-up">Gem Developers, Listen Up!</h2>
+<p>Part of your job as a library author is to treat your user and their
+application with respect.  You should make an effort to minimize your
+own dependencies so they don&rsquo;t load unnecessary code or cause issues in the user&rsquo;s application.
+You control your own code but you don&rsquo;t control your dependencies.  Any
+bug in a dependency of yours becomes a bug that causes stress for your user and
+their application.</p>
+<p>As a gem developer, for each of your gem dependencies do you:</p>
+<ul>
+<li>know how much memory each takes?</li>
+<li>know how long each takes to require?</li>
+<li>know whether it performs any monkeypatching outside of its own module?</li>
+</ul>
+<p>Sidekiq, with all of its functionality, has only 3 runtime dependencies:
+<code>concurrent-ruby</code>, <code>connection_pool</code> and <code>redis</code>.</p>
+<h3 id="die-json-die-german-for-the-json-the">Die json, die (German for &ldquo;The json, the&rdquo;)</h3>
+<figure style="float: right;">
+  <img style="border: solid white 10px;" src="http://41.media.tumblr.com/tumblr_lh4z0xSXsx1qbohddo1_500.jpg" width="320px" />
+</figure>
+So many gems declare a dependency on json, oj, multi\_json, or yajl-ruby.
+There's so many ossified layers of cruft around JSON
+processing that only one course of action makes sense: remove it all.
+JSON has been in the stdlib since 1.9, you don't need to declare any dependencies at all.
+Just `require 'json'` and let Ruby deal with it.
+<p><a href="https://github.com/rails/rails/pull/23453">Rails did it</a>, so can you!</p>
+<h3 id="why-choose-an-http-client-when-you-can-have-them-all">Why choose an HTTP client when you can have them all?</h3>
+<p>Every Rails app pulls in a half dozen different HTTP clients: faraday, rest-client,
+httparty, excon, typhoeus, curb, etc.  This is because various gems use them internally.
+<strong>A Rubygem should never use anything but Net::HTTP internally!</strong>
+Learn the Net:HTTP API, kill those dependencies and stop forcing extra HTTP client gems on your users.</p>
+<p>Let&rsquo;s say you want to offer an optimized version using curb: ok, but make it
+optional.  Allow the application developer to opt into using curb but
+net/http should always be the default.</p>
+<h3 id="optimizing-rails-50">Optimizing Rails 5.0</h3>
+<p>For the last few weeks, I&rsquo;ve been working (in tandem with several other
+developers, hi @_matthewd, @applerebel!) on minimizing gem dependencies
+in Rails 5.0.  Rails 4.2.5 requires 34 gems.  Rails 5.0b1 required 55 gems.
+Rails 5.0b2 required 39 gems.  I expect Rails 5.0 to require 37 gems or
+less.  So far we&rsquo;ve removed Celluloid, EventMachine, thread_safe, and json.</p>
+<p>Unfortunately there&rsquo;s no more low-hanging fruit.  I&rsquo;d love to drop
+Nokogiri, it&rsquo;s such a huge dependency with a massive native extension component,
+but there are some <a href="https://github.com/flavorjones/loofah/issues/100">non-trivial dependencies</a> on it.
+<a href="https://github.com/YorickPeterse/oga">Oga</a> is a nice, simpler alternative.  If you
+ship a gem which depends on Nokogiri, consider making it optional and defaulting to REXML (I know, but
+at least it&rsquo;s in stdlib) or Oga instead.</p>
+<h3 id="be-part-of-the-solution">Be Part of the Solution</h3>
+<p>I can help with Rails 5.0 but I can&rsquo;t fix every gem.  If you are a gem developer,
+audit your own dependencies and remove as many as you can.
+If you&rsquo;re an app developer, take a look in your
+Gemfile and see if you can find a gem or two to remove.
+Simplify, simplify, simplify.</p>
+<p>As an example, I think it&rsquo;s possible for the <a href="https://github.com/stripe/stripe-ruby/blob/master/stripe.gemspec#L16">Stripe gem</a> to remove both of its runtime dependencies.</p>
+<h3 id="rules-to-remember">Rules to Remember</h3>
+<p>Some software engineering rules:</p>
+<ul>
+<li>No code runs faster than no code.</li>
+<li>No code has fewer bugs than no code.</li>
+<li>No code uses less memory than no code.</li>
+<li>No code is easier to understand than no code.</li>
+</ul>
+<p>Kill those dependencies.  Your gems and apps will be better for it.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

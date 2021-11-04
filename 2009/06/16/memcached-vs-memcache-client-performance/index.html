@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>memcached vs memcache-client Performance | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>memcached vs memcache-client Performance</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2009-06-16
+  </small>
+  
+</p>
+<p><a href="http://github.com/fauna/memcached">memcached</a> is Evan Weaver&rsquo;s Ruby wrapper around the libmemcached C library and widely regarded as quite fast. After an hour of trying, I finally got a build of memcached to actually compile and install on my machine (the trick: you need to download the custom packages Evan links on his blog, nothing else seems to work). Here&rsquo;s the results:</p>
+<pre>== memcached 0.13 + libmemcached 0.25.4 versus memcache-client 1.7.4
+
+                                     user     system      total        real
+set:plain:noblock:memcached      0.090000   0.030000   0.120000 (  0.277929)
+set:plain:memcached              0.220000   0.270000   0.490000 (  1.251547)
+set:plain:memcache-client        0.610000   0.270000   0.880000 (  1.670718)
+set:ruby:noblock:memcached       0.150000   0.020000   0.170000 (  0.309201)
+set:ruby:memcached               0.300000   0.290000   0.590000 (  1.390354)
+set:ruby:memcache-client         0.670000   0.270000   0.940000 (  1.713558)
+get:plain:memcached              0.240000   0.270000   0.510000 (  1.169909)
+get:plain:memcache-client        0.850000   0.270000   1.120000 (  1.885270)
+get:ruby:memcached               0.270000   0.280000   0.550000 (  1.229705)
+get:ruby:memcache-client         0.890000   0.260000   1.150000 (  1.861660)
+multiget:ruby:memcached          0.190000   0.090000   0.280000 (  0.396264)
+multiget:ruby:memcache-client    0.530000   0.100000   0.630000 (  0.901016)
+missing:ruby:memcached           0.280000   0.290000   0.570000 (  1.254400)
+missing:ruby:memcached:inline    0.300000   0.290000   0.590000 (  1.235122)
+missing:ruby:memcache-client     0.570000   0.250000   0.820000 (  1.461293)
+mixed:ruby:noblock:memcached     0.540000   0.620000   1.160000 (  2.429200)
+mixed:ruby:memcached             0.580000   0.570000   1.150000 (  2.610819)
+mixed:ruby:memcache-client       1.580000   0.540000   2.120000 (  3.632775)
+</pre>
+<p>In most cases, memcache-client is within 33-50% of the performance of memcached. This is amazing for a (mostly) pure Ruby library performing a lot of network IO against a C library which has been tuned for speed! I hope that puts to bed any lingering doubts that memcache-client is slow.</p>
+<p>Remember: if you are using Rails 2.3, just &ldquo;gem install memcache-client&rdquo; and Rails will pick up the latest version with all these performance improvements.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

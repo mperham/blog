@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>One Quarter of Sidekiq | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>One Quarter of Sidekiq</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2012-05-01
+  </small>
+  
+</p>
+<p>It&rsquo;s been about three months since I released <a href="https://github.com/mperham/sidekiq">Sidekiq</a>. Let&rsquo;s get to the numbers:</p>
+<ul>
+<li>668 GitHub watchers</li>
+<li>171 issues, 11 open</li>
+<li>7 commercial licenses purchased!</li>
+<li>54 pull requests with 30+ different developers!</li>
+<li>1 <a href="http://www.engineyard.com/podcast/sidekiq-the-clymb-motorcycles">EngineYard podcast interview</a></li>
+<li>1 RailsConf lightning talk by @jwo</li>
+<li>1 South African Ruby group talk on Sidekiq!</li>
+<li>1 new license (LGPL rather than GPL)</li>
+<li>0 locks in the multithreaded codebase</li>
+</ul>
+<p>I consider that a success; I&rsquo;ve never had a project grow this fast with just my own promotion and community word of mouth. <a href="https://www.theclymb.com/invite-from/mperham">TheClymb</a> switched to Sidekiq last week and our biggest problem so far has been that Sidekiq can be <strong>too parallel</strong> and crush servers with traffic; we&rsquo;ve had to rewrite some jobs to be serial!</p>
+<p>My goals remain the same:</p>
+<ul>
+<li>Provide the easiest and best supported queueing system for Ruby.</li>
+<li>Be the first Rubygem people mention or consider when choosing a queueing system</li>
+<li>Improve Ruby&rsquo;s overall efficiency and perceived performance through multi-threading.</li>
+<li>Evangelize multi-threaded infrastructure written with actor abstractions as relatively straightforward for knowledgable developers to build. <a href="https://github.com/celluloid/celluloid">Celluloid</a> continues to be a huge asset to Sidekiq&rsquo;s ease of development and stability.</li>
+</ul>
+<p>Thank you all for your support so far! Thank you especially to EngineYard, Tony Arcieri and the early adopters that have made hacking on Sidekiq an exciting adventure rather than a lonely chore.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

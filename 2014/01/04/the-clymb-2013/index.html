@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>The Clymb 2013 | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>The Clymb 2013</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2014-01-04
+  </small>
+  
+</p>
+<p>At the start of 2103, I was given full control of The Clymb&rsquo;s site operations. Now that a year has passed, I want to post a year end summary with lessons learned. We had a few problems but the year was mostly positive.</p>
+<p><strong>New Hardware</strong></p>
+<p>This time last year we moved from Rackspace Cloud servers to Rackspace dedicated hardware with the thought that we could grow 10x on a more stable cluster. Previously we were running about 10 cloud servers to power the site and would spin up another 5 if we knew a big sale would drive higher traffic levels than normal (e.g. Black Friday).</p>
+<p>We moved to 4 dedicated machines: 3 apps and 1 db. Each has a LOT more memory and cores than a Cloud box. The costs are approximately the same. In practice this has worked out fantastically. The dedicated machines scale at least an order of magnitude better than the Cloud boxes. Rackspace is not cheap but the network has proven very reliable and the support staff very knowledgable on the lower levels of the stack, i.e. Linux and OS setup/tuning.</p>
+<p>The dedicated boxes <strong>crushed</strong> Black Friday. They had no problems at all, despite us having 2x the traffic of our previous best day.</p>
+<p><strong>Infrastructure</strong></p>
+<p>Our stack is very vanilla, with <strong>simple</strong> tools where possible. I eschew complexity as that is where production problems tend to crop up in my experience.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<ul>
+<li>Percona 5.5 &ndash; 100% uptime, replication issues<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></li>
+<li>Redis 2.4 &ndash; 100% uptime</li>
+<li>memcached 1.4 &ndash; 100% uptime</li>
+<li>nginx 1.1 &ndash; 100% uptime</li>
+<li>sidekiq &ndash; 100% uptime, memory bloat<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></li>
+<li>elasticsearch 0.90 &ndash; some downtime, configuration and setup complexity bit us</li>
+<li>unicorn 4.6 &ndash; 100% uptime, expensive</li>
+</ul>
+<p>ElasticSearch has proven the least reliable part of our stack: getting indexing and sharding working reliably took several months with a handful of extended outages. Luckily we built in a &ldquo;Search is not available right now&rdquo; fallback into the code so users don&rsquo;t get a broken page when ES did go haywire.</p>
+<p>Unicorn is expensive. Its lack of concurrency means it consumes most of the memory on our app servers. One of my tasks for 2014 is moving to a hybrid concurrency model via Puma or Phusion Passenger. Sidekiq has proven that Rails can be multithreaded, we just need to start using threads on the web side.</p>
+<p><strong>Failures</strong></p>
+<p>We had several production issues during the year:</p>
+<ul>
+<li>
+<p>In February we switched over to our new dedicated hardware cluster and almost immediately had downtime. The issue was tracked down to use of a hostname for our statsd metrics server. The statsd client was resolving the hostname for every metric it sent, causing 1000s of DNS requests per second when site traffic picked up. In response we switched the client to use a hard coded IP address and installed a caching DNS resolver on localhost.</p>
+</li>
+<li>
+<p>In April our image domain expired, no one was monitoring the email address it had been registered with. Product images were dead from midnight to about 8am. In response we consolidated all our domains away from GoDaddy to another registrar and renewed them.</p>
+</li>
+<li>
+<p>In December we had an engineer <em>cough, me, cough</em> who accidentally ran an UPDATE in production that he meant to run on localhost. This led to 500 orders being short on inventory and ruining the holidays for a few of our customers. I started using our read-only slave except where I explicitly need to write something right now.</p>
+</li>
+</ul>
+<p>I can&rsquo;t think of any other user-facing disruptions.</p>
+<p><strong>Fun Stuff</strong></p>
+<p>Other issues, while maybe not user-facing, cropped up and demanded attention:</p>
+<ul>
+<li>We had one Russian IP address performing automated dictionary login attacks. We banned the IP address and then implemented rate limiting via nginx to ensure it can&rsquo;t happen again.</li>
+<li>A few times people have tried crawling us without any rate limiting. If it was persistent, we banned their IP.</li>
+<li>There was once or twice where bad data caused MySQL queries to return huge volumes of data, spiking various graphs and resulting in miserable performance. We found the problem in the slow query log and quickly fixed the data but don&rsquo;t have a more comprehensive solution.</li>
+</ul>
+<p><strong>TODO</strong></p>
+<p>In 2014, we plan to:</p>
+<ul>
+<li>upgrade Linux kernel for TCP performance improvements</li>
+<li>upgrade to Percona 5.6</li>
+<li>upgrade to Redis 2.8 for Lua and SCAN support</li>
+<li>upgrade to nginx 1.5 for SSL performance improvements</li>
+<li>switch from unicorn to Puma for memory efficiency</li>
+</ul>
+<p><strong>Conclusion</strong></p>
+<p>Overall I&rsquo;m quite happy with the year. I was never woken up by a phone call and I sleep soundly at night. I like to think that validates the choices we&rsquo;ve made with our infrastructure; let&rsquo;s hope 2014 proves as reliable.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>This is why I avoid distributed data stores as their administration and failure modes tend to be much more complex and thus difficult to make reliable.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Replication has proven reliable as long as we aren&rsquo;t doing something crazy on the slave, like locking tables for over an hour, or using a read/write account to access it. <em>cough</em>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>Memory bloat is common for Ruby daemons. Since we deploy and restart Sidekiq daily, this hasn&rsquo;t posed a problem. monit restarts Sidekiq if it goes above a certain threshold on weekends.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

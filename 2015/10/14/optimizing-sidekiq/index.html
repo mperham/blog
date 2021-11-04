@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Optimizing Sidekiq | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Optimizing Sidekiq</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2015-10-14
+  </small>
+  
+</p>
+<p>Sidekiq has a reputation for being much faster than its competition but
+there&rsquo;s always room for improvement. I recently rewrote its internals
+and made it <strong>six times faster</strong>.  Here&rsquo;s how!</p>
+<figure style="float: right;">
+  <img style="border: solid white 10px;" src="http://cdn.shopify.com/s/files/1/0154/2777/products/Sidekiq_-_Detail_1024x1024.jpg" width="360px" />
+</figure>
+<p>It&rsquo;s been quite a while since I&rsquo;ve touched Sidekiq&rsquo;s core design.  That
+was intentional: for the last year Sidekiq has stabilized and become
+reliable infrastructure that Ruby developers can trust when
+building their applications.  That didn&rsquo;t stop me from wondering though,
+what would happen if I change this or tweak that?</p>
+<p>Recently I decided to embark on an experiment: how hard would it be
+to remove Celluloid?  Could I convert Sidekiq to use bare threads?
+I like Celluloid and how much easier it makes concurrent programming but
+it&rsquo;s also Sidekiq&rsquo;s largest dependency; as Celluloid changes, Sidekiq
+must accomodate those changes.</p>
+<h2 id="1-get-a-baseline">1. Get a Baseline</h2>
+<p>First thing I did was write a <a href="https://github.com/mperham/sidekiq/blob/master/bin/sidekiqload">load testing script</a> to execute 100,000
+no-op jobs so I could judge whether a change was effective or not.  The
+script creates 100,000 jobs in Redis, boots Sidekiq with 25 worker threads
+and then prints the current state every 2 seconds until the queue is
+drained. This script ran in <strong>125 seconds</strong> on MRI 2.2.3.</p>
+<h2 id="2-bare-threads">2. Bare Threads</h2>
+<p>Once a baseline was established, I spent a few days porting Sidekiq&rsquo;s
+core to use nothing but plain old Threads.  This wasn&rsquo;t easy but
+after a few days I had a stable system and
+the improvement was impressive: the load testing script now ran in <strong>57
+seconds</strong>.  Every abstraction has a cost and benefit; Celluloid allows
+you to reason about and build a concurrent system much quicker but does
+have a small runtime cost.</p>
+<h2 id="3-asynchronous-status">3. Asynchronous Status</h2>
+<p>Once the rewritten core was stable and tests passing again, I ran <code>ruby-prof</code>
+on the load testing script to see
+if there was any low hanging fruit.  The profiler showed that the
+processor threads were spending most of their time sending job status data to
+Redis.  Sidekiq has 25 processor threads to execute jobs concurrently and each thread
+called Redis at the start and finish of each job; you get precise status
+but at the cost of two
+network round trips.  To optimize this, I changed the
+processor threads to update a global status structure in memory then
+changed the process&rsquo;s heartbeat, which contacts Redis every few seconds,
+to update the status as part of the heartbeat.  If Sidekiq is processing
+1000 jobs/sec, this saves 1999 round trips!  Result?  The load testing
+script ran in <strong>20 seconds</strong>.</p>
+<h2 id="4-parallel-fetch">4. Parallel Fetch</h2>
+<p>The last major change I made when I noticed that MRI was using 100% of
+CPU and JRuby was using 150% during the script execution.  <em>Only 150%???</em>
+I have four cores in this laptop; why isn&rsquo;t it using 300% or more?
+I had a hunch: Sidekiq has always used a single Fetcher thread to
+retrieve jobs from Redis one at a time.  To test my theory, I introduced 1ms of latency
+into the Redis network connection using Shopify&rsquo;s nifty <a href="https://github.com/shopify/toxiproxy">Toxiproxy</a>
+gadget and immediately the script execution time shot up to over five
+minutes!  The processor threads were starving, waiting for that single
+thread to deliver jobs to them one at a time over the slow network.</p>
+<p>I refactored things to move the fetch code into the processor thread
+itself.  Now all 25 processor threads will call Redis and block, waiting
+for a job to appear.  This, along with the async status change, should
+make Sidekiq much more resilient to Redis latency.  With fetch happening
+in parallel, the script ran in <strong>20 seconds</strong> again, even with 1ms of latency.
+JRuby 9000 uses &gt;300% CPU now and processes 7000 jobs/sec!</p>
+<h2 id="bonus-memory-and-latency">Bonus: Memory and Latency!</h2>
+<p>I also ran the script with GC disabled.  With no optimizations, Sidekiq
+executed 10,000 jobs using 1257MB of memory.  With all optimizations,
+Sidekiq executed the same number of jobs in 151MB of memory.  In other words, the
+optimizations result in <strong>8.3x less garbage</strong>.</p>
+<p>But that&rsquo;s not all!  I measured job execution latency before and after:
+the time required for the client in one process to create a job, push it
+to Redis, Sidekiq to pick it up and execute the worker.  Latency dropped
+from 22ms to 10ms.</p>
+<style>
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #000;
+}
+
+th, td, caption {
+  border: 1px solid #000;
+  padding: 0.5em;
+}
+</style>
+<table>
+<tr><th>Version</th><th>Latency</th><th>Garbage created when<br/> processing 10,000 jobs</th><th>Time to process<br/> 100,000 jobs</th><th>Throughput</th></tr>
+<tr><th>3.5.1</th><td>22ms</td><td>1257 MB</td><td>125 sec</td><td>800 job/sec</td></tr>
+<tr><th>4.0.0</th><td>10ms</td><td>151 MB</td><td>22 sec</td><td>4500 jobs/sec</td></tr>
+</table>
+<small>Data collected with MRI 2.2.3 running on my MBP 13-inch w/ 2.8Ghz i7.</small>
+<h2 id="drawbacks">Drawbacks?</h2>
+<p>There are a few trade offs to consider with these changes:</p>
+<ul>
+<li>more Redis connections in use.  Previously only the single Fetcher
+thread would block on Redis.  Now each processor thread will block
+on Redis, meaning you <strong>must</strong> have more Redis connections than your
+concurrency setting.  Sidekiq&rsquo;s default connection pool sizing of
+(concurrency + 2) will work great.</li>
+<li>job status on the Busy tab in the Web UI isn&rsquo;t real-time when the page
+renders, it may be delayed up to a few seconds</li>
+<li>Celluloid is no longer required by Sidekiq so if your application uses
+it, you will need to pull it in and initialize it yourself</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>Keep in mind what we are talking about: the overhead of executing no-op
+jobs.  This overhead is dwarfed by application job execution time so
+don&rsquo;t expect to see radical speedups in your own application jobs.  That
+said, this dramatic lowering of job overhead is still a nice win for
+all Sidekiq users, especially those with lots of very fast jobs.</p>
+<p>This effort will become Sidekiq 4.0 coming later this Fall.  All of this
+is made possible by sales of <a href="http://sidekiq.org">Sidekiq Pro</a> and <a href="http://sidekiq.org">Sidekiq Enterprise</a>.
+If you rely on Sidekiq every day, please upgrade and support my work.</p>
+<p>See the <a href="https://github.com/mperham/sidekiq/pull/2593">GitHub pull request</a> for all the gory detail.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

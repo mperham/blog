@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Taming Rails memory bloat | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Taming Rails memory bloat</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2018-04-25
+  </small>
+  
+</p>
+<p>MRI, the standard Ruby interpreter, has a serious problem with memory bloat in large Rails apps.
+It&rsquo;s quite common for me to see Sidekiq processes which are 1-2GB in RSS or even larger!
+It turns out that a large part of this memory usage is due to memory fragmentation: MRI uses
+the OS&rsquo;s memory allocator by default (on Linux, almost always GNU glibc),
+which seems to work poorly with Ruby&rsquo;s memory allocation patterns.</p>
+<p><a href="https://www.speedshop.co/2017/12/04/malloc-doubles-ruby-memory.html">Nate Berkopec went into great detail</a> about Ruby memory bloat.  His blog post is a much deeper dive.</p>
+<p>One important note: this behavior is specific to GNU glibc on Linux.
+OSX and BSD appear to have better quality allocators, not as prone to fragmentation.</p>
+<h2 id="reducing-arenas">Reducing Arenas</h2>
+<p>The major cause of fragmentation appears to be the large number of glibc memory arenas in heavily multi-threaded programs.
+&ldquo;Heavily multi-threaded&rdquo; &ndash; sound familiar?  That&rsquo;s Sidekiq.
+People on Heroku have discovered that to reduce memory, they should set <code>-c 5</code> which reduces the number of threads from 25 to 5.
+That reduces the &ldquo;heavily multi-threaded&rdquo; trigger and leads to less bloat.</p>
+<p>But the better way is to reduce glibc&rsquo;s memory arena count.
+Set this environment variable in your dynos, systemd unit files or however you start Sidekiq:</p>
+<pre tabindex="0"><code>MALLOC_ARENA_MAX = 2
+</code></pre><p>You should see a noticable reduction in memory usage after rebooting.</p>
+<h2 id="using-jemalloc">Using jemalloc</h2>
+<p>Switching Ruby&rsquo;s allocator to jemalloc looks to be an even more effective solution&hellip; for a price.
+One example:</p>
+<p><img src="https://www.mikeperham.com/images/jemalloc.jpg" alt="jemalloc"></p>
+<p>The results have been described as &ldquo;miraculous&rdquo;.
+That&rsquo;s <strong>40GB</strong> worth of Sidekiq processes shrunk to <strong>9GB</strong>, a 4x reduction.
+Much of this space is fragmented memory and switching to jemalloc fixes this wasted space.
+Seeing R14 errors on Heroku?
+<a href="https://www.levups.com/en/blog/2017/optimize_ruby_memory_usage_jemalloc_heroku_scalingo.html">Just throw a little jemalloc in there</a>.</p>
+<p>The issue with jemalloc is that it can cause problems in different environments.
+For example, it&rsquo;s had compatibility issues with Alpine Linux so if you are running Ruby in Alpine-based Docker images, you could see segfaults or stack overflows.
+If you want to try jemalloc, be sure you test your app thoroughly before pushing to production.</p>
+<p><a href="http://oldblog.antirez.com/post/everything-about-redis-24.html">Redis pulled in jemalloc explicitly to reduce memory fragmentation, with
+big success</a>:</p>
+<blockquote>
+<p>&ldquo;Since we introduced the specially encoded data types Redis started suffering from fragmentation. We tried different things to fix the problem, but basically the Linux default allocator in glibc sucks really, really hard. [&hellip;] Every single case of fragmentation in real world systems was fixed by this change, and also the amount of memory used dropped a bit.&rdquo;</p>
+</blockquote>
+<h2 id="trying-jemalloc">Trying jemalloc</h2>
+<p>Want to try jemalloc on OS X?
+My installed rubies seem to hardcode the memory allocator so you might need to build MRI with jemalloc specifically.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">brew install jemalloc
+<span style="color:#75715e"># Now install Ruby with jemalloc enabled</span>
+<span style="color:#75715e">#   with rbenv:</span>
+<span style="color:#75715e">#     RUBY_CONFIGURE_OPTS=--with-jemalloc rbenv install 2.5.1</span>
+<span style="color:#75715e">#   with ruby-install</span>
+<span style="color:#75715e">#     ruby-install ruby-2.5.1 -- --with-jemalloc</span>
+chruby ruby-2.5.1
+MALLOC_CONF<span style="color:#f92672">=</span>stats_print:true irb
+</code></pre></div><p>If you see lots of arcane stats print out upon exiting IRB, jemalloc is running in your Ruby.
+Make sure to verify your Ruby is actually running jemalloc; it is easy to misconfigure and have it silently fall back to the default allocator.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I&rsquo;m convinced that tuning glibc is a no brainer.
+Set <code>MALLOC_ARENA_MAX=2</code> everywhere you start Sidekiq and enjoy your extra memory.</p>
+<p>Using jemalloc is more complex.
+Memory bloat has been a serious issue in large scale Rails apps as far back as I can remember in Ruby.
+I wish ruby-core would pull in jemalloc as the default allocator but they seem content with glibc.
+Major Rails apps like <a href="https://gitlab.com/gitlab-org/omnibus-gitlab/issues/3073">GitLab</a>, Discourse and <a href="https://github.com/tootsuite/mastodon/issues/7257">Mastodon</a> plan to or have already integrated jemalloc but each app has to do it separately.
+If you have a large Rails app, integrate jemalloc and see significant improvements, please <a href="https://bugs.ruby-lang.org/issues/new">open a Ruby issue</a> with graphs before and after.
+Let&rsquo;s give ruby-core all the data they need to make the right decision.</p>
+<p>Ruby-core jemalloc issues: <a href="https://bugs.ruby-lang.org/issues/13524">13524</a>, <a href="https://bugs.ruby-lang.org/issues/9113">9113</a>, <a href="https://bugs.ruby-lang.org/issues/14718">14718</a></p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

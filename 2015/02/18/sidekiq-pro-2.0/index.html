@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Sidekiq Pro 2.0! | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Sidekiq Pro 2.0!</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2015-02-18
+  </small>
+  
+</p>
+<figure style="float:right">
+  <img src="/wp-content/uploads/2015/02/sidekiq-pro.png" width="303" height="74"/>
+</figure>
+<p>I&rsquo;m happy to announce that <strong><a href="http://sidekiq.org/pro">Sidekiq Pro</a></strong> 2.0 is ready for general use.  There&rsquo;s two major features
+and some refactoring you need to know about.</p>
+<h3 id="batches">Batches</h3>
+<p>Sidekiq allows you to fire off a set of jobs to process asynchronously but you don&rsquo;t know when the whole set of jobs are complete:</p>
+<p><img src="/wp-content/uploads/2015/02/sidekiq.png" alt="no job workflow"></p>
+<p>Sidekiq Pro provides the <strong>Batch</strong> abstraction, it represents a set of jobs; you can attach callbacks
+to be fired when the set of jobs has finished.  This allows more complex job workflows:</p>
+<p><img src="/wp-content/uploads/2015/02/pro1.png" alt="simple job workflow"></p>
+<p>For 2.0, the Batch implementation and data model was overhauled for higher performance, much smaller size
+and <strong>Batches can now be nested</strong>: a job within a Batch can itself create a child Batch of jobs.  The callbacks for
+the parent batch will only be fired once the child batch callbacks have finished.</p>
+<p><img src="/wp-content/uploads/2015/02/pro2.png" alt="complex job workflow"></p>
+<p>This was some of the hardest code I&rsquo;ve ever written (it requires a bag of buzzwords: asynchronous, distributed,
+transactional, threadsafe and fast!) but I&rsquo;m really proud of the outcome.  Sidekiq Pro should be
+able to handle job workflows of any depth now.</p>
+<p>As part of 2.0, the batch data model changed significantly but have no fear: existing 1.x batches will process as normal.</p>
+<h3 id="scheduler">Scheduler</h3>
+<p>Sidekiq&rsquo;s scheduler scans the scheduler set for jobs to perform.  Unfortunately the way it scans and enqueues jobs is not atomic.
+There is a very very small but real chance a scheduled job could be lost.</p>
+<p>For 2.0, I&rsquo;ve written a Lua-based scheduler which is atomic and enqueues 50-100x faster than the existing scheduler since it does
+not require any network round trips.  It&rsquo;s very easy to enable:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  config<span style="color:#f92672">.</span>reliable_scheduler!
+<span style="color:#66d9ef">end</span></code></pre></div>
+<p>It&rsquo;s optional because it does require Redis 2.6.</p>
+<h3 id="miscellaneous-changes">Miscellaneous Changes</h3>
+<ul>
+<li>Various deprecated APIs were removed</li>
+<li>Reliability features are now enabled via methods, not <code>require</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">.</span>reliable_push!
+
+<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+  config<span style="color:#f92672">.</span>reliable_fetch!
+<span style="color:#66d9ef">end</span></code></pre></div></li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>Here&rsquo;s the <a href="https://github.com/mperham/sidekiq/blob/master/Pro-2.0-Upgrade.md">Sidekiq Pro 2.0 Upgrade Notes</a>.
+If you&rsquo;re not a Sidekiq Pro customer yet, <a href="http://sidekiq.org/">you can buy Sidekiq Pro here</a>.  Enjoy!</p>
+<p>Diagrams courtesy of the very nifty <a href="http://draw.io">draw.io</a>.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

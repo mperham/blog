@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>The Sidekiq Pro Giveaway Winner! | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>The Sidekiq Pro Giveaway Winner!</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2013-05-11
+  </small>
+  
+</p>
+<p>I&rsquo;m happy to announce the winner of my <a href="http://sidekiq.org/">Sidekiq Pro</a> 1.0 license giveaway is Libin Pan, whose company already uses Sidekiq pretty heavily, having run <strong>billions</strong> of jobs through Sidekiq in the last year. Let&rsquo;s hear his story:</p>
+<blockquote>
+<p>I work for Demandbase, a B2B marketing company, we help our client to identify the companies who visited their online properties.</p>
+<p>We were using resque before, because of the nature of forking, the memory and compute power is a big cost for us. So we switched to sidekiq soon after you released it. And we love it.</p>
+<img src="http://www.mikeperham.com/wp-content/uploads/2013/05/BJzXcEFCcAE-8a2.jpg" alt="BJzXcEFCcAE-8a2" width="658" height="178" class="aligncenter size-full wp-image-1339" />
+<p>We&rsquo;re using it in several projects, this screenshot is just one of them, a larger one of course. This sidekiq cluster handles the aggregation of realtime traffic for some clients. There&rsquo;re two major sidekiq workers, one normalizes the traffic, another one updates all the aggregation counts. Every task is very small and fast, and sidekiq is a perfect tool for it.</p>
+<p>There&rsquo;re 4 sidekiq worker servers, and every one has 4 processes which every one has 25 workers. As we are all on EC2, we use spot instances for part of the cluster so we can add more workers as needed, so it could grow up from 400 to 800 or more.</p>
+<p>The technology is nothing special but solid, Rails + Redis + Sharded MySQL.</p>
+</blockquote>
+<p>Thanks Libin and everyone else who entered. I hope Sidekiq Pro makes your system even better!</p>
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

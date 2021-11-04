@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>My Coolest Code | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>My Coolest Code</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2020-05-04
+  </small>
+  
+</p>
+<p>What&rsquo;s the coolest code you&rsquo;ve written, for your own definition of cool?</p>
+<h2 id="edi-the-worst-document-format">EDI: the Worst Document Format?</h2>
+<p>From 2003-2006 I worked at a startup building enterprise software for the health care space.
+We were building a system which allowed doctors offices to
+submit real-time transactions over the Internet, to migrate offices away from phone, fax or mail.
+Our first step was allowing real-time inquiry for insurance eligibility and benefits of a patient.
+Each doctor&rsquo;s office runs an EMR (&ldquo;Electronic Medical Records&rdquo;) system.
+When John Doe walks into his doctor&rsquo;s office, they call his insurance company to
+determine co-pays, etc. With our system, the EMR could do this automatically in seconds.</p>
+<p>The industry has an standard format for this request, known as <a href="https://www.1edisource.com/resources/edi-transactions-sets/edi-270/">X12 270</a>.
+It looks like this:</p>
+<pre tabindex="0"><code>ISA*01*0000000000*01*0000000000*ZZ*ABCDEFGHIJKLMNO*ZZ*123456789012345*101127*1719*U*00400*000003438*0*P*&gt;
+GS*HS*4405197800*999999999*20120117*1719*1421*X*004010VICS
+ST*270*1234
+BHT*0022*13*1*20010820*1330
+HL*1**20*1
+NM1*PR*2******PI*123456789
+HL*2*1*21*1
+NM1*1P*2******SV*987654321
+HL*3*2*22*0
+NM1*IL*1*DOE*JANE****MI*345678901
+EQ*30**FAM
+SE*10*1234
+GE*1*1421
+IEA*1*000006768
+</code></pre><p>The corresponding response is known as <a href="https://www.1edisource.com/resources/edi-transactions-sets/edi-271/">X12 271</a>.
+The doctor&rsquo;s EMR would submit a 270 document to us, we&rsquo;d need to
+parse it, pass the data to the BigHealthInsuranceCo, get the response
+back and convert that response into a 271 document to return to
+the EMR.</p>
+<p>So a quick rundown:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Electronic_data_interchange">EDI</a> - a generic but incomprehensible document format</li>
+<li><a href="https://en.wikipedia.org/wiki/ASC_X12">X12</a> - specific set of industry-standard documents using EDI</li>
+<li><a href="https://en.wikipedia.org/wiki/X12_Document_List#Insurance/Health_Series_(INS)">270</a> - insurance benefit inquiry document</li>
+</ul>
+<p>Oh, EDI documents are also called transactions so, yay confusion!
+I&rsquo;m going to stick to calling them documents.</p>
+<h2 id="the-problem">The Problem</h2>
+<p>The core difficulty we needed to solve:
+<strong>how the hell do we parse the above gobblygook into an object format we can easily CRUD?</strong>
+Keep in mind, the 270 document is about the simplest document format &ndash; it gets way, way more complex &ndash; so using regular expressions to parse were out of the question.</p>
+<p>But &ldquo;parse&rdquo; is the key word here.</p>
+<p>I realized we needed to go up a level of abstraction and get a machine-readable description of each EDI document format so we could build a parser.
+This is when I discovered <a href="https://www.edidev.com/eval_SefFile.html">SEF descriptors</a>.
+Each document type (270, 271, etc) has an associated SEF descriptor which describes the specific EDI document format.
+The essence of what I&rsquo;m so proud of is this:</p>
+<pre><code>a JavaCC grammar for parsing SEF files and generating a JavaBeans object model so we can parse specific EDI documents, manipulate the JavaBeans and emit an updated, well-formed document
+</code></pre>
+<p>I got something bare bones working after a month or so; soon we had full support for 270, 271, 835, 837p, 837i and other health related transactions.</p>
+<h2 id="the-solution">The Solution</h2>
+<p><a href="https://github.com/mperham/edistuff">Here&rsquo;s the code!</a>
+Keep in mind that all of this code and data is almost 20 years old, I put it on GitHub purely for my own historical interest.</p>
+<p>I read the SEF document format standard in <a href="https://github.com/mperham/edistuff/blob/master/src/parser/sef16.pdf">sef16.pdf</a>
+and built a <a href="https://github.com/mperham/edistuff/blob/master/src/parser/sef.jj">JavaCC grammar</a> for it.</p>
+<p>Here&rsquo;s an old <a href="https://github.com/mperham/edistuff/blob/master/src/parser/270.sef">270 SEF</a>.
+Once I had the grammar, I could use JavaCC to <a href="https://github.com/mperham/edistuff/tree/master/src/java/com/webify/shared/edi/parser/sef">parse the SEF</a> for each document type and emit <a href="https://github.com/mperham/edistuff/tree/master/src/java/com/webify/shared/edi/model/hipaa270/beans">Java code</a> which knew how to parse an EDI 270 InputStream into a set of Java beans.
+With a set of JavaBeans which described the document, the sky was the
+limit &ndash; we could write any business logic the customer needed.</p>
+<h2 id="the-conclusion">The Conclusion</h2>
+<p>So instead of maintaining a massive set of horrid regexps, I maintained the SEF grammar and JavaBeans generator.
+If we needed a new feature for the various document types, I could implement it and regenerate the JavaBeans,
+giving all document types that new feature.
+If we needed to support a new X12 document type, I just grabbed the SEF for it and generated the associated beans.
+Typically it would take me hours rather than months.</p>
+<p>Behold, the power of an abstraction layer. That&rsquo;s pretty cool.</p>
+<h2 id="postscript">Postscript</h2>
+<p>I haven&rsquo;t written Java in 15 years.  I saw Ruby on Rails in 2005 and fell in love with Ruby.</p>
+<p>These days I believe X12 has been superceded by the <a href="https://en.wikipedia.org/wiki/Health_Level_7">HL7 standard</a> which uses XML and therefore is easy to parse.
+EDI should be relegated to the dustbin of legacy formats ASAP.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

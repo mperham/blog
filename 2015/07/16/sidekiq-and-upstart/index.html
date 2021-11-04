@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Sidekiq and Upstart | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Sidekiq and Upstart</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2015-07-16
+  </small>
+  
+</p>
+<p>The best and most reliable way to manage multiple Sidekiq processes is with Upstart.
+Many developers know little to nothing about Upstart so I wanted to write up how to
+integrate Sidekiq with Upstart.  With Upstart doing the hard work, it becomes easy
+to manage deployments with Capistrano or another similar tool.</p>
+<h2 id="starting-sidekiq">Starting Sidekiq</h2>
+<p>The Sidekiq repo has <a href="https://github.com/mperham/sidekiq/tree/master/examples/upstart">example .conf files</a> you can use as a template to create your
+own services.  Customize the .conf files as necessary and place them in <code>/etc/init</code>;
+they tell Upstart when and how to start the associated processes.</p>
+<p>The <code>workers</code> service is a &ldquo;fake&rdquo; service which knows how to start/stop N sidekiq
+processes.  Upon machine boot, Upstart will start <code>workers</code> which will start those N
+processes.  Within <code>workers.conf</code> we&rsquo;ve declared how many processes we want to start:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">env <span style="color:#66d9ef">NUM_WORKERS</span><span style="color:#f92672">=</span><span style="color:#ae81ff">2</span></code></pre></div>
+<p>If you want to quickly shut down all Sidekiq processes, run <code>stop workers</code>. Start
+them back up with <code>start workers</code>.  Of course you can do both with <code>restart workers</code>.
+It literally can&rsquo;t be any easier!</p>
+<p>The <code>sidekiq</code> service is an &ldquo;instance&rdquo; service, allowing you to create N processes.
+It requires an index parameter to define which instance you are controlling:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ start sidekiq index<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+$ start sidekiq index<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+$ stop sidekiq index<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>
+etc...</code></pre></div>
+<h2 id="deployment">Deployment</h2>
+<p>Deployment should do two things: quiet Sidekiq as early as possible and restart
+as late as possible.</p>
+<h3 id="quieting-sidekiq">Quieting Sidekiq</h3>
+<p>During a deployment, we want to signal Sidekiq to stop processing jobs as early as possible so
+Sidekiq has as much time as possible to finish any jobs in progress.  We do this by sending
+each process the USR1 signal, here&rsquo;s a Capistrano task which does that:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:quiet</span> <span style="color:#66d9ef">do</span>
+  on roles(<span style="color:#e6db74">:worker</span>) <span style="color:#66d9ef">do</span>
+    puts capture(<span style="color:#e6db74">&#34;sudo pgrep -f &#39;sidekiq&#39; | xargs kill -USR1&#34;</span>)
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
+<p>Note that <code>workers</code> does not support reload since it doesn&rsquo;t map to a single process so we have to
+use that pgrep hack.</p>
+<p>You can use Upstart&rsquo;s <code>reload</code> command to quiet a specific instance:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ reload sidekiq index<span style="color:#f92672">=</span>X</code></pre></div>
+<h3 id="restarting-sidekiq">Restarting Sidekiq</h3>
+<p>Restarting is easy: <code>restart workers</code>.  This will actually stop and then start the processes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:restart</span> <span style="color:#66d9ef">do</span>
+  on roles(<span style="color:#e6db74">:worker</span>) <span style="color:#66d9ef">do</span>
+    puts capture(<span style="color:#e6db74">&#34;sudo restart workers&#34;</span>)
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span></code></pre></div>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>We don&rsquo;t need to daemonize.  Modern daemons should never daemonize themselves.</li>
+<li>We don&rsquo;t need PID files.  PID files are legacy from years ago and their use should
+signal that something is wrong.</li>
+<li>We don&rsquo;t need to specify our own log files.  Sidekiq will output to stdout; Upstart will direct stdout to
+a file within <code>/var/log/upstart/</code> <strong>and</strong> automatically rotate those log files
+for you - no logrotate setup necessary!</li>
+</ul>
+<p>In other words, stop reinventing the wheel and let the operating system do the hard work for you!
+I hope this makes your Sidekiq deployment cleaner and more stable.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

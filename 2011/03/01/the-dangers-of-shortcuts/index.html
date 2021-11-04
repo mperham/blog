@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>The Dangers of Shortcuts | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>The Dangers of Shortcuts</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2011-03-01
+  </small>
+  
+</p>
+<p><a href="http://mongodb.org/">MongoDB</a> has amazing write performance. <a href="http://nodejs.org/">Node.js</a> has great I/O concurrency. <a href="http://www.telehash.org/">Telehash</a> is an extremely efficient wire protocol. All three of these systems have a common theme: they take a shortcut in order to provide a leap in performance over existing systems.</p>
+<ul>
+<li>In MongoDB&rsquo;s case, they don&rsquo;t provide true durability so writes can be batched into a large set of writes when actually persisting to disk. This gets them great performance but means they don&rsquo;t provide true ACID transactions. Side note: the latest release has a new <code>--dur</code> flag which gives true durability with the resultant loss in write performance.</li>
+<li>For Node.js, the trade-off is in programming style: everything is done asynchronously so you have to learn an entirely new style of programming. Great performance but great developer learning curve.</li>
+<li>With Telehash, UDP is a more efficient network protocol than TCP by design. TCP is essentially UDP with reliable delivery baked on top, so it suffers from round trip latency and the state required to track the current network packets in flight in order to ensure delivery. You can use UDP but if a router drops a UDP packet, your application will never know.</li>
+</ul>
+<p>When you are looking at a new system that promises better performance or scalability than existing systems, ask yourself &ldquo;what shortcuts did they take to get that performance or scalability?&rdquo; <strong>Sometimes those shortcuts are worth it but it is completely dependent on your own situation.</strong> If you are writing a small, high-traffic network service, Node.js makes sense. Writing a high volume of low-priority logging data with MongoDB makes sense. I would argue there are very few instances where UDP is a good idea, realtime data streaming is the best case I can think of, off hand. Part of being an engineer is learning when these shortcuts are unreasonable and what you are paying for that shortcut.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

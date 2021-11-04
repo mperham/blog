@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>12 Gems of Christmas #8 -- wicked_pdf | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>12 Gems of Christmas #8 &ndash; wicked_pdf</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2012-12-05
+  </small>
+  
+</p>
+<p>We recently rolled out gift certificates in time for the holiday shopping season at <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> and one of our major implementation hurdles was a very innocent feature request: send the certificate via email as a PDF.</p>
+<p>How on earth do I create a PDF? I&rsquo;m a web developer &ndash; HTML/CSS is no problem &ndash; but PDF is a binary format and making a PDF with a &ldquo;nice&rdquo; design is way out of my bailiwick. <a href="https://github.com/mileszs/wicked_pdf">wicked_pdf</a> to the rescue! wicked_pdf wraps the <code>wkhtmltopdf</code> command line tool which can convert an HTML file into a PDF file for offline access or printing purposes. Our email code is simple: we render the HTML content and then pass it to WickedPdf for conversion.</p>
+<pre lang="ruby">pdf_str = render_to_string(:template => 'emails/gift_certificate',
+                           :layout => false,
+                           :locals => { :amount => number_to_currency(amount),
+                                        :product_code => pc.code } )
+pdfs &lt;&lt; WickedPdf.new.pdf_from_string(pdf_str)
+</pre>
+<p>With wicked_pdf, we didn&rsquo;t have to sacrifice the tools and technologies we know best in order to support PDF files. We rolled out the feature on time and no web developers were harmed in the process.</p>
+<p>I couldn&rsquo;t resist this platform to plug one of my own gems; tomorrow I&rsquo;ll cover my own favorite, under-utilized creation.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

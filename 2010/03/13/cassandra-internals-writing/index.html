@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Cassandra Internals -- Writing | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Cassandra Internals &ndash; Writing</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2010-03-13
+  </small>
+  
+
+<small><code><a href="https://www.mikeperham.com/tags/cassandra">cassandra</a></code></small>
+
+</p>
+<p><img src="http://incubator.apache.org/cassandra/media/img/cassandra_logo.png" alt="Cassandra logo"></p>
+<p>We&rsquo;ve started using Cassandra as our next-generation data storage engine at <a href="http://www.onespot.com">OneSpot</a> (replacing a very large Postgresql machine with a cluster of EC2 machines) and so I&rsquo;ve been using it for the last few weeks. As I&rsquo;m an infrastructure nerd and a big believer in understanding the various layers in the stack, I&rsquo;ve been reading up a bit on how Cassandra works and wanted to write a summary for others to benefit from. Since Cassandra is known to have very good write performance, I thought I would cover that first.</p>
+<p>First thing to understand is that Cassandra wants to run on many machines. From what I&rsquo;ve heard, Twitter uses a cluster of 45 machines. It doesn&rsquo;t make a lot of sense to run Cassandra on a single machine as you are losing the benefits of a system with no single point of failure.</p>
+<p>Your client sends a write request to a single, random Cassandra node. This node acts as a proxy and writes the data to the cluster. The cluster of nodes is stored as a &ldquo;ring&rdquo; of nodes and writes are replicated to N nodes using a <em>replication placement strategy</em>. With the RackAwareStrategy, Cassandra will determine the &ldquo;distance&rdquo; from the current node for reliability and availability purposes where &ldquo;distance&rdquo; is broken into three buckets: same rack as current node, same data center as current node, or a different data center. You configure Cassandra to write data to N nodes for redundancy and it will write the first copy to the primary node for that data, the second copy to the next node in the ring <em>in another data center</em>, and the rest of the copies to machines in the same data center as the proxy. This ensures that a single failure does not take down the entire cluster and the cluster will be available even if an entire data center goes offline.</p>
+<p>So the write request goes from your client to a single random node, which sends the write to N different nodes according to the replication placement strategy. There are many edge cases here (nodes are down, nodes being added to the cluster, etc) which I won&rsquo;t go into but the node waits for the N successes and then returns success to the client.</p>
+<p>Each of those N nodes gets that write request in the form of a &ldquo;RowMutation&rdquo; message. The node performs two actions for this message:</p>
+<ul>
+<li>Append the mutation to the commit log for transactional purposes</li>
+<li>Update an in-memory Memtable structure with the change</li>
+</ul>
+<p>And it&rsquo;s done. This is why Cassandra is so fast for writes: the slowest part is appending to a file. Unlike a database, Cassandra does not update data in-place on disk, nor update indices, so there&rsquo;s no intensive <em>synchronous</em> disk operations to block the write.</p>
+<p>There are several asynchronous operations which occur regularly:</p>
+<ul>
+<li>A &ldquo;full&rdquo; Memtable structure is written to a disk-based structure called an SSTable so we don&rsquo;t get too much data in-memory only.</li>
+<li>The set of temporary SSTables which exist for a given ColumnFamily are merged into one large SSTable. At this point the temporary SSTables are old and can be garbage collected at some point in the future.</li>
+</ul>
+<p>There are lots of edge cases and complications beyond what I&rsquo;ve talked about so far. I highly recommend reading the Cassandra wiki pages for <a href="http://wiki.apache.org/cassandra/ArchitectureInternals">ArchitectureInternals</a> and <a href="http://wiki.apache.org/cassandra/Operations">Operations</a> at the very least. Distributed systems are hard and Cassandra is no different.</p>
+<p>Please leave a comment if you have a correction or want to add detail &ndash; I&rsquo;m not a Cassandra developer so I&rsquo;m sure there&rsquo;s a mistake or two hidden up there.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

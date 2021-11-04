@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Distributed Locking with Redis and Ruby | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Distributed Locking with Redis and Ruby</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2016-04-25
+  </small>
+  
+</p>
+<figure style="float: right;">
+  <img style="border: solid white 0px;" src="/images/distributedlock.png" width="400px" />
+</figure>
+<p>It can happen: sometimes you need to severely curtail access to a
+resource.  Maybe you use a 3rd party API where you can only make one call at a
+time.  To handle this extreme case, you need an extreme tool: a
+distributed lock.</p>
+<p>Distributed locks are dangerous: hold the lock for too long and your
+system throughput plummets. They can easy become a major chokepoint for
+your app&rsquo;s performance and scalability.</p>
+<p>Recently a blog post talked about using Redis for
+distributed locking with Sidekiq.  I tried the code and <strong>it didn&rsquo;t even
+work</strong>. It did however give me the idea to test <a href="https://github.com/mperham/sidekiq/wiki/Ent-Rate-Limiting">Sidekiq Enterprise&rsquo;s Rate Limiting
+API</a>, which provides a flexible &ldquo;concurrent&rdquo; limiter,
+against other rubygems which provide a similar lock.</p>
+<blockquote>
+<p><strong>Please Note</strong>: I&rsquo;m not talking about <a href="http://redis.io/topics/distlock">Redlock</a> and other algorithms that
+provide fault-tolerant locking via distributed consensus.  Those
+algorithms are slower and <strong>much</strong> harder to get correct; I would never trust
+myself to write one (or anyone else that&rsquo;s not a Computer Science Ph.D).
+In this post, I&rsquo;m talking about using a single Redis instance to
+coordinate many worker processes distributed across many machines.
+This is sufficiently safe and robust for most businesses.</p>
+</blockquote>
+<h3 id="the-setup">The Setup</h3>
+<p>I tested four different distributed lock gems, including sidekiq-ent.
+With any of them we can create a distributed lock which
+ensures our system executes a block of code exclusively, even with dozens
+of processes.  One thing to understand: <strong>sidekiq-ent&rsquo;s Rate Limiting API does
+not need to run within a Sidekiq process</strong> - it can be used in any Ruby
+process: puma, unicorn, passenger, sidekiq, etc.</p>
+<p>All locking libraries provide similar semantics. You define:</p>
+<ul>
+<li>how long should the code wait for the lock before giving up?</li>
+<li>how long before the lock times out?</li>
+</ul>
+<p>The lock has to have a timeout as that&rsquo;s the only way to recover from a
+process crash while holding a lock.  Libraries &ldquo;wait&rdquo; in two different
+ways: redis-semaphore and sidekiq-ent block, efficiently waiting to be
+notified when they can take the lock, the other two gems poll regularly,
+forcing an unfortunate tradeoff: polling more often means slamming Redis
+with unnecessary work.</p>
+<h3 id="the-test">The Test</h3>
+<p>I created a benchmark exercising all four APIs.
+The code executes 100 &ldquo;jobs&rdquo; using 25 threads.  Each job sleeps for 0.1
+sec while holding the lock, meaning that a perfect run will take 10.0
+sec.  <a href="https://gist.github.com/mperham/e0248bfb727ebf02ffd6b09172a85301">Gist of the actual benchmark code here</a>.</p>
+<pre><code>sidekiq-ent
+  0.110000   0.100000   0.210000 ( 10.433794)
+redis-semaphore
+  0.150000   0.150000   0.300000 ( 10.487963)
+pmckee11-redis-lock
+  0.460000   0.550000   1.010000 ( 10.718958)
+ruby_redis_lock
+  0.280000   0.250000   0.530000 ( 11.655952)
+</code></pre>
+<p>The third column shows you the number of seconds actually running on the
+CPU; sidekiq-ent&rsquo;s limiter used 0.21 seconds of CPU time, the
+others varied from 0.3 to 1.0 seconds.</p>
+<p>The theoretical perfect runtime is 10 sec, 100 jobs * 0.1 sec sleep
+so sidekiq-ent adds about 4% overhead.  The latter two gems added notably more overhead.
+Note in the gist, I had to modify <code>pmckee11-redis-lock</code> to disable exponential
+backoff, otherwise it would die with a timeout after several minutes.</p>
+<h3 id="metrics">Metrics</h3>
+<p>Unfortunately the other three libraries give you no insight into actual lock usage while
+sidekiq-ent&rsquo;s concurrent limiter offers real-time metrics so you can
+understand how the lock is performing &ndash; it can answer questions like:</p>
+<ul>
+<li>how heavily is this lock contended?</li>
+<li>is the lock ever timing out?</li>
+<li>how often is the lock granted immediately vs forcing your code to wait?</li>
+</ul>
+<p>You can read the <a href="https://github.com/mperham/sidekiq/wiki/Ent-Rate-Limiting#concurrent-metrics">metric definitions in the wiki</a>.  Here&rsquo;s the UI:</p>
+<p><img src="https://raw.githubusercontent.com/mperham/sidekiq/master/examples/ent-concurrent.png" alt="Limiter Web UI"></p>
+<h3 id="what-have-we-learned">What have we learned?</h3>
+<p>The other libraries give you the basics of a distributed lock but two
+are lacking in performance and all are missing the metrics necessary to
+debug problems.  Some good things about Sidekiq Enterprise&rsquo;s concurrent limiter:</p>
+<ul>
+<li>it provides the highest performance distributed lock for Redis</li>
+<li>it blocks, it does not poll or sleep, so it won&rsquo;t slam Redis with superfluous requests or burn CPU</li>
+<li>it can limit access to N callers, not just 1</li>
+<li>it provides much better visibility with real-time metrics about limiter usage</li>
+</ul>
+<p>If you are using Sidekiq today, the Enterprise upgrade will drop right in.
+<a href="https://billing.contribsys.com/sent/new.cgi">Sidekiq Enterprise starts at $179/mo, get a quote in seconds here.</a></p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

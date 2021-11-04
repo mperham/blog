@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>The Sidekiq Experiment, Part I | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>The Sidekiq Experiment, Part I</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2012-08-26
+  </small>
+  
+</p>
+<p>It&rsquo;s been about 6 months since I released the first version of <a href="http://mperham.github.com/sidekiq">Sidekiq</a>, my take on a high-performance background processing library for Ruby which is an order of magnitude more efficient than Resque and DelayedJob.</p>
+<p>In some ways, Sidekiq has been a huge success: I&rsquo;ve never owned an OSS project that has ramped up this quickly in terms of watchers, users, pull requests, etc. I&rsquo;m still blown away that a <a href="http://railscasts.com/episodes/366-sidekiq">Railscast</a> was created for Sidekiq!</p>
+<p>But another part of the Sidekiq project is not technological at all but rather an experiment to answer another question: how can I build a library that is simple for others to use but also financially responsible for myself as a husband and father? I&rsquo;ve spent hundreds of hours building Sidekiq and managing the project, how can I justify time away from my family in order to build and support the best tool out there for free?</p>
+<p>Sidekiq&rsquo;s initial release was LGPL (actually GPL but that was my mistake and quickly fixed) and offered a (easy?) way for people to donate $50 in exchange for a more business-friendly license. In the last 6 months, I&rsquo;ve sold about 15 licenses for about $700. Assuming I&rsquo;ve spent 200 hours on Sidekiq, that&rsquo;s $3.50/hr or half of minimum wage. <strong>It&rsquo;s safe to say I do this because I love building software, not for the massive payday.</strong> I&rsquo;m calling altruism and licensing a failure and an end to this part of the experiment.</p>
+<p>What&rsquo;s next? Allow your workers to purchase in-app trinkets, a la Zynga? Sell out to IBM and create WebSphere SQ? Nope, but I have some ideas which I think everyone will be happy with. They&rsquo;re still early stages so I won&rsquo;t give any details but people who have bought a commercial license will be taken care of.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

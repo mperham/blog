@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Testing Ruby&#39;s CGI | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Testing Ruby&rsquo;s CGI</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2018-10-12
+  </small>
+  
+</p>
+<p>CGI is a standard for generating HTML pages from scripts executed as
+child processes by a web server. I explained CGI and how I use it in a
+previous post, <a href="/2015/01/05/cgi-rubys-bare-metal/">CGI: Ruby&rsquo;s Bare Metal</a>.
+I like to use CGI because it means that I don&rsquo;t have to run any Ruby app
+server (e.g. puma, passenger, unicorn) 24/7.  Less moving parts == more
+robust!</p>
+<p>Those app servers get most of the press these days so sadly CGI doesn&rsquo;t
+have much support and documentation; I couldn&rsquo;t find anything on how to <strong>test</strong> CGI scripts.
+These scripts handle my business, they need to work so I decided to put some effort into testing CGI.
+You, dear reader, are the benefactor!</p>
+<p>Two things I learned:</p>
+<ol>
+<li>Webrick, Ruby&rsquo;s built-in HTTP server, does have support for calling CGI scripts.
+This will be critical for us, it means we don&rsquo;t have to install Apache or nginx to call the CGI scripts.</li>
+<li>Because CGI outputs raw HTML, we&rsquo;ll need to do browser-level testing
+using Capybara with headless chrome or another automated browser.</li>
+</ol>
+<p>Great! Our test suite will be a Ruby process with two things:</p>
+<ol>
+<li>Webrick serving CGI requests</li>
+<li>Capybara requesting URLs from Webrick</li>
+</ol>
+<p>How can a Ruby process do two things at once?  With Threads, of course!</p>
+<h2 id="webrick">Webrick</h2>
+<p>Webrick is set up out of the box to serve any <code>.cgi</code> files as Ruby CGI scripts.
+You point Webrick to your <code>DocumentRoot</code> as normal.  Note that since
+Capybara is going to be driving the tests, we need Webrick to execute in
+another thread so both the HTTP client and server can execute
+concurrently:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">WEBRICK</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
+  require <span style="color:#e6db74">&#39;webrick&#39;</span>
+
+  server <span style="color:#f92672">=</span> <span style="color:#66d9ef">WEBrick</span><span style="color:#f92672">::</span><span style="color:#66d9ef">HTTPServer</span><span style="color:#f92672">.</span>new(
+    <span style="color:#e6db74">:Port</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">8999</span>,
+    <span style="color:#e6db74">:DocumentRoot</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>expand_path(<span style="color:#e6db74">&#34;../..&#34;</span>, __FILE__),
+  )
+  trap(<span style="color:#e6db74">&#39;INT&#39;</span>) { server<span style="color:#f92672">.</span>shutdown }
+
+  puts <span style="color:#e6db74">&#34;Starting Webrick on port 8999&#34;</span>
+  server<span style="color:#f92672">.</span>start
+<span style="color:#66d9ef">end</span>
+</code></pre></div><h2 id="capybara">Capybara</h2>
+<p>Most of the Capybara integration is straight out of the README, there is
+only one trick necessary: since we are starting our own custom Webrick
+server in a separate thread, we need to tell Capybara not to start a
+server on its own and point it to ours instead.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>run_server <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
+<span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>app_host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://localhost:8999&#39;</span>
+</code></pre></div><p>After an hour of fiddling, here&rsquo;s the <code>test/helper.rb</code> I came up with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>report_on_exception <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+
+require <span style="color:#e6db74">&#39;minitest/autorun&#39;</span>
+require <span style="color:#e6db74">&#39;capybara/minitest&#39;</span>
+<span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>run_server <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
+
+<span style="color:#75715e"># I found poltergeist quick to install and worked first time, YMMV</span>
+require <span style="color:#e6db74">&#39;capybara/poltergeist&#39;</span>
+<span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>javascript_driver <span style="color:#f92672">=</span> <span style="color:#e6db74">:poltergeist</span>
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CGITest</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">Minitest</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Test</span>
+  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">::</span><span style="color:#66d9ef">DSL</span>
+  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Minitest</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Assertions</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">setup</span>
+    <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>current_driver <span style="color:#f92672">=</span> <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>javascript_driver
+  <span style="color:#66d9ef">end</span>
+
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">teardown</span>
+    <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>reset_sessions!
+    <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>use_default_driver
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+
+
+<span style="color:#75715e"># Here&#39;s the trick:</span>
+<span style="color:#75715e"># We need to run the Webrick server in a separate thread so the</span>
+<span style="color:#75715e"># testcases can make requests and block, waiting for the response.</span>
+<span style="color:#66d9ef">WEBRICK</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
+  require <span style="color:#e6db74">&#39;webrick&#39;</span>
+
+  server <span style="color:#f92672">=</span> <span style="color:#66d9ef">WEBrick</span><span style="color:#f92672">::</span><span style="color:#66d9ef">HTTPServer</span><span style="color:#f92672">.</span>new(
+    <span style="color:#e6db74">:Port</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">8999</span>,
+    <span style="color:#e6db74">:DocumentRoot</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>expand_path(<span style="color:#e6db74">&#34;../..&#34;</span>, __FILE__),
+  )
+  trap(<span style="color:#e6db74">&#39;INT&#39;</span>) { server<span style="color:#f92672">.</span>shutdown }
+
+  puts <span style="color:#e6db74">&#34;Starting Webrick on port 8999&#34;</span>
+  server<span style="color:#f92672">.</span>start
+<span style="color:#66d9ef">end</span>
+
+<span style="color:#75715e"># Point Capybara to Webrick!</span>
+<span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>app_host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://localhost:8999&#39;</span>
+
+<span style="color:#75715e"># give webrick time to boot before the tests can run</span>
+sleep <span style="color:#ae81ff">1</span>
+</code></pre></div><p>Now I create <code>test/smoke_test.rb</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require_relative <span style="color:#e6db74">&#39;./helper&#39;</span>
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SmokeTest</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">CGITest</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_pro_navigation</span>
+    visit(<span style="color:#e6db74">&#34;/spro/new.cgi&#34;</span>)
+    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Subscribe to&#39;</span>)
+
+    visit(<span style="color:#e6db74">&#34;/spro/update.cgi&#34;</span>)
+    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Update your&#39;</span>)
+
+    visit(<span style="color:#e6db74">&#34;/spro/cancel.cgi&#34;</span>)
+    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Cancel your&#39;</span>)
+
+    visit(<span style="color:#e6db74">&#34;/spro/delete.cgi&#34;</span>)
+    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Confirm your&#39;</span>)
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><p>That&rsquo;s a quick test to make sure the <a href="https://billing.contribsys.com/spro/">billing scripts for Sidekiq
+Pro</a> will render correctly and not crash.
+Now with a little test coverage I&rsquo;ve got more confidence that changes won&rsquo;t break these scripts.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

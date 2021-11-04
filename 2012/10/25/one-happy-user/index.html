@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>One Happy User | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>One Happy User</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2012-10-25
+  </small>
+  
+</p>
+<p>I received a nice email the other day from a programmer who wants to remain anonymous due to his job at LargeCorp™. While efficiency is something I strive for in Sidekiq, this story really proves that you can do an amazing amount of work very quickly with the right architecture.</p>
+<blockquote>
+<p>Hey Mike,</p>
+<p>Just wanted to drop a line about Sidekiq. I know you&rsquo;ve put a lot of thought and work into it and sometimes it&rsquo;s good to hear that not only are people using what you&rsquo;ve done, but that they might be using it in ways you never intended to great success.</p>
+<p>My organization had a unique problem. We had to poll around 600,000 nodes via SNMPv1 very quickly to see how operational changes were effecting the nodes. The problem is more complicated in that the poll wasn&rsquo;t simple at all. Each node has agents running on multiple ports, and they may or may not respond based on any number of factors. Sometimes some of the agents on a node would talk back and some wouldn&rsquo;t. The average number of unique GETs per host was 40+. It was a crapshoot.</p>
+<p>Did I also mention the nodes are all on private address space? Yeah, this got complicated. I wasn&rsquo;t going to turn up EC2 instances to deal with this.</p>
+<p>I was told by others that what I wanted to do — poll all the nodes in less than 15<br>
+minutes — was impossible. Not just impossible, but that it couldn&rsquo;t be done in less than hours.</p>
+<p>There are many ways to approach something like this. A lot of folks would reach for a message queue and have the consumers handle the work.</p>
+<p>Well I tried that. The problem? Lots of them. First off, we&rsquo;re talking about a lot of Ruby objects and hitting the garbage collector happened quickly. This isn&rsquo;t a Ruby problem. If I want to poll a lot of nodes quickly with these characteristics, I was hitting similar limits with SNMP4J and Java.</p>
+<p>So to cut a long story short, I moved the logic into Sidekiq workers with an EventMachine-based SNMP poller.</p>
+<p>I think many users may see Sidekiq as a background worker that&rsquo;s more efficient than something like Resque (the reasons are on the wiki, I don&rsquo;t think I need to cover them). Since I approached it with a different mindset, what I saw was a high performance message queue that did all the hard work for me.</p>
+<p>And the performance increase I got?</p>
+<p>I was told it would take no less than four hours to do what I wanted to do, which was 600,000 of the complicated queries in less than four hours (and those guys had LOTS of workers).</p>
+<p>One Sidekiq worker does 500,000 in an hour at a concurrency level of 75. The existing solution had more racks of high performance servers acting as workers, I had no idea really, but the three or four racks of boxes took four hours. The four workers I deployed with did two million in an hour, which met my original objective. Well, almost, but shh.</p>
+<p>Sidekiq is new. It&rsquo;s good. I really hope more people try it out to hack at problems they might have.</p>
+</blockquote>
+<p>As a developer who&rsquo;s put a lot of heart and soul into building something, these usage stories always make my day. Thank you for the tale and kind words!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

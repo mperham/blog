@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>12 Gems of Christmas #4 -- mailcatcher and mail_view | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>12 Gems of Christmas #4 &ndash; mailcatcher and mail_view</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2012-12-09
+  </small>
+  
+</p>
+<p>Surprise, today&rsquo;s blog posting is a double header!</p>
+<p>Testing email can be painful, verifying delivery and look and feel quickly becomes tedious. <a href="http://mailcatcher.me">mailcatcher</a> and <a href="https://github.com/37signals/mail_view">mail_view</a> are my go-to tools for dealing with email.</p>
+<p><strong>mailcatcher</strong></p>
+<p>With mailcatcher, you install the gem and then run the <code>mailcatcher</code> binary to start the mailcatcher daemon in the background. Now you have an SMTP server running on port 1025 and an inbox available at http://localhost:1080. I configured <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> Rails app to automatically use mailcatcher if it&rsquo;s running:</p>
+<pre lang="ruby"># config/initializers/email.rb
+begin
+  sock = TCPSocket.new("localhost", 1025)
+  sock.close
+  catcher = true
+rescue
+  catcher = false
+end
+
+ActionMailer::Base.smtp_settings = if Rails.env.development? &#038;&#038; catcher
+  { :host => "localhost", :port => '1025', }
+else
+  { } # normal SMTP config
+end
+</pre>
+<p>Now you can test email via http://localhost:1080 and not have to use gmail, hotmail, etc.</p>
+<p><strong>mail_view</strong></p>
+<p><a href="https://github.com/37signals/mail_view">mail_view</a> is awesome for rapidly testing UI changes in email. The trick is to render the email as a webpage directly in your Rails app so you can see changes immediately with Cmd+R just like any normal webpage. You just need to set up the email to be rendered with some data; in our case we just pull random data from the database since we all work with production database snapshots.</p>
+<pre lang="ruby">class Preview &lt; MailView
+  def order_receipt
+    cart = Cart.where(:state => 'pushed').order(:id).last
+    Emails.order_receipt(cart.id)
+  end
+end
+</pre>
+<p>Of course, we need to mount the mail_view engine itself:</p>
+<pre lang="ruby"># config/routes.rb
+mount MailPreview => 'mail_view' if Rails.env.development?
+</pre>
+<p>Now we can go to http://localhost:3000/mail_view/order_receipt and immediately see what our order_receipt email looks like, no email required!</p>
+<p>With mailcatcher and mail_view at your side, email development and testing goes from tedious to stupendous! Tomorrow we&rsquo;ll cover a gem designed to build better command line scripts in Ruby&hellip;</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

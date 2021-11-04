@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.89.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" />
+
+  
+  <title>Trimming Dependencies: concurrent-ruby | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Trimming Dependencies: concurrent-ruby</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2020-06-02
+  </small>
+  
+</p>
+<p>I&rsquo;ve advocated for <a href="https://www.mikeperham.com/2016/02/09/kill-your-dependencies/">fewer dependencies</a> for years now.
+Every long-running project needs to periodically re-evaluate their usage of each dependency and the value it provides.
+To that end, I recently considered Sidekiq&rsquo;s dependencies:</p>
+<ul>
+<li>redis-rb - the Redis client</li>
+<li>connection_pool - provide threaded access to Redis connections</li>
+<li>rack - required to standardize Sidekiq&rsquo;s Web UI</li>
+<li>rack-protection - necessary to provide CSRF protection for write
+actions in the Web UI</li>
+</ul>
+<p>We might be able to remove <code>rack-protection</code> gem if we re-implement the
+CSRF functionality but none of the other gems are easy to remove
+(indeed, as I was writing this post, @seuros stepped up and took on <a href="https://github.com/mperham/sidekiq/issues/4587">issue #4587</a>).</p>
+<h3 id="sidekiq-pro">Sidekiq Pro</h3>
+<p>Sidekiq Pro adds a dependency on <code>concurrent-ruby</code> because Pro uses its
+<code>ThreadPoolExecutor</code> to limit access to Redis in super_fetch. Can we
+remove it?</p>
+<p>It turns out we can. We can reuse a connection pool as a pool of tokens
+for accessing Redis. By forcing all Processor threads to get a token
+before calling Redis, we can limit concurrent access to Redis. After
+refactoring connection_pool a bit, I was able to replace Concurrent
+usage with just a few lines of ConnectionPool code.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff"><span style="color:#f92672">-        @pool ||= Concurrent::ThreadPoolExecutor.new(
+</span><span style="color:#f92672">-          min_threads: 1,
+</span><span style="color:#f92672">-          max_threads: 2,
+</span><span style="color:#f92672">-          max_queue: options[:concurrency]
+</span><span style="color:#f92672">-        )
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+        @pool = ConnectionPool.new(size: 2, timeout: 120) { Object.new }
+</span><span style="color:#a6e22e"></span>
+<span style="color:#75715e">@@ -249,12 +244,20 @@ module Sidekiq::Pro
+</span><span style="color:#75715e"></span><span style="color:#f92672">-          future = Concurrent::Future.execute(executor: @pool, &amp;method(:get_job))
+</span><span style="color:#f92672">-          val = future.value(nil)
+</span><span style="color:#f92672">-          return val if val
+</span><span style="color:#f92672">-          raise future.reason if future.rejected?
+</span><span style="color:#f92672">-        rescue Concurrent::RejectedExecutionError
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+          # Since every Processor is a Thread, we want to limit the concurrency
+</span><span style="color:#a6e22e">+          # going to Redis. We do this with an artifically limited connection pool
+</span><span style="color:#a6e22e">+          # that holds tokens allowing the Thread to call Redis. We need to do
+</span><span style="color:#a6e22e">+          # this because Redis does not have a command which is both Reliable
+</span><span style="color:#a6e22e">+          # *and* operates on multiple queues.
+</span><span style="color:#a6e22e">+          # https://github.com/antirez/redis/issues/1785
+</span><span style="color:#a6e22e">+          @pool.with do
+</span><span style="color:#a6e22e">+            get_job
+</span><span style="color:#a6e22e">+          end
+</span><span style="color:#a6e22e">+        rescue ConnectionPool::TimeoutError
+</span><span style="color:#a6e22e">+          nil
+</span><span style="color:#a6e22e">+        rescue ConnectionPool::PoolShuttingDownError
+</span><span style="color:#a6e22e"></span>           # shutting down race condition, #2827, nbd
+<span style="color:#a6e22e">+          nil
+</span><span style="color:#a6e22e"></span>         end
+
+</code></pre></div><h3 id="sidekiq-enterprise">Sidekiq Enterprise</h3>
+<p>Sidekiq Enterprise adds a dependency on <code>einhorn</code> for the <a href="https://github.com/mperham/sidekiq/wiki/Ent-Rolling-Restarts">rolling
+restart</a> feature.
+We can&rsquo;t really remove this gem as customers use the <code>einhorn</code> binary.</p>
+<p>Enterprise also uses the <code>Concurrent.processor_count</code> API so it can fork
+a Sidekiq process for each core. It turns out that Ruby already provides
+this API in <code>Etc.nprocessors</code>, awesome!!! With this change, we can
+completely remove the <code>concurrent-ruby</code> gem from all Sidekiq variants.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff"><span style="color:#75715e">@@ -46,7 +45,7 @@ module Sidekiq
+</span><span style="color:#75715e"></span>         @signal = signal
+         @io = STDOUT
+ 
+<span style="color:#f92672">-        @count = Integer(env[&#34;SIDEKIQ_COUNT&#34;] || Concurrent.processor_count)
+</span><span style="color:#f92672"></span><span style="color:#a6e22e">+        @count = Integer(env[&#34;SIDEKIQ_COUNT&#34;] || Etc.nprocessors)
+</span></code></pre></div><h3 id="who-cares-whats-the-effect">Who cares? What&rsquo;s the effect?</h3>
+<p>Almost all OSS projects will struggle to get long term maintenance.
+concurrent-ruby had a maintainer for many years but he eventually moved
+onto other things. I believe it currently has another maintainer but
+there&rsquo;s no guarantee how long that arrangement will last. <strong>Without
+maintenance, OSS projects are a snapshot in time: eventually they will
+become outdated.</strong></p>
+<p>Once I removed all usage of the gem I booted a bare Sidekiq Pro process, had it process a few thousand jobs, and examined the RSS before and after:</p>
+<p><strong>Before</strong>: 60MB<br/>
+<strong>After</strong>: 50MB</p>
+<p><strong>10MB shaved off by removing concurrent-ruby!!!</strong></p>
+<h3 id="conclusion">Conclusion</h3>
+<p>Alas, a reality check: Rails depends on concurrent-ruby so most apps using Sidekiq will pull it in anyways.
+But this is a great example where stable, well used projects can always improve.
+Rails depends on many dozens of gems: can you remove one?</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>
