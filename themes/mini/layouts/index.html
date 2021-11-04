@@ -1,0 +1,13 @@
+{{- define "main" -}}
+
+{{ $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{ range $pages.ByPublishDate.Reverse }}
+    {{ $customDateFormat := "January 2, 2006" }}
+    {{ with .Site.Params.customDateFormat }}{{ $customDateFormat = . }}{{ end }}
+    <article>
+      <span class="publish-date">{{ .PublishDate.Format $customDateFormat }}</span>
+      <a href="{{ .Permalink }}">{{ .Title | markdownify }}</a>
+    </article>
+{{ end }}
+
+{{- end -}}
