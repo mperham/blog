@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.89.1" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://www.mikeperham.com/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>What&#39;s New in Sidekiq 6.3 | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">Mike Perham</a>
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq 🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory 🏭</a></li>
+      <li class="nav-item"><a class="nav-link" title="About" href="/about/">🔎</a></li>
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">🎉</a></li>
+    </ul>
+    <ul class="navbar-nav float-right">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">mperham@gmail.com</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">@getajobmike</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS">RSS</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>What&rsquo;s New in Sidekiq 6.3</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2021-11-07
+  </small>
+  
+</p>
+<p>I&rsquo;m happy to announce the general availability of Sidekiq 6.3 here at Rubyconf 2021!
+Since Sidekiq 6.2 in March we&rsquo;ve passed 110 million downloads on Rubygems.org and added a number of nice new features.
+Let&rsquo;s dive in!</p>
+<h2 id="sidekiqjob">Sidekiq::Job</h2>
+<p>One consistent issue in communication with the Sidekiq community is the nebulous term <code>worker</code>.
+Are you talking about a process? A thread? A type of job?
+Vagueness breeds confusion and frustration.
+I encourage developers to stop using the term <code>worker</code> and use <code>include Sidekiq::Job</code> in your job classes.
+Of course <code>Sidekiq::Worker</code> will be supported for the foreseeable future for backwards compatibility.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SomeJob</span>
+  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Job</span>
+  sidekiq_options <span style="color:#f92672">...</span>
+  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><h2 id="activejob-compatibility">ActiveJob Compatibility</h2>
+<p>ActiveJob&rsquo;s <code>set</code> API allows you to dynamically change job options.
+When I saw it, I said &ldquo;Why didn&rsquo;t I think of that?!&rdquo; <em>smacks forehead</em></p>
+<p>Sidekiq 4.1 first introduced support for ActiveJob&rsquo;s <code>set</code> API.
+Sidekiq 6.3 adds support for the <code>wait</code> and <code>wait_until</code> options as an alternative to <code>perform_at</code> or <code>perform_in</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">MyJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">wait</span>: <span style="color:#ae81ff">5</span><span style="color:#f92672">.</span>minutes)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>)
+<span style="color:#66d9ef">MyJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">wait_until</span>: <span style="color:#ae81ff">5</span><span style="color:#f92672">.</span>days<span style="color:#f92672">.</span>from_now)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>)
+</code></pre></div><p>We also added support for <code>queue_as :foo</code> as an alternative to <code>sidekiq_options queue: :foo</code>.
+By supporting more and more of the ActiveJob API natively, we make the decision of &ldquo;should I use ActiveJob or native Sidekiq?&rdquo; easier.</p>
+<h2 id="rails-logger">Rails Logger</h2>
+<p>Sidekiq&rsquo;s stdout now includes any logging from <code>Rails.logger</code>.
+Remove any logging hacks you might have in your initializer and see if it Just Works™ now.
+A specific thank you to @key88sf who helped me understand and track down the issue.</p>
+<h2 id="speedy-scheduler">Speedy Scheduler</h2>
+<p>GitLab submitted an optimized job scheduler which reduces Redis overhead by
+up to 45% when scheduling jobs with large fleets of worker processes. A
+really detailed, interesting writeup with more info can be <a href="https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1179">found here</a>.</p>
+<h2 id="bulk-perform">Bulk Perform</h2>
+<p>If you need to create a lot of jobs to parallelize some task, <code>Sidekiq::Client.push_bulk</code> has existed for years.
+We recently landed a higher-level wrapper API, <code>perform_bulk</code> which can be called directly from your Job class.
+Pass an Array of Arrays for the individual job arguments; this will create three SomeJob instances and direct them to a lower priority queue:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">SomeJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#34;low&#34;</span>)<span style="color:#f92672">.</span>perform_bulk(<span style="color:#f92672">[[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">]</span>, <span style="color:#f92672">[</span><span style="color:#ae81ff">2</span><span style="color:#f92672">]</span>, <span style="color:#f92672">[</span><span style="color:#ae81ff">3</span><span style="color:#f92672">]]</span>)
+</code></pre></div><p>There&rsquo;s no size limit. By default, jobs are created and pushed in batches of 1000.</p>
+<h2 id="modern-javascript">Modern JavaScript</h2>
+<p>The Web UI&rsquo;s javascripts hadn&rsquo;t been touched in five years so I felt it time to modernize things a bit.
+jQuery has been removed and the Web UI&rsquo;s scripts updated to use vanilla JavaScript.
+One less thing to upgrade and one less source of CVEs.</p>
+<h2 id="metrics-tagging">Metrics Tagging</h2>
+<p>A Sidekiq Pro customer wanted to tag their job metrics based on the associated tenant.
+Sounds like a great idea to me!
+Sidekiq Pro&rsquo;s Statsd metrics now allows you to dynamically calculate any options, including tags, for the job metrics.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># add to your initializer</span>
+<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Server</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Middleware</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>options <span style="color:#f92672">=</span> <span style="color:#f92672">-&gt;</span>(klass, job, q) <span style="color:#66d9ef">do</span>
+  {<span style="color:#e6db74">tags</span>: <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;worker:</span><span style="color:#e6db74">#{</span>klass<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74">&#34;queue:</span><span style="color:#e6db74">#{</span>q<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">]</span>}<span style="color:#f92672">.</span>tap <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>h<span style="color:#f92672">|</span>
+    h<span style="color:#f92672">[</span><span style="color:#e6db74">:tags</span><span style="color:#f92672">]</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;tenant:</span><span style="color:#e6db74">#{</span>job<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;tenant_id&#39;</span><span style="color:#f92672">]</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#66d9ef">if</span> job<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;tenant_id&#34;</span><span style="color:#f92672">]</span>
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><h2 id="miscellenia">Miscellenia</h2>
+<p>Among lots of other tweaks, a race condition leading to queue stoppage on JRuby was fixed.
+See the <a href="https://github.com/mperham/sidekiq/blob/main/Changes.md#630">changelog</a> for even more detail.
+Thanks for your continued support and keep &lsquo;kiqing!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

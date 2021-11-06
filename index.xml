@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Jul 2021 09:29:54 -0700</lastBuildDate>
+    <lastBuildDate>Sun, 07 Nov 2021 09:00:00 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>What&#39;s New in Sidekiq 6.3</title>
+      <link>https://www.mikeperham.com/2021/11/07/whats-new-in-sidekiq-6.3/</link>
+      <pubDate>Sun, 07 Nov 2021 09:00:00 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2021/11/07/whats-new-in-sidekiq-6.3/</guid>
+      <description>I&amp;rsquo;m happy to announce the general availability of Sidekiq 6.3 here at Rubyconf 2021! Since Sidekiq 6.2 in March we&amp;rsquo;ve passed 110 million downloads on Rubygems.org and added a number of nice new features. Let&amp;rsquo;s dive in!
+Sidekiq::Job One consistent issue in communication with the Sidekiq community is the nebulous term worker. Are you talking about a process? A thread? A type of job? Vagueness breeds confusion and frustration. I encourage developers to stop using the term worker and use include Sidekiq::Job in your job classes.</description>
+    </item>
     
     <item>
       <title>On Multi-Platform Docker images</title>
@@ -103,16 +113,6 @@ Sidekiq 6.1 The most visible change in Sidekiq 6.</description>
       
       <guid>https://www.mikeperham.com/2020/06/03/trimming-dependencies-rack-protection/</guid>
       <description>Recently I discussed how I was evaluating all of Sidekiq&amp;rsquo;s current dependencies to see if any could be removed or vendored to reduce upstream churn, security issues, and other maintenance chores. I was able to remove concurrent-ruby from Sidekiq Pro and Sidekiq Enterprise, which is a major win considering the size of that gem. A simple benchmark showed removing that gem shrunk a basic Sidekiq Pro process from 60MB to 50MB, a 16% improvement!</description>
-    </item>
-    
-    <item>
-      <title>Trimming Dependencies: concurrent-ruby</title>
-      <link>https://www.mikeperham.com/2020/06/02/trimming-dependencies-concurrent-ruby/</link>
-      <pubDate>Tue, 02 Jun 2020 15:41:10 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2020/06/02/trimming-dependencies-concurrent-ruby/</guid>
-      <description>I&amp;rsquo;ve advocated for fewer dependencies for years now. Every long-running project needs to periodically re-evaluate their usage of each dependency and the value it provides. To that end, I recently considered Sidekiq&amp;rsquo;s dependencies:
- redis-rb - the Redis client connection_pool - provide threaded access to Redis connections rack - required to standardize Sidekiq&amp;rsquo;s Web UI rack-protection - necessary to provide CSRF protection for write actions in the Web UI  We might be able to remove rack-protection gem if we re-implement the CSRF functionality but none of the other gems are easy to remove (indeed, as I was writing this post, @seuros stepped up and took on issue #4587).</description>
     </item>
     
   </channel>
