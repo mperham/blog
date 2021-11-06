@@ -16,7 +16,7 @@ To include your event, please [click this link](https://github.com/mperham/blog/
 
 * Happy Hour - 3-5pm, Pre-Function/Registration Area
 * WNB.rb Networking Reception - 6-10pm, Earl's: 1600 Glenarm Place, Denver, CO 80202 - [RSVP here](https://ti.to/rubyconf/rubyconf-2021)
-* Board Game Night - 7-11pm, Hyatt - Mineral Foyer, Bring your favorite game!
+* Board Game Night (sponsored by Contributed Systems) - 7-11pm, Hyatt - Mineral Foyer, Bring your favorite game!
 
 ## Tuesday 11/9
 
