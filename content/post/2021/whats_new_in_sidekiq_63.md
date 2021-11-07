@@ -67,7 +67,9 @@ There's no size limit. By default, jobs are created and pushed in batches of 100
 
 The Web UI's javascripts hadn't been touched in five years so I felt it time to modernize things a bit.
 jQuery has been removed and the Web UI's scripts updated to use vanilla JavaScript.
-One less thing to upgrade and one less source of CVEs.
+One less thing to upgrade and one less source of CVEs. **WARNING**:
+existing Web UI extensions which use jQuery might break since the page does
+not supply jQuery anymore.
 
 ## Metrics Tagging
 
