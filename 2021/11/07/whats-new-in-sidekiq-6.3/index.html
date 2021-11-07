@@ -230,7 +230,9 @@ Pass an Array of Arrays for the individual job arguments; this will create three
 <h2 id="modern-javascript">Modern JavaScript</h2>
 <p>The Web UI&rsquo;s javascripts hadn&rsquo;t been touched in five years so I felt it time to modernize things a bit.
 jQuery has been removed and the Web UI&rsquo;s scripts updated to use vanilla JavaScript.
-One less thing to upgrade and one less source of CVEs.</p>
+One less thing to upgrade and one less source of CVEs. <strong>WARNING</strong>:
+existing Web UI extensions which use jQuery might break since the page does
+not supply jQuery anymore.</p>
 <h2 id="metrics-tagging">Metrics Tagging</h2>
 <p>A Sidekiq Pro customer wanted to tag their job metrics based on the associated tenant.
 Sounds like a great idea to me!
