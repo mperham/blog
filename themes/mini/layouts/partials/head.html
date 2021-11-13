@@ -27,8 +27,8 @@
 
   <meta name="theme-color" content="{{ .Site.Params.faviconThemeColor }}">
 
-  {{ $bootstrapCss := "css/bootstrap.min.css" }}
-  <link rel="stylesheet" href="{{ $bootstrapCss | absURL }}" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  {{ $bootstrapCss := "/css/bootstrap.min.css" }}
+  <link rel="stylesheet" href="{{ $bootstrapCss }}" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
   <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
 
   {{ if .IsHome }}

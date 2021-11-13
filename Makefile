@@ -3,7 +3,7 @@ build:
 
 run:
 	open http://localhost:1313/
-	hugo serve -DF
+	hugo serve -DF --bind 0.0.0.0
 
 theme:
 	# update theme
