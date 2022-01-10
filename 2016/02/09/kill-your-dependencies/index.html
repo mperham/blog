@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.89.2" />
+  <meta name="generator" content="Hugo 0.91.2" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -258,12 +258,12 @@ their application.</p>
 <li>know whether it performs any monkeypatching outside of its own module?</li>
 </ul>
 <p>Sidekiq, with all of its functionality, has only 3 runtime dependencies:
-<code>concurrent-ruby</code>, <code>connection_pool</code> and <code>redis</code>.</p>
+<code>rack</code>, <code>connection_pool</code> and <code>redis</code>.</p>
 <h3 id="die-json-die-german-for-the-json-the">Die json, die (German for &ldquo;The json, the&rdquo;)</h3>
 <figure style="float: right;">
   <img style="border: solid white 10px;" src="http://41.media.tumblr.com/tumblr_lh4z0xSXsx1qbohddo1_500.jpg" width="320px" />
 </figure>
-So many gems declare a dependency on json, oj, multi\_json, or yajl-ruby.
+So many gems declare a dependency on json, oj, multi_json, or yajl-ruby.
 There's so many ossified layers of cruft around JSON
 processing that only one course of action makes sense: remove it all.
 JSON has been in the stdlib since 1.9, you don't need to declare any dependencies at all.
@@ -295,7 +295,7 @@ audit your own dependencies and remove as many as you can.
 If you&rsquo;re an app developer, take a look in your
 Gemfile and see if you can find a gem or two to remove.
 Simplify, simplify, simplify.</p>
-<p>As an example, I think it&rsquo;s possible for the <a href="https://github.com/stripe/stripe-ruby/blob/master/stripe.gemspec#L16">Stripe gem</a> to remove both of its runtime dependencies.</p>
+<p>As an example, I think it&rsquo;s possible for the <a href="https://github.com/stripe/stripe-ruby/blob/master/stripe.gemspec#L16">Stripe gem</a> to remove both of its runtime dependencies. (Update: Stripe <a href="https://github.com/stripe/stripe-ruby/pull/813">removed these dependencies</a> from their gem, yay!)</p>
 <h3 id="rules-to-remember">Rules to Remember</h3>
 <p>Some software engineering rules:</p>
 <ul>
