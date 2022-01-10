@@ -89,14 +89,14 @@ As a gem developer, for each of your gem dependencies do you:
 * know whether it performs any monkeypatching outside of its own module?
 
 Sidekiq, with all of its functionality, has only 3 runtime dependencies:
-`concurrent-ruby`, `connection_pool` and `redis`.
+`rack`, `connection_pool` and `redis`.
 
 ### Die json, die (German for "The json, the")
 
 <figure style="float: right;">
   <img style="border: solid white 10px;" src="http://41.media.tumblr.com/tumblr_lh4z0xSXsx1qbohddo1_500.jpg" width="320px" />
 </figure>
-So many gems declare a dependency on json, oj, multi\_json, or yajl-ruby.
+So many gems declare a dependency on json, oj, multi_json, or yajl-ruby.
 There's so many ossified layers of cruft around JSON
 processing that only one course of action makes sense: remove it all.
 JSON has been in the stdlib since 1.9, you don't need to declare any dependencies at all.
@@ -138,7 +138,7 @@ If you're an app developer, take a look in your
 Gemfile and see if you can find a gem or two to remove.
 Simplify, simplify, simplify.
 
-As an example, I think it's possible for the [Stripe gem](https://github.com/stripe/stripe-ruby/blob/master/stripe.gemspec#L16) to remove both of its runtime dependencies.
+As an example, I think it's possible for the [Stripe gem](https://github.com/stripe/stripe-ruby/blob/master/stripe.gemspec#L16) to remove both of its runtime dependencies. (Update: Stripe [removed these dependencies](https://github.com/stripe/stripe-ruby/pull/813) from their gem, yay!)
 
 ### Rules to Remember
 
