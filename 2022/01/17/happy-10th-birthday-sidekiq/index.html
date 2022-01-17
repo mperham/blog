@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.92.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>🎉 Happy 10th Birthday, Sidekiq! 🎂 | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+      
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>🎉 Happy 10th Birthday, Sidekiq! 🎂</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2022-01-17
+  </small>
+  
+</p>
+<p>It&rsquo;s hard for me to believe these words but I pushed Sidekiq&rsquo;s <a href="https://github.com/mperham/sidekiq/commit/26d9a92a6b355f131720b983888e8858e40aaa6e">first commit</a> on Jan 16th, 2012. Ten years ago. <a href="https://www.mikeperham.com/2012/02/07/sidekiq-simple-efficient-messaging-for-rails/">The public announcement</a>. <a href="https://www.mikeperham.com/2012/03/02/the-state-of-sidekiq-one-month-later/">One month later</a>. <a href="https://www.mikeperham.com/2012/05/01/one-quarter-of-sidekiq/">One quarter later</a>.</p>
+<p>Some context for those new to this blog: Sidekiq is the most popular background job system for the Ruby programming language.
+Every application has tasks which are important: send an email, charge a credit card, reserve inventory for an order, synchronize some data to a 3rd party service, etc.
+By making these background jobs, you automatically get error handling and retry, easy scaling across multiple machines, a monitoring UI and lots more.</p>
+<div class="jumbotron" style="padding: 2rem">
+  <h1>A Deal for You!</h1>
+  <p class="lead">Nate Berkopec's incredible <a href="https://nateberk.gumroad.com/l/sidekiqinpractice"><b>Sidekiq in Practice</b></a> workshop is 10 times cheaper in honor of Sidekiq's 10th Anniversary. You can buy it for $5 with the discount code <tt>SIDEKIQ10</tt>.
+  <p>The discount is good for <b>this week only</b> and ends on 2022-01-24.</p>
+</div>
+<h2 id="prehistory">Prehistory</h2>
+<p>Sidekiq did not spring fully formed from the ether.
+The first background job system in Ruby which I&rsquo;m aware of was <strong><a href="https://www.infoq.com/articles/BackgrounDRb/">BackgrounDRb</a></strong> in 2006 from the late, great <a href="https://youtu.be/xG1S9ZPCy2Q">Ezra Zygmuntowicz</a>.
+Ruby on Rails was just taking off in popularity but there was little to no infrastructure to process tasks outside of the HTTP request/response cycle.
+The name is a play on DRB, the Distributed Ruby module which ships in Ruby&rsquo;s standard library, and allows RPC-style calls across machines.
+Note the use of the term <strong>Worker</strong> in <a href="http://blog.gnufied.org">the docs</a>; modern Ruby uses the term <strong>Job</strong> now.</p>
+<p>BackgrounDRb&rsquo;s main issue is that it is not persistent: if the process is shutdown, all executing jobs are lost.
+Tobi Lutke, CEO of Shopify, <a href="https://github.com/tobi/delayed_job/commit/75b49dc1c281ffa934a4eb2c7e840291e8b4a5ff">published <strong>Delayed::Job</strong> in Feb 2008</a>.
+DJ persisted job data to the database, allowing for safe, frequent deployments which restarted any DJ processes.
+DJ&rsquo;s main issue is that it targeted MySQL, which was not designed for the access patterns inherent in a queue; it added massive load to the database which limited its scalability pretty severely.</p>
+<p>Chris Wanstrath, Founder of GitHub, <a href="https://github.com/resque/resque/commit/b1e00511b8ee9d9b2bcec41d7ccf306757049e66">published <strong>Resque</strong> in Aug 2009</a>.
+Resque moved away from the database and stored job data inside a popular new datastore named <strong>Redis</strong>.
+(Side note: Ezra Zygmuntowicz was the main driver of Redis adoption within the Ruby community and wrote the first Redis client.)
+Redis was marketed as a &ldquo;data structure server&rdquo; and had native, high performance support for queueing operations, making it far more scalable than DJ.
+Resque&rsquo;s main issue is that jobs are not thread-safe and so job execution is single-threaded only, making it RAM hungry.</p>
+<p>Shopify is currently worth $140+ billion.
+GitHub was bought by Microsoft for $7.5 billion.
+Tobi and Chris are both now billionaires.</p>
+<h2 id="history">History</h2>
+<p>This was the state of background jobs circa 2010.
+I had implemented a background job system in every Ruby company I had worked at because each OSS solution had severe limitations.
+I built <a href="https://github.com/mperham/qanat">Qanat in 2010</a>, an <a href="https://www.mikeperham.com/2010/01/27/scalable-ruby-processing-with-eventmachine/">event-based job runner</a> which used green threads to process multiple jobs concurrently but it suffered from the same malady as Node apps: blocking the event loop.
+I built <a href="https://github.com/mperham/girl_friday/wiki">girl_friday in 2011</a> which prototyped using the Actor pattern for <a href="https://www.mikeperham.com/2011/05/19/threads-fibers-events-and-actors/">thread-safe job execution</a> but still had a few design issues I was not happy about.
+The stage was set for Sidekiq.</p>
+<p>Redis really impressed me as a pragmatic datastore.
+It was the first non-trivial C project I&rsquo;d seen that did not run <code>configure</code>;
+you just downloaded the code and ran <code>make</code>.
+It did not pretend to support every *nix since 1983.
+64-bit native.
+The code was clean and readable.
+I believed I could rely on it as a datastore and that has proven to be true.
+I never seriously considered supporting multiple datastores; that&rsquo;s a quagmire with little value.
+Omakase.</p>
+<p>Sidekiq was the first major Ruby job system to run multi-threaded only.
+I knew someone had to entice the community to address thread-safety and my main worry was that the community would reject Sidekiq due to thread-safety fears.
+I guess the promise of a huge leap forward in performance won the day;
+within a year or so most thread safety problems in popular gems had been discovered and fixed.
+I still get occasional emails from customers running Sidekiq with concurrency: 1 because they don&rsquo;t trust their own app code to be thread-safe.
+Alas.</p>
+<p>After a few months I did something unusual: I declared that Sidekiq was unsustainable and that to solve that problem I wanted to run some <a href="https://www.mikeperham.com/2012/08/26/the-sidekiq-experiment-part-i/">&ldquo;financial experiments&rdquo;</a> to ensure long-term support and maintenance.
+In October 2012, <a href="https://www.mikeperham.com/2012/10/01/say-hello-to-sidekiq-pro/">I started selling Sidekiq Pro</a>.
+Even today I regularly see talk about the unsustainability of open source software, burnout and &ldquo;retiring from OSS&rdquo;.
+What&rsquo;s old is new again.</p>
+<p>My solution to sustainability was to make Sidekiq profitable.
+A project the size of Sidekiq requires many years of maintenance while supporting many thousands of users.
+That work can be a brutal cross to bear for free but it&rsquo;s a perfectly sensible job.
+I settled on the open core business model: Sidekiq is open source but Sidekiq Pro and Sidekiq Enterprise are closed source, commercial add-ons.
+I still work in the open where possible;
+issues, pull requests, wiki documentation are all on GitHub in the open.</p>
+<h2 id="some-numbers">Some Numbers</h2>
+<p>What has happened in the past 10 years?</p>
+<ul>
+<li>11,500 stars</li>
+<li>4100 commits (from me <strong>and</strong> the community!)</li>
+<li>5100 issues</li>
+<li>115 million downloads</li>
+<li>170 OSS gem versions</li>
+</ul>
+<p>But none of that matters if a maintainer&rsquo;s health or well-being is suffering. Here&rsquo;s some business numbers for <a href="https://contribsys.com">Contributed Systems</a>:</p>
+<ul>
+<li>1 employee (me!)</li>
+<li>1850 customers</li>
+<li>3.0m HTTP requests to the commercial gem server per day</li>
+<li>$13.5 million in total gross sales</li>
+</ul>
+<p>Ten years later and I&rsquo;m still here: sustainability ✅ and I did it my way.</p>
+<p>But I do wonder: could I have sold out, taken VC, and grown Sidekiq into a billion dollar unicorn?
+Maybe&hellip; but that wasn&rsquo;t my objective.
+Since the beginning I&rsquo;ve focused on building Sidekiq with steady, methodical improvement every day.</p>
+<p>Four years ago, I started a new project, <a href="https://github.com/contribsys/faktory/wiki">Faktory</a>, to bring Sidekiq&rsquo;s functionality to any programming language, not just Ruby.
+Like Sidekiq, it has a commercial version which ensures long-term maintenance.
+Unlike Sidekiq, it is designed to work with any programming language: Go, JavaScript, Python, et al.
+The bulk of my workday consists of supporting my Sidekiq and Faktory users.</p>
+<p>It&rsquo;s been incredibly gratifying to see many other software projects following Sidekiq&rsquo;s lead.
+Some copy the pricing, the wiki documentation style, the commercial license or even the <a href="https://sidekiq.org">sidekiq.org</a> home page!
+Once a person blazes a trail, many people can follow the well-worn path.</p>
+<h2 id="the-future">The Future</h2>
+<p>Short term: Ruby 3.1 and Rails 7.0 will require some minor but breaking changes, coming in Sidekiq
+7.0. Maintenance never ends.</p>
+<p>Long term: it&rsquo;s really hard for me to type this but I likely won&rsquo;t see 2030 as project owner and maintainer.
+While I have a few wonderful collaborators, being Sidekiq&rsquo;s <a href="https://en.wikipedia.org/wiki/Benevolent_dictator_for_life">BDFL</a> means I am a single point of failure.
+I&rsquo;m approaching 50 years old and want to enjoy my success at some point.
+What should I do?
+One idea is to turn Sidekiq over to <a href="https://rubycentral.org">Ruby Central</a>.
+Nothing would making me prouder than seeing Sidekiq sustaining our Ruby community infrastructure.</p>
+<p>What a legacy that would be!</p>
+<p>Thoughts? Tweet <a href="https://twitter.com/getajobmike">@getajobmike</a>.</p>
+<div class="jumbotron" style="padding: 2rem">
+  <h1>A Deal for You!</h1>
+  <p class="lead">Nate Berkopec's incredible <a href="https://nateberk.gumroad.com/l/sidekiqinpractice"><b>Sidekiq in Practice</b></a> workshop is 10 times cheaper in honor of Sidekiq's 10th Anniversary. You can buy it for $5 with the discount code <tt>SIDEKIQ10</tt>.
+  <p>The discount is good for <b>this week only</b> and ends on 2022-01-24.</p>
+</div>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

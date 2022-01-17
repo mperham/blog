@@ -3,7 +3,10 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.mikeperham.com/</loc>
-    <lastmod>2021-11-07T00:00:00+00:00</lastmod>
+    <lastmod>2022-01-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/2022/01/17/happy-10th-birthday-sidekiq/</loc>
+    <lastmod>2022-01-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2021/11/07/whats-new-in-sidekiq-6.3/</loc>
     <lastmod>2021-11-07T00:00:00+00:00</lastmod>
