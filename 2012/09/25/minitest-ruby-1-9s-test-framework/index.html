@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -192,7 +192,7 @@ blockquote,
 <p>(this is a classic post I wrote two years ago for another site which is shutting down, saving here since it&rsquo;s still very useful)</p>
 <p>Aaron Patterson gave a talk at GoGaRuCo 2010 about the latest changes in Ruby 1.9.2&rsquo;s standard library and one of the topics he spoke on was MiniTest. The Ruby community has been particularly innovative in the world of testing and Ruby 1.8&rsquo;s Test::Unit library is circa 2003, providing nothing but the most basic testing API. Every Ruby project I&rsquo;ve ever worked on has skipped Test::Unit and pulled in many different test gems (e.g. rspec, shoulda, mocha, flexmock) to provide a modern test infrastructure.</p>
 <h2 id="testunit-refresher">Test::Unit Refresher</h2>
-<p>With Test::Unit, you just subclass Test::Unit::TestCase, name your methods starting with &lsquo;test&rsquo; and include one or more assertions to verify:</p>
+<p>With Test::Unit, you just subclass Test::Unit::TestCase, name your methods starting with &rsquo;test&rsquo; and include one or more assertions to verify:</p>
 <pre lang="ruby">class TestSomething &lt; Test::Unit::TestCase
   def test_foo
     foo = Foo.new

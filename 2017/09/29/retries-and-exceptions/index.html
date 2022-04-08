@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -210,36 +210,36 @@ enabled by default and disabled only if your job is truly optional.</p>
 <p>Instead, your job should flag errors that can be ignored; we&rsquo;ll configure our
 error service to ignore them.  First we add a flag to the root of all
 errors:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># config/initializers/exceptions.rb</span>
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Exception</span>
-  <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:ignore_please</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Now we update our job to rescue and flag those flaky errors:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># your job/worker class</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>
-  <span style="color:#66d9ef">begin</span>
-    sketchy_service<span style="color:#f92672">.</span>call
-  <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">FlakyError</span> <span style="color:#f92672">=&gt;</span> ex
-    <span style="color:#75715e"># flag it to be ignored</span>
-    ex<span style="color:#f92672">.</span>ignore_please <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
-    <span style="color:#75715e"># re-raise it so Sidekiq will retry</span>
-    <span style="color:#66d9ef">raise</span> ex
-  <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Now configure your error service gem to ignore those errors.  Here&rsquo;s how
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># config/initializers/exceptions.rb</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Exception</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">attr_accessor</span> <span style="color:#e6db74">:ignore_please</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Now we update our job to rescue and flag those flaky errors:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># your job/worker class</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    sketchy_service<span style="color:#f92672">.</span>call
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">FlakyError</span> <span style="color:#f92672">=&gt;</span> ex
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># flag it to be ignored</span>
+</span></span><span style="display:flex;"><span>    ex<span style="color:#f92672">.</span>ignore_please <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># re-raise it so Sidekiq will retry</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">raise</span> ex
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Now configure your error service gem to ignore those errors.  Here&rsquo;s how
 to do it for Bugsnag and Honeybadger:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># https://docs.bugsnag.com/platforms/ruby/rails/configuration-options/#ignore_classes</span>
-<span style="color:#75715e"># config/initializers/bugsnag.rb</span>
-<span style="color:#66d9ef">Bugsnag</span><span style="color:#f92672">.</span>configure <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
-  config<span style="color:#f92672">.</span>ignore_classes <span style="color:#f92672">&lt;&lt;</span> lambda {<span style="color:#f92672">|</span>ex<span style="color:#f92672">|</span> ex<span style="color:#f92672">.</span>ignore_please }
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#75715e"># http://docs.honeybadger.io/ruby/getting-started/ignoring-errors.html#ignore-programmatically</span>
-<span style="color:#75715e"># config/initializers/honeybadger.rb</span>
-<span style="color:#66d9ef">Honeybadger</span><span style="color:#f92672">.</span>exception_filter <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>notice<span style="color:#f92672">|</span>
-  notice<span style="color:#f92672">[</span><span style="color:#e6db74">:exception</span><span style="color:#f92672">].</span>ignore_please
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Done!  Now your inbox should be a little cleaner.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># https://docs.bugsnag.com/platforms/ruby/rails/configuration-options/#ignore_classes</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># config/initializers/bugsnag.rb</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Bugsnag</span><span style="color:#f92672">.</span>configure <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>ignore_classes <span style="color:#f92672">&lt;&lt;</span> lambda {<span style="color:#f92672">|</span>ex<span style="color:#f92672">|</span> ex<span style="color:#f92672">.</span>ignore_please }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># http://docs.honeybadger.io/ruby/getting-started/ignoring-errors.html#ignore-programmatically</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># config/initializers/honeybadger.rb</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Honeybadger</span><span style="color:#f92672">.</span>exception_filter <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>notice<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  notice<span style="color:#f92672">[</span><span style="color:#e6db74">:exception</span><span style="color:#f92672">].</span>ignore_please
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Done!  Now your inbox should be a little cleaner.</p>
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -209,9 +209,9 @@ metrics into their own internal format.</p>
 <p>You plug in the Statsd client in your initializer and Sidekiq Pro will add metrics:</p>
 <div style="clear: both">
 </div>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;statsd-ruby&#39;</span>
-<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">.</span>statsd <span style="color:#f92672">=</span> <span style="color:#f92672">-&gt;</span>{ <span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;127.0.0.1&#34;</span>, <span style="color:#ae81ff">8125</span>) }
-</code></pre></div><p>Note that it&rsquo;s a Proc; Sidekiq Pro uses a connection pool with several clients so a
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;statsd-ruby&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">.</span>statsd <span style="color:#f92672">=</span> <span style="color:#f92672">-&gt;</span>{ <span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;127.0.0.1&#34;</span>, <span style="color:#ae81ff">8125</span>) }
+</span></span></code></pre></div><p>Note that it&rsquo;s a Proc; Sidekiq Pro uses a connection pool with several clients so a
 single global client doesn&rsquo;t become a source of thread and socket contention.</p>
 <h2 id="more-metrics">More Metrics</h2>
 <p>Sidekiq Pro now publishes several new metrics:</p>
@@ -226,7 +226,7 @@ based on their features.  A sample:</p>
 <pre tabindex="0"><code>jobs.periodic.created - enqueued a cron job
 leader.election - Sidekiq cluster changed leadership
 jobs.duplicate - a job was not enqueued because it was not unique
-jobs.duplicate.$WorkerClassName - metric with the worker's class name included, for debugging
+jobs.duplicate.$WorkerClassName - metric with the worker&#39;s class name included, for debugging
 </code></pre><p>With this, your operations dashboards should be more useful than ever.
 Want more metrics?  <a href="https://github.com/mperham/sidekiq/issues/new">Open an issue!</a></p>
 

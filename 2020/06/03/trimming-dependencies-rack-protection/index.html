@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -208,15 +208,15 @@ seemed like a lot for the feature, I didn&rsquo;t really understand the code wel
 I find the rack codebase to be a bit abstract for my own tastes, with lots of options, abstract classes/modules and one line methods which make the code harder to follow and navigate.
 To that end, I removed a lot of options and features Sidekiq doesn&rsquo;t use, inlined or removed some methods and shrank the code from 230 to 130 lines.
 The public API is now this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">::</span><span style="color:#66d9ef">CsrfProtection</span>
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(app, options <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>)
-    @app <span style="color:#f92672">=</span> app
-  <span style="color:#66d9ef">end</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(env)
-    accept?(env) ? admit(env) : deny(env)
-  <span style="color:#66d9ef">end</span>
-</code></pre></div><p>Once I had a very limited, focused API I started writing tests in test_csrf.rb.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">::</span><span style="color:#66d9ef">CsrfProtection</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(app, options <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>    @app <span style="color:#f92672">=</span> app
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(env)
+</span></span><span style="display:flex;"><span>    accept?(env) ? admit(env) : deny(env)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Once I had a very limited, focused API I started writing tests in test_csrf.rb.
 I wanted four tests:</p>
 <ul>
 <li>a simple GET which does not require CSRF protection</li>
@@ -225,45 +225,45 @@ I wanted four tests:</p>
 <li>a POST with a good token</li>
 </ul>
 <p>All I had to do was provide those <code>app</code> and <code>env</code> parameters, easy right??? Actually Rack&rsquo;s <code>call</code> interface made it rather elegant: you can call a block with <code>.call</code> so my &ldquo;test app&rdquo; is just a block! I explicitly chose not to use Rack&rsquo;s test helper DSL in order to better understand how Rack works under the covers. Here&rsquo;s the simple GET test:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(env, <span style="color:#f92672">&amp;</span>block)
-  <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">::</span><span style="color:#66d9ef">CsrfProtection</span><span style="color:#f92672">.</span>new(block)<span style="color:#f92672">.</span>call(env)
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_get</span>
-  ok <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">200</span>, {}, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;OK&#34;</span><span style="color:#f92672">]]</span>
-  result <span style="color:#f92672">=</span> call(env) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>envy<span style="color:#f92672">|</span>
-    refute_nil envy<span style="color:#f92672">[</span><span style="color:#e6db74">:csrf_token</span><span style="color:#f92672">]</span>
-    assert_equal <span style="color:#ae81ff">88</span>, envy<span style="color:#f92672">[</span><span style="color:#e6db74">:csrf_token</span><span style="color:#f92672">].</span>size
-    ok
-  <span style="color:#66d9ef">end</span>
-  assert_equal ok, result
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>In a real world app that block would render an HTML template,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(env, <span style="color:#f92672">&amp;</span>block)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">::</span><span style="color:#66d9ef">CsrfProtection</span><span style="color:#f92672">.</span>new(block)<span style="color:#f92672">.</span>call(env)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_get</span>
+</span></span><span style="display:flex;"><span>  ok <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">200</span>, {}, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;OK&#34;</span><span style="color:#f92672">]]</span>
+</span></span><span style="display:flex;"><span>  result <span style="color:#f92672">=</span> call(env) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>envy<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>    refute_nil envy<span style="color:#f92672">[</span><span style="color:#e6db74">:csrf_token</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    assert_equal <span style="color:#ae81ff">88</span>, envy<span style="color:#f92672">[</span><span style="color:#e6db74">:csrf_token</span><span style="color:#f92672">].</span>size
+</span></span><span style="display:flex;"><span>    ok
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  assert_equal ok, result
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>In a real world app that block would render an HTML template,
 injecting the <code>:csrf_token</code> into a hidden form input.</p>
 <p>The trickiest part was constructing Rack&rsquo;s <code>env</code> which is a magical Hash full of pain and wonder:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">session</span>
-  @session <span style="color:#f92672">||=</span> {}
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">env</span>(method<span style="color:#f92672">=</span><span style="color:#e6db74">:get</span>, form_hash<span style="color:#f92672">=</span>{})
-  imp <span style="color:#f92672">=</span> <span style="color:#66d9ef">StringIO</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;&#34;</span>)
-  {
-    <span style="color:#e6db74">&#34;REQUEST_METHOD&#34;</span> <span style="color:#f92672">=&gt;</span> method<span style="color:#f92672">.</span>to_s<span style="color:#f92672">.</span>upcase,
-    <span style="color:#e6db74">&#34;rack.session&#34;</span> <span style="color:#f92672">=&gt;</span> session,
-    <span style="color:#e6db74">&#34;rack.logger&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#f92672">::</span><span style="color:#66d9ef">Logger</span><span style="color:#f92672">.</span>new(@logio <span style="color:#f92672">||=</span> <span style="color:#66d9ef">StringIO</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;&#34;</span>)),
-    <span style="color:#e6db74">&#34;rack.input&#34;</span> <span style="color:#f92672">=&gt;</span> imp,
-    <span style="color:#e6db74">&#34;rack.request.form_input&#34;</span> <span style="color:#f92672">=&gt;</span> imp,
-    <span style="color:#e6db74">&#34;rack.request.form_hash&#34;</span> <span style="color:#f92672">=&gt;</span> form_hash,
-  }
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Don&rsquo;t ask; it works. A POST looks like this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">result <span style="color:#f92672">=</span> call(env(<span style="color:#e6db74">:post</span>, { <span style="color:#e6db74">&#34;authenticity_token&#34;</span><span style="color:#f92672">=&gt;</span>goodtoken })) <span style="color:#66d9ef">do</span>
-  <span style="color:#f92672">[</span><span style="color:#ae81ff">200</span>, {}, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;OK&#34;</span><span style="color:#f92672">]]</span>
-<span style="color:#66d9ef">end</span>
-refute_nil result
-assert_equal <span style="color:#ae81ff">200</span>, result<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">]</span>
-assert_equal <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;OK&#34;</span><span style="color:#f92672">]</span>, result<span style="color:#f92672">[</span><span style="color:#ae81ff">2</span><span style="color:#f92672">]</span>
-</code></pre></div><p>Not super elegant but I like explicit code; by their nature, DSLs hide underlying complexity, meaning you never get a good mental model of how something works (<strong>critical for debugging</strong>).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">session</span>
+</span></span><span style="display:flex;"><span>  @session <span style="color:#f92672">||=</span> {}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">env</span>(method<span style="color:#f92672">=</span><span style="color:#e6db74">:get</span>, form_hash<span style="color:#f92672">=</span>{})
+</span></span><span style="display:flex;"><span>  imp <span style="color:#f92672">=</span> <span style="color:#66d9ef">StringIO</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;REQUEST_METHOD&#34;</span> <span style="color:#f92672">=&gt;</span> method<span style="color:#f92672">.</span>to_s<span style="color:#f92672">.</span>upcase,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;rack.session&#34;</span> <span style="color:#f92672">=&gt;</span> session,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;rack.logger&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#f92672">::</span><span style="color:#66d9ef">Logger</span><span style="color:#f92672">.</span>new(@logio <span style="color:#f92672">||=</span> <span style="color:#66d9ef">StringIO</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;&#34;</span>)),
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;rack.input&#34;</span> <span style="color:#f92672">=&gt;</span> imp,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;rack.request.form_input&#34;</span> <span style="color:#f92672">=&gt;</span> imp,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;rack.request.form_hash&#34;</span> <span style="color:#f92672">=&gt;</span> form_hash,
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Don&rsquo;t ask; it works. A POST looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>result <span style="color:#f92672">=</span> call(env(<span style="color:#e6db74">:post</span>, { <span style="color:#e6db74">&#34;authenticity_token&#34;</span><span style="color:#f92672">=&gt;</span>goodtoken })) <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span><span style="color:#ae81ff">200</span>, {}, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;OK&#34;</span><span style="color:#f92672">]]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>refute_nil result
+</span></span><span style="display:flex;"><span>assert_equal <span style="color:#ae81ff">200</span>, result<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>assert_equal <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;OK&#34;</span><span style="color:#f92672">]</span>, result<span style="color:#f92672">[</span><span style="color:#ae81ff">2</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>Not super elegant but I like explicit code; by their nature, DSLs hide underlying complexity, meaning you never get a good mental model of how something works (<strong>critical for debugging</strong>).</p>
 <p>After today&rsquo;s work, here&rsquo;s the result:</p>
 <ol>
 <li><code>rack-protection</code> code vendored</li>

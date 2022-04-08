@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -207,12 +207,12 @@ QUEUE RESUME *
 QUEUE RESUME nameA nameB ...
 </code></pre><p>and of course the Go and Ruby clients have been updated so you can issue
 these commands:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;faktory&#39;</span>
-
-client <span style="color:#f92672">=</span> <span style="color:#66d9ef">Faktory</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">.</span>new
-client<span style="color:#f92672">.</span>pause_queue <span style="color:#f92672">[</span><span style="color:#e6db74">:default</span>, <span style="color:#e6db74">:low</span><span style="color:#f92672">]</span>
-client<span style="color:#f92672">.</span>resume_queue <span style="color:#e6db74">&#34;*&#34;</span>
-</code></pre></div><h1 id="worker-rss-display">Worker RSS display</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;faktory&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>client <span style="color:#f92672">=</span> <span style="color:#66d9ef">Faktory</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>client<span style="color:#f92672">.</span>pause_queue <span style="color:#f92672">[</span><span style="color:#e6db74">:default</span>, <span style="color:#e6db74">:low</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>client<span style="color:#f92672">.</span>resume_queue <span style="color:#e6db74">&#34;*&#34;</span>
+</span></span></code></pre></div><h1 id="worker-rss-display">Worker RSS display</h1>
 <p>Worker processes can now submit their current process RSS with their
 heartbeat so Faktory can display that attribute on the <code>/busy</code> page. The Go
 and Ruby workers have been updated to do so.</p>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -193,35 +193,35 @@ blockquote,
 <p>This leads to the question: can we speed up Ruby by creating less garbage? Absolutely!</p>
 <h2 id="a-string-primer">A String Primer</h2>
 <p>Ruby has an unfortunate default semantic that all Strings are mutable:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
-string <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;mike&#34;</span>
-</code></pre></div><p>This allocates two Strings, &quot;&quot; and &ldquo;mike&rdquo;. The first, empty String is then mutated to contain &ldquo;mike&rdquo;. However String mutation is quite rare, more common is something like this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">HASH</span> <span style="color:#f92672">=</span> {
-  <span style="color:#e6db74">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>
-}
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getmike</span>
-  <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">]</span> <span style="color:#75715e"># unnecessary garbage here!</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Every invocation of getmike will allocate a new copy of &ldquo;mike&rdquo;, which is then immediately thrown away as garbage, but is required because Ruby just treats the String as a method argument which might be mutated inside <code>Hash#[]</code>. So wasteful!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>string <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;mike&#34;</span>
+</span></span></code></pre></div><p>This allocates two Strings, &quot;&quot; and &ldquo;mike&rdquo;. The first, empty String is then mutated to contain &ldquo;mike&rdquo;. However String mutation is quite rare, more common is something like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">HASH</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getmike</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">]</span> <span style="color:#75715e"># unnecessary garbage here!</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Every invocation of getmike will allocate a new copy of &ldquo;mike&rdquo;, which is then immediately thrown away as garbage, but is required because Ruby just treats the String as a method argument which might be mutated inside <code>Hash#[]</code>. So wasteful!</p>
 <h2 id="freeze">Freeze!</h2>
 <p>Ruby introduced the freeze concept many years ago to minimize allocation. Calling freeze on an object tells Ruby to treat it as immutable. Now Ruby knows that it can treat &ldquo;mike&rdquo; as a constant:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getmike</span>
-  <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">.</span>freeze<span style="color:#f92672">]</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>The problem? It makes the code uglier and needs to be called everywhere you declare a String.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getmike</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">.</span>freeze<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>The problem? It makes the code uglier and needs to be called everywhere you declare a String.</p>
 <h2 id="magic-comments">Magic Comments!</h2>
 <p>Ruby 2.3 introduced a very nice option: each Ruby file can opt into Strings as immutable, meaning all Strings within that file will automatically freeze, with a simple magic comment at the top of the file. This will not allocate an extra String for &ldquo;mike&rdquo;.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># frozen_string_literal: true</span>
-
-<span style="color:#66d9ef">HASH</span> <span style="color:#f92672">=</span> {
-  <span style="color:#e6db74">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>
-}
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getmike</span>
-  <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">]</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><h2 id="the-real-world">The Real World</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># frozen_string_literal: true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">HASH</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getmike</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">HASH</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;mike&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><h2 id="the-real-world">The Real World</h2>
 <p>Years ago I added a lot of freeze calls to Sidekiq to minimize its impact on the garbage collector and maximize performance.
 Last week <a href="https://github.com/mperham/sidekiq/pull/3759/files">I removed all those calls</a> and added a <code>frozen_string_literal</code> comment to all Ruby files.</p>
 <p>To see the effect, I ran an experiment with <code>frozen_string_literal</code> using Sidekiq&rsquo;s benchmark script by adding <code>GC.disable</code> and watching the RSS grow. Note how Ruby allows you to enable or disable the feature with a flag:</p>

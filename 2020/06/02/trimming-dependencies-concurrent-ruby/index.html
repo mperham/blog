@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -211,36 +211,35 @@ for accessing Redis. By forcing all Processor threads to get a token
 before calling Redis, we can limit concurrent access to Redis. After
 refactoring connection_pool a bit, I was able to replace Concurrent
 usage with just a few lines of ConnectionPool code.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff"><span style="color:#f92672">-        @pool ||= Concurrent::ThreadPoolExecutor.new(
-</span><span style="color:#f92672">-          min_threads: 1,
-</span><span style="color:#f92672">-          max_threads: 2,
-</span><span style="color:#f92672">-          max_queue: options[:concurrency]
-</span><span style="color:#f92672">-        )
-</span><span style="color:#f92672"></span><span style="color:#a6e22e">+        @pool = ConnectionPool.new(size: 2, timeout: 120) { Object.new }
-</span><span style="color:#a6e22e"></span>
-<span style="color:#75715e">@@ -249,12 +244,20 @@ module Sidekiq::Pro
-</span><span style="color:#75715e"></span><span style="color:#f92672">-          future = Concurrent::Future.execute(executor: @pool, &amp;method(:get_job))
-</span><span style="color:#f92672">-          val = future.value(nil)
-</span><span style="color:#f92672">-          return val if val
-</span><span style="color:#f92672">-          raise future.reason if future.rejected?
-</span><span style="color:#f92672">-        rescue Concurrent::RejectedExecutionError
-</span><span style="color:#f92672"></span><span style="color:#a6e22e">+          # Since every Processor is a Thread, we want to limit the concurrency
-</span><span style="color:#a6e22e">+          # going to Redis. We do this with an artifically limited connection pool
-</span><span style="color:#a6e22e">+          # that holds tokens allowing the Thread to call Redis. We need to do
-</span><span style="color:#a6e22e">+          # this because Redis does not have a command which is both Reliable
-</span><span style="color:#a6e22e">+          # *and* operates on multiple queues.
-</span><span style="color:#a6e22e">+          # https://github.com/antirez/redis/issues/1785
-</span><span style="color:#a6e22e">+          @pool.with do
-</span><span style="color:#a6e22e">+            get_job
-</span><span style="color:#a6e22e">+          end
-</span><span style="color:#a6e22e">+        rescue ConnectionPool::TimeoutError
-</span><span style="color:#a6e22e">+          nil
-</span><span style="color:#a6e22e">+        rescue ConnectionPool::PoolShuttingDownError
-</span><span style="color:#a6e22e"></span>           # shutting down race condition, #2827, nbd
-<span style="color:#a6e22e">+          nil
-</span><span style="color:#a6e22e"></span>         end
-
-</code></pre></div><h3 id="sidekiq-enterprise">Sidekiq Enterprise</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#f92672">-        @pool ||= Concurrent::ThreadPoolExecutor.new(
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-          min_threads: 1,
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-          max_threads: 2,
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-          max_queue: options[:concurrency]
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-        )
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+        @pool = ConnectionPool.new(size: 2, timeout: 120) { Object.new }
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -249,12 +244,20 @@ module Sidekiq::Pro
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">-          future = Concurrent::Future.execute(executor: @pool, &amp;method(:get_job))
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-          val = future.value(nil)
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-          return val if val
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-          raise future.reason if future.rejected?
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672">-        rescue Concurrent::RejectedExecutionError
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+          # Since every Processor is a Thread, we want to limit the concurrency
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+          # going to Redis. We do this with an artifically limited connection pool
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+          # that holds tokens allowing the Thread to call Redis. We need to do
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+          # this because Redis does not have a command which is both Reliable
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+          # *and* operates on multiple queues.
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+          # https://github.com/antirez/redis/issues/1785
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+          @pool.with do
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+            get_job
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+          end
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+        rescue ConnectionPool::TimeoutError
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+          nil
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+        rescue ConnectionPool::PoolShuttingDownError
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>           # shutting down race condition, #2827, nbd
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+          nil
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>         end
+</span></span></code></pre></div><h3 id="sidekiq-enterprise">Sidekiq Enterprise</h3>
 <p>Sidekiq Enterprise adds a dependency on <code>einhorn</code> for the <a href="https://github.com/mperham/sidekiq/wiki/Ent-Rolling-Restarts">rolling
 restart</a> feature.
 We can&rsquo;t really remove this gem as customers use the <code>einhorn</code> binary.</p>
@@ -248,13 +247,13 @@ We can&rsquo;t really remove this gem as customers use the <code>einhorn</code> 
 a Sidekiq process for each core. It turns out that Ruby already provides
 this API in <code>Etc.nprocessors</code>, awesome!!! With this change, we can
 completely remove the <code>concurrent-ruby</code> gem from all Sidekiq variants.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff"><span style="color:#75715e">@@ -46,7 +45,7 @@ module Sidekiq
-</span><span style="color:#75715e"></span>         @signal = signal
-         @io = STDOUT
- 
-<span style="color:#f92672">-        @count = Integer(env[&#34;SIDEKIQ_COUNT&#34;] || Concurrent.processor_count)
-</span><span style="color:#f92672"></span><span style="color:#a6e22e">+        @count = Integer(env[&#34;SIDEKIQ_COUNT&#34;] || Etc.nprocessors)
-</span></code></pre></div><h3 id="who-cares-whats-the-effect">Who cares? What&rsquo;s the effect?</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#75715e">@@ -46,7 +45,7 @@ module Sidekiq
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>         @signal = signal
+</span></span><span style="display:flex;"><span>         @io = STDOUT
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-        @count = Integer(env[&#34;SIDEKIQ_COUNT&#34;] || Concurrent.processor_count)
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+        @count = Integer(env[&#34;SIDEKIQ_COUNT&#34;] || Etc.nprocessors)
+</span></span></span></code></pre></div><h3 id="who-cares-whats-the-effect">Who cares? What&rsquo;s the effect?</h3>
 <p>Almost all OSS projects will struggle to get long term maintenance.
 concurrent-ruby had a maintainer for many years but he eventually moved
 onto other things. I believe it currently has another maintainer but

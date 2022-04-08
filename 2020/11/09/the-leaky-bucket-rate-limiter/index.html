@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -219,49 +219,49 @@ Redis provides newer <a href="https://redis.io/commands#hash">Hash commands</a> 
 <h2 id="implementation">Implementation</h2>
 <p>You gotta buy Sidekiq Enterprise if you want the real deal but here&rsquo;s
 the core of the implementation:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lua" data-lang="lua"><span style="color:#75715e">-- Decrement the drops based on the time which has passed since</span>
-<span style="color:#75715e">-- the last call.</span>
-<span style="color:#66d9ef">if</span> drops <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">and</span> (lastcall <span style="color:#f92672">+</span> driprate) <span style="color:#f92672">&lt;</span> current_time <span style="color:#66d9ef">then</span>
-  drops <span style="color:#f92672">=</span> drops <span style="color:#f92672">-</span> math.floor((current_time <span style="color:#f92672">-</span> lastcall) <span style="color:#f92672">/</span> driprate)
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#75715e">-- if the bucket has room for another drop, increment and return</span>
-<span style="color:#66d9ef">if</span> drops <span style="color:#f92672">&lt;</span> size <span style="color:#66d9ef">then</span>
-  redis.call(<span style="color:#e6db74">&#34;hset&#34;</span>, key, <span style="color:#e6db74">&#34;lastcall&#34;</span>, current_time, <span style="color:#e6db74">&#34;drops&#34;</span>, drops<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
-  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#75715e">-- if the bucket is full, send the amount of time necessary to wait</span>
-<span style="color:#75715e">-- for the next drop to drain.</span>
-<span style="color:#66d9ef">return</span> (lastcall <span style="color:#f92672">+</span> driprate) <span style="color:#f92672">-</span> current_time
-</code></pre></div><p>Each time we call the limiter, we check to see if enough time has passed
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#75715e">-- Decrement the drops based on the time which has passed since</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- the last call.</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> drops <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">and</span> (lastcall <span style="color:#f92672">+</span> driprate) <span style="color:#f92672">&lt;</span> current_time <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  drops <span style="color:#f92672">=</span> drops <span style="color:#f92672">-</span> math.floor((current_time <span style="color:#f92672">-</span> lastcall) <span style="color:#f92672">/</span> driprate)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- if the bucket has room for another drop, increment and return</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> drops <span style="color:#f92672">&lt;</span> size <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  redis.call(<span style="color:#e6db74">&#34;hset&#34;</span>, key, <span style="color:#e6db74">&#34;lastcall&#34;</span>, current_time, <span style="color:#e6db74">&#34;drops&#34;</span>, drops<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- if the bucket is full, send the amount of time necessary to wait</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- for the next drop to drain.</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span> (lastcall <span style="color:#f92672">+</span> driprate) <span style="color:#f92672">-</span> current_time
+</span></span></code></pre></div><p>Each time we call the limiter, we check to see if enough time has passed
 for 1 or more drips. If the bucket is full, we return the amount of time
 until the next drip.</p>
 <h2 id="testing-and-use">Testing and Use</h2>
 <p>Of course I wrote some basic tests for the limiter but I wanted to take
 it further and implement a <strong>Rack-based limiter middleware</strong>. Here it
 is:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LeakyLimiter</span>
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(app)
-    @app <span style="color:#f92672">=</span> app
-  <span style="color:#66d9ef">end</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(env)
-    remote_ip <span style="color:#f92672">=</span> env<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;REMOTE_ADDR&#34;</span><span style="color:#f92672">].</span>tr(<span style="color:#e6db74">&#39;:&#39;</span>, <span style="color:#e6db74">&#39;_&#39;</span>)
-    <span style="color:#66d9ef">begin</span>
-      limiter <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Limiter</span><span style="color:#f92672">.</span>leaky(<span style="color:#e6db74">&#34;ip-</span><span style="color:#e6db74">#{</span>remote_ip<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>, <span style="color:#e6db74">wait_timeout</span>: <span style="color:#ae81ff">0</span>)
-      limiter<span style="color:#f92672">.</span>within_limit <span style="color:#66d9ef">do</span>
-        @app<span style="color:#f92672">.</span>call(env)
-      <span style="color:#66d9ef">end</span>
-    <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Limiter</span><span style="color:#f92672">::</span><span style="color:#66d9ef">OverLimit</span> <span style="color:#f92672">=&gt;</span> ex
-      <span style="color:#f92672">[</span><span style="color:#ae81ff">429</span>, {
-        <span style="color:#e6db74">&#34;Content-Type&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;text/plain&#34;</span>,
-        <span style="color:#e6db74">&#34;X-Rate-Limited-For&#34;</span> <span style="color:#f92672">=&gt;</span> ex<span style="color:#f92672">.</span>limiter<span style="color:#f92672">.</span>next_drip<span style="color:#f92672">.</span>to_s,
-      }, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;Rate limited&#34;</span><span style="color:#f92672">]]</span>
-    <span style="color:#66d9ef">end</span>
-  <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Note that this uses dynamic limiters, it creates a limiter for every
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LeakyLimiter</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(app)
+</span></span><span style="display:flex;"><span>    @app <span style="color:#f92672">=</span> app
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(env)
+</span></span><span style="display:flex;"><span>    remote_ip <span style="color:#f92672">=</span> env<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;REMOTE_ADDR&#34;</span><span style="color:#f92672">].</span>tr(<span style="color:#e6db74">&#39;:&#39;</span>, <span style="color:#e6db74">&#39;_&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>      limiter <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Limiter</span><span style="color:#f92672">.</span>leaky(<span style="color:#e6db74">&#34;ip-</span><span style="color:#e6db74">#{</span>remote_ip<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>, <span style="color:#e6db74">wait_timeout</span>: <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>      limiter<span style="color:#f92672">.</span>within_limit <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>        @app<span style="color:#f92672">.</span>call(env)
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Limiter</span><span style="color:#f92672">::</span><span style="color:#66d9ef">OverLimit</span> <span style="color:#f92672">=&gt;</span> ex
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">[</span><span style="color:#ae81ff">429</span>, {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;Content-Type&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;text/plain&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;X-Rate-Limited-For&#34;</span> <span style="color:#f92672">=&gt;</span> ex<span style="color:#f92672">.</span>limiter<span style="color:#f92672">.</span>next_drip<span style="color:#f92672">.</span>to_s,
+</span></span><span style="display:flex;"><span>      }, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;Rate limited&#34;</span><span style="color:#f92672">]]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Note that this uses dynamic limiters, it creates a limiter for every
 single IP address that hits the webapp. For each IP address, we allow 10 calls every 10 seconds. If the IP
 has made more than 10 calls, the limiter will raise OverLimit and we&rsquo;ll
 return them an HTTP 429 status code along with a header that indicates

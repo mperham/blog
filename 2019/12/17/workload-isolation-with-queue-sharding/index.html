@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -222,19 +222,19 @@ running against a single Redis instance.</p>
 queue but in reality your app will enqueue those jobs into eight shards: bulk0 - bulk7.</p>
 <p>You have 8 Sidekiq processes and each process will process <code>critical</code>,
 <code>default</code> and 2 bulk shards.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">shards <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>
-shards<span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
-  other <span style="color:#f92672">=</span> idx<span style="color:#f92672">.</span>succ <span style="color:#f92672">%</span> shards
-  <span style="color:#e6db74">&#34;bundle exec sidekiq -q critical -q default -q bulk</span><span style="color:#e6db74">#{</span>idx<span style="color:#e6db74">}</span><span style="color:#e6db74"> -q bulk</span><span style="color:#e6db74">#{</span>other<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Now each user&rsquo;s operation should dynamically target a bulk shard.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>shards <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>shards<span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  other <span style="color:#f92672">=</span> idx<span style="color:#f92672">.</span>succ <span style="color:#f92672">%</span> shards
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;bundle exec sidekiq -q critical -q default -q bulk</span><span style="color:#e6db74">#{</span>idx<span style="color:#e6db74">}</span><span style="color:#e6db74"> -q bulk</span><span style="color:#e6db74">#{</span>other<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Now each user&rsquo;s operation should dynamically target a bulk shard.
 If you have a random ID for the overall operation, you can do something as simple as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">q <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;bulk</span><span style="color:#e6db74">#{</span>operationID <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
-<span style="color:#ae81ff">100_000</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
-  <span style="color:#75715e"># push 100,000 jobs to a bulk shard</span>
-  <span style="color:#66d9ef">SomeWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>:q)<span style="color:#f92672">.</span>perform_async(idx)
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Other bulk user operations should randomly select a shard also. They have a 1 in 8 chance of selecting the same shard but most of the time the operations will be isolated from each other.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>q <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;bulk</span><span style="color:#e6db74">#{</span>operationID <span style="color:#f92672">%</span> <span style="color:#ae81ff">8</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">100_000</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># push 100,000 jobs to a bulk shard</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">SomeWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>:q)<span style="color:#f92672">.</span>perform_async(idx)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Other bulk user operations should randomly select a shard also. They have a 1 in 8 chance of selecting the same shard but most of the time the operations will be isolated from each other.
 Net result: if a user operation creates a large number of bulk jobs, this will only affect 12%
 of other operations rather than 100% as we were seeing at the beginning. The trade off is that only two Sidekiq processes will be processing any one bulk shard.</p>
 <p>Want faster processing?  Spread the jobs across two random shards. You

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -199,7 +199,7 @@ Processing by HomeController#index as HTML
   Rendered layouts/_google_analytics.html.erb (0.4ms)
 Completed 200 OK in 79ms (Views: 78.8ms | ActiveRecord: 0.0ms)
 </pre>
-<p><a href="https://github.com/roidrage/lograge">Lograge</a> &lsquo;tames&rsquo; Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here&rsquo;s some output from <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> production logging with lograge enabled:</p>
+<p><a href="https://github.com/roidrage/lograge">Lograge</a> &rsquo;tames&rsquo; Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here&rsquo;s some output from <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> production logging with lograge enabled:</p>
 <pre>Nov 24 13:31:27 app-1 rails[22622]: method=GET path=/brand-event/2818/show-product/183537?f=mi format=html controller=presentations action=show_product status=200.00 duration=237.54 view=206.14 db=17.12
 Nov 24 13:31:28 app-1 rails[22630]: method=GET path=/brand-event/2818/show-product/183539?f=mi format=html controller=presentations action=show_product status=200.00 duration=125.37 view=94.05 db=17.59
 Nov 24 13:31:28 app-1 rails[22622]: method=GET path=/brand-event/2818/show-product/183541?f=mi format=html controller=presentations action=show_product status=200.00 duration=117.47 view=86.00 db=16.79

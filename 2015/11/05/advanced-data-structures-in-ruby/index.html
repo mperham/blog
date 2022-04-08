@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -198,30 +198,30 @@ esoteric.  Here&rsquo;s two examples I&rsquo;ve used recently.</p>
 time-limited <code>pop</code> operation.  This can be very useful when coordinating
 time-sensitive operations between threads.  Recently I used it as an alternative
 to <code>sleep</code> so I could wake up a sleeping thread immediately:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
-  @done <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
-  @sleeper <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">::</span><span style="color:#66d9ef">TimedStack</span><span style="color:#f92672">.</span>new
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">terminate</span>
-  @done <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
-  @sleeper <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">nil</span>
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>
-  @thread <span style="color:#f92672">||=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
-    <span style="color:#66d9ef">while</span> <span style="color:#f92672">!</span>@done
-      do_something
-      <span style="color:#75715e"># normally we&#39;ll sleep 60 seconds.</span>
-      <span style="color:#75715e"># terminate will wake up the sleeper early so it can exit</span>
-      <span style="color:#75715e"># immediately.</span>
-      <span style="color:#66d9ef">begin</span>
-        @sleeper<span style="color:#f92672">.</span>pop(<span style="color:#ae81ff">60</span>)
-      <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Timeout</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Error</span>
-      <span style="color:#66d9ef">end</span>
-    <span style="color:#66d9ef">end</span>
-  <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
+</span></span><span style="display:flex;"><span>  @done <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  @sleeper <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">::</span><span style="color:#66d9ef">TimedStack</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">terminate</span>
+</span></span><span style="display:flex;"><span>  @done <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  @sleeper <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>
+</span></span><span style="display:flex;"><span>  @thread <span style="color:#f92672">||=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#f92672">!</span>@done
+</span></span><span style="display:flex;"><span>      do_something
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># normally we&#39;ll sleep 60 seconds.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># terminate will wake up the sleeper early so it can exit</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># immediately.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>        @sleeper<span style="color:#f92672">.</span>pop(<span style="color:#ae81ff">60</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Timeout</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Error</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
 <h3 id="the-algorithms-gem">The algorithms gem</h3>
 <p>Although somewhat misnamed, the <a href="https://github.com/kanwei/algorithms">algorithms</a> gem contains a large
 set of advanced data structures for use in Ruby code.  <a href="http://sidekiq.org">Sidekiq

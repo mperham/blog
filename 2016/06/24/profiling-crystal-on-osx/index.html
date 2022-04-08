@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -207,16 +207,16 @@ have Crystal installed; if not, run this:</p>
 brew install crystal-lang
 </code></pre><p>Now we need an app to profile.  Let&rsquo;s make a toy app that doesn&rsquo;t
 do much of anything; put this code in <code>app.cr</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(i)
-  <span style="color:#e6db74">&#34;mike&#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>to_s
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#ae81ff">10_000_000</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>x<span style="color:#f92672">|</span>
-  foo(x)
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Compile and run in the profiler:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(i)
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;mike&#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">.</span>to_s
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">10_000_000</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>x<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  foo(x)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Compile and run in the profiler:</p>
 <pre tabindex="0"><code>$ crystal compile app.cr
-$ instruments -t &quot;Time Profiler&quot; ./app
+$ instruments -t &#34;Time Profiler&#34; ./app
 Instruments Trace Complete (Duration : 4.458741s; Output : /Users/mike/instrumentscli0.trace)
 $ open instrumentscli0.trace/
 </code></pre><p>You should now see a lovely UI with a totally rad tree view where you

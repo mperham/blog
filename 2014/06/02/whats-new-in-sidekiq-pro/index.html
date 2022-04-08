@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -194,8 +194,8 @@ blockquote,
 <p>Sidekiq Pro is happy to sponsor <a href="http://cascadiaruby.com/">Cascadia Ruby</a> 2014. If you&rsquo;re in Portland for the conference, find me for a Sidekiq sticker perfect for those who like to adorn their laptops.</p>
 <p><strong>Pause Queues</strong></p>
 <p>v1.7 added the ability to pause reliable queues via API. Occasionally you might want a system that enables or disables processing of certain types of messages based on time of day or some other external event. This is easily accomplished now:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">q <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;business_hours_only&#34;</span>)
-q<span style="color:#f92672">.</span>pause!</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>q <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;business_hours_only&#34;</span>)
+</span></span><span style="display:flex;"><span>q<span style="color:#f92672">.</span>pause!</span></span></code></pre></div>
 <p>Jobs will accumulate until the queue is unpaused. As you might guess, the Web UI will show when a queue is paused:</p>
 <p><a href="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-1.56.37-PM.png"><img src="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-1.56.37-PM.png" alt="Screen Shot 2014-06-01 at 1.56.37 PM" class="alignnone size-full wp-image-1673" width="808" height="314" /></a></p>
 <p><strong>Batch tweaks</strong></p>

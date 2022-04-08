@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -333,12 +333,12 @@ sensible default.  Run this on your instance and see if you find anything suspic
 1) 1) (integer) 3
    2) (integer) 1492461257
    3) (integer) 11825
-   4)  1) &quot;LPUSH&quot;
-       2) &quot;queue:default&quot;
-       3) &quot;{\&quot;queue\&quot;:\&quot;default\&quot;,\&quot;jid\&quot;:\&quot;df55c4e27c48e63f0d5212b4\&quot;,\&quot;class\&quot;:\&quot;LoadWorker\&quot;,\&quot;args\&quot;:[0],\&quot;created_at\&quot;:1492461257.208411,\&quot;enqueued_at\&quot;... (33 more bytes)&quot;
-       4) &quot;{\&quot;queue\&quot;:\&quot;default\&quot;,\&quot;jid\&quot;:\&quot;4989e31cea7ecf78e93b7f9f\&quot;,\&quot;class\&quot;:\&quot;LoadWorker\&quot;,\&quot;args\&quot;:[1],\&quot;created_at\&quot;:1492461257.2084169,\&quot;enqueued_at... (34 more bytes)&quot;
+   4)  1) &#34;LPUSH&#34;
+       2) &#34;queue:default&#34;
+       3) &#34;{\&#34;queue\&#34;:\&#34;default\&#34;,\&#34;jid\&#34;:\&#34;df55c4e27c48e63f0d5212b4\&#34;,\&#34;class\&#34;:\&#34;LoadWorker\&#34;,\&#34;args\&#34;:[0],\&#34;created_at\&#34;:1492461257.208411,\&#34;enqueued_at\&#34;... (33 more bytes)&#34;
+       4) &#34;{\&#34;queue\&#34;:\&#34;default\&#34;,\&#34;jid\&#34;:\&#34;4989e31cea7ecf78e93b7f9f\&#34;,\&#34;class\&#34;:\&#34;LoadWorker\&#34;,\&#34;args\&#34;:[1],\&#34;created_at\&#34;:1492461257.2084169,\&#34;enqueued_at... (34 more bytes)&#34;
       [snip]
-      32) &quot;... (9971 more arguments)&quot;
+      32) &#34;... (9971 more arguments)&#34;
 </code></pre><p>There are four parts to each entry: 3 is a unique identifier, 1492461257 is the timestamp
 when it happened and 11825 is the number of microseconds for execution, 11.825ms.
 The last part is the command with arguments.</p>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -208,8 +208,8 @@ DEB appears to have won the popularity contest and Debian distros seem to be the
 That&rsquo;s four seconds for a <strong>full build</strong>: cleaning, generating, cross compiling and building the deb/rpm files.</p>
 <pre tabindex="0"><code>$ time make package
 go generate github.com/contribsys/faktory/webui
-Created package {:path=&gt;&quot;packaging/output/systemd/faktory_0.9.0-beta3_amd64.deb&quot;}
-Created package {:path=&gt;&quot;packaging/output/systemd/faktory-0.9.0-beta3.x86_64.rpm&quot;}
+Created package {:path=&gt;&#34;packaging/output/systemd/faktory_0.9.0-beta3_amd64.deb&#34;}
+Created package {:path=&gt;&#34;packaging/output/systemd/faktory-0.9.0-beta3.x86_64.rpm&#34;}
 
 real	0m4.218s
 user	0m3.529s
@@ -227,21 +227,21 @@ apt/yum repos are notoriously painful to setup and run.
 Easiest quick solution that I know of is to use GitHub releases:
 tag the code, generate the packages and then create a release.
 Here&rsquo;s how I create a Faktory release:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#a6e22e">release</span><span style="color:#f92672">:</span> clean test package tag
-  @echo Generating release notes
-  ruby .github/notes.rb <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
-  @echo Releasing faktory <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>
-  hub release create v<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>_<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>_amd64.deb <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>.x86_64.rpm <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    -F /tmp/release-notes.md -e -o
-</code></pre></div><p>Note the Ruby script to generate the release notes automatically,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-make" data-lang="make"><span style="display:flex;"><span><span style="color:#a6e22e">release</span><span style="color:#f92672">:</span> clean test package tag
+</span></span><span style="display:flex;"><span>  @echo Generating release notes
+</span></span><span style="display:flex;"><span>  ruby .github/notes.rb <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>  @echo Releasing faktory <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>  hub release create v<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>_<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>_amd64.deb <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>.x86_64.rpm <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -F /tmp/release-notes.md -e -o
+</span></span></code></pre></div><p>Note the Ruby script to generate the release notes automatically,
 including changelog link and SHA256 sums for each file.
 <code>brew install hub</code> to get GitHub&rsquo;s handy CLI tool.</p>
 <p>To install that DEB:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl -LO https://github.com/contribsys/faktory/releases/download/v0.9.0-beta3/faktory_0.9.0-beta3_amd64.deb
-dpkg -i faktory_0.9.0-beta3_amd64.deb
-</code></pre></div><h2 id="conclusion">Conclusion</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -LO https://github.com/contribsys/faktory/releases/download/v0.9.0-beta3/faktory_0.9.0-beta3_amd64.deb
+</span></span><span style="display:flex;"><span>dpkg -i faktory_0.9.0-beta3_amd64.deb
+</span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>GitHub Releases work well enough for now.
 They don&rsquo;t have the benefit of a full-blown package repo but they provide a stable download link for binaries and are far simpler to setup and use from my POV.
 In reality, I would imagine most teams will fetch and install the package via Puppet/Chef/Ansible.

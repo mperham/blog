@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -200,12 +200,12 @@ last five years in Sidekiq <strong>to every programming language</strong>.</p>
 <p>Faktory is a server daemon which provides a simple API to produce and
 consume background jobs.  Here&rsquo;s the chatter to create and execute
 a background job:</p>
-<pre tabindex="0"><code>&gt; PUSH {&quot;jid&quot;:&quot;1238abc712&quot;,&quot;jobtype&quot;:&quot;SomeJob&quot;,&quot;args&quot;:[1,2,&quot;hello&quot;],&quot;queue&quot;:&quot;default&quot;}
+<pre tabindex="0"><code>&gt; PUSH {&#34;jid&#34;:&#34;1238abc712&#34;,&#34;jobtype&#34;:&#34;SomeJob&#34;,&#34;args&#34;:[1,2,&#34;hello&#34;],&#34;queue&#34;:&#34;default&#34;}
 &lt; OK
 &gt; FETCH critical default low
-&lt; {&quot;jid&quot;:&quot;1238abc712&quot;,&quot;jobtype&quot;:&quot;SomeJob&quot;,&quot;args&quot;:[1,2,&quot;hello&quot;],&quot;queue&quot;:&quot;default&quot;}
+&lt; {&#34;jid&#34;:&#34;1238abc712&#34;,&#34;jobtype&#34;:&#34;SomeJob&#34;,&#34;args&#34;:[1,2,&#34;hello&#34;],&#34;queue&#34;:&#34;default&#34;}
 [...do the work...]
-&gt; ACK {&quot;jid&quot;:&quot;1238abc712&quot;}
+&gt; ACK {&#34;jid&#34;:&#34;1238abc712&#34;}
 &lt; OK
 </code></pre><p>Jobs are a small JSON hash with a few mandatory keys.
 Producers PUSH a job to a queue. Consumers FETCH jobs from queues,

@@ -50,7 +50,7 @@ Faktory OSS The Faktory OSS build was relatively straightforward, with three ste
       <guid>https://www.mikeperham.com/2021/06/23/using-tags-with-sidekiq-jobs/</guid>
       <description>A customer recently opened issue to point out a bug in Sidekiq&amp;rsquo;s tag filtering support and I realized: I haven&amp;rsquo;t told people that tags exist. Oops. Here is your notification. 😁
 Sidekiq 6.0.1 added support for per-job tags. Tags are an Array of Strings within the job payload. Maybe you want to tag the sports related to a given job:
-class SomeWorker include Sidekiq::Worker sidekiq_options tags: [&amp;#39;alpha&amp;#39;] There&amp;rsquo;s plenty of ideas for job tagging:</description>
+class SomeWorker  include Sidekiq::Worker  sidekiq_options tags: [&amp;#39;alpha&amp;#39;] There&amp;rsquo;s plenty of ideas for job tagging:</description>
     </item>
     
     <item>

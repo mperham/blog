@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -207,9 +207,9 @@ I&rsquo;m launching it with two major features.</p>
 full blast will crush our servers. How can we throttle those jobs so
 that our workers keep some threads available for other, more critical queues?&rdquo;.</p>
 <p>Easy, <a href="https://github.com/contribsys/faktory/wiki/Ent-Throttling#use-cases">queue throtting</a> couldn&rsquo;t be simpler to configure:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">throttles</span>]
-<span style="color:#a6e22e">bulk</span> = { <span style="color:#a6e22e">worker</span> = <span style="color:#ae81ff">5</span>, <span style="color:#a6e22e">timeout</span> = <span style="color:#ae81ff">60</span> }
-</code></pre></div><p>Throw those 100,000 jobs into a <code>bulk</code> queue.  That config says that
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span>[<span style="color:#a6e22e">throttles</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bulk</span> = { <span style="color:#a6e22e">worker</span> = <span style="color:#ae81ff">5</span>, <span style="color:#a6e22e">timeout</span> = <span style="color:#ae81ff">60</span> }
+</span></span></code></pre></div><p>Throw those 100,000 jobs into a <code>bulk</code> queue.  That config says that
 each worker process may only process 5 jobs from <code>bulk</code> at a time.
 If each worker process has 15 threads, you&rsquo;ll have 10 threads left to
 process other queues.
@@ -241,14 +241,14 @@ Batches allow you to compose more complex, nested workflows of jobs.
 Here&rsquo;s an example defining a batch with several ImageJobs and a success
 callback; that callback will execute only once all three ImageJobs have finished
 successfully.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">b <span style="color:#f92672">=</span> <span style="color:#66d9ef">Faktory</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Batch</span><span style="color:#f92672">.</span>new
-b<span style="color:#f92672">.</span>success <span style="color:#f92672">=</span> <span style="color:#66d9ef">ImagesComplete</span><span style="color:#f92672">.</span>to_s
-b<span style="color:#f92672">.</span>jobs <span style="color:#66d9ef">do</span>
-  <span style="color:#66d9ef">ImageJob</span><span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
-  <span style="color:#66d9ef">ImageJob</span><span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
-  <span style="color:#66d9ef">ImageJob</span><span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>Note that a callback is a background job like everything else.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>b <span style="color:#f92672">=</span> <span style="color:#66d9ef">Faktory</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Batch</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>b<span style="color:#f92672">.</span>success <span style="color:#f92672">=</span> <span style="color:#66d9ef">ImagesComplete</span><span style="color:#f92672">.</span>to_s
+</span></span><span style="display:flex;"><span>b<span style="color:#f92672">.</span>jobs <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">ImageJob</span><span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">ImageJob</span><span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">ImageJob</span><span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Note that a callback is a background job like everything else.
 Of course it comes with a handy Web UI for monitoring but a screenshot is AWOL.
 <a href="https://github.com/contribsys/faktory/wiki/Ent-Batches">Read more about batches here</a>.</p>
 <h2 id="docker-repository">Docker Repository</h2>

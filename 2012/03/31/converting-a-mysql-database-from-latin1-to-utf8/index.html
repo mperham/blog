@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -191,19 +191,19 @@ blockquote,
 </p>
 <p>We had a problem at <a href="http://www.theclymb.com/invite-from/mperham">TheClymb</a>: our database and tables were created with the default Latin1 encoding. Now all of the data in those tables is actually UTF8 because it was all imported via the web browser (which defaults to UTF8) and MySQL doesn&rsquo;t actually validate or convert data encoding when inserting.</p>
 <p>A suggestion was to just set this in an initializer:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Mysql2</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">::</span><span style="color:#66d9ef">CHARSET_MAP</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#39;latin1&#39;</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Encoding</span><span style="color:#f92672">::</span><span style="color:#66d9ef">UTF_8</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">Mysql2</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">::</span><span style="color:#66d9ef">CHARSET_MAP</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#39;latin1&#39;</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Encoding</span><span style="color:#f92672">::</span><span style="color:#66d9ef">UTF_8</span></span></span></code></pre></div>
 <p>This will solve your problems in Ruby but will not solve your problems in the database: MySQL will still sort and compare strings thinking they are latin1 and thus do so incorrectly. Here&rsquo;s an example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> names_latin1 (name varchar(<span style="color:#ae81ff">32</span>) character <span style="color:#66d9ef">set</span> latin1);
-<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_latin1 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Strauße&#39;</span>);
-<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_latin1 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Straure&#39;</span>);
-<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_latin1 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Strausse&#39;</span>);
-<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_latin1 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Straute&#39;</span>);
-
-<span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> names_utf8 (name varchar(<span style="color:#ae81ff">32</span>) character <span style="color:#66d9ef">set</span> utf8);
-<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_utf8 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Strauße&#39;</span>);
-<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_utf8 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Straure&#39;</span>);
-<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_utf8 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Strausse&#39;</span>);
-<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_utf8 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Straute&#39;</span>);</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> names_latin1 (name varchar(<span style="color:#ae81ff">32</span>) character <span style="color:#66d9ef">set</span> latin1);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_latin1 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Strauße&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_latin1 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Straure&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_latin1 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Strausse&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_latin1 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Straute&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> names_utf8 (name varchar(<span style="color:#ae81ff">32</span>) character <span style="color:#66d9ef">set</span> utf8);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_utf8 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Strauße&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_utf8 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Straure&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_utf8 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Strausse&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> names_utf8 <span style="color:#66d9ef">values</span> (<span style="color:#e6db74">&#39;Martin Straute&#39;</span>);</span></span></code></pre></div>
 <p>I&rsquo;m not a linguist but to the best of my knowledge the German ß is essentially &ldquo;ss&rdquo;. When we ask MySQL to sort our names, you can see that the UTF-8 results put the ß character between &ldquo;r&rdquo; and &ldquo;ss&rdquo; but the Latin1 results don&rsquo;t. If a German were to see this, they would be enraged due to your culturally insensitive code!</p>
 <pre>
 > select * from names_latin1 order by name;
@@ -228,8 +228,8 @@ blockquote,
 +-----------------+
 </pre>
 <p>We need to update the CHARACTER SET without doing any conversion of the data. This is simple to do: you convert the columns to a blob format and then convert them back to a string format with the proper encoding declared; MySQL will not do any conversion of raw binary data. For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> categories CHARACTER <span style="color:#66d9ef">SET</span> utf8 <span style="color:#66d9ef">COLLATE</span> utf8_unicode_ci, CHANGE title title VARBINARY(<span style="color:#ae81ff">255</span>)
-<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> categories CHANGE title title VARCHAR(<span style="color:#ae81ff">255</span>) CHARACTER <span style="color:#66d9ef">SET</span> utf8 <span style="color:#66d9ef">COLLATE</span> utf8_unicode_ci</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> categories CHARACTER <span style="color:#66d9ef">SET</span> utf8 <span style="color:#66d9ef">COLLATE</span> utf8_unicode_ci, CHANGE title title VARBINARY(<span style="color:#ae81ff">255</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> categories CHANGE title title VARCHAR(<span style="color:#ae81ff">255</span>) CHARACTER <span style="color:#66d9ef">SET</span> utf8 <span style="color:#66d9ef">COLLATE</span> utf8_unicode_ci</span></span></code></pre></div>
 <p>With this in mind, I wrote a rake task to convert our application&rsquo;s database. Here&rsquo;s the full script in a <a href="https://gist.github.com/2045565">Github Gist</a>. You&rsquo;ll need to run it with a <code>DOIT</code> parameter to actually make the changes otherwise it will just print the SQL it will run to the terminal. The script will take a long time for large databases since it has to ALTER TABLE, which means MySQL will write out the table to disk in full; the script does minimize the number of ALTER TABLEs it runs to two per table.
 <code>rake convert_to_utf8 DOIT=1</code></p>
 <p>So please think of the Germans and the rest of our international friends: converting the character set of your database to the proper value is important to get correct sorting of results.</p>

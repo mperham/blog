@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -194,10 +194,10 @@ filtering support and I realized: <strong>I haven&rsquo;t told people that tags
 exist</strong>. <strong>Oops.</strong> Here is your notification. 😁</p>
 <p><a href="https://github.com/mperham/sidekiq/blob/master/Changes.md#601">Sidekiq 6.0.1</a> added support for per-job tags. Tags are an Array of Strings
 within the job payload. Maybe you want to tag the sports related to a given job:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SomeWorker</span>
-  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
-  sidekiq_options <span style="color:#e6db74">tags</span>: <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;alpha&#39;</span><span style="color:#f92672">]</span>
-</code></pre></div><p>There&rsquo;s plenty of ideas for job tagging:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SomeWorker</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
+</span></span><span style="display:flex;"><span>  sidekiq_options <span style="color:#e6db74">tags</span>: <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;alpha&#39;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>There&rsquo;s plenty of ideas for job tagging:</p>
 <ul>
 <li>active locale or user language</li>
 <li>customer or account ID</li>
@@ -207,18 +207,18 @@ within the job payload. Maybe you want to tag the sports related to a given job:
 with that tag</strong>.</p>
 <p>For example, assume we have a bunch of jobs which are associated with different sports.
 First we&rsquo;ll create a bunch of jobs with random tags:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">sports <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>:<span style="color:#960050;background-color:#1e0010">⚽️</span>, :<span style="color:#960050;background-color:#1e0010">🏈</span>, :<span style="color:#960050;background-color:#1e0010">⛳️</span>, :<span style="color:#960050;background-color:#1e0010">⚾️</span>, :<span style="color:#960050;background-color:#1e0010">🏀</span>, :<span style="color:#960050;background-color:#1e0010">🎾</span>, :<span style="color:#960050;background-color:#1e0010">🏐</span>, :<span style="color:#960050;background-color:#1e0010">🥊</span>, :<span style="color:#960050;background-color:#1e0010">🎳</span>, :<span style="color:#960050;background-color:#1e0010">🏓</span><span style="color:#f92672">]</span>
-<span style="color:#ae81ff">100</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span>
-  <span style="color:#66d9ef">SimpleWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">tags</span>: sports<span style="color:#f92672">.</span>sample(<span style="color:#ae81ff">2</span>))<span style="color:#f92672">.</span>perform_async(<span style="color:#e6db74">&#34;abc&#34;</span>)
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>In Redis, tags are an Array within each job&rsquo;s JSON payload.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;SimpleWorker&#34;</span>,
-  <span style="color:#f92672">&#34;args&#34;</span>: [<span style="color:#e6db74">&#34;abc&#34;</span>],
-  <span style="color:#f92672">&#34;tags&#34;</span>: [<span style="color:#e6db74">&#34;⚽️&#34;</span>, <span style="color:#e6db74">&#34;🏈&#34;</span>],
-  <span style="color:#f92672">&#34;queue&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span>
-}
-</code></pre></div><p>On the Retries and Dead tabs, we can see each tag formatted as a blue label
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>sports <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>:<span style="color:#960050;background-color:#1e0010">⚽️</span>, :<span style="color:#960050;background-color:#1e0010">🏈</span>, :<span style="color:#960050;background-color:#1e0010">⛳️</span>, :<span style="color:#960050;background-color:#1e0010">⚾️</span>, :<span style="color:#960050;background-color:#1e0010">🏀</span>, :<span style="color:#960050;background-color:#1e0010">🎾</span>, :<span style="color:#960050;background-color:#1e0010">🏐</span>, :<span style="color:#960050;background-color:#1e0010">🥊</span>, :<span style="color:#960050;background-color:#1e0010">🎳</span>, :<span style="color:#960050;background-color:#1e0010">🏓</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">100</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">SimpleWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">tags</span>: sports<span style="color:#f92672">.</span>sample(<span style="color:#ae81ff">2</span>))<span style="color:#f92672">.</span>perform_async(<span style="color:#e6db74">&#34;abc&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>In Redis, tags are an Array within each job&rsquo;s JSON payload.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;SimpleWorker&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;args&#34;</span>: [<span style="color:#e6db74">&#34;abc&#34;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;tags&#34;</span>: [<span style="color:#e6db74">&#34;⚽️&#34;</span>, <span style="color:#e6db74">&#34;🏈&#34;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;queue&#34;</span>: <span style="color:#e6db74">&#34;default&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>On the Retries and Dead tabs, we can see each tag formatted as a blue label
 next to the job type.</p>
 <p><img src="/images/2021-tags-alljobs.png" alt="alljobs"></p>
 <p>In Sidekiq Pro, the tags are clickable and will use Pro&rsquo;s filtering support to show just

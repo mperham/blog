@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -202,7 +202,7 @@ blockquote,
 
     &lt;Location /&gt;
       AuthType basic
-      AuthName &quot;private area&quot;
+      AuthName &#34;private area&#34;
       AuthBasicProvider file
       AuthUserFile /var/www/gems-passwd
       Require valid-user
@@ -232,38 +232,38 @@ drwxrwxr-x 3 mike adm  4096 Apr  5 16:25 quick
 </ul>
 <pre tabindex="0"><code>Put this in your Gemfile:
 
-    source &quot;https://my-server.com&quot; do
-      gem &quot;sidekiq-pro&quot;
+    source &#34;https://my-server.com&#34; do
+      gem &#34;sidekiq-pro&#34;
     end
 
 Run this bundle command:
 
     bundle config my-server.com username:password
 
-Run `bundle install` and you're done!
+Run `bundle install` and you&#39;re done!
 </code></pre><ul>
 <li>In addition to the passwd file, the server has a CSV file with <code>email,username,password</code> so I can look up the Apache username for a customer&rsquo;s email and regenerate the passwd file from scratch if necessary.</li>
 <li>If a subscription runs out, Stripe sends the opposite webhook; the server removes them from the CSV and passwd so they can no longer access the gem server.</li>
 <li>I have rake tasks which can push a new gem version, add/remove a customer, send email, etc.</li>
 <li>Pushing a new gem version looks like this, note the <code>generate_index</code> call:</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">task <span style="color:#e6db74">:push</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">:release</span> <span style="color:#66d9ef">do</span>
-  require <span style="color:#e6db74">&#39;net/ssh&#39;</span>
-  require <span style="color:#e6db74">&#39;net/scp&#39;</span>
-  require <span style="color:#e6db74">&#39;sidekiq/pro/version&#39;</span>
-
-  ver <span style="color:#f92672">=</span> <span style="color:#66d9ef">ENV</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;VERSION&#34;</span><span style="color:#f92672">]</span> <span style="color:#f92672">||</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">::</span><span style="color:#66d9ef">VERSION</span>
-
-  <span style="color:#66d9ef">Net</span><span style="color:#f92672">::</span><span style="color:#66d9ef">SCP</span><span style="color:#f92672">.</span>start(<span style="color:#e6db74">&#34;my-server.com&#34;</span>, <span style="color:#e6db74">&#34;user&#34;</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>scp<span style="color:#f92672">|</span>
-    scp<span style="color:#f92672">.</span>upload!(<span style="color:#e6db74">&#34;pkg/sidekiq-pro-</span><span style="color:#e6db74">#{</span>ver<span style="color:#e6db74">}</span><span style="color:#e6db74">.gem&#34;</span>, <span style="color:#e6db74">&#34;/var/www/gems/gems&#34;</span>)
-  <span style="color:#66d9ef">end</span>
-
-  <span style="color:#66d9ef">Net</span><span style="color:#f92672">::</span><span style="color:#66d9ef">SSH</span><span style="color:#f92672">.</span>start(<span style="color:#e6db74">&#34;my-server.com&#34;</span>, <span style="color:#e6db74">&#39;user&#39;</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>ssh<span style="color:#f92672">|</span>
-    puts ssh<span style="color:#f92672">.</span>exec!(<span style="color:#e6db74">&#34;gem generate_index --directory /var/www/gems&#34;</span>)
-  <span style="color:#66d9ef">end</span>
-  puts <span style="color:#e6db74">&#34;Released Sidekiq Pro </span><span style="color:#e6db74">#{</span>ver<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>task <span style="color:#e6db74">:push</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">:release</span> <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  require <span style="color:#e6db74">&#39;net/ssh&#39;</span>
+</span></span><span style="display:flex;"><span>  require <span style="color:#e6db74">&#39;net/scp&#39;</span>
+</span></span><span style="display:flex;"><span>  require <span style="color:#e6db74">&#39;sidekiq/pro/version&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  ver <span style="color:#f92672">=</span> <span style="color:#66d9ef">ENV</span><span style="color:#f92672">[</span><span style="color:#e6db74">&#34;VERSION&#34;</span><span style="color:#f92672">]</span> <span style="color:#f92672">||</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">::</span><span style="color:#66d9ef">VERSION</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Net</span><span style="color:#f92672">::</span><span style="color:#66d9ef">SCP</span><span style="color:#f92672">.</span>start(<span style="color:#e6db74">&#34;my-server.com&#34;</span>, <span style="color:#e6db74">&#34;user&#34;</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>scp<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>    scp<span style="color:#f92672">.</span>upload!(<span style="color:#e6db74">&#34;pkg/sidekiq-pro-</span><span style="color:#e6db74">#{</span>ver<span style="color:#e6db74">}</span><span style="color:#e6db74">.gem&#34;</span>, <span style="color:#e6db74">&#34;/var/www/gems/gems&#34;</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Net</span><span style="color:#f92672">::</span><span style="color:#66d9ef">SSH</span><span style="color:#f92672">.</span>start(<span style="color:#e6db74">&#34;my-server.com&#34;</span>, <span style="color:#e6db74">&#39;user&#39;</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>ssh<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>    puts ssh<span style="color:#f92672">.</span>exec!(<span style="color:#e6db74">&#34;gem generate_index --directory /var/www/gems&#34;</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  puts <span style="color:#e6db74">&#34;Released Sidekiq Pro </span><span style="color:#e6db74">#{</span>ver<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><ul>
 <li>The Stripe webhook integration is really nice as it automates 90% of my business BUT don&rsquo;t bother until you have sufficient sales to make it worth your while.  For the first two years, I added customers manually when I got the &ldquo;You just got a sale!&rdquo; email.  The hard part is dealing with churn - Stripe doesn&rsquo;t email when a subscription ends so you&rsquo;ll need to automate that or at least send yourself email upon that webhook.</li>
 <li>For redundancy, I run two servers at a time so a replica is always available.  I switch out servers every six months so software versions on the server stay reasonably current: create new replica, old replica is promoted to primary, old primary is killed.  The servers are sync&rsquo;d with BitTorrent Sync, which is the only &ldquo;shiny&rdquo; tech I use but I&rsquo;ve found nothing better to keep a directory in sync between two servers in near real-time.</li>
 </ul>

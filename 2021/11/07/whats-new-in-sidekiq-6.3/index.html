@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -198,20 +198,20 @@ Are you talking about a process? A thread? A type of job?
 Vagueness breeds confusion and frustration.
 I encourage developers to stop using the term <code>worker</code> and use <code>include Sidekiq::Job</code> in your job classes.
 Of course <code>Sidekiq::Worker</code> will be supported for the foreseeable future for backwards compatibility.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SomeJob</span>
-  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Job</span>
-  sidekiq_options <span style="color:#f92672">...</span>
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)
-  <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><h2 id="activejob-compatibility">ActiveJob Compatibility</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SomeJob</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Job</span>
+</span></span><span style="display:flex;"><span>  sidekiq_options <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><h2 id="activejob-compatibility">ActiveJob Compatibility</h2>
 <p>ActiveJob&rsquo;s <code>set</code> API allows you to dynamically change job options.
 When I saw it, I said &ldquo;Why didn&rsquo;t I think of that?!&rdquo; <em>smacks forehead</em></p>
 <p>Sidekiq 4.1 first introduced support for ActiveJob&rsquo;s <code>set</code> API.
 Sidekiq 6.3 adds support for the <code>wait</code> and <code>wait_until</code> options as an alternative to <code>perform_at</code> or <code>perform_in</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">MyJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">wait</span>: <span style="color:#ae81ff">5</span><span style="color:#f92672">.</span>minutes)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>)
-<span style="color:#66d9ef">MyJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">wait_until</span>: <span style="color:#ae81ff">5</span><span style="color:#f92672">.</span>days<span style="color:#f92672">.</span>from_now)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>)
-</code></pre></div><p>We also added support for <code>queue_as :foo</code> as an alternative to <code>sidekiq_options queue: :foo</code>.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">MyJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">wait</span>: <span style="color:#ae81ff">5</span><span style="color:#f92672">.</span>minutes)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">MyJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">wait_until</span>: <span style="color:#ae81ff">5</span><span style="color:#f92672">.</span>days<span style="color:#f92672">.</span>from_now)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>)
+</span></span></code></pre></div><p>We also added support for <code>queue_as :foo</code> as an alternative to <code>sidekiq_options queue: :foo</code>.
 By supporting more and more of the ActiveJob API natively, we make the decision of &ldquo;should I use ActiveJob or native Sidekiq?&rdquo; easier.</p>
 <h2 id="rails-logger">Rails Logger</h2>
 <p>Sidekiq&rsquo;s stdout now includes any logging from <code>Rails.logger</code>.
@@ -225,8 +225,8 @@ really detailed, interesting writeup with more info can be <a href="https://gitl
 <p>If you need to create a lot of jobs to parallelize some task, <code>Sidekiq::Client.push_bulk</code> has existed for years.
 We recently landed a higher-level wrapper API, <code>perform_bulk</code> which can be called directly from your Job class.
 Pass an Array of Arrays for the individual job arguments; this will create three SomeJob instances and direct them to a lower priority queue:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">SomeJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#34;low&#34;</span>)<span style="color:#f92672">.</span>perform_bulk(<span style="color:#f92672">[[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">]</span>, <span style="color:#f92672">[</span><span style="color:#ae81ff">2</span><span style="color:#f92672">]</span>, <span style="color:#f92672">[</span><span style="color:#ae81ff">3</span><span style="color:#f92672">]]</span>)
-</code></pre></div><p>There&rsquo;s no size limit. By default, jobs are created and pushed in batches of 1000.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">SomeJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#34;low&#34;</span>)<span style="color:#f92672">.</span>perform_bulk(<span style="color:#f92672">[[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">]</span>, <span style="color:#f92672">[</span><span style="color:#ae81ff">2</span><span style="color:#f92672">]</span>, <span style="color:#f92672">[</span><span style="color:#ae81ff">3</span><span style="color:#f92672">]]</span>)
+</span></span></code></pre></div><p>There&rsquo;s no size limit. By default, jobs are created and pushed in batches of 1000.</p>
 <h2 id="modern-javascript">Modern JavaScript</h2>
 <p>The Web UI&rsquo;s javascripts hadn&rsquo;t been touched in five years so I felt it time to modernize things a bit.
 jQuery has been removed and the Web UI&rsquo;s scripts updated to use vanilla JavaScript.
@@ -237,13 +237,13 @@ not supply jQuery anymore.</p>
 <p>A Sidekiq Pro customer wanted to tag their job metrics based on the associated tenant.
 Sounds like a great idea to me!
 Sidekiq Pro&rsquo;s Statsd metrics now allows you to dynamically calculate any options, including tags, for the job metrics.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># add to your initializer</span>
-<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Server</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Middleware</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>options <span style="color:#f92672">=</span> <span style="color:#f92672">-&gt;</span>(klass, job, q) <span style="color:#66d9ef">do</span>
-  {<span style="color:#e6db74">tags</span>: <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;worker:</span><span style="color:#e6db74">#{</span>klass<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74">&#34;queue:</span><span style="color:#e6db74">#{</span>q<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">]</span>}<span style="color:#f92672">.</span>tap <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>h<span style="color:#f92672">|</span>
-    h<span style="color:#f92672">[</span><span style="color:#e6db74">:tags</span><span style="color:#f92672">]</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;tenant:</span><span style="color:#e6db74">#{</span>job<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;tenant_id&#39;</span><span style="color:#f92672">]</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#66d9ef">if</span> job<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;tenant_id&#34;</span><span style="color:#f92672">]</span>
-  <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><h2 id="miscellenia">Miscellenia</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># add to your initializer</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Server</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Middleware</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>options <span style="color:#f92672">=</span> <span style="color:#f92672">-&gt;</span>(klass, job, q) <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  {<span style="color:#e6db74">tags</span>: <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;worker:</span><span style="color:#e6db74">#{</span>klass<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74">&#34;queue:</span><span style="color:#e6db74">#{</span>q<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">]</span>}<span style="color:#f92672">.</span>tap <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>h<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>    h<span style="color:#f92672">[</span><span style="color:#e6db74">:tags</span><span style="color:#f92672">]</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;tenant:</span><span style="color:#e6db74">#{</span>job<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;tenant_id&#39;</span><span style="color:#f92672">]</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#66d9ef">if</span> job<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;tenant_id&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><h2 id="miscellenia">Miscellenia</h2>
 <p>Among lots of other tweaks, a race condition leading to queue stoppage on JRuby was fixed.
 See the <a href="https://github.com/mperham/sidekiq/blob/main/Changes.md#630">changelog</a> for even more detail.
 Thanks for your continued support and keep &lsquo;kiqing!</p>

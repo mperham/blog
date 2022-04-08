@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -204,24 +204,24 @@ and testable as possible.</p>
 <p><a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L24">Sidekiq::Processor</a> is an object which is designed to run in its own
 thread and doesn&rsquo;t have any public API aside from starting/stopping the
 thread.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
-p<span style="color:#f92672">.</span>start</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>p<span style="color:#f92672">.</span>start</span></span></code></pre></div>
 <p>Interally it has quite a bit of complexity - think of it like an iceberg.
 In order to test those complex internals, I make its <a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L62">internal API public</a> so that the test suite has full
 access to the methods.  The <code>start</code> method spins up a thread which calls a very simple <code>run</code> loop similar this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>
-  <span style="color:#66d9ef">while</span> <span style="color:#f92672">!</span>@done
-    job <span style="color:#f92672">=</span> fetch
-    process(job) <span style="color:#66d9ef">if</span> job
-  <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">while</span> <span style="color:#f92672">!</span>@done
+</span></span><span style="display:flex;"><span>    job <span style="color:#f92672">=</span> fetch
+</span></span><span style="display:flex;"><span>    process(job) <span style="color:#66d9ef">if</span> job
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
 <p>I&rsquo;ve kept the run method as simple as possible since we can&rsquo;t call it in
 the test suite but we can call <code>fetch</code> and <code>process</code> in order to test them:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_process_fake_job</span>
-  p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
-  result <span style="color:#f92672">=</span> p<span style="color:#f92672">.</span>process(some_fake_job)
-  <span style="color:#75715e"># asserts...</span>
-<span style="color:#66d9ef">end</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_process_fake_job</span>
+</span></span><span style="display:flex;"><span>  p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>  result <span style="color:#f92672">=</span> p<span style="color:#f92672">.</span>process(some_fake_job)
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># asserts...</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
 <p>In this case, I&rsquo;ve kept the thread management code as simple as
 possible and pushed as much of the code complexity into separate methods
 which can be called directly by the test suite and deterministically
@@ -244,81 +244,81 @@ Generally the pattern is:</p>
 </ol>
 <p>Most people don&rsquo;t know how to do (3) properly so they use <code>sleep</code> as a
 hack.  Here&rsquo;s a complete example of how to do it in Ruby:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;thread&#39;</span>
-
-<span style="color:#75715e"># We want to test Upcaser by exercising its full API,</span>
-<span style="color:#75715e"># including the internal threading.</span>
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Upcaser</span>
-  <span style="color:#66d9ef">Request</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Struct</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:args</span>, <span style="color:#e6db74">:block</span>)
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
-    @queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new
-  <span style="color:#66d9ef">end</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>
-    @thread <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new(<span style="color:#f92672">&amp;</span>method(<span style="color:#e6db74">:run</span>))
-  <span style="color:#66d9ef">end</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">&amp;</span>block)
-    @queue <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">Request</span><span style="color:#f92672">.</span>new(args, block)
-    <span style="color:#66d9ef">true</span>
-  <span style="color:#66d9ef">end</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">terminate</span>
-    @queue <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">nil</span>
-  <span style="color:#66d9ef">end</span>
-
-  <span style="color:#66d9ef">private</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>
-    <span style="color:#66d9ef">loop</span> <span style="color:#66d9ef">do</span>
-      req <span style="color:#f92672">=</span> @queue<span style="color:#f92672">.</span>pop
-      <span style="color:#66d9ef">break</span> <span style="color:#66d9ef">unless</span> req
-      <span style="color:#75715e"># perform the actual work</span>
-      result <span style="color:#f92672">=</span> req<span style="color:#f92672">.</span>args<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">].</span>upcase
-      <span style="color:#75715e"># call the block with the result</span>
-      req<span style="color:#f92672">.</span>block<span style="color:#f92672">.</span>call(result)
-    <span style="color:#66d9ef">end</span>
-  <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_upcaser</span>
-  m <span style="color:#f92672">=</span> <span style="color:#66d9ef">Mutex</span><span style="color:#f92672">.</span>new
-  cv <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConditionVariable</span><span style="color:#f92672">.</span>new
-
-  a <span style="color:#f92672">=</span> <span style="color:#66d9ef">Upcaser</span><span style="color:#f92672">.</span>new
-  <span style="color:#75715e"># Step 1</span>
-  <span style="color:#75715e"># tell Upcaser to start its internal thread</span>
-  a<span style="color:#f92672">.</span>start
-
-  results <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>
-
-  <span style="color:#75715e"># the main thread will lock the mutex so it can pass data</span>
-  <span style="color:#75715e"># to Upcaser and then wait for the results</span>
-  m<span style="color:#f92672">.</span>synchronize <span style="color:#66d9ef">do</span>
-
-    <span style="color:#75715e"># Step 2</span>
-    <span style="color:#75715e"># pass &#34;something&#34; to Upcaser for its internal thread to process</span>
-    <span style="color:#75715e"># the internal thread must call the block with results when done</span>
-    a<span style="color:#f92672">.</span>process(<span style="color:#e6db74">&#34;something&#34;</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>res<span style="color:#f92672">|</span>
-      results <span style="color:#f92672">=</span> res
-      m<span style="color:#f92672">.</span>synchronize <span style="color:#66d9ef">do</span>
-        cv<span style="color:#f92672">.</span>signal
-      <span style="color:#66d9ef">end</span>
-    <span style="color:#66d9ef">end</span>
-
-    <span style="color:#75715e"># Step 3</span>
-    <span style="color:#75715e"># the main thread will wait here for Upcaser&#39;s thread to finish.</span>
-    cv<span style="color:#f92672">.</span>wait(m)
-  <span style="color:#66d9ef">end</span>
-
-  <span style="color:#75715e"># Step 4</span>
-  <span style="color:#75715e"># assert whatever you want about the results</span>
-  assert_equal <span style="color:#e6db74">&#34;SOMETHING&#34;</span>, results
-
-  <span style="color:#75715e"># shut down Upcaser&#39;s internal thread</span>
-  a<span style="color:#f92672">.</span>terminate
-<span style="color:#66d9ef">end</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;thread&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># We want to test Upcaser by exercising its full API,</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># including the internal threading.</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Upcaser</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Request</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Struct</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:args</span>, <span style="color:#e6db74">:block</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
+</span></span><span style="display:flex;"><span>    @queue <span style="color:#f92672">=</span> <span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>
+</span></span><span style="display:flex;"><span>    @thread <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new(<span style="color:#f92672">&amp;</span>method(<span style="color:#e6db74">:run</span>))
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">&amp;</span>block)
+</span></span><span style="display:flex;"><span>    @queue <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">Request</span><span style="color:#f92672">.</span>new(args, block)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">terminate</span>
+</span></span><span style="display:flex;"><span>    @queue <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">loop</span> <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>      req <span style="color:#f92672">=</span> @queue<span style="color:#f92672">.</span>pop
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">break</span> <span style="color:#66d9ef">unless</span> req
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># perform the actual work</span>
+</span></span><span style="display:flex;"><span>      result <span style="color:#f92672">=</span> req<span style="color:#f92672">.</span>args<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">].</span>upcase
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># call the block with the result</span>
+</span></span><span style="display:flex;"><span>      req<span style="color:#f92672">.</span>block<span style="color:#f92672">.</span>call(result)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_upcaser</span>
+</span></span><span style="display:flex;"><span>  m <span style="color:#f92672">=</span> <span style="color:#66d9ef">Mutex</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>  cv <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConditionVariable</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  a <span style="color:#f92672">=</span> <span style="color:#66d9ef">Upcaser</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Step 1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># tell Upcaser to start its internal thread</span>
+</span></span><span style="display:flex;"><span>  a<span style="color:#f92672">.</span>start
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  results <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># the main thread will lock the mutex so it can pass data</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># to Upcaser and then wait for the results</span>
+</span></span><span style="display:flex;"><span>  m<span style="color:#f92672">.</span>synchronize <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Step 2</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># pass &#34;something&#34; to Upcaser for its internal thread to process</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># the internal thread must call the block with results when done</span>
+</span></span><span style="display:flex;"><span>    a<span style="color:#f92672">.</span>process(<span style="color:#e6db74">&#34;something&#34;</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>res<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>      results <span style="color:#f92672">=</span> res
+</span></span><span style="display:flex;"><span>      m<span style="color:#f92672">.</span>synchronize <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>        cv<span style="color:#f92672">.</span>signal
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Step 3</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># the main thread will wait here for Upcaser&#39;s thread to finish.</span>
+</span></span><span style="display:flex;"><span>    cv<span style="color:#f92672">.</span>wait(m)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Step 4</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># assert whatever you want about the results</span>
+</span></span><span style="display:flex;"><span>  assert_equal <span style="color:#e6db74">&#34;SOMETHING&#34;</span>, results
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># shut down Upcaser&#39;s internal thread</span>
+</span></span><span style="display:flex;"><span>  a<span style="color:#f92672">.</span>terminate
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
 <p>The &ldquo;trick&rdquo; is the callback block passed to the <code>process</code> method.  That callback
 will save the results and unlock the main thread once Upcaser&rsquo;s thread is finished processing.  If your API
 exposes a similar callback mechanism, it can be properly tested across threads.</p>

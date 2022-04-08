@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -222,14 +222,14 @@ to any number from 0-15 (and you can configure Redis to support more databases, 
 provides a distinct keyspace, independent from the others.  Use <code>SELECT n</code> to change databases.  Use <code>FLUSHDB</code> to flush the
 current database.  You can <code>MOVE</code> a key from the current database to another database.</p>
 <p>Want to put all your Sidekiq job data in a separate database?</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e"># Use DB 4 for all job data</span>
-redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">url</span>: <span style="color:#e6db74">&#39;redis://localhost:6379/4&#39;</span> }
-<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_client <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
-  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> redis
-<span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
-  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> redis
-<span style="color:#66d9ef">end</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># Use DB 4 for all job data</span>
+</span></span><span style="display:flex;"><span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">url</span>: <span style="color:#e6db74">&#39;redis://localhost:6379/4&#39;</span> }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_client <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> redis
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> redis
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
 <p>Using separate databases is an easy way to put a &ldquo;firewall&rdquo; between datasets without any additional administrative
 overhead.  Now you can FLUSHDB one dataset without affecting another dataset.  Protip: configure your test suites
 to use a different database than your development environment so the test suite can FLUSHDB without destroying development data.

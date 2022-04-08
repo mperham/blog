@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -215,41 +215,41 @@ additional tooling or build process.  Bootstrap 3.x is popular enough that
 other people have created flipped overrides for it already.  The only hard
 work was creating application-rtl.css.</p>
 <p>Normal CSS, application.css:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-left</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
-</code></pre></div><p>Flipped CSS, application-rtl.css:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
-</code></pre></div><h3 id="2-fix-up-the-generated-css">2. Fix up the Generated CSS</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-left</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
+</span></span></code></pre></div><p>Flipped CSS, application-rtl.css:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
+</span></span></code></pre></div><h3 id="2-fix-up-the-generated-css">2. Fix up the Generated CSS</h3>
 <p>Unfortunately it&rsquo;s not that easy; you&rsquo;ll note that now we have a
 margin on <strong>both</strong> sides when rendering RTL.  What I had to do was go
 through the generated application-rtl.css and update the rules to make
 them true overrides, like so:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">margin-left</span>: <span style="color:#66d9ef">unset</span>; }
-</code></pre></div><p>Sidekiq&rsquo;s Web UI doesn&rsquo;t have a huge amount of CSS.  It took me less
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-right</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span>; <span style="color:#66d9ef">margin-left</span>: <span style="color:#66d9ef">unset</span>; }
+</span></span></code></pre></div><p>Sidekiq&rsquo;s Web UI doesn&rsquo;t have a huge amount of CSS.  It took me less
 than an hour to go through 1000 lines, one at a time.</p>
 <h3 id="3-include-the-right-css">3. Include the right CSS</h3>
 <p>Now you include your application.css as normal and optionally include
 the RTL overrides if rendering an RTL script.  For example, I put this RTL logic in <code>&lt;head&gt;</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/bootstrap.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> /&gt;
-<span style="color:#960050;background-color:#1e0010">&lt;</span>% if rtl? %&gt;
-&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/bootstrap-rtl.min.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span>/&gt;
-<span style="color:#960050;background-color:#1e0010">&lt;</span>% end %&gt;
-
-&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/application.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> /&gt;
-<span style="color:#960050;background-color:#1e0010">&lt;</span>% if rtl? %&gt;
-&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/application-rtl.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> /&gt;
-<span style="color:#960050;background-color:#1e0010">&lt;</span>% end %&gt;
-</code></pre></div><p>The <code>rtl?</code> method is very simple, it just checks for Farsi as the
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/bootstrap.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> /&gt;
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&lt;</span>% if rtl? %&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/bootstrap-rtl.min.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&lt;</span>% end %&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/application.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> /&gt;
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&lt;</span>% if rtl? %&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&lt;%= root_path %&gt;stylesheets/application-rtl.css&#34;</span> <span style="color:#a6e22e">media</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;screen&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;text/css&#34;</span> /&gt;
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&lt;</span>% end %&gt;
+</span></span></code></pre></div><p>The <code>rtl?</code> method is very simple, it just checks for Farsi as the
 current locale:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rtl?</span>
-  <span style="color:#e6db74">&#39;fa&#39;</span> <span style="color:#f92672">==</span> locale
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>The result (still buggy, note graph axis labels, but usable):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rtl?</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#39;fa&#39;</span> <span style="color:#f92672">==</span> locale
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>The result (still buggy, note graph axis labels, but usable):</p>
 <img width="640" src="http://www.mikeperham.com/images/issue3381.png" />
 <h3 id="standards">Standards</h3>
 <p>There are some upcoming standards on the horizon for easier BiDi
 support in CSS so you wouldn&rsquo;t need overrides at all:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#a6e22e">someclass</span> { margin-inline-start: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
-</code></pre></div><p><code>inline-start</code> maps to <code>right</code> in RTL and <code>left</code> in LTR.  Unfortunately
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>.<span style="color:#a6e22e">someclass</span> { margin-inline-start: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
+</span></span></code></pre></div><p><code>inline-start</code> maps to <code>right</code> in RTL and <code>left</code> in LTR.  Unfortunately
 only Firefox supports this syntax today or I could have just updated
 application.css directly.  I hope the other browser vendors can
 implement this soon as it greatly eases the burden of BiDi support.</p>

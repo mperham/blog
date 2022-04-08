@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -197,11 +197,11 @@ still changing every day.  Pretty amazing.  So what&rsquo;s new?</p>
 <p>Sidekiq Enterprise can now send the global counts you see at
 the top of the Web UI to Statsd for monitoring and
 display within your metrics dashboard. <a href="https://github.com/mperham/sidekiq/wiki/Ent-Historical-Metrics">Read More</a></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">STATSD</span> <span style="color:#f92672">=</span> <span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>new(<span style="color:#f92672">...</span>)
-
-<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
-  config<span style="color:#f92672">.</span>save_history(<span style="color:#66d9ef">STATSD</span>)
-<span style="color:#66d9ef">end</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">STATSD</span> <span style="color:#f92672">=</span> <span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>new(<span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>save_history(<span style="color:#66d9ef">STATSD</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
 <h3 id="multi-process">Multi-Process</h3>
 <p>If you start N Sidekiq processes, each process is completely separate
 and must be managed individually.</p>
@@ -213,20 +213,20 @@ Quieting and stopping the parent does the same to all children so you
 don&rsquo;t need to manage individual child processes.  With this new
 multi-process support, it&rsquo;s really simple to scale Sidekiq across all
 cores.  <a href="https://github.com/mperham/sidekiq/wiki/Ent-Multi-Process">Read More</a></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">COUNT</span><span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> bundle exec sidekiqswarm <span style="color:#f92672">-</span>e production</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">COUNT</span><span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> bundle exec sidekiqswarm <span style="color:#f92672">-</span>e production</span></span></code></pre></div>
 <h2 id="sidekiq-pro">Sidekiq Pro</h2>
 <p>Until today you had to be running reliable fetch in order to pause
 queues.  This is no longer required!  Anyone running Sidekiq Pro 3.x can now
 pause queues.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">q <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new
-q<span style="color:#f92672">.</span>pause!
-sleep <span style="color:#ae81ff">10</span>
-q<span style="color:#f92672">.</span>unpause!</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>q <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>q<span style="color:#f92672">.</span>pause!
+</span></span><span style="display:flex;"><span>sleep <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>q<span style="color:#f92672">.</span>unpause!</span></span></code></pre></div>
 <p><a href="https://github.com/mperham/sidekiq/blob/master/Pro-Changes.md">Read More</a></p>
 <h2 id="sidekiq">Sidekiq</h2>
 <p>Sidekiq gained support for an ActiveJob-style <code>set</code> method, to set options
 dynamically:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">SomeWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#39;high&#39;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>)</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">SomeWorker</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#39;high&#39;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>)</span></span></code></pre></div>
 <p>Also, the Web UI now shows a tag next to any process which is quiet (has
 received the USR1 signal). <a href="https://github.com/mperham/sidekiq/blob/master/Changes.md">Read More</a></p>
 <h2 id="rails">Rails</h2>

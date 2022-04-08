@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.92.0" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -166,13 +166,13 @@ blockquote,
     <ul class="navbar-nav d-flex flex-row">
       <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
       <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
-      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
-      
     </ul>
     <ul class="navbar-nav float-right d-none d-md-flex">
+      <li class="nav-item"><a class="nav-link" title="Events" href="/events/">Events 🎉</a></li>
       <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
       <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
       <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
     </ul>
   </div>
 </nav>
@@ -218,91 +218,91 @@ You point Webrick to your <code>DocumentRoot</code> as normal.  Note that since
 Capybara is going to be driving the tests, we need Webrick to execute in
 another thread so both the HTTP client and server can execute
 concurrently:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">WEBRICK</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
-  require <span style="color:#e6db74">&#39;webrick&#39;</span>
-
-  server <span style="color:#f92672">=</span> <span style="color:#66d9ef">WEBrick</span><span style="color:#f92672">::</span><span style="color:#66d9ef">HTTPServer</span><span style="color:#f92672">.</span>new(
-    <span style="color:#e6db74">:Port</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">8999</span>,
-    <span style="color:#e6db74">:DocumentRoot</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>expand_path(<span style="color:#e6db74">&#34;../..&#34;</span>, __FILE__),
-  )
-  trap(<span style="color:#e6db74">&#39;INT&#39;</span>) { server<span style="color:#f92672">.</span>shutdown }
-
-  puts <span style="color:#e6db74">&#34;Starting Webrick on port 8999&#34;</span>
-  server<span style="color:#f92672">.</span>start
-<span style="color:#66d9ef">end</span>
-</code></pre></div><h2 id="capybara">Capybara</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">WEBRICK</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  require <span style="color:#e6db74">&#39;webrick&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  server <span style="color:#f92672">=</span> <span style="color:#66d9ef">WEBrick</span><span style="color:#f92672">::</span><span style="color:#66d9ef">HTTPServer</span><span style="color:#f92672">.</span>new(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">:Port</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">8999</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">:DocumentRoot</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>expand_path(<span style="color:#e6db74">&#34;../..&#34;</span>, __FILE__),
+</span></span><span style="display:flex;"><span>  )
+</span></span><span style="display:flex;"><span>  trap(<span style="color:#e6db74">&#39;INT&#39;</span>) { server<span style="color:#f92672">.</span>shutdown }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  puts <span style="color:#e6db74">&#34;Starting Webrick on port 8999&#34;</span>
+</span></span><span style="display:flex;"><span>  server<span style="color:#f92672">.</span>start
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><h2 id="capybara">Capybara</h2>
 <p>Most of the Capybara integration is straight out of the README, there is
 only one trick necessary: since we are starting our own custom Webrick
 server in a separate thread, we need to tell Capybara not to start a
 server on its own and point it to ours instead.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>run_server <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
-<span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>app_host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://localhost:8999&#39;</span>
-</code></pre></div><p>After an hour of fiddling, here&rsquo;s the <code>test/helper.rb</code> I came up with:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>report_on_exception <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
-
-require <span style="color:#e6db74">&#39;minitest/autorun&#39;</span>
-require <span style="color:#e6db74">&#39;capybara/minitest&#39;</span>
-<span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>run_server <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
-
-<span style="color:#75715e"># I found poltergeist quick to install and worked first time, YMMV</span>
-require <span style="color:#e6db74">&#39;capybara/poltergeist&#39;</span>
-<span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>javascript_driver <span style="color:#f92672">=</span> <span style="color:#e6db74">:poltergeist</span>
-
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CGITest</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">Minitest</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Test</span>
-  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">::</span><span style="color:#66d9ef">DSL</span>
-  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Minitest</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Assertions</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">setup</span>
-    <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>current_driver <span style="color:#f92672">=</span> <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>javascript_driver
-  <span style="color:#66d9ef">end</span>
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">teardown</span>
-    <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>reset_sessions!
-    <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>use_default_driver
-  <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span>
-
-
-<span style="color:#75715e"># Here&#39;s the trick:</span>
-<span style="color:#75715e"># We need to run the Webrick server in a separate thread so the</span>
-<span style="color:#75715e"># testcases can make requests and block, waiting for the response.</span>
-<span style="color:#66d9ef">WEBRICK</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
-  require <span style="color:#e6db74">&#39;webrick&#39;</span>
-
-  server <span style="color:#f92672">=</span> <span style="color:#66d9ef">WEBrick</span><span style="color:#f92672">::</span><span style="color:#66d9ef">HTTPServer</span><span style="color:#f92672">.</span>new(
-    <span style="color:#e6db74">:Port</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">8999</span>,
-    <span style="color:#e6db74">:DocumentRoot</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>expand_path(<span style="color:#e6db74">&#34;../..&#34;</span>, __FILE__),
-  )
-  trap(<span style="color:#e6db74">&#39;INT&#39;</span>) { server<span style="color:#f92672">.</span>shutdown }
-
-  puts <span style="color:#e6db74">&#34;Starting Webrick on port 8999&#34;</span>
-  server<span style="color:#f92672">.</span>start
-<span style="color:#66d9ef">end</span>
-
-<span style="color:#75715e"># Point Capybara to Webrick!</span>
-<span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>app_host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://localhost:8999&#39;</span>
-
-<span style="color:#75715e"># give webrick time to boot before the tests can run</span>
-sleep <span style="color:#ae81ff">1</span>
-</code></pre></div><p>Now I create <code>test/smoke_test.rb</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require_relative <span style="color:#e6db74">&#39;./helper&#39;</span>
-
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SmokeTest</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">CGITest</span>
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_pro_navigation</span>
-    visit(<span style="color:#e6db74">&#34;/spro/new.cgi&#34;</span>)
-    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Subscribe to&#39;</span>)
-
-    visit(<span style="color:#e6db74">&#34;/spro/update.cgi&#34;</span>)
-    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Update your&#39;</span>)
-
-    visit(<span style="color:#e6db74">&#34;/spro/cancel.cgi&#34;</span>)
-    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Cancel your&#39;</span>)
-
-    visit(<span style="color:#e6db74">&#34;/spro/delete.cgi&#34;</span>)
-    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Confirm your&#39;</span>)
-  <span style="color:#66d9ef">end</span>
-<span style="color:#66d9ef">end</span>
-</code></pre></div><p>That&rsquo;s a quick test to make sure the <a href="https://billing.contribsys.com/spro/">billing scripts for Sidekiq
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>run_server <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>app_host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://localhost:8999&#39;</span>
+</span></span></code></pre></div><p>After an hour of fiddling, here&rsquo;s the <code>test/helper.rb</code> I came up with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>report_on_exception <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;minitest/autorun&#39;</span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;capybara/minitest&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>run_server <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># I found poltergeist quick to install and worked first time, YMMV</span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;capybara/poltergeist&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>javascript_driver <span style="color:#f92672">=</span> <span style="color:#e6db74">:poltergeist</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CGITest</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">Minitest</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Test</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">::</span><span style="color:#66d9ef">DSL</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Minitest</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Assertions</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">setup</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>current_driver <span style="color:#f92672">=</span> <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>javascript_driver
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">teardown</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>reset_sessions!
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>use_default_driver
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Here&#39;s the trick:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># We need to run the Webrick server in a separate thread so the</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># testcases can make requests and block, waiting for the response.</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WEBRICK</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  require <span style="color:#e6db74">&#39;webrick&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  server <span style="color:#f92672">=</span> <span style="color:#66d9ef">WEBrick</span><span style="color:#f92672">::</span><span style="color:#66d9ef">HTTPServer</span><span style="color:#f92672">.</span>new(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">:Port</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">8999</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">:DocumentRoot</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>expand_path(<span style="color:#e6db74">&#34;../..&#34;</span>, __FILE__),
+</span></span><span style="display:flex;"><span>  )
+</span></span><span style="display:flex;"><span>  trap(<span style="color:#e6db74">&#39;INT&#39;</span>) { server<span style="color:#f92672">.</span>shutdown }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  puts <span style="color:#e6db74">&#34;Starting Webrick on port 8999&#34;</span>
+</span></span><span style="display:flex;"><span>  server<span style="color:#f92672">.</span>start
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Point Capybara to Webrick!</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Capybara</span><span style="color:#f92672">.</span>app_host <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://localhost:8999&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># give webrick time to boot before the tests can run</span>
+</span></span><span style="display:flex;"><span>sleep <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>Now I create <code>test/smoke_test.rb</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require_relative <span style="color:#e6db74">&#39;./helper&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SmokeTest</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">CGITest</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_pro_navigation</span>
+</span></span><span style="display:flex;"><span>    visit(<span style="color:#e6db74">&#34;/spro/new.cgi&#34;</span>)
+</span></span><span style="display:flex;"><span>    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Subscribe to&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    visit(<span style="color:#e6db74">&#34;/spro/update.cgi&#34;</span>)
+</span></span><span style="display:flex;"><span>    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Update your&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    visit(<span style="color:#e6db74">&#34;/spro/cancel.cgi&#34;</span>)
+</span></span><span style="display:flex;"><span>    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Cancel your&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    visit(<span style="color:#e6db74">&#34;/spro/delete.cgi&#34;</span>)
+</span></span><span style="display:flex;"><span>    assert page<span style="color:#f92672">.</span>has_content?(<span style="color:#e6db74">&#39;Confirm your&#39;</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>That&rsquo;s a quick test to make sure the <a href="https://billing.contribsys.com/spro/">billing scripts for Sidekiq
 Pro</a> will render correctly and not crash.
 Now with a little test coverage I&rsquo;ve got more confidence that changes won&rsquo;t break these scripts.</p>
 
