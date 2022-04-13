@@ -10,7 +10,7 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Monday 5/16
 
-* *Your event here!*
+* [Ruby For Good volunteer opportunity](https://rubyforgood.org/railsconf), DoubleTree Hotel Lobby, 12pm.
 
 ## Tuesday 5/17
 
