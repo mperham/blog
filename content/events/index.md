@@ -18,7 +18,7 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Wednesday 5/18
 
-* [Board Game Night](https://ti.to/contributed-systems/railsconf-2022-board-game-night), DoubleTree, 7pm, bring your favorite analog game!
+* [Board Game Night](https://ti.to/contributed-systems/railsconf-2022-board-game-night), DoubleTree, 7pm, bring your favorite analog game! ([RSVP](https://ti.to/contributed-systems/railsconf-2022-board-game-night))
 
 ## Thursday 5/19
 
@@ -26,7 +26,7 @@ Send me *public* events so I can list them here, mperham AT gmail or @mperham.
 
 ## Friday 5/20
 
-* [Portland Walking Tour](TODO), any interest in a Friday morning downtown walking tour? Email [mperham@gmail.com](mailto:mperham@gmail.com?subject=Walking+Tour).
+* [Downtown Portland Walking Tour](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour), 10am, ([RSVP](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour))
 
 ### Hotel
 
