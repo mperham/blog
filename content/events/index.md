@@ -4,9 +4,7 @@ author: Mike Perham
 type: pages
 ---
 
-This is the list of **official** and unofficial Railsconf events. Please RSVP for official,
-sponsored events at the [Railsconf parties](https://www.eventbrite.com/e/railsconf-2022-rsvps-for-networking-events-tickets-317317534287) page.
-Send me *public* events so I can list them here, mperham AT gmail or @mperham.
+This is the list of unofficial but public Railsconf events. Official events can be found on the [Railsconf](https://railsconf.org) website. Send me events open to the public so I can list them here, mperham AT gmail or @mperham.
 
 ## Monday 5/16
 
