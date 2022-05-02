@@ -20,7 +20,7 @@ This is the list of unofficial but public Railsconf events. Official events can 
 
 ## Thursday 5/19
 
-* Send me the time, place and a link to more info!
+* [Bridgetown Bash](https://www.eventbrite.com/e/bridgetown-bash-tickets-331594466977), 6:30pm, [Buranko](https://goo.gl/maps/kVf1ojf3WsJJxjWFA) ([RSVP](https://www.eventbrite.com/e/bridgetown-bash-tickets-331594466977))
 
 ## Friday 5/20
 
