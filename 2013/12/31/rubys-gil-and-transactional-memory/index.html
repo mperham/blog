@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.97.3" />
+  <meta name="generator" content="Hugo 0.98.0" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -200,20 +200,20 @@ blockquote,
 <p>The GIL is one way to get that atomic, consistent view but HTM is another way. When executed, Ruby code actually takes the form of lots of tiny operations: load a variable, branching, method invocation, yielding, etc. The researchers turned each one of those operations into a small transaction. If two threads execute operations that touch the same memory, the hardware will abort one of them so it can start the operation over.</p>
 <p>The performance gains were modest: a simple Rails app app saw 1.3x performance improvement with 3 threads vs 1 thread. But the researchers found a number of hotspots which caused a lot of transaction aborts, including Ruby&rsquo;s GC, the regexp library and various C global variables. Fixing these hotspots would be just one of many changes necessary to remove the GIL and make Ruby truly thread-safe but would also improve HTM scalability greatly.</p>
 <p>That&rsquo;s a <strong>very</strong> brief overview of the paper but I think it&rsquo;s a fascinating idea and one worth pursuing further.</p>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p>HTM is available via Intel&rsquo;s TSX extensions, available on some recent Haswell processors. Hopefully this will become standard in future generations of x86 CPUs.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p>Ruby in this case means MRI. JRuby and Rubinius are thread-safe. &lt;3&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
+<li id="fn:3">
 <p>As with everything, it&rsquo;s more complicated than that. Concurrency != parallelism and all that; please skip the comments arguing at me, trying to win Internet points.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
     </article>
   </div>
 
