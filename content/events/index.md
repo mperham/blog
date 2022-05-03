@@ -12,6 +12,7 @@ This is the list of unofficial but public Railsconf events. Official events can 
 
 ## Tuesday 5/17
 
+* [Unofficial RailsConf 5k](https://joshpuetz.com/events/railsconf-2022-5k.html), DoubleTree Hotel Lobby, 7 am.
 * [Gaming with Honeybadger](TODO), [Ground Kontrol](https://g.page/ground-kontrol-classic-arcade), 7-10pm
 
 ## Wednesday 5/18
