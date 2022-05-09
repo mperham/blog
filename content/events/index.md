@@ -13,13 +13,14 @@ This is the list of unofficial but public Railsconf events. Official events can 
 ## Tuesday 5/17
 
 * [Unofficial RailsConf 5k](https://joshpuetz.com/events/railsconf-2022-5k.html), DoubleTree Hotel Lobby, 7am
-* ViewComponent Happy Hour, [Spirit of '77](https://g.page/spiritof77bar), 5-8pm, ([RSVP](https://www.eventbrite.com/e/viewcomponent-happy-hour-tickets-304168585427))
-* [Gaming with Honeybadger](https://www.eventbrite.com/e/classic-arcade-bash-hosted-by-honeybadger-and-sidekiq-tickets-332494047647), [Ground Kontrol](https://g.page/ground-kontrol-classic-arcade), 7-10pm, ([RSVP](https://www.eventbrite.com/e/classic-arcade-bash-hosted-by-honeybadger-and-sidekiq-tickets-332494047647))
+* ViewComponent Happy Hour, [Spirit of '77](https://g.page/spiritof77bar), 5-8pm ([RSVP](https://www.eventbrite.com/e/viewcomponent-happy-hour-tickets-304168585427))
+* [Gaming with Honeybadger](https://www.eventbrite.com/e/classic-arcade-bash-hosted-by-honeybadger-and-sidekiq-tickets-332494047647), [Ground Kontrol](https://g.page/ground-kontrol-classic-arcade), 7-10pm ([RSVP](https://www.eventbrite.com/e/classic-arcade-bash-hosted-by-honeybadger-and-sidekiq-tickets-332494047647))
 
 
 ## Wednesday 5/18
 
-* [Board Game Night with Sidekiq](https://ti.to/contributed-systems/railsconf-2022-board-game-night), DoubleTree, 7pm, bring your favorite analog game! ([RSVP](https://ti.to/contributed-systems/railsconf-2022-board-game-night))
+* [Board Game Night with Sidekiq](https://ti.to/contributed-systems/railsconf-2022-board-game-night), DoubleTree, 7pm, bring your favorite analog game ([RSVP](https://ti.to/contributed-systems/railsconf-2022-board-game-night))
+* [Getting into Web3](https://www.eventbrite.com/e/getting-into-web3-happy-hour-tickets-336730719647), [Spirit of '77](https://g.page/spiritof77bar), 6:30pm ([RSVP](https://www.eventbrite.com/e/getting-into-web3-happy-hour-tickets-336730719647))
 
 ## Thursday 5/19
 
@@ -27,7 +28,7 @@ This is the list of unofficial but public Railsconf events. Official events can 
 
 ## Friday 5/20
 
-* [Waterfront Portland Walking Tour with Sidekiq](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour), [NE Halladay and MLK](https://www.google.com/maps/@45.5295498,-122.6623516,176m/data=!3m1!1e3), 10am, ([RSVP](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour))
+* [Waterfront Portland Walking Tour with Sidekiq](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour), [NE Halladay and MLK](https://www.google.com/maps/@45.5295498,-122.6623516,176m/data=!3m1!1e3), 10am ([RSVP](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour))
 
 ### Hotel
 
