@@ -20,7 +20,6 @@ This is the list of unofficial but public Railsconf events. Official events can 
 ## Wednesday 5/18
 
 * [Board Game Night with Sidekiq](https://ti.to/contributed-systems/railsconf-2022-board-game-night), DoubleTree, 7pm, bring your favorite analog game ([RSVP](https://ti.to/contributed-systems/railsconf-2022-board-game-night))
-* [Getting into Web3](https://www.eventbrite.com/e/getting-into-web3-happy-hour-tickets-336730719647), [Spirit of '77](https://g.page/spiritof77bar), 6:30pm ([RSVP](https://www.eventbrite.com/e/getting-into-web3-happy-hour-tickets-336730719647))
 
 ## Thursday 5/19
 
