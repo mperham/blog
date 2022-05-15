@@ -12,13 +12,13 @@ This is the list of unofficial but public Railsconf events. Official events can 
 
 ## Tuesday 5/17
 
-* [Unofficial RailsConf 5k](https://joshpuetz.com/events/railsconf-2022-5k.html), DoubleTree Hotel Lobby, 7am
 * ViewComponent Happy Hour, [Spirit of '77](https://g.page/spiritof77bar), 5-8pm ([RSVP](https://www.eventbrite.com/e/viewcomponent-happy-hour-tickets-304168585427))
 * [Gaming with Honeybadger](https://www.eventbrite.com/e/classic-arcade-bash-hosted-by-honeybadger-and-sidekiq-tickets-332494047647), [Ground Kontrol](https://g.page/ground-kontrol-classic-arcade), 7-10pm ([RSVP](https://www.eventbrite.com/e/classic-arcade-bash-hosted-by-honeybadger-and-sidekiq-tickets-332494047647))
 
 
 ## Wednesday 5/18
 
+* [Unofficial RailsConf 5k](https://joshpuetz.com/events/railsconf-2022-5k.html), DoubleTree Hotel Lobby, 7am
 * [Board Game Night with Sidekiq](https://ti.to/contributed-systems/railsconf-2022-board-game-night), DoubleTree, 7pm, bring your favorite analog game ([RSVP](https://ti.to/contributed-systems/railsconf-2022-board-game-night))
 
 ## Thursday 5/19
