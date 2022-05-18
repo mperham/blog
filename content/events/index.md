@@ -20,6 +20,7 @@ This is the list of unofficial but public Railsconf events. Official events can 
 
 * [Unofficial RailsConf 5k](https://joshpuetz.com/events/railsconf-2022-5k.html), DoubleTree Hotel Lobby, 7am
 * [Board Game Night with Sidekiq](https://ti.to/contributed-systems/railsconf-2022-board-game-night), DoubleTree, 7pm, bring your favorite analog game ([RSVP](https://ti.to/contributed-systems/railsconf-2022-board-game-night))
+* Ruby Karaoke, VoiceBox Southeast, 8:30pm, RSVP at the ScoutAPM booth
 
 ## Thursday 5/19
 
