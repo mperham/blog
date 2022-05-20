@@ -28,7 +28,7 @@ This is the list of unofficial but public Railsconf events. Official events can 
 
 ## Friday 5/20
 
-* [Waterfront Portland Walking Tour with Sidekiq](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour), [NE Halladay and MLK](https://www.google.com/maps/@45.5295498,-122.6623516,176m/data=!3m1!1e3), 10am ([RSVP](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour))
+* [Waterfront Portland Walking Tour with Sidekiq](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour), [NE Holladay and MLK](https://www.google.com/maps/@45.5295498,-122.6623516,176m/data=!3m1!1e3), 10am ([RSVP](https://ti.to/contributed-systems/railsconf-2022-portland-walking-tour))
 
 ### Around Portland
 
