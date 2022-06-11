@@ -39,7 +39,7 @@ Sidekiq::Job One consistent issue in communication with the Sidekiq community is
       <guid>https://www.mikeperham.com/2021/07/15/on-multi-platform-docker-images/</guid>
       <description>Until recently, Faktory only supported the x86_64 platform. With the rise of the Apple Silicon chip and AWS Graviton, it was obvious that I would need to roll out ARM64 support soon. This week I spent several days fighting Docker&amp;rsquo;s support for multi-platform images and wanted to document what I learned.
 Faktory OSS The Faktory OSS build was relatively straightforward, with three steps for each platform:
- Build the ./faktory binary on the host.</description>
+Build the ./faktory binary on the host.</description>
     </item>
     
     <item>
@@ -50,7 +50,7 @@ Faktory OSS The Faktory OSS build was relatively straightforward, with three ste
       <guid>https://www.mikeperham.com/2021/06/23/using-tags-with-sidekiq-jobs/</guid>
       <description>A customer recently opened issue to point out a bug in Sidekiq&amp;rsquo;s tag filtering support and I realized: I haven&amp;rsquo;t told people that tags exist. Oops. Here is your notification. 😁
 Sidekiq 6.0.1 added support for per-job tags. Tags are an Array of Strings within the job payload. Maybe you want to tag the sports related to a given job:
-class SomeWorker  include Sidekiq::Worker  sidekiq_options tags: [&amp;#39;alpha&amp;#39;] There&amp;rsquo;s plenty of ideas for job tagging:</description>
+class SomeWorker include Sidekiq::Worker sidekiq_options tags: [&amp;#39;alpha&amp;#39;] There&amp;rsquo;s plenty of ideas for job tagging:</description>
     </item>
     
     <item>
@@ -61,7 +61,7 @@ class SomeWorker  include Sidekiq::Worker  sidekiq_options tags: [&amp;#39;alpha
       <guid>https://www.mikeperham.com/2021/04/20/a-tour-of-the-sidekiq-api/</guid>
       <description>Sidekiq provides an underappreciated but powerful tool for all users: the Sidekiq API. The API gives comprehensive and idiomatic access to Sidekiq&amp;rsquo;s underlying real-time job and queue data within Redis.
 The Glossary To explore the API, first it helps to understand the basic entities in Sidekiq&amp;rsquo;s universe:
- A job is a unit of work in your Ruby application A queue is a list of jobs which are ready to execute right now A process is a Sidekiq process with one or more threads for executing jobs.</description>
+A job is a unit of work in your Ruby application A queue is a list of jobs which are ready to execute right now A process is a Sidekiq process with one or more threads for executing jobs.</description>
     </item>
     
     <item>
@@ -101,7 +101,7 @@ Let&amp;rsquo;s pretend we work for an ecommerce vendor and we want to track pro
       
       <guid>https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/</guid>
       <description>A few months ago, a customer asked if I could supply a &amp;ldquo;leaky bucket&amp;rdquo; rate limiter as part of Sidekiq Enterprise&amp;rsquo;s rate limiter suite. It took me a while to find the time and energy to work on it (my need to mentally escape the 2020 election eventually did the trick).
-  I went into this process knowing the basics of the leaky bucket algorithm but with no idea how to implement it.</description>
+I went into this process knowing the basics of the leaky bucket algorithm but with no idea how to implement it.</description>
     </item>
     
     <item>
@@ -111,7 +111,7 @@ Let&amp;rsquo;s pretend we work for an ecommerce vendor and we want to track pro
       
       <guid>https://www.mikeperham.com/2020/09/10/whats-new-in-sidekiq-2020-edition/</guid>
       <description>&amp;ldquo;Your work doesn&amp;rsquo;t matter if no one knows about it&amp;rdquo; &amp;ndash; some marketing genius
- COVID and wildfires have made this year hellish and really difficult to focus. I sympathize with all of my fellow engineers trying to maintain systems and improve apps while dealing with our rapidly changing society. Be kind to each other. ❤️
+COVID and wildfires have made this year hellish and really difficult to focus. I sympathize with all of my fellow engineers trying to maintain systems and improve apps while dealing with our rapidly changing society. Be kind to each other. ❤️
 Let&amp;rsquo;s distract ourselves with a Sidekiq family update.
 Sidekiq 6.1 The most visible change in Sidekiq 6.</description>
     </item>
