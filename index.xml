@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 17 Jan 2022 09:00:00 -0800</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jun 2022 09:00:00 -0800</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Coming Soon in Sidekiq, 2022 edition</title>
+      <link>https://www.mikeperham.com/2022/06/17/coming-soon-in-sidekiq-2022-edition/</link>
+      <pubDate>Fri, 17 Jun 2022 09:00:00 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2022/06/17/coming-soon-in-sidekiq-2022-edition/</guid>
+      <description>I just released Sidekiq 6.5 and I&amp;rsquo;ve got a lot of changes on the roadmap for Sidekiq 7.0. Here&amp;rsquo;s what&amp;rsquo;s coming soon so you can plan too.
+New Transaction-aware Client Sidekiq has long had a &amp;ldquo;problem&amp;rdquo; with executing jobs very fast, before any associated transaction has committed, leading to &amp;ldquo;Cannot find Model id=1234&amp;rdquo; errors. Sidekiq 6.5 introduced beta support for a new Sidekiq::Client option which will delay all job pushes until the current transaction has committed.</description>
+    </item>
     
     <item>
       <title>🎉 Happy 10th Birthday, Sidekiq! 🎂</title>
@@ -102,18 +112,6 @@ Let&amp;rsquo;s pretend we work for an ecommerce vendor and we want to track pro
       <guid>https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/</guid>
       <description>A few months ago, a customer asked if I could supply a &amp;ldquo;leaky bucket&amp;rdquo; rate limiter as part of Sidekiq Enterprise&amp;rsquo;s rate limiter suite. It took me a while to find the time and energy to work on it (my need to mentally escape the 2020 election eventually did the trick).
 I went into this process knowing the basics of the leaky bucket algorithm but with no idea how to implement it.</description>
-    </item>
-    
-    <item>
-      <title>What&#39;s New in Sidekiq, 2020 edition</title>
-      <link>https://www.mikeperham.com/2020/09/10/whats-new-in-sidekiq-2020-edition/</link>
-      <pubDate>Thu, 10 Sep 2020 18:58:52 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2020/09/10/whats-new-in-sidekiq-2020-edition/</guid>
-      <description>&amp;ldquo;Your work doesn&amp;rsquo;t matter if no one knows about it&amp;rdquo; &amp;ndash; some marketing genius
-COVID and wildfires have made this year hellish and really difficult to focus. I sympathize with all of my fellow engineers trying to maintain systems and improve apps while dealing with our rapidly changing society. Be kind to each other. ❤️
-Let&amp;rsquo;s distract ourselves with a Sidekiq family update.
-Sidekiq 6.1 The most visible change in Sidekiq 6.</description>
     </item>
     
   </channel>

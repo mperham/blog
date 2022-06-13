@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.100.2" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Coming Soon in Sidekiq, 2022 edition | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>Coming Soon in Sidekiq, 2022 edition</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2022-06-13
+  </small>
+  
+</p>
+<p>I just released Sidekiq 6.5 and I&rsquo;ve got a lot of changes on the roadmap for Sidekiq 7.0.
+Here&rsquo;s what&rsquo;s coming soon so you can plan too.</p>
+<h2 id="new-transaction-aware-client">New Transaction-aware Client</h2>
+<p>Sidekiq has long had a &ldquo;problem&rdquo; with executing jobs very fast, before
+any associated transaction has committed, leading to &ldquo;Cannot find
+Model id=1234&rdquo; errors. Sidekiq 6.5 introduced beta support for a new
+<code>Sidekiq::Client</code> option which will delay all job pushes until the current transaction has committed.</p>
+<p>Users have already <a href="https://github.com/Envek/after_commit_everywhere/issues/20">found and fixed</a> a potential DB connection leak in the <code>after_commit_everywhere</code> gem thanks to the increased usage.
+That&rsquo;s why we call it beta, folks!</p>
+<h2 id="new-redis-driver">New Redis Driver</h2>
+<p>The existing <code>redis</code> gem is reliable and battle-tested but has code written for every Redis command.
+When Redis adds a new command, <code>redis</code> needs to add a Ruby method and ship a new version. Ugh!</p>
+<p>Redis 6.0 introduced <a href="https://github.com/antirez/RESP3/blob/master/spec.md">the RESP3 protocol</a> which allows clients to be implemented without knowledge of specific commands, greatly reducing lines of code in the client.
+This is the core of the new <code>redis-client</code> gem.
+Once I understood this, I realized what a huge advantage this would be; less code means fewer bugs and easier maintenance.
+That&rsquo;s good for you, me and especially @_byroot who maintains it!</p>
+<p>Sidekiq 6.5 supports running with either gem, <code>redis</code> by default and beta support for <code>redis-client</code>.
+Sidekiq 7.0 will work with <code>redis-client</code> only.</p>
+<h2 id="configuration-refactoring">Configuration Refactoring</h2>
+<p>I&rsquo;m executing a long-term plan for refactoring Sidekiq&rsquo;s internals in order to allow new deployment topologies.
+What would it take to run N Sidekiq instances <strong>in one process</strong>?
+Today all Sidekiq configuration is centralized in the global Sidekiq module.
+Instead I&rsquo;m creating a new <code>Sidekiq::Config</code> class which could allow configuring multiple instances of the Sidekiq runtime, all running in the same process.
+This could unlock a whole new set of features, possibly including <strong>queue throttling</strong>?!?!
+Sidekiq 6.5 saw the first step in that refactoring plan.
+Sidekiq 7.0 is the next step.</p>
+<h2 id="redis-data-model-and-statistics">Redis Data Model and Statistics</h2>
+<p>Another big change I&rsquo;m planning is a <a href="https://github.com/mperham/sidekiq/pull/5384">major overhaul of the statistics</a> Sidekiq stores in Redis.
+Since Sidekiq 1.0, these have been coarse-grained success/failure counters per day.
+In Sidekiq 7.0 I want to save more fine-grained data which could provide APM-lite functionality: per-queue and per-job runtime metrics.
+What about a vertical line in the graphs for the time of each deployment?
+Job runtime histograms?</p>
+<p>To some extent this is redundant with Sidekiq Pro&rsquo;s Statsd support but that does require a somewhat complex metrics service and dashboard configuration.
+I envision this functionality to work out of the box.</p>
+<p>I&rsquo;d welcome feedback on the proposal and other ideas for improving the data model and its capabilities.
+Collection needs to be really efficient at runtime, the data take as little space in Redis as possible and provide useful graphs/metrics in the Web UI.
+No pressure!</p>
+<h2 id="other-ideas">Other ideas?</h2>
+<p>I&rsquo;d love suggestions on how we can improve Sidekiq in its second decade.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>
