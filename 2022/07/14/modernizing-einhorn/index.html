@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.101.0" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Modernizing Einhorn | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>Modernizing Einhorn</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2022-07-14
+  </small>
+  
+</p>
+<p><a href="https://github.com/contribsys/einhorn">Einhorn</a> is a Ruby gem which provides the ability to manage multiple forked processes of Unix services.
+Stripe originally built Einhorn to manage their internal collection of
+services in production but stopped actively maintaining the gem several years.
+I recently asked for and was granted ownership of the gem so that I could provide maintenance going forward.
+This blog post is meant to document how I took over and what I did, I hope others find this interesting and perhaps even useful.</p>
+<h2 id="why">Why?</h2>
+<p>Sidekiq Enterprise uses Einhorn as a key component in the <a href="https://github.com/mperham/sidekiq/wiki/Ent-Rolling-Restarts">Rolling Restarts</a> feature.
+It is a business risk for my commercial software to depend on an unmaintained component.</p>
+<h2 id="an-issue-appears-and-a-risk-manifests">An Issue Appears and A Risk Manifests</h2>
+<p>Recently a Sidekiq Enterprise user reported that <a href="https://github.com/mperham/sidekiq/issues/5400">Einhorn no longer works with Ruby 3.1</a> due to
+changes in the YAML library.
+Since there was no maintainer, there was no way to fix this issue;
+I had to appeal to a higher power: Stripe.
+I contacted two Stripe developers, noted the issue and offered to take over maintenance of Einhorn.
+The Stripe developer council met, berobed, in their torch-lit underground lair and decided this was acceptable to them.
+Within a few days I was granted ownership of the gem at Rubygems.org and the project repo was moved to <code>contribsys/einhorn</code>.
+I&rsquo;ve got root!</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>Taking over a new codebase is always scary.
+The first step for me, before making any changes at all, is to get the test suite running successfully in your local environment.
+I did not know what the &ldquo;normal&rdquo; output would look like but thankfully nothing looked odd or scary.
+There were a bunch of warnings and one error due to a deprecated API removed in Ruby 3.0 but we&rsquo;ll fix that soon.</p>
+<p>You may elect to read through the codebase now if you haven&rsquo;t already.
+When I read a codebase, I&rsquo;m not looking for anything in particular but rather noting the various classes and modules, reading any comments and hunting for any sketchy looking code.
+I can&rsquo;t really define &ldquo;sketchy looking&rdquo; but I Know It When I See It™.
+Obviously thread-unsafe code, extreme amounts of meta-programming, or an unreasonably large number of dependencies are all red flags for me.</p>
+<h2 id="deciding-what-to-support">Deciding What to Support</h2>
+<p>Part of taking over maintenance is deciding what versions of dependencies you are going to support.
+Thankfully at runtime Einhorn only depends on Ruby itself.
+Since Einhorn is a decade old, I installed the oldest Ruby I could easily (2.6) and made sure the test suite ran.</p>
+<p>Einhorn&rsquo;s README says it supports Ruby 2.0 and up but that line is many years old and Ruby 2.0 doesn&rsquo;t install on most modern machines. I decided to go with Ruby 2.5 as the minimum version as that version is also supported by Rails 5.0. I could have chosen Ruby 2.7, which is required by Rails 6.0, but that felt like it would be a pretty large jump for existing apps which want to upgrade to my version of Einhorn.</p>
+<p>Anything older than Ruby 2.5 really becomes difficult for me to support. That version is 5+ years old and it&rsquo;s hard for me to remember quirks and subtleties that long ago. If you want to use a really old Ruby, you give up any hope of support. That&rsquo;s a constant trade-off in the software industry: keep up or be left behind.</p>
+<h2 id="project-scaffolding">Project Scaffolding</h2>
+<p>Since Einhorn hadn&rsquo;t seen active maintenance in many years, I went through the various project files (README, Rakefile, Gemfile, gemspec, etc) and cleaned up anything weird or unconventional.
+I removed any unnecessary or unused development dependencies.
+I fixed the test suite error and warnings.
+Running the test suite after every change gave me some confidence I wasn&rsquo;t breaking anything.</p>
+<p>I started a changelog so users have a dense summary of notable changes. Always <a href="https://keepachangelog.com">keep a changelog</a>!</p>
+<p>Finally the most important thing I did was bump the version to v1.0.
+When you take over maintenance and enforce new support policies, it&rsquo;s important to demarcate that to the user.
+Users can install the existing 0.x versions but my support starts with 1.0.</p>
+<h2 id="code-changes">Code Changes</h2>
+<p>Since we&rsquo;re bumping the major version, I also want to remove anything deprecated.
+Turns out there were three deprecated items noted in the codebase.
+I removed them, any associated tests and verified the test suite still passed.</p>
+<p>But, Mike, what about the YAML issue???
+I spent two days trying to fix the original YAML issue which started this whole process and was stumped.
+To be honest, I was shocked; I can&rsquo;t remember the last time a reproducible bug stumped me but the Einhorn test suite is unusually complex because it deals with low-level communication between Unix processes.
+In desperation I tweeted out a bug bounty: $500 to the first person to track down the problem and get the test suite running green in all Rubies.
+Within two hours I had a fix from @casperisfine!!!
+The <a href="https://github.com/contribsys/einhorn/pull/106">pull request</a> gives the full context but it turns out the method signature for <code>YAML.safe_load</code> has changed pretty radically since Ruby 2.5 and required some deep Ruby magic to determine how to call it correctly.</p>
+<p>@casperisfine requested that I donate the money to charity. I sent $500 to the <a href="https://feministcenter.org/donate/">Feminist Center</a>, a non-profit health clinic in Atlanta, GA, location of Railsconf 2023.</p>
+<h2 id="extras">Extras</h2>
+<p>I&rsquo;m adding two things which are technically optional but really mandatory in my opinion.</p>
+<ol>
+<li>Update the codebase to <code>standardrb</code> formatting. Having a consistently formatted codebase makes for a nicer experience when reading or accepting pull requests from others.</li>
+<li>Add CI. Integrate a test matrix against Ruby 2.5+ so we can be sure any future code changes will work against all supported Rubies.</li>
+</ol>
+<p>These will take me a day or two to implement but they are really designed to minimize future maintenance work.
+I don&rsquo;t envision Einhorn changing much, it does what it says in the README and nothing more.
+I plan to treat it as feature frozen except to ensure it runs on future Rubies.</p>
+<h2 id="future-work">Future Work</h2>
+<p>The test suite is rather slow at 28 seconds. Maybe we could speed that up?
+There are unit and integration test components to the suite but I don&rsquo;t know a lot about the suite so there&rsquo;s no point in conjecture.
+I&rsquo;ll have to profile it at some point if I really want to spend time on it.
+It&rsquo;s not high on my priority list but others are welcome to give it a shot if the task seems interesting.</p>
+<p>I also don&rsquo;t yet have a good sense for how well the test suite covers the codebase.
+We could generate a code coverage report and see if we can add more tests to exercise more code.
+Again, not high priority but if that sounds interesting to you, open an issue and tell us what you learn.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This is not the beginning of the end but rather the end of the beginning;
+maintenance is all about the long game.
+The project is in good shape and <a href="https://github.com/contribsys/einhorn/blob/main/Changes.md#100">v1.0 is now available</a>!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

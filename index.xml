@@ -6,10 +6,19 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 17 Jun 2022 09:00:00 -0800</lastBuildDate>
+    <lastBuildDate>Thu, 14 Jul 2022 08:41:10 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Modernizing Einhorn</title>
+      <link>https://www.mikeperham.com/2022/07/14/modernizing-einhorn/</link>
+      <pubDate>Thu, 14 Jul 2022 08:41:10 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2022/07/14/modernizing-einhorn/</guid>
+      <description>Einhorn is a Ruby gem which provides the ability to manage multiple forked processes of Unix services. Stripe originally built Einhorn to manage their internal collection of services in production but stopped actively maintaining the gem several years. I recently asked for and was granted ownership of the gem so that I could provide maintenance going forward. This blog post is meant to document how I took over and what I did, I hope others find this interesting and perhaps even useful.</description>
+    </item>
     
     <item>
       <title>Coming Soon in Sidekiq, 2022 edition</title>
@@ -102,16 +111,6 @@ Let&amp;rsquo;s pretend we work for an ecommerce vendor and we want to track pro
       
       <guid>https://www.mikeperham.com/2020/11/21/running-ruby-on-risc-v/</guid>
       <description>With the release of the new arm64 architecture M1 Macbooks, I started wondering about x86 alternatives and came across RISC-V. RISC-V is an open source ISA (the set of instructions documented by a CPU) which does not cost anything to use. Anyone can take the ISA, build a chip which implements the ISA and then any software compiled for RISC-V will run on that chip. Several generations of RISC ISAs were created at UC Berkeley in the 1980s; RISC-V denotes their fifth generation ISA.</description>
-    </item>
-    
-    <item>
-      <title>The Leaky Bucket rate limiter</title>
-      <link>https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/</link>
-      <pubDate>Mon, 09 Nov 2020 08:33:40 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/</guid>
-      <description>A few months ago, a customer asked if I could supply a &amp;ldquo;leaky bucket&amp;rdquo; rate limiter as part of Sidekiq Enterprise&amp;rsquo;s rate limiter suite. It took me a while to find the time and energy to work on it (my need to mentally escape the 2020 election eventually did the trick).
-I went into this process knowing the basics of the leaky bucket algorithm but with no idea how to implement it.</description>
     </item>
     
   </channel>
