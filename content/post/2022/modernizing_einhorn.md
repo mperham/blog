@@ -3,7 +3,7 @@ title: "Modernizing Einhorn"
 date: 2022-07-14T08:41:10-07:00
 publishdate: 2022-07-14
 lastmod: 2022-07-14
-draft: true
+draft: false
 tags: []
 ---
 
