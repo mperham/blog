@@ -47,7 +47,7 @@ Part of taking over maintenance is deciding what versions of dependencies you ar
 Thankfully at runtime Einhorn only depends on Ruby itself.
 Since Einhorn is a decade old, I installed the oldest Ruby I could easily (2.6) and made sure the test suite ran.
  
-Einhorn's README says it supports Ruby 2.0 and up but that line is many years old and Ruby 2.0 doesn't install on most modern machines. I decided to go with Ruby 2.5 as the minimum version as that version is also supported by Rails 5.0. I could have chosen Ruby 2.7, which is required by Rails 6.0, but that felt like it would be a pretty large jump for existing apps which want to upgrade to my version of Einhorn.
+Einhorn's README says it supports Ruby 2.0 and up but that line is many years old and Ruby 2.0 doesn't install on most modern machines. I decided to go with Ruby 2.5 as the minimum version as that version is also supported by Rails 6.0. I could have chosen Ruby 2.7, which is required by Rails 7.0, but that felt like it would be a pretty large jump for existing apps which want to upgrade to my version of Einhorn.
 
 Anything older than Ruby 2.5 really becomes difficult for me to support. That version is 5+ years old and it's hard for me to remember quirks and subtleties that long ago. If you want to use a really old Ruby, you give up any hope of support. That's a constant trade-off in the software industry: keep up or be left behind.
 
