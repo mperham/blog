@@ -9,7 +9,8 @@ tags: []
 
 [Einhorn](https://github.com/contribsys/einhorn) is a Ruby gem which provides the ability to manage multiple forked processes of Unix services.
 Stripe originally built Einhorn to manage their internal collection of
-services in production but stopped actively maintaining the gem several years.
+services in production but stopped actively maintaining the gem several
+years ago.
 I recently asked for and was granted ownership of the gem so that I could provide maintenance going forward.
 This blog post is meant to document how I took over and what I did, I hope others find this interesting and perhaps even useful.
 
