@@ -17,7 +17,7 @@
       <pubDate>Thu, 14 Jul 2022 08:41:10 -0700</pubDate>
       
       <guid>https://www.mikeperham.com/2022/07/14/modernizing-einhorn/</guid>
-      <description>Einhorn is a Ruby gem which provides the ability to manage multiple forked processes of Unix services. Stripe originally built Einhorn to manage their internal collection of services in production but stopped actively maintaining the gem several years. I recently asked for and was granted ownership of the gem so that I could provide maintenance going forward. This blog post is meant to document how I took over and what I did, I hope others find this interesting and perhaps even useful.</description>
+      <description>Einhorn is a Ruby gem which provides the ability to manage multiple forked processes of Unix services. Stripe originally built Einhorn to manage their internal collection of services in production but stopped actively maintaining the gem several years ago. I recently asked for and was granted ownership of the gem so that I could provide maintenance going forward. This blog post is meant to document how I took over and what I did, I hope others find this interesting and perhaps even useful.</description>
     </item>
     
     <item>
