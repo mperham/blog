@@ -6,10 +6,19 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 14 Jul 2022 08:41:10 -0700</lastBuildDate>
+    <lastBuildDate>Fri, 29 Jul 2022 19:43:06 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Sidekiq and Request-Specific Context</title>
+      <link>https://www.mikeperham.com/2022/07/29/sidekiq-and-request-specific-context/</link>
+      <pubDate>Fri, 29 Jul 2022 19:43:06 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2022/07/29/sidekiq-and-request-specific-context/</guid>
+      <description>At some point in growing a large-scale software system, you&amp;rsquo;ll require &amp;ldquo;out of band&amp;rdquo; context: data which is not explicitly passed as an argument to a function but rather implicitly attached to the request, job or event being processed. Usually context is implemented as thread-local variables; your code first sets up the necessary context and then processes the request. A common example is multi-tenancy: you might want to limit any data queried by a given request to a database schema specific to a given tenant.</description>
+    </item>
     
     <item>
       <title>Modernizing Einhorn</title>
@@ -102,15 +111,6 @@ Pause / Resume The OSS version of Faktory now allows you to Pause and Resume pro
       <guid>https://www.mikeperham.com/2020/12/14/grouping-events-for-later-processing/</guid>
       <description>A customer recently wondered how they could handle aggregate events in Sidekiq. They don&amp;rsquo;t want one background job per event but rather a background job to handle the last N events.
 Let&amp;rsquo;s pretend we work for an ecommerce vendor and we want to track product clicks: User A clicks on Product B. This is a naive way to show interest in a product or category; we want to store this data for long-term data mining purposes.</description>
-    </item>
-    
-    <item>
-      <title>Running Ruby on RISC-V</title>
-      <link>https://www.mikeperham.com/2020/11/21/running-ruby-on-risc-v/</link>
-      <pubDate>Sat, 21 Nov 2020 16:18:34 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2020/11/21/running-ruby-on-risc-v/</guid>
-      <description>With the release of the new arm64 architecture M1 Macbooks, I started wondering about x86 alternatives and came across RISC-V. RISC-V is an open source ISA (the set of instructions documented by a CPU) which does not cost anything to use. Anyone can take the ISA, build a chip which implements the ISA and then any software compiled for RISC-V will run on that chip. Several generations of RISC ISAs were created at UC Berkeley in the 1980s; RISC-V denotes their fifth generation ISA.</description>
     </item>
     
   </channel>
