@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 29 Jul 2022 19:43:06 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 27 Sep 2022 15:17:08 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Sidekiq 7.0 Beta now Available</title>
+      <link>https://www.mikeperham.com/2022/09/27/sidekiq-7.0-beta-now-available/</link>
+      <pubDate>Tue, 27 Sep 2022 15:17:08 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2022/09/27/sidekiq-7.0-beta-now-available/</guid>
+      <description>Yesterday I released the first public beta of Sidekiq 7.0. This is a major new release with several huge new features, several features removed, APIs refactored and updated requirements.
+Job Performance Metrics! Embedded mode! Capsules! Strict args! But with all these awesome new features, we refactored a LOT of internal APIs and likely broke a bunch of things. In other words, we really need people to test it and open issues in order to get a smooth 7.</description>
+    </item>
     
     <item>
       <title>Sidekiq and Request-Specific Context</title>
@@ -101,16 +111,6 @@ A job is a unit of work in your Ruby application A queue is a list of jobs which
       <description>Faktory is my background job server for use with any programming language. It brings the nice patterns and features available in Sidekiq to the rest of the world. Using Go, Python, JavaScript, Elixir, or other languages? Give Faktory a shot!
 Today I&amp;rsquo;ve released Faktory, Faktory Pro and Faktory Enterprise 1.5.0. What&amp;rsquo;s new?
 Pause / Resume The OSS version of Faktory now allows you to Pause and Resume processing for a queue.</description>
-    </item>
-    
-    <item>
-      <title>Grouping Events for Later Processing</title>
-      <link>https://www.mikeperham.com/2020/12/14/grouping-events-for-later-processing/</link>
-      <pubDate>Mon, 14 Dec 2020 10:03:29 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2020/12/14/grouping-events-for-later-processing/</guid>
-      <description>A customer recently wondered how they could handle aggregate events in Sidekiq. They don&amp;rsquo;t want one background job per event but rather a background job to handle the last N events.
-Let&amp;rsquo;s pretend we work for an ecommerce vendor and we want to track product clicks: User A clicks on Product B. This is a naive way to show interest in a product or category; we want to store this data for long-term data mining purposes.</description>
     </item>
     
   </channel>
