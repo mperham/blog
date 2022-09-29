@@ -36,9 +36,16 @@ and then run:
 bundle install --prerelease
 ```
 
+## Commercial Considerations
+
+There is no compatible version of Sidekiq 7.x for Sidekiq Pro or Sidekiq Enterprise yet.
+If you use Pro or Ent, **please lock your app to Sidekiq 6.x** as described below so you don't accidentally pick up 7.x.
+I will announce new versions of Sidekiq Pro and Ent in the next few weeks.
+
 ## How Not to Get the Beta
 
-If you do not want to risk breaking things, please make sure your Sidekiq version is locked to a major version. Here's how to lock to 6.x versions:
+If you do not want to risk breaking things, please make sure your Sidekiq version is locked to a major version.
+Here's how to lock to 6.x versions:
 
 ```ruby
 gem "sidekiq", "<7"
