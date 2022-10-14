@@ -40,9 +40,22 @@ bundle install --prerelease
 
 ## Commercial Considerations
 
-There is no compatible version of Sidekiq 7.x for Sidekiq Pro or Sidekiq Enterprise yet.
-If you use Pro or Ent, **please lock your app to Sidekiq 6.x** as described below so you don't accidentally pick up 7.x.
-I will announce new versions of Sidekiq Pro and Ent in the next few weeks.
+Sidekiq Pro 6.0.0.beta1 and Sidekiq Enterprise 3.0.0.beta1 are now available also.
+Update your Gemfile:
+
+```ruby
+gem "sidekiq", "<8"
+source ... do
+  gem "sidekiq-pro", "<7"
+  gem "sidekiq-ent", "<4"
+end
+```
+
+and then run:
+
+```
+bundle install --prerelease
+```
 
 ## How Not to Get the Beta
 
