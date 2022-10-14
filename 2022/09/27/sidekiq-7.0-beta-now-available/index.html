@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.104.2" />
+  <meta name="generator" content="Hugo 0.104.3" />
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -207,10 +207,16 @@ several huge new features, several features removed, APIs refactored and updated
 </span></span></code></pre></div><p>and then run:</p>
 <pre tabindex="0"><code>bundle install --prerelease
 </code></pre><h2 id="commercial-considerations">Commercial Considerations</h2>
-<p>There is no compatible version of Sidekiq 7.x for Sidekiq Pro or Sidekiq Enterprise yet.
-If you use Pro or Ent, <strong>please lock your app to Sidekiq 6.x</strong> as described below so you don&rsquo;t accidentally pick up 7.x.
-I will announce new versions of Sidekiq Pro and Ent in the next few weeks.</p>
-<h2 id="how-not-to-get-the-beta">How Not to Get the Beta</h2>
+<p>Sidekiq Pro 6.0.0.beta1 and Sidekiq Enterprise 3.0.0.beta1 are now available also.
+Update your Gemfile:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>gem <span style="color:#e6db74">&#34;sidekiq&#34;</span>, <span style="color:#e6db74">&#34;&lt;8&#34;</span>
+</span></span><span style="display:flex;"><span>source <span style="color:#f92672">...</span> <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#34;sidekiq-pro&#34;</span>, <span style="color:#e6db74">&#34;&lt;7&#34;</span>
+</span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#34;sidekiq-ent&#34;</span>, <span style="color:#e6db74">&#34;&lt;4&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>and then run:</p>
+<pre tabindex="0"><code>bundle install --prerelease
+</code></pre><h2 id="how-not-to-get-the-beta">How Not to Get the Beta</h2>
 <p>If you do not want to risk breaking things, please make sure your Sidekiq version is locked to a major version.
 Here&rsquo;s how to lock to 6.x versions:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>gem <span style="color:#e6db74">&#34;sidekiq&#34;</span>, <span style="color:#e6db74">&#34;&lt;7&#34;</span>
