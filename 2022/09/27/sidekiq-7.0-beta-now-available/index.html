@@ -202,20 +202,18 @@ several huge new features, several features removed, APIs refactored and updated
 <h2 id="how-to-get-the-beta">How to Get the Beta</h2>
 <p>Bundler makes you ask for the exact version:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>gem <span style="color:#e6db74">&#34;sidekiq&#34;</span>, <span style="color:#e6db74">&#34;7.0.0.beta1&#34;</span>
-</span></span></code></pre></div><p>or specifically opt into the beta with the <code>--prerelease</code> flag. Allow 7.x versions:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>gem <span style="color:#e6db74">&#34;sidekiq&#34;</span>, <span style="color:#e6db74">&#34;&lt;8&#34;</span>
 </span></span></code></pre></div><p>and then run:</p>
-<pre tabindex="0"><code>bundle install --prerelease
+<pre tabindex="0"><code>bundle
 </code></pre><h2 id="commercial-considerations">Commercial Considerations</h2>
 <p>Sidekiq Pro 6.0.0.beta1 and Sidekiq Enterprise 3.0.0.beta1 are now available also.
 Update your Gemfile:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>gem <span style="color:#e6db74">&#34;sidekiq&#34;</span>, <span style="color:#e6db74">&#34;&lt;8&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>gem <span style="color:#e6db74">&#34;sidekiq&#34;</span>, <span style="color:#e6db74">&#34;7.0.0.beta1&#34;</span>
 </span></span><span style="display:flex;"><span>source <span style="color:#f92672">...</span> <span style="color:#66d9ef">do</span>
-</span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#34;sidekiq-pro&#34;</span>, <span style="color:#e6db74">&#34;&lt;7&#34;</span>
-</span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#34;sidekiq-ent&#34;</span>, <span style="color:#e6db74">&#34;&lt;4&#34;</span>
+</span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#34;sidekiq-pro&#34;</span>, <span style="color:#e6db74">&#34;6.0.0.beta1&#34;</span>
+</span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#34;sidekiq-ent&#34;</span>, <span style="color:#e6db74">&#34;3.0.0.beta1&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>and then run:</p>
-<pre tabindex="0"><code>bundle install --prerelease
+<pre tabindex="0"><code>bundle
 </code></pre><h2 id="how-not-to-get-the-beta">How Not to Get the Beta</h2>
 <p>If you do not want to risk breaking things, please make sure your Sidekiq version is locked to a major version.
 Here&rsquo;s how to lock to 6.x versions:</p>
