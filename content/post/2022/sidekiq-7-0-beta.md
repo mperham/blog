@@ -26,16 +26,10 @@ Bundler makes you ask for the exact version:
 gem "sidekiq", "7.0.0.beta1"
 ```
 
-or specifically opt into the beta with the `--prerelease` flag. Allow 7.x versions:
-
-```ruby
-gem "sidekiq", "<8"
-```
-
 and then run:
 
 ```
-bundle install --prerelease
+bundle
 ```
 
 ## Commercial Considerations
@@ -44,17 +38,17 @@ Sidekiq Pro 6.0.0.beta1 and Sidekiq Enterprise 3.0.0.beta1 are now available als
 Update your Gemfile:
 
 ```ruby
-gem "sidekiq", "<8"
+gem "sidekiq", "7.0.0.beta1"
 source ... do
-  gem "sidekiq-pro", "<7"
-  gem "sidekiq-ent", "<4"
+  gem "sidekiq-pro", "6.0.0.beta1"
+  gem "sidekiq-ent", "3.0.0.beta1"
 end
 ```
 
 and then run:
 
 ```
-bundle install --prerelease
+bundle
 ```
 
 ## How Not to Get the Beta
