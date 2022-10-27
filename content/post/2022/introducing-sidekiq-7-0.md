@@ -3,7 +3,6 @@ title: "Introducing Sidekiq 7.0"
 date: 2022-10-27T10:08:17-07:00
 publishdate: 2022-10-27
 lastmod: 2022-10-27
-draft: true
 tags: []
 ---
 
