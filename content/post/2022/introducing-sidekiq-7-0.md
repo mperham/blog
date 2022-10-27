@@ -7,6 +7,7 @@ tags: []
 ---
 
 I'm proud to announce, after nearly a year of work, Sidekiq 7.0 is now available.
+[Sidekiq](https://sidekiq.org) is the most popular background job system for Ruby, used by thousands of companies around the world.
 This release is our biggest, most splendiforous release ever!
 
 # What's New?
