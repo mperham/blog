@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 27 Oct 2022 09:21:22 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 27 Oct 2022 10:08:17 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Introducing Sidekiq 7.0</title>
+      <link>https://www.mikeperham.com/2022/10/27/introducing-sidekiq-7.0/</link>
+      <pubDate>Thu, 27 Oct 2022 10:08:17 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2022/10/27/introducing-sidekiq-7.0/</guid>
+      <description>I&amp;rsquo;m proud to announce, after nearly a year of work, Sidekiq 7.0 is now available. This release is our biggest, most splendiforous release ever!
+What&amp;rsquo;s New? Metrics One thing I know: everybody loves big beautiful graphs! Sidekiq 7.0 has a major new feature for tracking and visualizing job execution times. Big thanks to @adamlogic of Rails Autoscale for implementing the new graphs and I hope you&amp;rsquo;ll agree he did a fantastic job.</description>
+    </item>
     
     <item>
       <title>Sidekiq 7.0: Embedding</title>
@@ -98,17 +108,6 @@ Sidekiq::Job One consistent issue in communication with the Sidekiq community is
       <description>Until recently, Faktory only supported the x86_64 platform. With the rise of the Apple Silicon chip and AWS Graviton, it was obvious that I would need to roll out ARM64 support soon. This week I spent several days fighting Docker&amp;rsquo;s support for multi-platform images and wanted to document what I learned.
 Faktory OSS The Faktory OSS build was relatively straightforward, with three steps for each platform:
 Build the ./faktory binary on the host.</description>
-    </item>
-    
-    <item>
-      <title>Using Tags with Sidekiq Jobs</title>
-      <link>https://www.mikeperham.com/2021/06/23/using-tags-with-sidekiq-jobs/</link>
-      <pubDate>Wed, 23 Jun 2021 15:08:02 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2021/06/23/using-tags-with-sidekiq-jobs/</guid>
-      <description>A customer recently opened issue to point out a bug in Sidekiq&amp;rsquo;s tag filtering support and I realized: I haven&amp;rsquo;t told people that tags exist. Oops. Here is your notification. 😁
-Sidekiq 6.0.1 added support for per-job tags. Tags are an Array of Strings within the job payload. Maybe you want to tag the sports related to a given job:
-class SomeWorker include Sidekiq::Worker sidekiq_options tags: [&amp;#39;alpha&amp;#39;] There&amp;rsquo;s plenty of ideas for job tagging:</description>
     </item>
     
   </channel>

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.104.3" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Introducing Sidekiq 7.0 | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>Introducing Sidekiq 7.0</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2022-10-27
+  </small>
+  
+</p>
+<p>I&rsquo;m proud to announce, after nearly a year of work, Sidekiq 7.0 is now available.
+This release is our biggest, most splendiforous release ever!</p>
+<h1 id="whats-new">What&rsquo;s New?</h1>
+<h2 id="metrics">Metrics</h2>
+<p>One thing I know: everybody loves big beautiful graphs!
+Sidekiq 7.0 has a major new feature for tracking and visualizing job execution times.
+Big thanks to @adamlogic of Rails Autoscale for implementing the new graphs and I hope you&rsquo;ll agree he did a fantastic job.</p>
+<p><img src="https://github.com/mperham/sidekiq/raw/main/examples/metrics.png" alt="metrics"></p>
+<p>The Metrics system is covered in more detail <a href="https://www.mikeperham.com/2022/10/27/sidekiq-7.0-metrics/">in its own blog post</a>.</p>
+<p>But wait, that&rsquo;s not all! Adam also reimplemented the Dashboard graphs using <a href="https://chartjs.org">Chart.js</a> to replace Rickshaw/D3.js and bring the Web UI javascripts into the 2020s.
+Truly he is a Sidekiq rockstar!</p>
+<h2 id="embedding">Embedding</h2>
+<p>Sidekiq can now be embedded within another process in order to share memory and simplify deployments.
+Instead of needing a 500MB Sidekiq process and a 500MB Puma process, now you might have a 600MB Puma process with Sidekiq running inside.
+There are some caveats and footguns here so this is definitely more of an advanced feature.
+Caveat developer!</p>
+<p>Embedding is covered in more detail <a href="https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/">in its own blog post</a>.</p>
+<h2 id="refactoring-and-new-apis">Refactoring and New APIs</h2>
+<p>Lots of internal Sidekiq APIs have been refactored or changed in some way to support these new features. If you maintain a Sidekiq plugin, you really really should test it against Sidekiq 7.0.</p>
+<p><strong>Middleware</strong> should now include <code>Sidekiq::ClientMiddleware</code> or <code>Sidekiq::ServerMiddleware</code>.
+Sidekiq 6.5 has these modules also so you may choose to only support Sidekiq 6.5+ in future releases of your middleware. Once you include the module, your middleware should call <code>redis</code> or <code>logger</code> instead of <code>Sidekiq.redis</code> or <code>Sidekiq.logger</code>.</p>
+<h2 id="requirements">Requirements</h2>
+<p>Strict argument checking is now enabled by default. Sidekiq will raise an error if you pass a Symbol or generic Ruby object into <code>perform_async</code> because they do not serialize correctly into JSON.
+This has long been a source of frustration and debugging time for users, better to be upfront about this design decision. From the beginning, Sidekiq has used plain JSON as its job format, for interoperability with all programming languages and environments.</p>
+<p>Sidekiq 7.0 now requires Redis 6.2+. That&rsquo;s a huge jump from 4.0 to 6.2 but Redis Labs has made a lot of changes to Redis commands recently and v6.2 is really necessary to start using the new commands. In 7.1, I&rsquo;ll update Sidekiq to use those new commands.</p>
+<p>I also worked with @_byroot to migrate Sidekiq to the <code>redis-client</code> gem which uses the new <a href="https://github.com/antirez/RESP3/blob/master/spec.md">RESP3 protocol</a> found in Redis 6.0+.
+The newer protocol provides precise data types for responses, meaning the Ruby client code is greatly simplified.
+There are a few compatibility issues between the old and new client; test carefully if you use <code>Sidekiq.redis</code> in your code.</p>
+<p>Sidekiq 7.0 requires Ruby 2.7+. Sidekiq 7.0 supports Rails 6.0+. Both are several years old so this should not be controversial.</p>
+<h2 id="deprecations-and-removals">Deprecations and Removals</h2>
+<p>Sidekiq 7.0 removes the Delayed extensions and support for redis-namespace. Neither have been recommended for years now.</p>
+<p>With the release of Sidekiq 7.0, Sidekiq 5.x is no longer supported.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>
