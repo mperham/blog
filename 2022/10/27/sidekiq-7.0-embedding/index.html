@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.104.3" />
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Sidekiq 7.0: Embedding | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mperham@gmail.com">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" href="https://twitter.com/getajobmike">📣 Twitter</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>Sidekiq 7.0: Embedding</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2022-10-27
+  </small>
+  
+</p>
+<p>Sidekiq 7.0 can be embedded within another process so you do not need to run a separate Sidekiq process. This is called <strong>embedding</strong>.</p>
+<h2 id="why">Why?</h2>
+<p>Why would you want to do this?
+Embedding can make for a simpler deployment: you deploy one larger process instead of two separate processes, now you only need to monitor and manage one process.
+Embedding also requires less total memory since both subsystems will share most of the Ruby data structures and code in memory.
+Embedding does have a serious limitation: Ruby&rsquo;s Global VM Lock limits the process to one core which pretty drastically limits how many threads you can run in a process.</p>
+<h2 id="definition">Definition</h2>
+<p>The process owning library (e.g. puma or passenger) will typically have some sort of lifecycle callbacks which you can use to create, start and stop the Sidekiq instance.
+Here&rsquo;s how you can do this with <code>puma</code> but the principle is the same for <code>passenger</code> or any other process.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># config/puma.rb </span>
+</span></span><span style="display:flex;"><span>workers <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>threads <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#34;sidekiq&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># preloading the application is necessary to ensure</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># the configuration in your initializer runs before</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># the boot callback below.</span>
+</span></span><span style="display:flex;"><span>preload_app!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>on_worker_boot <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  x <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_embed <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># config.logger.level = Logger::DEBUG</span>
+</span></span><span style="display:flex;"><span>    config<span style="color:#f92672">.</span>queues <span style="color:#f92672">=</span> <span style="color:#e6db74">%w[critical default low]</span>
+</span></span><span style="display:flex;"><span>    config<span style="color:#f92672">.</span>concurrency <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  x<span style="color:#f92672">.</span>run
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>on_worker_shutdown <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  x<span style="color:#f92672">&amp;.</span>stop
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>I strongly recommend keeping your concurrency very low, i.e. 1-2.
+Embedding Sidekiq within an Ruby process means that it shares one CPU with all other threads within the process.
+A good rule of thumb is that your puma threads + sidekiq concurrency should never be greater than 5.
+You&rsquo;ll create a puma process for every core so if your machine has 8 cores, you&rsquo;ll have 8*3 = 24 Puma threads and 8*2 = 16 Sidekiq threads.
+As with any rule of thumb, YMMV.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>The process owner (i.e. puma or passenger) owns any signal traps; the embedded Sidekiq instance does not directly respond to Ctrl-C, TERM or any other signal.</li>
+<li>The embedded instance does not look at <code>config/sidekiq.yml</code> or command line arguments.
+You can only configure it via Ruby.</li>
+<li><code>Sidekiq.server?</code> will return <code>false</code> because this is not a Sidekiq process but it will run <code>configure_server</code> blocks so every instance is set up automatically for any local gems.</li>
+<li>Graceful restarts (a Sidekiq Enterprise feature) are not supported because we do not have full control of the process.</li>
+</ul>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

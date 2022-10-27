@@ -6,10 +6,30 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 27 Sep 2022 15:17:08 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 27 Oct 2022 09:21:22 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Sidekiq 7.0: Embedding</title>
+      <link>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/</link>
+      <pubDate>Thu, 27 Oct 2022 09:21:22 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/</guid>
+      <description>Sidekiq 7.0 can be embedded within another process so you do not need to run a separate Sidekiq process. This is called embedding.
+Why? Why would you want to do this? Embedding can make for a simpler deployment: you deploy one larger process instead of two separate processes, now you only need to monitor and manage one process. Embedding also requires less total memory since both subsystems will share most of the Ruby data structures and code in memory.</description>
+    </item>
+    
+    <item>
+      <title>Sidekiq 7.0: Metrics</title>
+      <link>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-metrics/</link>
+      <pubDate>Thu, 27 Oct 2022 09:20:55 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-metrics/</guid>
+      <description>Sidekiq 7.0 introduces a new subsystem for gathering job execution data along with a new Metrics tab within the Web UI to visualize this data. The data is designed to help you answer a few questions:
+Which types of jobs executed? Which types of jobs took the most amount of time to execute? How has the performance of Job X changed recently? When did any deploys occur during this time? The graphs only show data for the last hour.</description>
+    </item>
     
     <item>
       <title>Sidekiq 7.0 Beta now Available</title>
@@ -89,28 +109,6 @@ Build the ./faktory binary on the host.</description>
       <description>A customer recently opened issue to point out a bug in Sidekiq&amp;rsquo;s tag filtering support and I realized: I haven&amp;rsquo;t told people that tags exist. Oops. Here is your notification. 😁
 Sidekiq 6.0.1 added support for per-job tags. Tags are an Array of Strings within the job payload. Maybe you want to tag the sports related to a given job:
 class SomeWorker include Sidekiq::Worker sidekiq_options tags: [&amp;#39;alpha&amp;#39;] There&amp;rsquo;s plenty of ideas for job tagging:</description>
-    </item>
-    
-    <item>
-      <title>A Tour of the Sidekiq API</title>
-      <link>https://www.mikeperham.com/2021/04/20/a-tour-of-the-sidekiq-api/</link>
-      <pubDate>Tue, 20 Apr 2021 09:00:00 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2021/04/20/a-tour-of-the-sidekiq-api/</guid>
-      <description>Sidekiq provides an underappreciated but powerful tool for all users: the Sidekiq API. The API gives comprehensive and idiomatic access to Sidekiq&amp;rsquo;s underlying real-time job and queue data within Redis.
-The Glossary To explore the API, first it helps to understand the basic entities in Sidekiq&amp;rsquo;s universe:
-A job is a unit of work in your Ruby application A queue is a list of jobs which are ready to execute right now A process is a Sidekiq process with one or more threads for executing jobs.</description>
-    </item>
-    
-    <item>
-      <title>Faktory News: Pause, RSS and Bring your own Redis</title>
-      <link>https://www.mikeperham.com/2021/03/01/faktory-news-pause-rss-and-bring-your-own-redis/</link>
-      <pubDate>Mon, 01 Mar 2021 09:00:00 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2021/03/01/faktory-news-pause-rss-and-bring-your-own-redis/</guid>
-      <description>Faktory is my background job server for use with any programming language. It brings the nice patterns and features available in Sidekiq to the rest of the world. Using Go, Python, JavaScript, Elixir, or other languages? Give Faktory a shot!
-Today I&amp;rsquo;ve released Faktory, Faktory Pro and Faktory Enterprise 1.5.0. What&amp;rsquo;s new?
-Pause / Resume The OSS version of Faktory now allows you to Pause and Resume processing for a queue.</description>
     </item>
     
   </channel>
