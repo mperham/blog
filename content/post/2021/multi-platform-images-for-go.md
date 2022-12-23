@@ -89,4 +89,4 @@ an "insecure" registry. It's not really insecure because of the SSH tunnel.)
 
 I'm not a Docker expert by any means so I can't tell which approach is
 right or wrong or what the tradeoffs might be. I hope this helps
-someone; tweet at @getajobmike if you have a comment or suggestion.
+someone; ping me at [@getajobmike](https://ruby.social/@getajobmike) if you have a comment or suggestion.

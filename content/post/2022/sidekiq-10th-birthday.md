@@ -124,7 +124,7 @@ Nothing would making me prouder than seeing Sidekiq sustaining our Ruby communit
 
 What a legacy that would be!
 
-Thoughts? Tweet [@getajobmike](https://twitter.com/getajobmike).
+Thoughts? Find me at [@getajobmike](https://ruby.social/@getajobmike).
 
 <div class="jumbotron" style="padding: 2rem">
   <h1>A Deal for You!</h1>

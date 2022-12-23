@@ -114,4 +114,4 @@ And that's the value: all features are useable by jobs and workers written in an
 Want to batch jobs written in Rust and Python? Sure!
 Want to scale and throttle your Erlang and Go worker queues differently? Why not!
 
-Got questions, requests? Ping me at [@getajobmike](https://twitter.com/getajobmike) or mike@contribsys.com.
+Got questions, requests? Ping me at [@getajobmike](https://ruby.social/@getajobmike) or mike@contribsys.com.
