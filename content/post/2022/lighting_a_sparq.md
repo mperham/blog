@@ -3,6 +3,7 @@ title: "Lighting a Sparq⚡️"
 date: 2022-11-14T09:21:09-08:00
 publishdate: 2022-11-14
 lastmod: 2022-11-14
+draft: true
 tags: []
 ---
 
