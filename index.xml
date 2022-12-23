@@ -6,20 +6,10 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 14 Nov 2022 09:21:09 -0800</lastBuildDate>
+    <lastBuildDate>Thu, 27 Oct 2022 10:08:17 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Lighting a Sparq⚡️</title>
-      <link>https://www.mikeperham.com/2022/11/14/lighting-a-sparq%EF%B8%8F/</link>
-      <pubDate>Mon, 14 Nov 2022 09:21:09 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2022/11/14/lighting-a-sparq%EF%B8%8F/</guid>
-      <description>I&amp;rsquo;m starting a new project, Sparq⚡️.
-With the ongoing fall of Twitter and the rise of the Fediverse, Mastodon seems to be the talk of the town. Unfortunately much of the talk seems to be about its scaling problems. You might not know this but Mastodon uses my Sidekiq project to do much of its data processing and federation. Sidekiq can scale really, really far (I emailed last week with a Sidekiq Pro customer processing 22 billion jobs/day [250,000/sec!</description>
-    </item>
     
     <item>
       <title>Introducing Sidekiq 7.0</title>
@@ -107,6 +97,17 @@ Some context for those new to this blog: Sidekiq is the most popular background 
       <guid>https://www.mikeperham.com/2021/11/07/whats-new-in-sidekiq-6.3/</guid>
       <description>I&amp;rsquo;m happy to announce the general availability of Sidekiq 6.3 here at Rubyconf 2021! Since Sidekiq 6.2 in March we&amp;rsquo;ve passed 110 million downloads on Rubygems.org and added a number of nice new features. Let&amp;rsquo;s dive in!
 Sidekiq::Job One consistent issue in communication with the Sidekiq community is the nebulous term worker. Are you talking about a process? A thread? A type of job? Vagueness breeds confusion and frustration. I encourage developers to stop using the term worker and use include Sidekiq::Job in your job classes.</description>
+    </item>
+    
+    <item>
+      <title>On Multi-Platform Docker images</title>
+      <link>https://www.mikeperham.com/2021/07/15/on-multi-platform-docker-images/</link>
+      <pubDate>Thu, 15 Jul 2021 09:29:54 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2021/07/15/on-multi-platform-docker-images/</guid>
+      <description>Until recently, Faktory only supported the x86_64 platform. With the rise of the Apple Silicon chip and AWS Graviton, it was obvious that I would need to roll out ARM64 support soon. This week I spent several days fighting Docker&amp;rsquo;s support for multi-platform images and wanted to document what I learned.
+Faktory OSS The Faktory OSS build was relatively straightforward, with three steps for each platform:
+Build the ./faktory binary on the host.</description>
     </item>
     
   </channel>
