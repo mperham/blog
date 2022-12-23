@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.108.0">
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Lighting a Sparq⚡️ | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+      <li class="nav-item"><a class="nav-link" title="Sparq" href="https://github.com/contribsys/sparq">Sparq⚡️</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>Lighting a Sparq⚡️</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2022-11-14
+  </small>
+  
+</p>
+<p>I&rsquo;m starting a new project, <a href="https://github.com/contribsys/sparq">Sparq</a>⚡️.</p>
+<p>With the ongoing fall of Twitter and the rise of the Fediverse, Mastodon seems to be the talk of the town. Unfortunately much of the talk seems to be about its scaling problems. You might not know this but Mastodon uses my <a href="https://sidekiq.org">Sidekiq</a> project to do much of its data processing and federation. Sidekiq can scale really, really far (I emailed last week with a Sidekiq Pro customer processing 22 billion jobs/day [250,000/sec!]) but it needs to be deployed carefully to handle that scale. Fundamentally, a Ruby process is memory-hungry and bound to a single core. Sidekiq can&rsquo;t change that.</p>
+<h2 id="mastodon">Mastodon</h2>
+<p>Mastodon is a Ruby on Rails app.
+It requires Ruby and a large set of gems to be installed.
+The Mastodon source tree must be deployed.
+You install and run PostgreSQL for the database.
+You install and run Redis for Sidekiq.
+You must run separate Puma and Sidekiq processes.
+In summary, you must run and monitor a minimum of four services: postgresql, redis, puma, sidekiq.
+If you want to scale Mastodon, you need to run more puma or sidekiq processes.
+Since Mastodon is using Ruby, each puma or sidekiq process can only use one core.
+The DevOps knowledge required to administer Mastodon is significant.</p>
+<p>So Mastodon is in a bind: Ruby is a lovely language with some painful runtime constraints. This is what I aim to fix with Sparq.</p>
+<h2 id="how-is-sparq-different">How is Sparq different?</h2>
+<p>Sparq is designed to be a single executable with all of the infrastructure necessary for a complex web application inside it.
+Redis is the only external dependency.
+Embedded within the Sparq process is:</p>
+<ul>
+<li>sqlite providing a SQL database</li>
+<li>faktory providing a background job engine</li>
+<li>a faktory worker pool for processing those jobs</li>
+<li>redis running as a child process</li>
+</ul>
+<p>Instead of four separate services requiring customization to scale, you have one service which automatically scales.</p>
+<p>Sparq is written in Go.
+The Go language is far faster than Ruby (typically 5-10x).
+It uses far less memory (typically 5-10x).
+It does not limit you to one core but can automatically use all cores on a machine.
+If you put Sparq on a 2 core machine, it will use 2 cores.
+If you put it on a 64 core machine, it will use all 64 cores.
+Automatically.</p>
+<p>With all of those services running, it boots in 10 milliseconds:</p>
+<pre tabindex="0"><code>Sparq⚡️ 0.0.1
+Copyright © 2022 Contributed Systems LLC
+Licensed under the GNU Affero Public License 3.0
+D 2022-11-11T00:06:12.379Z Options: {localhost:9494 localhost.dev debug . .}
+I 2022-11-11T00:06:12.380Z Starting sqlite 3.39.3
+I 2022-11-11T00:06:12.380Z Initializing redis storage at ., socket sparq.redis.sock
+D 2022-11-11T00:06:12.381Z Booting Redis: /opt/homebrew/bin/redis-server /tmp/redis.conf --unixsocket sparq.redis.sock --loglevel notice --dir . --logfile ./redis.log
+D 2022-11-11T00:06:12.388Z Redis booted in 5.864375ms
+D 2022-11-11T00:06:12.389Z Running Redis v7.0.5
+D 2022-11-11T00:06:12.389Z Queue init: low 0 elements
+D 2022-11-11T00:06:12.389Z Queue init: high 0 elements
+I 2022-11-11T00:06:12.389Z Faktory 1.6.2 booted
+I 2022-11-11T00:06:12.389Z Starting Faktory job runner with 40 concurrency
+I 2022-11-11T00:06:12.389Z Web now running at localhost:9494
+</code></pre><h2 id="status">Status</h2>
+<p>Sparq is brand new.
+I have the core infrastructure running as above but there&rsquo;s no app yet.
+We need to build the database models, ActivityPub federation, Admin UI and User UI.
+Where possible we will maintain compatibility with Mastodon.
+But realistically that&rsquo;s a lot of work; Sparq will not be usable for several months.
+But if this project interests you and you&rsquo;d like to help expand the Fediverse ecosystem, jump into the <a href="https://github.com/contribsys/sparq/issues">issue tracker</a> and review the current status.</p>
+<p>As we get closer to something usable, I&rsquo;ll update this blog with project news.
+Follow me at <a href="https://ruby.social/@getajobmike">https://ruby.social/@getajobmike</a>.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>
