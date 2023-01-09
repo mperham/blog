@@ -26,4 +26,4 @@ allow Nazis under the guise of free speech.
 "What's next?"
 
 I've moved over to Mastodon where I can pick an instance whose policies
-I respect. [I'm here for now](https://mastodon.xyz/@mperham).
+I respect. [I'm here for now](https://ruby.social/@getajobmike).

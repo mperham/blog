@@ -3,7 +3,7 @@ title = "Moving to Mastodon"
 date = 2018-09-21T09:37:21-07:00
 +++
 
-Last month I revived [my Mastodon account](https://mastodon.xyz/@mperham) after seeing one more round of
+Last month I revived [my Mastodon account](https://ruby.social/@getajobmike) after seeing one more round of
 Twitter giving Nazi accounts acting in bad faith a pass while suspending
 upset liberal accounts acting in good faith.
 
@@ -33,11 +33,7 @@ to have enough traction to work today. Niche-specific instances like
 small communities tend to treat each other with more respect than larger
 ones.  [Find your own community](https://instances.social/) and wean yourself off Twitter today!
 
-Mastodon looks pretty similar to Twitter:
-
-{{% mastodon status="https://mastodon.xyz/@mperham/100743659488287177" width="600" height="230" %}}
-
-I'm at [https://mastodon.xyz/@mperham](https://mastodon.xyz/@mperham)
-and Sidekiq is hanging out with all the Rubyists at [https://ruby.social/@sidekiq](https://ruby.social/@sidekiq).  I hope you give Mastodon a try.
+I'm at [https://ruby.social/@getajobmike](https://ruby.social/@getajobmike)
+and Sidekiq is hanging out too at [https://ruby.social/@sidekiq](https://ruby.social/@sidekiq).  I hope you give Mastodon a try.
 
 {{% mastodon status="https://ruby.social/@sidekiq/100605401147582858" width="600" height="400" %}}
