@@ -13,8 +13,9 @@ Today I'm the founder and CEO of [Contributed Systems][1], my own company dedica
 
 In my free time I spend most of my time advocating for a greener, more just society.
 My passion is micromobility and its potential to transform our ugly, car-dependent cities.
-I volunteer at organizations like [losn.org][2] and [fb4k.org][3].
+I've volunteered and supported organizations like [BikePortland.org][0], [losn.org][2] and [fb4k.org][3].
 
+[0]: https://bikeportland.org
 [1]: https://www.contribsys.com
 [2]: https://losn.org
 [3]: https://fb4k.org
