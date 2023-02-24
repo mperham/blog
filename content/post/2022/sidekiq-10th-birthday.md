@@ -6,7 +6,8 @@ lastmod: 2022-01-17
 tags: []
 ---
 
-It's hard for me to believe these words but I pushed Sidekiq's [first commit](https://github.com/mperham/sidekiq/commit/26d9a92a6b355f131720b983888e8858e40aaa6e) on Jan 16th, 2012. Ten years ago. [The public announcement](https://www.mikeperham.com/2012/02/07/sidekiq-simple-efficient-messaging-for-rails/). [One month later](https://www.mikeperham.com/2012/03/02/the-state-of-sidekiq-one-month-later/). [One quarter later](https://www.mikeperham.com/2012/05/01/one-quarter-of-sidekiq/).
+It's hard for me to believe these words but I pushed Sidekiq's [first
+commit](https://github.com/sidekiq/sidekiq/commit/26d9a92a6b355f131720b983888e8858e40aaa6e) on Jan 16th, 2012. Ten years ago. [The public announcement](https://www.mikeperham.com/2012/02/07/sidekiq-simple-efficient-messaging-for-rails/). [One month later](https://www.mikeperham.com/2012/03/02/the-state-of-sidekiq-one-month-later/). [One quarter later](https://www.mikeperham.com/2012/05/01/one-quarter-of-sidekiq/).
 
 Some context for those new to this blog: Sidekiq is the most popular background job system for the Ruby programming language.
 Every application has tasks which are important: send an email, charge a credit card, reserve inventory for an order, synchronize some data to a 3rd party service, etc.

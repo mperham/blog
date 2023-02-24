@@ -19,7 +19,7 @@ Notably it does not try to profile inside your jobs to find N+1 queries, etc or 
 
 ## Metrics Home
 
-![metrics](https://github.com/mperham/sidekiq/raw/main/examples/metrics.png)
+![metrics](https://github.com/sidekiq/sidekiq/raw/main/examples/metrics.png)
 
 The Metrics home page shows a graph and table, focused on the Total Execution Time per Job Class. Lower lines are better.
 
@@ -31,7 +31,7 @@ In the graph above we can see most of the job types look healthy but one type `S
 
 ## Metrics Job Detail
 
-![metrics for job](https://github.com/mperham/sidekiq/raw/main/examples/metrics_job.png)
+![metrics for job](https://github.com/sidekiq/sidekiq/raw/main/examples/metrics_job.png)
 
 The detail page shows an overall histogram of execution times for the past hour along with a bubble graph of fine-grained data per minute for the given job type.
 
@@ -64,7 +64,7 @@ With a smaller scale factor like 1.3x, you get more precise buckets but need mor
 With more buckets you can track a wider spread of execution times but require more space in Redis.
 
 The implementation uses Redis' super nifty [BITFIELD](https://redis.io/commands/bitfield/) command.
-See [`lib/sidekiq/metrics/`](https://github.com/mperham/sidekiq) for details.
+See [`lib/sidekiq/metrics/`](https://github.com/sidekiq/sidekiq) for details.
 
 ## Tracking Deployments
 
@@ -83,4 +83,5 @@ You'll see a vertical red line for every deploy in the graphs and the legend for
 ## Summary
 
 I hope this new Metrics tab proves useful for all Sidekiq users but this subsystem is brand new and still ripe for improvement.
-If you have ideas for new features or functionality, please [open an issue](https://github.com/mperham/sidekiq/issues/new) so we can discuss!
+If you have ideas for new features or functionality, please [open an
+issue](https://github.com/sidekiq/sidekiq/issues/new) so we can discuss!

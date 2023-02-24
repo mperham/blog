@@ -18,7 +18,7 @@ One thing I know: everybody loves big beautiful graphs!
 Sidekiq 7.0 has a major new feature for tracking and visualizing job execution times.
 Big thanks to @adamlogic of Rails Autoscale for implementing the new graphs and I hope you'll agree he did a fantastic job.
 
-![metrics](https://github.com/mperham/sidekiq/raw/main/examples/metrics.png)
+![metrics](https://github.com/sidekiq/sidekiq/raw/main/examples/metrics.png)
 
 The Metrics system is covered in more detail [in its own blog post](https://www.mikeperham.com/2022/10/27/sidekiq-7.0-metrics/).
 

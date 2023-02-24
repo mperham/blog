@@ -88,7 +88,7 @@ irb(main):003:0> Sidekiq::Queue.new.first
 
 Note that `cattr` hash is the data within `Myapp::Current` serialized at the time when the job was created.
 Sidekiq will automatically restore that data every time the job executes.
-[Here's the code](https://github.com/mperham/sidekiq/blob/main/lib/sidekiq/middleware/current_attributes.rb) for you to read if you want to see how it's done.
+[Here's the code](https://github.com/sidekiq/sidekiq/blob/main/lib/sidekiq/middleware/current_attributes.rb) for you to read if you want to see how it's done.
 
 Request-specific context is a bit magical and functional purists will argue they act like global variables.
 That is true but I take a more pragmatic stance: they solve a real world problem.

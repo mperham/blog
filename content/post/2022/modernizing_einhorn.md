@@ -16,12 +16,14 @@ This blog post is meant to document how I took over and what I did, I hope other
 
 ## Why?
 
-Sidekiq Enterprise uses Einhorn as a key component in the [Rolling Restarts](https://github.com/mperham/sidekiq/wiki/Ent-Rolling-Restarts) feature.
+Sidekiq Enterprise uses Einhorn as a key component in the [Rolling
+Restarts](https://github.com/sidekiq/sidekiq/wiki/Ent-Rolling-Restarts) feature.
 It is a business risk for my commercial software to depend on an unmaintained component.
 
 ## An Issue Appears and A Risk Manifests
 
-Recently a Sidekiq Enterprise user reported that [Einhorn no longer works with Ruby 3.1](https://github.com/mperham/sidekiq/issues/5400) due to
+Recently a Sidekiq Enterprise user reported that [Einhorn no longer
+works with Ruby 3.1](https://github.com/sidekiq/sidekiq/issues/5400) due to
 changes in the YAML library.
 Since there was no maintainer, there was no way to fix this issue;
 I had to appeal to a higher power: Stripe.
