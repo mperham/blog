@@ -197,10 +197,12 @@ years ago.
 I recently asked for and was granted ownership of the gem so that I could provide maintenance going forward.
 This blog post is meant to document how I took over and what I did, I hope others find this interesting and perhaps even useful.</p>
 <h2 id="why">Why?</h2>
-<p>Sidekiq Enterprise uses Einhorn as a key component in the <a href="https://github.com/mperham/sidekiq/wiki/Ent-Rolling-Restarts">Rolling Restarts</a> feature.
+<p>Sidekiq Enterprise uses Einhorn as a key component in the <a href="https://github.com/sidekiq/sidekiq/wiki/Ent-Rolling-Restarts">Rolling
+Restarts</a> feature.
 It is a business risk for my commercial software to depend on an unmaintained component.</p>
 <h2 id="an-issue-appears-and-a-risk-manifests">An Issue Appears and A Risk Manifests</h2>
-<p>Recently a Sidekiq Enterprise user reported that <a href="https://github.com/mperham/sidekiq/issues/5400">Einhorn no longer works with Ruby 3.1</a> due to
+<p>Recently a Sidekiq Enterprise user reported that <a href="https://github.com/sidekiq/sidekiq/issues/5400">Einhorn no longer
+works with Ruby 3.1</a> due to
 changes in the YAML library.
 Since there was no maintainer, there was no way to fix this issue;
 I had to appeal to a higher power: Stripe.

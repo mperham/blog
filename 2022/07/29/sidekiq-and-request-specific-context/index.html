@@ -244,7 +244,7 @@ You just need to put this in your initializer:</p>
 </span></span><span style="display:flex;"><span>   <span style="color:#e6db74">&#34;enqueued_at&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#ae81ff">1659150392</span><span style="color:#f92672">.</span><span style="color:#ae81ff">663126</span>}
 </span></span></code></pre></div><p>Note that <code>cattr</code> hash is the data within <code>Myapp::Current</code> serialized at the time when the job was created.
 Sidekiq will automatically restore that data every time the job executes.
-<a href="https://github.com/mperham/sidekiq/blob/main/lib/sidekiq/middleware/current_attributes.rb">Here&rsquo;s the code</a> for you to read if you want to see how it&rsquo;s done.</p>
+<a href="https://github.com/sidekiq/sidekiq/blob/main/lib/sidekiq/middleware/current_attributes.rb">Here&rsquo;s the code</a> for you to read if you want to see how it&rsquo;s done.</p>
 <p>Request-specific context is a bit magical and functional purists will argue they act like global variables.
 That is true but I take a more pragmatic stance: they solve a real world problem.
 Go chose the opposite approach with their <a href="https://pkg.go.dev/context"><code>context</code></a> package and requires all Go code to pass a <code>context.Context</code> argument to every function.

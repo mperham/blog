@@ -217,7 +217,8 @@ This could unlock a whole new set of features, possibly including <strong>queue 
 Sidekiq 6.5 saw the first step in that refactoring plan.
 Sidekiq 7.0 is the next step.</p>
 <h2 id="redis-data-model-and-statistics">Redis Data Model and Statistics</h2>
-<p>Another big change I&rsquo;m planning is a <a href="https://github.com/mperham/sidekiq/pull/5384">major overhaul of the statistics</a> Sidekiq stores in Redis.
+<p>Another big change I&rsquo;m planning is a <a href="https://github.com/sidekiq/sidekiq/pull/5384">major overhaul of the
+statistics</a> Sidekiq stores in Redis.
 Since Sidekiq 1.0, these have been coarse-grained success/failure counters per day.
 In Sidekiq 7.0 I want to save more fine-grained data which could provide APM-lite functionality: per-queue and per-job runtime metrics.
 What about a vertical line in the graphs for the time of each deployment?

@@ -201,14 +201,14 @@ blockquote,
 This feature isn&rsquo;t meant to replace a full-blown APM like AppSignal, DataDog, New Relic, Scout, Skylight, etc.
 Notably it does not try to profile inside your jobs to find N+1 queries, etc or provide longer-term historical execution metrics.</p>
 <h2 id="metrics-home">Metrics Home</h2>
-<p><img src="https://github.com/mperham/sidekiq/raw/main/examples/metrics.png" alt="metrics"></p>
+<p><img src="https://github.com/sidekiq/sidekiq/raw/main/examples/metrics.png" alt="metrics"></p>
 <p>The Metrics home page shows a graph and table, focused on the Total Execution Time per Job Class. Lower lines are better.</p>
 <p>A successful job is one which runs without raising an error to Sidekiq; we only track execution time for successful jobs.
 You can see a Failure job count in the table but since failures can have unpredictable performance, tracking their time might cause a false sense of performance regression.
 Average execution time is simply (Total Execution Time / Success).</p>
 <p>In the graph above we can see most of the job types look healthy but one type <code>SlowJob</code> looks suspicious. We&rsquo;ll click its name in the table row to get more detail.</p>
 <h2 id="metrics-job-detail">Metrics Job Detail</h2>
-<p><img src="https://github.com/mperham/sidekiq/raw/main/examples/metrics_job.png" alt="metrics for job"></p>
+<p><img src="https://github.com/sidekiq/sidekiq/raw/main/examples/metrics_job.png" alt="metrics for job"></p>
 <p>The detail page shows an overall histogram of execution times for the past hour along with a bubble graph of fine-grained data per minute for the given job type.</p>
 <p>In the bar graph, we want to see big bars on the left. In the bubble graph, lower is faster and fatter bubbles mean more executions. Ideally you want nice fat bubbles at the bottom of the graph with little variation.</p>
 <p>We can see that SlowJob has a bunch of executions which are very fast (see the 20ms bar).
@@ -231,7 +231,7 @@ If you have 200 job types, that&rsquo;s 200 * 52 * 60 * 8 = 4,992,000 or less th
 With a smaller scale factor like 1.3x, you get more precise buckets but need more buckets to track the same spread of execution times.
 With more buckets you can track a wider spread of execution times but require more space in Redis.</p>
 <p>The implementation uses Redis&rsquo; super nifty <a href="https://redis.io/commands/bitfield/">BITFIELD</a> command.
-See <a href="https://github.com/mperham/sidekiq"><code>lib/sidekiq/metrics/</code></a> for details.</p>
+See <a href="https://github.com/sidekiq/sidekiq"><code>lib/sidekiq/metrics/</code></a> for details.</p>
 <h2 id="tracking-deployments">Tracking Deployments</h2>
 <p>Sidekiq provides a simple Deploy API so capistrano scripts or similar can mark a deploy. The Metrics graphs will show a vertical line at that point in time so sudden changes can be correlated. If the current directory is a Git repo, here&rsquo;s a simple script which will label each deploy with the current git SHA and commit subject (e.g. &ldquo;d0f12ab3 Add foo to bar&rdquo;):</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#34;sidekiq/deploy&#34;</span>
@@ -241,7 +241,8 @@ See <a href="https://github.com/mperham/sidekiq"><code>lib/sidekiq/metrics/</cod
 <p><img src="https://user-images.githubusercontent.com/2911/189455943-18e898af-ee51-4b4c-9dd7-9bbc37d304bd.png" alt="deploy marks"></p>
 <h2 id="summary">Summary</h2>
 <p>I hope this new Metrics tab proves useful for all Sidekiq users but this subsystem is brand new and still ripe for improvement.
-If you have ideas for new features or functionality, please <a href="https://github.com/mperham/sidekiq/issues/new">open an issue</a> so we can discuss!</p>
+If you have ideas for new features or functionality, please <a href="https://github.com/sidekiq/sidekiq/issues/new">open an
+issue</a> so we can discuss!</p>
 
     </article>
   </div>
