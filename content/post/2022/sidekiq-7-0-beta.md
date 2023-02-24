@@ -14,7 +14,8 @@ several huge new features, several features removed, APIs refactored and updated
 * Capsules!
 * Strict args!
 
-But with all these [awesome new features](https://github.com/sidekiq/sidekiq/blob/7-0/docs/7.0-Upgrade.md), we refactored a **LOT** of internal APIs and likely broke a bunch of things. In other words, we really need people to test it and open issues in order to get a smooth 7.0 rollout.
+But with all these [awesome new
+features](https://github.com/sidekiq/sidekiq/blob/main/docs/7.0-Upgrade.md), we refactored a **LOT** of internal APIs and likely broke a bunch of things. In other words, we really need people to test it and open issues in order to get a smooth 7.0 rollout.
 
 ![metrics](https://github.com/sidekiq/sidekiq/raw/main/examples/metrics.png)
 
