@@ -8,7 +8,7 @@ title = "Monitoring Redis"
 </figure>
 
 
-Redis is widely by the Ruby community but, like any complex piece of
+Redis is widely used by the Ruby community but, like any complex piece of
 infrastructure, isn't well understood by many of its users.  I wanted to
 write a blog post that would answer the question: **How can I check on
 the health of my Redis server?**  Here's a few things you can do to
