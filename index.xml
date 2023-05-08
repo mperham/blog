@@ -17,8 +17,9 @@
       <pubDate>Mon, 08 May 2023 09:00:00 -0700</pubDate>
       
       <guid>https://www.mikeperham.com/2023/05/08/scaling-huge-transactional-datasets-with-redis-cluster/</guid>
-      <description>Recently I made some minor changes to Sidekiq Enterprise 7.1 in order to greatly increase the scalability of the Rate Limiter feature. Redis has a little-known feature which allows you to safely use MULTI transactions with multiple keys in a cluster. This was a real learning experience for me so I thought other people might find this interesting.
-Clustering a Cache Redis is famously single-threaded: while you can have thousands of connections, only one can be operating on the dataset at a time.</description>
+      <description>&lt;p&gt;Recently I made some minor changes to Sidekiq Enterprise 7.1 in order to greatly increase the scalability of the Rate Limiter feature.
+Redis has a little-known feature which allows you to safely use &lt;code&gt;MULTI&lt;/code&gt; transactions with multiple keys in a cluster.
+This was a real learning experience for me so I thought other people might find this interesting.&lt;/p&gt;</description>
     </item>
     
     <item>
