@@ -9,6 +9,7 @@ tags: []
 Recently I made some minor changes to Sidekiq Enterprise 7.1 in order to greatly increase the scalability of the Rate Limiter feature.
 Redis has a little-known feature which allows you to safely use `MULTI` transactions with multiple keys in a cluster.
 This was a real learning experience for me so I thought other people might find this interesting.
+<!--more-->
 
 # Clustering a Cache
 
