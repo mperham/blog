@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 27 Oct 2022 10:08:17 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 08 May 2023 09:00:00 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Scaling Huge Transactional Datasets with Redis Cluster</title>
+      <link>https://www.mikeperham.com/2023/05/08/scaling-huge-transactional-datasets-with-redis-cluster/</link>
+      <pubDate>Mon, 08 May 2023 09:00:00 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2023/05/08/scaling-huge-transactional-datasets-with-redis-cluster/</guid>
+      <description>Recently I made some minor changes to Sidekiq Enterprise 7.1 in order to greatly increase the scalability of the Rate Limiter feature. Redis has a little-known feature which allows you to safely use MULTI transactions with multiple keys in a cluster. This was a real learning experience for me so I thought other people might find this interesting.
+Clustering a Cache Redis is famously single-threaded: while you can have thousands of connections, only one can be operating on the dataset at a time.</description>
+    </item>
     
     <item>
       <title>Introducing Sidekiq 7.0</title>
@@ -97,17 +107,6 @@ Some context for those new to this blog: Sidekiq is the most popular background 
       <guid>https://www.mikeperham.com/2021/11/07/whats-new-in-sidekiq-6.3/</guid>
       <description>I&amp;rsquo;m happy to announce the general availability of Sidekiq 6.3 here at Rubyconf 2021! Since Sidekiq 6.2 in March we&amp;rsquo;ve passed 110 million downloads on Rubygems.org and added a number of nice new features. Let&amp;rsquo;s dive in!
 Sidekiq::Job One consistent issue in communication with the Sidekiq community is the nebulous term worker. Are you talking about a process? A thread? A type of job? Vagueness breeds confusion and frustration. I encourage developers to stop using the term worker and use include Sidekiq::Job in your job classes.</description>
-    </item>
-    
-    <item>
-      <title>On Multi-Platform Docker images</title>
-      <link>https://www.mikeperham.com/2021/07/15/on-multi-platform-docker-images/</link>
-      <pubDate>Thu, 15 Jul 2021 09:29:54 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2021/07/15/on-multi-platform-docker-images/</guid>
-      <description>Until recently, Faktory only supported the x86_64 platform. With the rise of the Apple Silicon chip and AWS Graviton, it was obvious that I would need to roll out ARM64 support soon. This week I spent several days fighting Docker&amp;rsquo;s support for multi-platform images and wanted to document what I learned.
-Faktory OSS The Faktory OSS build was relatively straightforward, with three steps for each platform:
-Build the ./faktory binary on the host.</description>
     </item>
     
   </channel>

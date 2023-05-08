@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.111.3">
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Scaling Huge Transactional Datasets with Redis Cluster | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>Scaling Huge Transactional Datasets with Redis Cluster</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2023-05-08
+  </small>
+  
+</p>
+<p>Recently I made some minor changes to Sidekiq Enterprise 7.1 in order to greatly increase the scalability of the Rate Limiter feature.
+Redis has a little-known feature which allows you to safely use <code>MULTI</code> transactions with multiple keys in a cluster.
+This was a real learning experience for me so I thought other people might find this interesting.</p>
+<h1 id="clustering-a-cache">Clustering a Cache</h1>
+<p>Redis is famously single-threaded: while you can have thousands of connections, only one can be operating on the dataset at a time.
+While Redis is incredibly well tuned, this design decision presents a fundamental limitation in scalability for one Redis instance.
+Redis has a Cluster mode which allows N Redis nodes to operate on a single, shared keyspace.
+This is the traditional way to scale Redis to many CPUs and machines and most commonly used for massive caches.</p>
+<p>All <a href="https://github.com/redis-rb/redis-cluster-client#redis-cluster-client">Redis clients</a> use an algorithm to map a given key onto an node within the Cluster, e.g.</p>
+<pre tabindex="0"><code>key-a -&gt; node1
+key-b -&gt; node2
+</code></pre><p>All Redis clients use the same algorithm so no matter which machine or CPU you are executing on, <code>key-a</code> will always map to <code>node1</code> as long as the set of nodes are the same.
+In this manner, keys are spread evenly across all nodes in the Cluster.
+If you have 1000 nodes and one of them goes down, 99.9% of the keyspace should still be available.
+This is exactly how you want a massive data cache to operate.</p>
+<h1 id="transactions">Transactions</h1>
+<p>Redis also allows you to operate transactionally on multiple data elements to ensure consistency using its <code>MULTI</code> command.
+Sidekiq uses this command quite frequently:</p>
+<pre tabindex="0"><code>MULTI do
+  HSET element-a field value
+  LPUSH element-a-queue message
+end
+</code></pre><p>But both of these data elements, element-a and element-a-queue, need to be stored on the same Redis node, otherwise we can&rsquo;t operate on them atomically.
+And unfortunately since they are two different keys, they will map to two different nodes and the MULTI command will raise a <code>CROSSSLOT</code> error.
+This is the root cause why Sidekiq has never supported Redis Cluster as its backing store.</p>
+<h1 id="hash-tagging">Hash Tagging</h1>
+<p>Sam Cochrane from <a href="https://buildkite.com">Buildkite</a> brought <a href="https://redis.com/blog/redis-clustering-best-practices-with-keys/">Hash tagging support</a> to my attention.
+<strong>Hash tagging allows you to map a set of keys to the same Cluster node.</strong>
+You do this by demarcating the portion of the key which should be used to map the key to a Node, using braces:</p>
+<pre tabindex="0"><code>MULTI do
+  HSET {element-a} field value
+  LPUSH {element-a}-queue message
+end
+</code></pre><p>Since both keys now use the same hash tag, <code>element-a</code>, they will map to the same Node and the transaction will work!!!!!!</p>
+<h1 id="limitations">Limitations</h1>
+<p>There are some drawbacks here:</p>
+<p>&ldquo;Global&rdquo; data structures can&rsquo;t participate in the MULTI transaction.
+Let&rsquo;s say I wanted to have a set of all element keys: [element-a, element-b, etc] so that a management screen could show all active elements.
+I can&rsquo;t use <code>SADD elements element-a</code> within the MULTI transaction above because the global <code>elements</code> key won&rsquo;t map to the same Node as <code>element-a</code>.
+I can run that command on its own, outside of the MULTI transaction, but now the application has a potential source of inconsistency.</p>
+<p>Maybe I can&rsquo;t maintain a global set of elements, but could I scan for all elements in Redis?
+Yes, but that requires scanning every node in the cluster.
+If you have thousands of nodes and billions of elements, that scan becomes very expensive.</p>
+<p>Essentially as your ability to scale the number of individual elements goes up, your ability to see and manage those elements goes down.
+It&rsquo;s easy to manage a thousand elements.
+It&rsquo;s very hard to manage a billion elements and every order of magnitude brings new challenges.</p>
+<h1 id="scaling-rate-limiting">Scaling Rate Limiting</h1>
+<p>Sam wrote to me and suggested that the Rate Limiting feature would be a good candidate for Hash tagging.
+Unlike many other features, <a href="https://github.com/sidekiq/sidekiq/wiki/Ent-Rate-Limiting">Sidekiq Enterprise&rsquo;s Rate Limiting</a> does not require access to any global data structures within Redis so
+I was able to add Hash tags at the few points where limiters used transactions.
+Starting with 7.1, you can configure the <a href="https://github.com/sidekiq/sidekiq/wiki/Ent-Rate-Limiting#redis">Rate Limiter subsystem</a> to use a Redis Cluster and create millions or billions of rate limiters.
+The only thing that won&rsquo;t work is the &ldquo;Limits&rdquo; tab in the Web UI; as we noted, the increase in scalability decreases the manageability.</p>
+<p>Let me be clear: Sidekiq still does not support Clustering of its core data model
+but this is a great example where a knowledgable customer helped me improve Sidekiq.</p>
+<p>If you have a bug, feature or idea for improvement, please <a href="https://github.com/sidekiq/sidekiq/issues/new">open an issue</a>!</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>
