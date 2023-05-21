@@ -215,7 +215,7 @@ end
 And unfortunately since they are two different keys, they will map to two different nodes and the MULTI command will raise a <code>CROSSSLOT</code> error.
 This is the root cause why Sidekiq has never supported Redis Cluster as its backing store.</p>
 <h1 id="hash-tagging">Hash Tagging</h1>
-<p>Sam Cochrane from <a href="https://buildkite.com">Buildkite</a> brought <a href="https://redis.com/blog/redis-clustering-best-practices-with-keys/">Hash tagging support</a> to my attention.
+<p>Samuel Cochrane from <a href="https://buildkite.com">Buildkite</a> brought <a href="https://redis.com/blog/redis-clustering-best-practices-with-keys/">Hash tagging support</a> to my attention.
 <strong>Hash tagging allows you to map a set of keys to the same Cluster node.</strong>
 You do this by demarcating the portion of the key which should be used to map the key to a Node, using braces:</p>
 <pre tabindex="0"><code>MULTI do
@@ -236,7 +236,7 @@ If you have thousands of nodes and billions of elements, that scan becomes very 
 It&rsquo;s easy to manage a thousand elements.
 It&rsquo;s very hard to manage a billion elements and every order of magnitude brings new challenges.</p>
 <h1 id="scaling-rate-limiting">Scaling Rate Limiting</h1>
-<p>Sam wrote to me and suggested that the Rate Limiting feature would be a good candidate for Hash tagging.
+<p>Samuel wrote to me and suggested that the Rate Limiting feature would be a good candidate for Hash tagging.
 Unlike many other features, <a href="https://github.com/sidekiq/sidekiq/wiki/Ent-Rate-Limiting">Sidekiq Enterprise&rsquo;s Rate Limiting</a> does not require access to any global data structures within Redis so
 I was able to add Hash tags at the few points where limiters used transactions.
 Starting with 7.1, you can configure the <a href="https://github.com/sidekiq/sidekiq/wiki/Ent-Rate-Limiting#redis">Rate Limiter subsystem</a> to use a Redis Cluster and create millions or billions of rate limiters.
