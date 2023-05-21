@@ -48,7 +48,7 @@ This is the root cause why Sidekiq has never supported Redis Cluster as its back
 
 # Hash Tagging
  
-Sam Cochrane from [Buildkite](https://buildkite.com) brought [Hash tagging support](https://redis.com/blog/redis-clustering-best-practices-with-keys/) to my attention.
+Samuel Cochrane from [Buildkite](https://buildkite.com) brought [Hash tagging support](https://redis.com/blog/redis-clustering-best-practices-with-keys/) to my attention.
 **Hash tagging allows you to map a set of keys to the same Cluster node.**
 You do this by demarcating the portion of the key which should be used to map the key to a Node, using braces:
 
@@ -80,7 +80,7 @@ It's very hard to manage a billion elements and every order of magnitude brings 
 
 # Scaling Rate Limiting
 
-Sam wrote to me and suggested that the Rate Limiting feature would be a good candidate for Hash tagging.
+Samuel wrote to me and suggested that the Rate Limiting feature would be a good candidate for Hash tagging.
 Unlike many other features, [Sidekiq Enterprise's Rate Limiting](https://github.com/sidekiq/sidekiq/wiki/Ent-Rate-Limiting) does not require access to any global data structures within Redis so
 I was able to add Hash tags at the few points where limiters used transactions.
 Starting with 7.1, you can configure the [Rate Limiter subsystem](https://github.com/sidekiq/sidekiq/wiki/Ent-Rate-Limiting#redis) to use a Redis Cluster and create millions or billions of rate limiters.
