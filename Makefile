@@ -9,4 +9,4 @@ theme:
 	# update theme
 	cd themes/minimal-bootstrap-hugo-theme
 	git fetch origin
-	git merge origin master
+	git merge origin main
