@@ -6,10 +6,20 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 May 2023 09:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 11 Sep 2023 12:27:34 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Ruby HTTP Server from scratch</title>
+      <link>https://www.mikeperham.com/2023/09/11/ruby-http-server-from-scratch/</link>
+      <pubDate>Mon, 11 Sep 2023 12:27:34 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2023/09/11/ruby-http-server-from-scratch/</guid>
+      <description>Recently I decided to add support for Kubernetes HTTP health checks to Sidekiq Enterprise. This means, within each Sidekiq worker process, we need to implement an HTTP server which listens on port X and simply returns 200/OK if the process is alive.
+Notice we have really basic requirements here: no need for serving files or arbitrary dynamic content. We only respond to &amp;ldquo;/&amp;rdquo; so there&amp;rsquo;s no need for routes, paths or query parameter handling.</description>
+    </item>
     
     <item>
       <title>Scaling Huge Transactional Datasets with Redis Cluster</title>
@@ -98,16 +108,6 @@ New Transaction-aware Client Sidekiq has long had a &amp;ldquo;problem&amp;rdquo
       <guid>https://www.mikeperham.com/2022/01/17/happy-10th-birthday-sidekiq/</guid>
       <description>It&amp;rsquo;s hard for me to believe these words but I pushed Sidekiq&amp;rsquo;s first commit on Jan 16th, 2012. Ten years ago. The public announcement. One month later. One quarter later.
 Some context for those new to this blog: Sidekiq is the most popular background job system for the Ruby programming language. Every application has tasks which are important: send an email, charge a credit card, reserve inventory for an order, synchronize some data to a 3rd party service, etc.</description>
-    </item>
-    
-    <item>
-      <title>What&#39;s New in Sidekiq 6.3</title>
-      <link>https://www.mikeperham.com/2021/11/07/whats-new-in-sidekiq-6.3/</link>
-      <pubDate>Sun, 07 Nov 2021 09:00:00 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2021/11/07/whats-new-in-sidekiq-6.3/</guid>
-      <description>I&amp;rsquo;m happy to announce the general availability of Sidekiq 6.3 here at Rubyconf 2021! Since Sidekiq 6.2 in March we&amp;rsquo;ve passed 110 million downloads on Rubygems.org and added a number of nice new features. Let&amp;rsquo;s dive in!
-Sidekiq::Job One consistent issue in communication with the Sidekiq community is the nebulous term worker. Are you talking about a process? A thread? A type of job? Vagueness breeds confusion and frustration. I encourage developers to stop using the term worker and use include Sidekiq::Job in your job classes.</description>
     </item>
     
   </channel>
