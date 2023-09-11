@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JavaScript on Mike Perham</title>
+    <link>https://www.mikeperham.com/categories/javascript/</link>
+    <description>Recent content in JavaScript on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 18 Mar 2011 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Node.js Roundup</title>
+      <link>https://www.mikeperham.com/2011/03/18/node-js-roundup/</link>
+      <pubDate>Fri, 18 Mar 2011 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2011/03/18/node-js-roundup/</guid>
+      <description>I just finished a three-part series of blog posts on Node.js over on the Carbon Five blog. JavaScript and Node are very different from Ruby and EventMachine, providing me lots to learn over the course of the last few weeks. Take a look; I hope you learn something too!
+Node.js, Part I: Overview Node.js, Part II: Spelunking in the Code Node.js, Part III: Full Stack Application </description>
+    </item>
+    
+  </channel>
+</rss>

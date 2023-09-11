@@ -260,11 +260,20 @@
     <loc>https://www.mikeperham.com/2014/11/26/building-a-binary-tree-with-enumerable/</loc>
     <lastmod>2014-11-26T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://www.mikeperham.com/categories/ruby/</loc>
+    <lastmod>2014-11-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/categories/inspeqtor/</loc>
+    <lastmod>2014-11-25T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://www.mikeperham.com/2014/11/25/inspeqtor-0-7-0-total_rss-and-postgresql/</loc>
     <lastmod>2014-11-25T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2014/10/23/inspeqtor-0-6-0-init-d-cron-and-statsd/</loc>
     <lastmod>2014-10-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/categories/software/</loc>
+    <lastmod>2014-10-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2014/10/15/stupid-go-tricks-in-janus/</loc>
     <lastmod>2014-10-15T00:00:00+00:00</lastmod>
@@ -274,6 +283,9 @@
   </url><url>
     <loc>https://www.mikeperham.com/2014/10/02/introducing-inspeqtor/</loc>
     <lastmod>2014-10-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/categories/sidekiq/</loc>
+    <lastmod>2014-10-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2014/10/01/the-path-to-full-time-open-source/</loc>
     <lastmod>2014-10-01T00:00:00+00:00</lastmod>
@@ -293,14 +305,23 @@
     <loc>https://www.mikeperham.com/2014/07/02/my-next-chapter/</loc>
     <lastmod>2014-07-02T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://www.mikeperham.com/categories/personal/</loc>
+    <lastmod>2014-07-02T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://www.mikeperham.com/2014/06/02/whats-new-in-sidekiq-pro/</loc>
     <lastmod>2014-06-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2014/05/27/the-reconciliation-step/</loc>
     <lastmod>2014-05-27T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://www.mikeperham.com/categories/uncategorized/</loc>
+    <lastmod>2014-05-27T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://www.mikeperham.com/2014/05/22/bounded-libraries/</loc>
     <lastmod>2014-05-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/categories/rails/</loc>
+    <lastmod>2014-05-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/</loc>
     <lastmod>2014-05-17T00:00:00+00:00</lastmod>
@@ -357,6 +378,9 @@
     <lastmod>2013-05-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2013/05/25/paralysis-of-choice/</loc>
+    <lastmod>2013-05-25T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/categories/general/</loc>
     <lastmod>2013-05-25T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2013/05/11/the-sidekiq-pro-giveaway-winner/</loc>
@@ -494,6 +518,9 @@
     <loc>https://www.mikeperham.com/2011/04/23/actors-and-ruby/</loc>
     <lastmod>2011-04-23T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://www.mikeperham.com/categories/javascript/</loc>
+    <lastmod>2011-03-18T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://www.mikeperham.com/2011/03/18/node-js-roundup/</loc>
     <lastmod>2011-03-18T00:00:00+00:00</lastmod>
   </url><url>
@@ -530,6 +557,9 @@
     <loc>https://www.mikeperham.com/2010/08/30/dalli-memcached-for-ruby/</loc>
     <lastmod>2010-08-30T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://www.mikeperham.com/tags/memcached/</loc>
+    <lastmod>2010-08-30T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://www.mikeperham.com/2010/08/05/securing-network-services/</loc>
     <lastmod>2010-08-05T00:00:00+00:00</lastmod>
   </url><url>
@@ -551,11 +581,17 @@
     <loc>https://www.mikeperham.com/2010/04/06/phat-news/</loc>
     <lastmod>2010-04-06T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://www.mikeperham.com/tags/eventmachine/</loc>
+    <lastmod>2010-04-03T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/</loc>
     <lastmod>2010-04-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2010/03/30/using-activerecord-with-eventmachine/</loc>
     <lastmod>2010-03-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/tags/cassandra/</loc>
+    <lastmod>2010-03-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2010/03/20/cassandra-internals-tricks/</loc>
     <lastmod>2010-03-20T00:00:00+00:00</lastmod>
@@ -583,6 +619,9 @@
   </url><url>
     <loc>https://www.mikeperham.com/2010/02/09/cassandra-and-eventmachine/</loc>
     <lastmod>2010-02-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/tags/ruby/</loc>
+    <lastmod>2010-01-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2010/01/27/scalable-ruby-processing-with-eventmachine/</loc>
     <lastmod>2010-01-27T00:00:00+00:00</lastmod>
@@ -679,6 +718,9 @@
   </url><url>
     <loc>https://www.mikeperham.com/2009/01/21/testing-multipart-upload-with-sinatra/</loc>
     <lastmod>2009-01-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/categories/gadgets/</loc>
+    <lastmod>2009-01-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2009/01/15/dreams-and-the-iphone/</loc>
     <lastmod>2009-01-15T00:00:00+00:00</lastmod>
@@ -797,11 +839,20 @@
     <loc>https://www.mikeperham.com/2008/06/04/the-mvc-song/</loc>
     <lastmod>2008-06-04T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://www.mikeperham.com/tags/starling/</loc>
+    <lastmod>2008-05-29T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://www.mikeperham.com/2008/05/29/starling-and-a-reliable-memcached-client/</loc>
     <lastmod>2008-05-29T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2008/05/28/mysql-lock-debugging/</loc>
     <lastmod>2008-05-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/tags/begin/</loc>
+    <lastmod>2008-05-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/tags/rescue/</loc>
+    <lastmod>2008-05-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2008/05/22/ruby-scoping-oddity/</loc>
     <lastmod>2008-05-22T00:00:00+00:00</lastmod>
@@ -823,6 +874,9 @@
   </url><url>
     <loc>https://www.mikeperham.com/2008/04/30/changing-with-the-times/</loc>
     <lastmod>2008-04-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/categories/java/</loc>
+    <lastmod>2008-04-25T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2008/04/25/syntactic-sugar/</loc>
     <lastmod>2008-04-25T00:00:00+00:00</lastmod>

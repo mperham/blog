@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>General on Mike Perham</title>
+    <link>https://www.mikeperham.com/categories/general/</link>
+    <description>Recent content in General on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 25 May 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/categories/general/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Blogging and the Paralysis of Choice</title>
+      <link>https://www.mikeperham.com/2013/05/25/paralysis-of-choice/</link>
+      <pubDate>Sat, 25 May 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/05/25/paralysis-of-choice/</guid>
+      <description>When I talk to younger developers about starting to blog, they often say things like &amp;ldquo;I don&amp;rsquo;t know what to write about&amp;rdquo; or &amp;ldquo;I have nothing to say&amp;rdquo;. This is because there is simply a paradox of too much to say, or what is commonly referred to as paralysis of choice. The field of software engineering is a complex one, full of detail. Trying to encompass all that detail can be terrifying.</description>
+    </item>
+    
+    <item>
+      <title>Bill Gates</title>
+      <link>https://www.mikeperham.com/2013/02/13/bill-gates/</link>
+      <pubDate>Wed, 13 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/02/13/bill-gates/</guid>
+      <description>Some back of the envelope numbers I was pondering this morning:
+40 hours / week * 50 weeks / year = 2000 hr / yr
+Bill Gates is worth about $66 billion. He&amp;rsquo;s worked for about 33 years now.
+66 billion / 33 years = $2 billion/year / 2000 = $1 million / hour.
+Bill Gates has made roughly $1 million per hour over the length of his career. Most people would be happy to make that amount in a decade.</description>
+    </item>
+    
+    <item>
+      <title>Sexism and Programming</title>
+      <link>https://www.mikeperham.com/2012/10/14/sexism-and-programming/</link>
+      <pubDate>Sun, 14 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2012/10/14/sexism-and-programming/</guid>
+      <description>In my experience, sexism is not overt in the software world. I do think there is an unspoken bias against anyone who is not a white male. For all the talk of egalitarianism in Silicon Valley, this is my belief:
+White men have to prove their incompetence. Everyone else has to prove their competence.
+This is why I think it is important to support organizations like RailsGirls looking to educate and improve the engineering skills of those minority groups.</description>
+    </item>
+    
+    <item>
+      <title>I&#39;m back!</title>
+      <link>https://www.mikeperham.com/2012/02/04/im-back/</link>
+      <pubDate>Sat, 04 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2012/02/04/im-back/</guid>
+      <description>I haven&amp;rsquo;t blogged much for the last year because most of my technical blogging went to the Carbon Five blog. Now that I&amp;rsquo;ve moved to Portland and have a new job at TheClymb I&amp;rsquo;ll be returning my attention to my own blog so expect new content regularly again!</description>
+    </item>
+    
+    <item>
+      <title>How to know if your airport is cool?</title>
+      <link>https://www.mikeperham.com/2007/11/05/how-to-know-if-your-airport-is-cool/</link>
+      <pubDate>Mon, 05 Nov 2007 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2007/11/05/how-to-know-if-your-airport-is-cool/</guid>
+      <description>I got 1.5MB/sec downloads while waiting for my flight home at the Charlotte airport. And trust me, that was not burst but sustained. Free T1-speed Internet access? Holy cow!</description>
+    </item>
+    
+    <item>
+      <title>Fun with Acronyms</title>
+      <link>https://www.mikeperham.com/2007/09/21/fun-with-acronyms/</link>
+      <pubDate>Fri, 21 Sep 2007 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2007/09/21/fun-with-acronyms/</guid>
+      <description>Am I the only one who laughs when I do a Google search for &amp;ldquo;Merb&amp;rdquo;? I mean I know Ruby guys are usually pretty nerdy. What is Google trying to tell us? :-)</description>
+    </item>
+    
+  </channel>
+</rss>

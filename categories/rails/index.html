@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.118.2">
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Rails | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>Rails</h1>
+
+
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/">Setting MySQL DATETIME column defaults in Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-05-17</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/01/18/dont-forget-whats-important/">Don&rsquo;t Forget What&rsquo;s Important</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-01-18</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2013/08/25/please-use-an-error-service/">Please Use an Error Service!</a>
+    
+    
+    <br>
+    <small class="text-secondary">2013-08-25</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2013/04/17/board-games-and-beverages-at-railsconf-2013/">Board Games and Beverages at Railsconf 2013</a>
+    
+    
+    <br>
+    <small class="text-secondary">2013-04-17</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2013/04/11/railsconf-2013-events/">Railsconf 2013 events</a>
+    
+    
+    <br>
+    <small class="text-secondary">2013-04-11</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/12/11/12-gems-of-christmas-2-bullet/">12 Gems of Christmas #2 &ndash; bullet</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-12-11</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/12/08/12-gems-of-christmas-5-lograge/">12 Gems of Christmas #5 &ndash; lograge</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-12-08</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/12/04/12-gems-of-christmas-9-pundit/">12 Gems of Christmas #9 &ndash; pundit</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-12-04</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/12/03/12-gems-of-christmas-10-konacha/">12 Gems of Christmas #10 &ndash; konacha</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-12-03</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/08/25/using-statsd-with-rails/">Using Statsd with Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-08-25</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/05/05/five-common-rails-mistakes/">Five Common Rails Mistakes</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-05-05</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/03/31/converting-a-mysql-database-from-latin1-to-utf8/">Converting a MySQL database from Latin1 to UTF8</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-03-31</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/">Introducing Phat, an Asynchronous Rails app</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-04-03</small>
+    
+
+<small><code><a href="https://www.mikeperham.com/tags/eventmachine">eventmachine</a></code></small>
+
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/03/30/using-activerecord-with-eventmachine/">Using ActiveRecord with EventMachine</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-03-30</small>
+    
+
+<small><code><a href="https://www.mikeperham.com/tags/eventmachine">eventmachine</a></code></small>
+
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/10/05/datafabric-database-sharding-for-rails/">DataFabric &ndash; database sharding for Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-10-05</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/08/28/rails-engines-at-lsrc/">Rails Engines at LSRC</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-08-28</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/07/29/old-versus-new/">Old versus New</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-07-29</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/06/13/adding-multi-get-support-to-rails/">Adding multi-get support to Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-06-13</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/04/18/engines-in-rails-23/">Engines in Rails 2.3</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-04-18</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/03/25/caching-and-rails/">Caching and Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-03-25</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/03/03/using-memcache-client-16x-in-rails-23/">Using memcache-client 1.6.x in Rails &lt; 2.3</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-03-03</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/02/24/fiveruns-dash-now-with-100-more-rimshot/">FiveRuns Dash, now with 100% more rimshot!</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-02-24</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/02/07/improved-deadlock-retry/">Improved Deadlock Retry</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-02-07</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/12/01/datafabric-12-released/">DataFabric 1.2 released</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-12-01</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/11/22/data_fabric-110-released/">data_fabric 1.1.0 released</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-11-22</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/11/13/rails-plugins-with-multi-threading/">Rails Plugins with Multi-Threading</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-11-13</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/10/28/envycasts-new-rails-22-screencast-review/">EnvyCasts&rsquo; new Rails 2.2 screencast review</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-10-28</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/10/24/laziness-can-hurt/">Laziness Can Hurt</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-10-24</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/09/11/bulk-import/">Bulk Import</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-09-11</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/09/07/upgrading-tracknowledgeorg/">Upgrading tracknowledge.org</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-09-07</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/06/30/rails-bootup/">Rails Bootup</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-06-30</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/06/04/the-mvc-song/">The MVC Song</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-06-04</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/05/28/mysql-lock-debugging/">MySQL lock debugging</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-05-28</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/05/03/activerecord-21-performance-1/">ActiveRecord 2.1 Performance (Part 1)</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-05-03</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/02/15/java-developers-moving-to-ruby-and-rails/">Java Developers moving to Ruby and Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-02-15</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/02/06/tuning-activerecord/">Tuning ActiveRecord</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-02-06</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/01/28/austin-jumping-on-rails/">Austin jumping on Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-01-28</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/01/16/activesupport-dependency-arcanery/">ActiveSupport Dependency arcanery</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-01-16</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/01/07/performance-and-activerecordbaseestablish_connection/">Performance and ActiveRecord::Base.establish_connection</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-01-07</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/12/17/creating-a-counter_cache-column/">Creating a counter_cache column</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-12-17</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/10/30/using-fixtures-without-rails/">Using Fixtures without Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-10-30</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/10/15/glassfish-versus-mongrel/">Glassfish versus Mongrel</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-10-15</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/10/02/file-uploads-in-merb-versus-rails/">File Uploads in Merb versus Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-10-02</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/09/25/performance-versus-scalability/">Performance versus Scalability</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-09-25</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/09/23/slashdot-thinking-about-rails-think-again/">Slashdot &ndash; Thinking about Rails? Think Again</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-09-23</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/09/19/welcome-sun/">Welcome, Sun!</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-09-19</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/09/17/rubyrails-ide/">Ruby/Rails IDE</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-09-17</small>
+    
+    
+  </p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>starling on Mike Perham</title>
+    <link>https://www.mikeperham.com/tags/starling/</link>
+    <description>Recent content in starling on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 29 May 2008 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/tags/starling/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Starling and a reliable Memcached client</title>
+      <link>https://www.mikeperham.com/2008/05/29/starling-and-a-reliable-memcached-client/</link>
+      <pubDate>Thu, 29 May 2008 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2008/05/29/starling-and-a-reliable-memcached-client/</guid>
+      <description>We moved part of our FiveRuns Manage infrastructure to use Starling this week. I&amp;rsquo;m rapidly becoming a convert as it has proven to be simple, fast and reliable. The Starling 0.9.3 release is somewhat long in the tooth but GitHub has several Starling forks which contain performance improvements and bugfixes, including our own fiveruns/starling fork. Our fork has proven to be about 3 times faster than 0.9.3 in raw message processing speed.</description>
+    </item>
+    
+  </channel>
+</rss>

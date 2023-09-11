@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ruby on Mike Perham</title>
+    <link>https://www.mikeperham.com/categories/ruby/</link>
+    <description>Recent content in Ruby on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 26 Nov 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/categories/ruby/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Building a Binary Tree with Enumerable</title>
+      <link>https://www.mikeperham.com/2014/11/26/building-a-binary-tree-with-enumerable/</link>
+      <pubDate>Wed, 26 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/11/26/building-a-binary-tree-with-enumerable/</guid>
+      <description>I believe that the Enumerable module is the most important thing to understand if you want to go from a beginner to intermediate Rubyist. It requires you to understand two fundamental parts of Ruby: modules and blocks.
+Ruby&amp;rsquo;s standard library includes hashes, arrays, sets and thread-safe queues. One structure missing is a generic binary tree. Binary trees are great general purpose data structures: they aren&amp;rsquo;t super fast for any operations (e.</description>
+    </item>
+    
+    <item>
+      <title>Ruby Performance 2014</title>
+      <link>https://www.mikeperham.com/2014/04/22/ruby-performance-2014/</link>
+      <pubDate>Tue, 22 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/04/22/ruby-performance-2014/</guid>
+      <description>Last year I posted a comparison of various Ruby VMs and how fast they could process N empty jobs. This is the equivalent of pumping out &amp;ldquo;Hello World&amp;rdquo; responses in an app server: it&amp;rsquo;s not very useful for application developers but it&amp;rsquo;s far more useful than a microbenchmark in determining real Ruby VM performance. Let&amp;rsquo;s take a look at the most popular three versions available today: MRI 2.1.1, MRI 2.0.0 and JRuby 1.</description>
+    </item>
+    
+    <item>
+      <title>Sidekiq 3.0!</title>
+      <link>https://www.mikeperham.com/2014/03/28/sidekiq-3-0/</link>
+      <pubDate>Fri, 28 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/03/28/sidekiq-3-0/</guid>
+      <description>&lt;p&gt;After tons of work on &lt;a href=&#34;http://sidekiq.org&#34;&gt;Sidekiq&lt;/a&gt; 2.x for the last 18 months, I decided it was time for some deeper refactoring and cleanup necessitating a major version bump.&lt;/p&gt;
+&lt;p&gt;Sidekiq 3.0 is the result of three months of hacking, cleanup and community suggestions. There&amp;rsquo;s an huge amount of stuff in here so hang on to your hats&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Happy 2nd Birthday Sidekiq!</title>
+      <link>https://www.mikeperham.com/2014/01/31/happy-2nd-birthday-sidekiq/</link>
+      <pubDate>Fri, 31 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/01/31/happy-2nd-birthday-sidekiq/</guid>
+      <description>Let&amp;rsquo;s review some numbers, from the 1st birthday:
+214,300 downloads 2144 stars 662 closed issues 266 forks 228 closed pull requests 44 versions released 25 Sidekiq Pro customers Now, on the 2nd birthday:
+1,192,259 downloads (wow, huge uptake!) 3535 stars 1420 closed issues 563 forks 380 closed pull requests 74 versions released Over 200 Sidekiq Pro customers At this point I believe I&amp;rsquo;ve achieved my goals: build the best background job framework, bar none.</description>
+    </item>
+    
+    <item>
+      <title>Don&#39;t Forget What&#39;s Important</title>
+      <link>https://www.mikeperham.com/2014/01/18/dont-forget-whats-important/</link>
+      <pubDate>Sat, 18 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/01/18/dont-forget-whats-important/</guid>
+      <description>&lt;p&gt;Technologies come and go. We learn and grow as engineers over time but some things are eternal: knowing what is truly important to you is critical in differentiating between a path to misery versus fulfillment. Like your coworkers and your environment, the technology you work with day to day can make a big difference in your job satisfaction.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>The Clymb 2013</title>
+      <link>https://www.mikeperham.com/2014/01/04/the-clymb-2013/</link>
+      <pubDate>Sat, 04 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/01/04/the-clymb-2013/</guid>
+      <description>&lt;p&gt;At the start of 2103, I was given full control of The Clymb&amp;rsquo;s site operations. Now that a year has passed, I want to post a year end summary with lessons learned. We had a few problems but the year was mostly positive.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ruby&#39;s GIL and transactional memory</title>
+      <link>https://www.mikeperham.com/2013/12/31/rubys-gil-and-transactional-memory/</link>
+      <pubDate>Tue, 31 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/12/31/rubys-gil-and-transactional-memory/</guid>
+      <description>&lt;p&gt;I saw a link to a really interesting paper this morning: &lt;a href=&#34;http://researcher.watson.ibm.com/researcher/files/jp-ODAIRA/PPoPP2014_RubyGILHTM.pdf&#34;&gt;Eliminating Global Interpreter Locks in Ruby through Hardware Transactional Memory&lt;/a&gt;. This blew my mind when I read it as it&amp;rsquo;s a really interesting concept; let me explain.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Please Use an Error Service!</title>
+      <link>https://www.mikeperham.com/2013/08/25/please-use-an-error-service/</link>
+      <pubDate>Sun, 25 Aug 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/08/25/please-use-an-error-service/</guid>
+      <description>&lt;p&gt;In &lt;a href=&#34;http://www.mikeperham.com/2012/03/03/the-perils-of-rescue-exception/&#34;&gt;The Perils of &amp;ldquo;rescue Exception&amp;rdquo;&lt;/a&gt; I explained one major error handling issue I see in almost all Ruby code. The second mistake I see is using logging rather than an error service.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Background Job Processing Overhead</title>
+      <link>https://www.mikeperham.com/2013/06/30/background-job-processing-overhead/</link>
+      <pubDate>Sun, 30 Jun 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/06/30/background-job-processing-overhead/</guid>
+      <description>&lt;p&gt;I wrote a simple benchmark which loads 20,000 empty jobs into Redis and then times how long it takes one Sidekiq process to finish those jobs running on my 2012 MacBook Air. The times are unsurprising (lower is better):&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Celluloid and Sidekiq hackfest in Portland</title>
+      <link>https://www.mikeperham.com/2013/05/26/celluloid-and-sidekiq-hackfest-in-portland/</link>
+      <pubDate>Sun, 26 May 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/05/26/celluloid-and-sidekiq-hackfest-in-portland/</guid>
+      <description>Tim Carey-Smith (aka halorgium, Celluloid committer) and I are meeting for a Celluloid and Sidekiq hackfest this Wednesday in Portland. Join us for anything related to Ruby, concurrency, threading, asynchronous processing and lots of other SEO-friendly buzzwords!
+Where: Lucky Lab NW (20th and Quimby)
+When: Wednesday May 29th, 6-10pm
+Who: Anyone interested</description>
+    </item>
+    
+  </channel>
+</rss>

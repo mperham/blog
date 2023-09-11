@@ -1,0 +1,1110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.118.2">
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Software | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16" height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  <div class="container">
+    <article>
+      <h1>Software</h1>
+
+
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/10/15/stupid-go-tricks-in-janus/">Stupid Go tricks in Janus</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-10-15</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/09/22/dont-daemonize-your-daemons/">Don&rsquo;t Daemonize your Daemons!</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-09-22</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/09/01/library-versioning/">Library Versioning</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-09-01</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/07/23/building-systems-and-the-cloud/">Building Systems and The Cloud</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-07-23</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/07/07/use-runit/">Use runit!</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-07-07</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/05/27/the-reconciliation-step/">The Reconciliation Step</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-05-27</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/05/22/bounded-libraries/">Bounded Libraries</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-05-22</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2014/03/08/dipping-a-toe-into-open-source/">Dipping a Toe into Open Source</a>
+    
+    
+    <br>
+    <small class="text-secondary">2014-03-08</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2013/10/17/the-emperor-has-no-clothes/">The Emperor has no Clothes</a>
+    
+    
+    <br>
+    <small class="text-secondary">2013-10-17</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2013/09/12/the-three-best-debugging-tools/">The Three Best Debugging Tools</a>
+    
+    
+    <br>
+    <small class="text-secondary">2013-09-12</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2013/06/23/sustainable-oss-meeting-notes/">Sustainable OSS Meeting Notes</a>
+    
+    
+    <br>
+    <small class="text-secondary">2013-06-23</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2013/06/13/sustainable-open-source/">Sustainable Open Source</a>
+    
+    
+    <br>
+    <small class="text-secondary">2013-06-13</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2013/01/30/2012-oss-rookie-project-of-the-year/">2012 OSS Rookie Project of the Year!</a>
+    
+    
+    <br>
+    <small class="text-secondary">2013-01-30</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/12/09/12-gems-of-christmas-4-mailcatcher-and-mail_view/">12 Gems of Christmas #4 &ndash; mailcatcher and mail_view</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-12-09</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/12/05/12-gems-of-christmas-7-lunchy/">12 Gems of Christmas #7 &ndash; lunchy</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-12-05</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/11/03/current-thoughts-on-ruby-performance/">Current Thoughts on MRI Performance</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-11-03</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/08/26/the-sidekiq-experiment-part-i/">The Sidekiq Experiment, Part I</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-08-26</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/04/08/dont-mistake-meetings-for-process/">Don&rsquo;t Mistake Meetings for Process</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-04-08</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2012/03/02/deleting-duplicate-rows-in-mysql/">Deleting Duplicate Rows in MySQL</a>
+    
+    
+    <br>
+    <small class="text-secondary">2012-03-02</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2011/12/30/getting-ichat-to-automatically-reconnect/">Getting iChat to automatically reconnect</a>
+    
+    
+    <br>
+    <small class="text-secondary">2011-12-30</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2011/05/04/background-processing-vs-message-queueing/">Background Processing vs Message Queueing</a>
+    
+    
+    <br>
+    <small class="text-secondary">2011-05-04</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2011/03/01/the-dangers-of-shortcuts/">The Dangers of Shortcuts</a>
+    
+    
+    <br>
+    <small class="text-secondary">2011-03-01</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/11/22/apache-tuning/">Apache Tuning</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-11-22</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/10/06/always-be-closing/">Always Be Closing</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-10-06</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/08/05/securing-network-services/">Securing Network Services</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-08-05</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/05/21/detecting-duplicate-images-with-phashion/">Detecting Duplicate Images with Phashion</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-05-21</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/05/05/stream-processing-and-trending-data/">Stream Processing and Trending Data</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-05-05</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/04/20/risk-and-startups/">Risk and Startups</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-04-20</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/03/30/using-activerecord-with-eventmachine/">Using ActiveRecord with EventMachine</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-03-30</small>
+    
+
+<small><code><a href="https://www.mikeperham.com/tags/eventmachine">eventmachine</a></code></small>
+
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/03/20/cassandra-internals-tricks/">Cassandra Internals &ndash; Tricks!</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-03-20</small>
+    
+
+<small><code><a href="https://www.mikeperham.com/tags/cassandra">cassandra</a></code></small>
+
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/03/17/cassandra-internals-reading/">Cassandra Internals &ndash; Reading</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-03-17</small>
+    
+
+<small><code><a href="https://www.mikeperham.com/tags/cassandra">cassandra</a></code></small>
+
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/03/13/cassandra-internals-writing/">Cassandra Internals &ndash; Writing</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-03-13</small>
+    
+
+<small><code><a href="https://www.mikeperham.com/tags/cassandra">cassandra</a></code></small>
+
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/02/18/changelog-vs-commitlog/">Changelog vs Commitlog</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-02-18</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2010/01/18/varnish-on-32-bit-systems/">Varnish on 32-bit systems</a>
+    
+    
+    <br>
+    <small class="text-secondary">2010-01-18</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/12/01/event-driven-applications/">Event-Driven Applications</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-12-01</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/10/16/document-oriented-database-shootout-part-2-performance/">Document-oriented Database Shootout Part 2: Performance</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-10-16</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/10/12/looking-for-machine-learning-specialist/">Looking for Machine Learning Specialist</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-10-12</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/09/01/comparing-document-oriented-databases/">Comparing Document-oriented Databases</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-09-01</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/06/22/slabs-pages-chunks-and-memcached/">Slabs, Pages, Chunks and Memcached</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-06-22</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/05/19/a-guide-to-varnish-vcl/">A Guide to Varnish VCL</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-05-19</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/02/04/memcache-client-162-released/">memcache-client 1.6.2 released</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-02-04</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/01/15/dreams-and-the-iphone/">How I Achieved my Dream with the iPhone</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-01-15</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2009/01/14/consistent-hashing-in-memcache-client/">Consistent Hashing in memcache-client</a>
+    
+    
+    <br>
+    <small class="text-secondary">2009-01-14</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/12/13/clojure-vs-ruby/">Clojure vs Ruby, Part I</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-12-13</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/12/10/rubyrewrite-ruby/">Ruby.rewrite Ruby</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-12-10</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/11/27/video-distributed-computing/">Video: Distributed Computing</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-11-27</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/11/27/consensus-protocols/">Consensus Protocols: Two-Phase Commit</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-11-27</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/11/23/caption-contest/">Caption Contest</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-11-23</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/11/06/introducing-politics/">Introducing Politics</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-11-06</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/10/28/envycasts-new-rails-22-screencast-review/">EnvyCasts&rsquo; new Rails 2.2 screencast review</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-10-28</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/10/24/laziness-can-hurt/">Laziness Can Hurt</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-10-24</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/09/24/fall-speaking-schedule/">Fall Speaking Schedule</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-09-24</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/09/18/mysql-optimization/">MySQL Optimization</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-09-18</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/09/09/one-year-of-ruby/">One Year of Ruby</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-09-09</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/09/04/how-not-to-build-a-service/">How NOT to Build a Service</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-09-04</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/08/28/google-reader-ignores-language-settings/">Google Reader ignores language settings?</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-08-28</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/08/19/mysql-innodb-clustered-indexes-and-rails/">MySQL InnoDB Clustered Indexes and Rails</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-08-19</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/08/17/explaining-rest-to-damien-katz/">Explaining REST to Damien Katz</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-08-17</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/08/07/tough-lessons-in-software/">Tough Lessons in Software</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-08-07</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/07/24/google-analytics/">Google Analytics</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-07-24</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/07/15/web-20-and-databases/">Web 2.0 and Databases</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-07-15</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/07/09/introducing-datafabric/">Introducing DataFabric</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-07-09</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/06/24/using-third-party-services/">Using third-party services</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-06-24</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/06/23/finally-a-modern-development-tool/">Finally! A Modern Development Tool</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-06-23</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/06/16/question-everything/">Lesson of the Day: Question Everything</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-06-16</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/06/09/speaking-at-lone-star-ruby-conf-2008/">Speaking at Lone Star Ruby Conf 2008</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-06-09</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/06/07/screencasts-and-firefox-3/">Screencasts and Firefox 3</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-06-07</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/05/22/ruby-scoping-oddity/">Ruby Scoping Oddity</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-05-22</small>
+    
+
+<small><code><a href="https://www.mikeperham.com/tags/begin">begin</a></code></small>
+
+
+<small><code><a href="https://www.mikeperham.com/tags/rescue">rescue</a></code></small>
+
+
+<small><code><a href="https://www.mikeperham.com/tags/ruby">Ruby</a></code></small>
+
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/05/14/fiveruns-public-beta/">FiveRuns Public Beta</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-05-14</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/05/05/microsoft-and-america/">Microsoft and America</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-05-05</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/04/30/changing-with-the-times/">Changing with the Times</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-04-30</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/04/19/vmware-question/">VMWare question</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-04-19</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/04/01/cobol-on-cogs/">COBOL ON COGS</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-04-01</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/03/17/speaking-at-oscon-2008/">Speaking at OSCON 2008</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-03-17</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/03/10/detecting-event-storms/">Detecting Event Storms</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-03-10</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/03/05/monitoring-with-monit/">Monitoring with Monit</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-03-05</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/02/16/design-and-tufte/">Design and Tufte</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-02-16</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/02/06/blog-customization-is-scary/">Blog Customization is Scary</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-02-06</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2008/01/11/openofficeorg-24-for-osx/">OpenOffice.org 2.4 for OSX</a>
+    
+    
+    <br>
+    <small class="text-secondary">2008-01-11</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/12/23/media-encoders-considered-evil/">Media Encoders Considered Evil</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-12-23</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/11/07/2d-dock-in-leopard/">2D Dock in Leopard</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-11-07</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/10/19/using-svnexternals/">Using svn:externals</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-10-19</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/10/10/glassfish-and-jruby/">Glassfish and JRuby</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-10-10</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/10/04/amazons-dynamo/">Amazon&rsquo;s Dynamo</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-10-04</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/09/28/using-apache-ds-part-2/">Using Apache DS, Part 2</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-09-28</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/09/28/using-apache-ds-part-1/">Using Apache DS, Part 1</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-09-28</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/09/28/using-apache-ds-with-mac-osx-and-ruby/">Using Apache DS with Mac OSX and Ruby</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-09-28</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/09/25/performance-versus-scalability/">Performance versus Scalability</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-09-25</small>
+    
+    
+  </p>
+
+  <p>
+    <a href="https://www.mikeperham.com/2007/09/16/about-this-blog/">About this blog</a>
+    
+    
+    <br>
+    <small class="text-secondary">2007-09-16</small>
+    
+    
+  </p>
+
+    </article>
+  </div>
+
+  
+  
+  
+
+  
+
+  
+</body>
+
+</html>

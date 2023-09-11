@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cassandra on Mike Perham</title>
+    <link>https://www.mikeperham.com/tags/cassandra/</link>
+    <description>Recent content in cassandra on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 20 Mar 2010 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/tags/cassandra/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Cassandra Internals -- Tricks!</title>
+      <link>https://www.mikeperham.com/2010/03/20/cassandra-internals-tricks/</link>
+      <pubDate>Sat, 20 Mar 2010 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2010/03/20/cassandra-internals-tricks/</guid>
+      <description>In my previous posts, I covered how Cassandra reads and writes data. In this post, I want to explain some of the trickery that Cassandra uses to provide a scalable distributed system.
+Gossip
+Cassandra is a cluster of individual nodes &amp;ndash; there&amp;rsquo;s no &amp;ldquo;master&amp;rdquo; node or single point of failure &amp;ndash; so each node must actively verify the state of the other cluster members. They do this with a mechanism known as gossip.</description>
+    </item>
+    
+    <item>
+      <title>Cassandra Internals -- Reading</title>
+      <link>https://www.mikeperham.com/2010/03/17/cassandra-internals-reading/</link>
+      <pubDate>Wed, 17 Mar 2010 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2010/03/17/cassandra-internals-reading/</guid>
+      <description>In my previous post, I discussed how writes happen in Cassandra and why they are so fast. Now we&amp;rsquo;ll look at reads and learn why they are slow.
+Reading and Consistency
+One of the fundamental thereoms in distributed systems is Brewer&amp;rsquo;s CAP theorem: distributed systems can have Consistency, Availability and Partition-tolerance properties but can only guarantee two. In the case of Cassandra, they guarantee AP and loosen consistency to what is known as eventual consistency.</description>
+    </item>
+    
+    <item>
+      <title>Cassandra Internals -- Writing</title>
+      <link>https://www.mikeperham.com/2010/03/13/cassandra-internals-writing/</link>
+      <pubDate>Sat, 13 Mar 2010 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2010/03/13/cassandra-internals-writing/</guid>
+      <description>We&amp;rsquo;ve started using Cassandra as our next-generation data storage engine at OneSpot (replacing a very large Postgresql machine with a cluster of EC2 machines) and so I&amp;rsquo;ve been using it for the last few weeks. As I&amp;rsquo;m an infrastructure nerd and a big believer in understanding the various layers in the stack, I&amp;rsquo;ve been reading up a bit on how Cassandra works and wanted to write a summary for others to benefit from.</description>
+    </item>
+    
+  </channel>
+</rss>

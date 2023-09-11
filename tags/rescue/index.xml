@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>rescue on Mike Perham</title>
+    <link>https://www.mikeperham.com/tags/rescue/</link>
+    <description>Recent content in rescue on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 22 May 2008 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/tags/rescue/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ruby Scoping Oddity</title>
+      <link>https://www.mikeperham.com/2008/05/22/ruby-scoping-oddity/</link>
+      <pubDate>Thu, 22 May 2008 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2008/05/22/ruby-scoping-oddity/</guid>
+      <description>This prints out &amp;ldquo;1&amp;rdquo;:
+`
+begin a = 1 raise RuntimeError, &#34;foo&#34; rescue =&gt; e puts a end ` I would think that a would be out of scope inside the rescue section but I guess Ruby considers the rescue section part of the begin/end block?</description>
+    </item>
+    
+  </channel>
+</rss>

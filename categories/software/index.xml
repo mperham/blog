@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Software on Mike Perham</title>
+    <link>https://www.mikeperham.com/categories/software/</link>
+    <description>Recent content in Software on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 15 Oct 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/categories/software/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Stupid Go tricks in Janus</title>
+      <link>https://www.mikeperham.com/2014/10/15/stupid-go-tricks-in-janus/</link>
+      <pubDate>Wed, 15 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/10/15/stupid-go-tricks-in-janus/</guid>
+      <description>I&amp;rsquo;ve used Janus as my main text editor for the last few years; it&amp;rsquo;s a good solution for people like myself that want to quickly install not just MacVim but also a curated set of plugins necessary to have a productive IDE for Ruby/JS development.
+Side note: learn vim if you&amp;rsquo;re a developer and don&amp;rsquo;t know it already. Every Unix environment in the world has vim installed. Learning vim is an excellent investment of your time and ensures you can be productive everywhere, not just your own machine.</description>
+    </item>
+    
+    <item>
+      <title>Don&#39;t Daemonize your Daemons!</title>
+      <link>https://www.mikeperham.com/2014/09/22/dont-daemonize-your-daemons/</link>
+      <pubDate>Mon, 22 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/09/22/dont-daemonize-your-daemons/</guid>
+      <description>&lt;p&gt;For years developers have followed the same arcane &lt;a href=&#34;http://0pointer.de/public/systemd-man/daemon.html#SysV%20Daemons&#34;&gt;dozen steps&lt;/a&gt; to create a long-lived daemon process on Unix-based systems. &lt;strong&gt;These steps were state of the art in 2000 but they are no longer best practice today.&lt;/strong&gt; &lt;a href=&#34;http://codeincomplete.com/posts/2014/9/15/ruby_daemons/&#34;&gt;Jake Gordon&amp;rsquo;s recent blog post on daemonizing Ruby processes&lt;/a&gt; is 100% factual but his approach is not recommended these days. Your application code should not be dealing with PID files, log redirection or other low-level concerns.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Library Versioning</title>
+      <link>https://www.mikeperham.com/2014/09/01/library-versioning/</link>
+      <pubDate>Mon, 01 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/09/01/library-versioning/</guid>
+      <description>&lt;p&gt;It&amp;rsquo;s time for our annual Semantic Versioning argument/gripefest! This time it was kicked off by Jeremy Ashkenas&amp;rsquo;s post &lt;a href=&#34;https://gist.github.com/jashkenas/cbd2b088e20279ae2c8e&#34;&gt;why he believes Semantic Versioning is wishful thinking&lt;/a&gt;. Olivier Lacan &lt;a href=&#34;http://olivierlacan.com/posts/the-semantics-of-software/&#34;&gt;chipped in further thoughts on the importance of a changelog.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Yes, Semantic Versioning is wishful thinking. Change cannot be compressed into three version numbers to guarantee safe upgrades. Developers get things wrong and forget changes such that versioning often isn&amp;rsquo;t correct, even if they wanted to follow SemVer exactly&lt;sup id=&#34;fnref-1785-1&#34;&gt;&lt;a href=&#34;#fn-1785-1&#34; rel=&#34;footnote&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. I thought I would write down my own versioning policies as another example for people to consider.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Building Systems and The Cloud</title>
+      <link>https://www.mikeperham.com/2014/07/23/building-systems-and-the-cloud/</link>
+      <pubDate>Wed, 23 Jul 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/07/23/building-systems-and-the-cloud/</guid>
+      <description>&lt;p&gt;If you are building a system to run in the cloud, be prepared to spend much of your time building a resilient system.&lt;/p&gt;
+&lt;p&gt;Not a fast system. Not a very efficient system. Not a system full of fun, quirky features that users love. A resilient system because you will see performance and network issues at every connection point in your system. I hope that&amp;rsquo;s what you want.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Use runit!</title>
+      <link>https://www.mikeperham.com/2014/07/07/use-runit/</link>
+      <pubDate>Mon, 07 Jul 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/07/07/use-runit/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been exploring a few new (to me!) technologies recently and &lt;a href=&#34;http://smarden.org/runit/&#34;&gt;runit&lt;/a&gt; is one that I&amp;rsquo;ve come away really impressed with. Linux distros have a few competing init services available: Upstart, systemd, runit or creaky old sysvinit. Having researched all of them and having built lots of server-side systems over the last two decades, I can firmly recommend runit if you want a server-focused, reliable init system based on the traditional Unix philosophy.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>The Reconciliation Step</title>
+      <link>https://www.mikeperham.com/2014/05/27/the-reconciliation-step/</link>
+      <pubDate>Tue, 27 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/05/27/the-reconciliation-step/</guid>
+      <description>&lt;p&gt;A lot of people ask me &amp;ldquo;How can I guarantee that a batch of jobs finished successfully?&amp;rdquo; Here&amp;rsquo;s the sad fact: &lt;strong&gt;you can&amp;rsquo;t&lt;/strong&gt;. 99% of the time things go perfectly but there will always be some small percentage that fail for a myriad of reasons: hardware failure, software bug, thunderstorms in the cloud.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Bounded Libraries</title>
+      <link>https://www.mikeperham.com/2014/05/22/bounded-libraries/</link>
+      <pubDate>Thu, 22 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/05/22/bounded-libraries/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve been noticing a theme in certain Rubygems recently that I like: opinionated designs which explicitly don&amp;rsquo;t allow the user to do certain things. I call these &lt;strong&gt;bounded libraries&lt;/strong&gt; because they draw a functional boundary and won&amp;rsquo;t go beyond that point.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Dipping a Toe into Open Source</title>
+      <link>https://www.mikeperham.com/2014/03/08/dipping-a-toe-into-open-source/</link>
+      <pubDate>Sat, 08 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/03/08/dipping-a-toe-into-open-source/</guid>
+      <description>&lt;p&gt;This is an excerpt from the foreword I wrote for Brandon Hilkert&amp;rsquo;s new e-book, &lt;a href=&#34;http://brandonhilkert.com/books/build-a-ruby-gem/&#34;&gt;Build a Ruby Gem&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I was a junior in college when I published my first open source program. It was Fall 1995 and Windows NT 3.5 had this fat and slow interface for launching applications. Windows 95 had an awesome new Start bar and so the answer was obvious: I decided I wanted to learn how to program the new Win32 API and solve my own problem at the same time. I set to write a lighter-weight, fast application launcher in the vein of the Start bar called &lt;a href=&#34;http://perham.net/mike/cornell/appbar/&#34;&gt;AppBar&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>The Emperor has no Clothes</title>
+      <link>https://www.mikeperham.com/2013/10/17/the-emperor-has-no-clothes/</link>
+      <pubDate>Thu, 17 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/10/17/the-emperor-has-no-clothes/</guid>
+      <description>&lt;p&gt;&amp;ldquo;In theory, theory and practice are the same. In practice, they are not.&amp;rdquo; — Albert Einstein&lt;/p&gt;
+&lt;p&gt;The original Dynamo paper created a wave of interest in the &lt;a href=&#34;https://en.wikipedia.org/wiki/CAP_theorem&#34;&gt;CAP theorem&lt;/a&gt; and gave rise to the recent crop of distributed databases: Cassandra, Riak, et al. These systems are generally AP where C can be tuned to provide some guarantee of consistency, i.e. they do their best to provide CAP according to the application&amp;rsquo;s needs. For instance, you might have a cluster of 5 nodes where a write to the cluster will return success if 3 of the nodes acknowledge the write. The cluster will still be available even if two of the machines fail.&lt;/p&gt;
+&lt;p&gt;In theory they are a great way to ensure availability to your application in the face of network failures. In practice, I believe &lt;strong&gt;these databases are so complex that they often provide less availability than a simpler CP system like a SQL database.&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>The Three Best Debugging Tools</title>
+      <link>https://www.mikeperham.com/2013/09/12/the-three-best-debugging-tools/</link>
+      <pubDate>Thu, 12 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/09/12/the-three-best-debugging-tools/</guid>
+      <description>1. Your Coworker
+It&amp;rsquo;s happened to me over and over: I&amp;rsquo;ll spend hours trying to track down a problem. In frustration, I&amp;rsquo;ll ask a coworker to look at the code and frequently they will point out the problem in seconds. It&amp;rsquo;s called situational blindness and it means that you will often overlook the bug right in front of your eyes because you&amp;rsquo;ve looked at it so much, your mind has started to ignore it.</description>
+    </item>
+    
+  </channel>
+</rss>

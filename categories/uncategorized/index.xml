@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Uncategorized on Mike Perham</title>
+    <link>https://www.mikeperham.com/categories/uncategorized/</link>
+    <description>Recent content in Uncategorized on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 27 May 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/categories/uncategorized/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>The Reconciliation Step</title>
+      <link>https://www.mikeperham.com/2014/05/27/the-reconciliation-step/</link>
+      <pubDate>Tue, 27 May 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/05/27/the-reconciliation-step/</guid>
+      <description>&lt;p&gt;A lot of people ask me &amp;ldquo;How can I guarantee that a batch of jobs finished successfully?&amp;rdquo; Here&amp;rsquo;s the sad fact: &lt;strong&gt;you can&amp;rsquo;t&lt;/strong&gt;. 99% of the time things go perfectly but there will always be some small percentage that fail for a myriad of reasons: hardware failure, software bug, thunderstorms in the cloud.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

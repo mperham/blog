@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Personal on Mike Perham</title>
+    <link>https://www.mikeperham.com/categories/personal/</link>
+    <description>Recent content in Personal on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Jul 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/categories/personal/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>My Next Chapter</title>
+      <link>https://www.mikeperham.com/2014/07/02/my-next-chapter/</link>
+      <pubDate>Wed, 02 Jul 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/07/02/my-next-chapter/</guid>
+      <description>&lt;p&gt;After 2.5 years I&amp;rsquo;ve decided to move on from The Clymb. I&amp;rsquo;m incredibly proud of our accomplishments during my time there: the site has dramatically increased in stability and scalability, the GitHub development workflow really improved code quality and we increased the size of the development team from 3 to 15. On the technical side, we moved from manually-configured cloud-based servers to Chef-managed dedicated servers, switched email providers twice, moved warehouses and rewrote our inventory and fulfillment process, integrated our logistics and fulfillment processes with an ERP system, and much more. I&amp;rsquo;m really proud to have helped grow the business while they helped me grow in management skill.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What am I doing next?&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Board Games and Beverages at Railsconf 2013</title>
+      <link>https://www.mikeperham.com/2013/04/17/board-games-and-beverages-at-railsconf-2013/</link>
+      <pubDate>Wed, 17 Apr 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/04/17/board-games-and-beverages-at-railsconf-2013/</guid>
+      <description>You are invited to a whimsical evening of merriment and gamesmanship!
+What: Board Games and Beverages
+Where: Skyroom Lounge, top of Red Lion Hotel, across the street from Railsconf
+When: Tuesday, 4/30 7-11pm
+The Skyroom has a great view of Portland so try to get there before sundown. We should have enough games for everyone but bring your favorite if you&amp;rsquo;d like. They have food if you need a late dinner.</description>
+    </item>
+    
+    <item>
+      <title>One Great Year at The Clymb</title>
+      <link>https://www.mikeperham.com/2013/01/31/one-great-year-at-the-clymb/</link>
+      <pubDate>Thu, 31 Jan 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2013/01/31/one-great-year-at-the-clymb/</guid>
+      <description>&lt;p&gt;I joined &lt;a href=&#34;http://www.theclymb.com/invite-from/mperham&#34;&gt;The Clymb&lt;/a&gt; one year ago today and what an amazing year it&amp;rsquo;s been.&lt;/p&gt;
+&lt;p&gt;Some context for you: I was employee 33 and the third engineer to join. The test suite had hundreds of failures and had been running red for months. We were on REE, Rails 2.3 and Delayed Job &amp;ndash; a stack that was current two years before &amp;ndash; and had no error service to know what errors were happening in production. The site was deployed with fabric, a Python-based tool. The first two developers were overworked and fought fires all day, every day.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>I&#39;m back!</title>
+      <link>https://www.mikeperham.com/2012/02/04/im-back/</link>
+      <pubDate>Sat, 04 Feb 2012 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2012/02/04/im-back/</guid>
+      <description>I haven&amp;rsquo;t blogged much for the last year because most of my technical blogging went to the Carbon Five blog. Now that I&amp;rsquo;ve moved to Portland and have a new job at TheClymb I&amp;rsquo;ll be returning my attention to my own blog so expect new content regularly again!</description>
+    </item>
+    
+    <item>
+      <title>Moving On</title>
+      <link>https://www.mikeperham.com/2010/12/27/moving-on/</link>
+      <pubDate>Mon, 27 Dec 2010 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2010/12/27/moving-on/</guid>
+      <description>Good news, everybody — I&amp;rsquo;m starting a new job in 2011! I&amp;rsquo;ve accepted a position at Carbon Five. While I enjoyed the challenges of starting a new business, I found the 60+ hr work weeks just unmaintainable with a new baby in the house. Carbon Five presents me many of the same challenges of Bootspring (e.g. finding new clients, recruiting new developers, designing and developing great code for victory) without the tedious bits (e.</description>
+    </item>
+    
+    <item>
+      <title>Risk and Startups</title>
+      <link>https://www.mikeperham.com/2010/04/20/risk-and-startups/</link>
+      <pubDate>Tue, 20 Apr 2010 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2010/04/20/risk-and-startups/</guid>
+      <description>I&amp;rsquo;ve worked at 7-8 startups in the last 12 years, learning along the way that I love the freedom and flexibility that a small company affords. You pay a good price for that freedom though in the form of risk: your job will be measured in terms of months and years, not decades. My parents spent decades at their jobs working for large corporations; that kind of job security does not exist at a startup.</description>
+    </item>
+    
+    <item>
+      <title>Heading to RubyConf 2009</title>
+      <link>https://www.mikeperham.com/2009/09/30/heading-to-rubyconf-2009/</link>
+      <pubDate>Wed, 30 Sep 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2009/09/30/heading-to-rubyconf-2009/</guid>
+      <description>RubyConf 2009 is taking place in San Francisco November 19-21. I&amp;rsquo;ll be there and have most of the 18th free if anyone is near SFO and wants to join me in some coffeeshop coding.</description>
+    </item>
+    
+    <item>
+      <title>FiveRuns Dash, now with 100% more rimshot!</title>
+      <link>https://www.mikeperham.com/2009/02/24/fiveruns-dash-now-with-100-more-rimshot/</link>
+      <pubDate>Tue, 24 Feb 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2009/02/24/fiveruns-dash-now-with-100-more-rimshot/</guid>
+      <description>I&amp;rsquo;m giving away a free copy of my iPhone app, Zinger, to every person who gets their app running with our new metrics service, Dash. Just email me. Steps (documented in more depth here):
+Request an invite by signing up at https://dash.fiveruns.com Log into Dash, create a new Rails application and note your application token. Install the gem: sudo gem install json sudo gem install fiveruns-dash-rails -s http://gems.github.com Add the gem to your config/environment.</description>
+    </item>
+    
+    <item>
+      <title>How I Achieved my Dream with the iPhone</title>
+      <link>https://www.mikeperham.com/2009/01/15/dreams-and-the-iphone/</link>
+      <pubDate>Thu, 15 Jan 2009 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2009/01/15/dreams-and-the-iphone/</guid>
+      <description>This article spurred me in a completely unexpected technical direction over the winter break: Massive Christmas iPod Touch Sales Boost App Store Downloads. Two facts struck me:
+An application which makes farting sounds was selling 40,000 units/day. I&amp;rsquo;ve had a secret dream for a year&amp;hellip; My dream? To make a $5 keychain sold at the checkout stand in Wal-Mart which just plays gag sound effects. The keychain&amp;rsquo;s user interface is dead simple: three buttons, each of which plays a sound.</description>
+    </item>
+    
+    <item>
+      <title>New Look</title>
+      <link>https://www.mikeperham.com/2008/11/23/new-look/</link>
+      <pubDate>Sun, 23 Nov 2008 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2008/11/23/new-look/</guid>
+      <description>I cleaned up the blog style as I thought the previous look and feel was a little busy. I hope you like the changes!</description>
+    </item>
+    
+  </channel>
+</rss>

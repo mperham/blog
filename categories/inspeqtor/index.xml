@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Inspeqtor on Mike Perham</title>
+    <link>https://www.mikeperham.com/categories/inspeqtor/</link>
+    <description>Recent content in Inspeqtor on Mike Perham</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 25 Nov 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://www.mikeperham.com/categories/inspeqtor/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Inspeqtor 0.7.0 -- total_rss and Postgresql</title>
+      <link>https://www.mikeperham.com/2014/11/25/inspeqtor-0-7-0-total_rss-and-postgresql/</link>
+      <pubDate>Tue, 25 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/11/25/inspeqtor-0-7-0-total_rss-and-postgresql/</guid>
+      <description>&lt;p&gt;I just released &lt;a href=&#34;https://contribsys.com/inspeqtor&#34;&gt;Inspeqtor&lt;/a&gt; 0.7.0 (&lt;a href=&#34;https://github.com/mperham/inspeqtor/blob/master/Changes.md#070-1&#34;&gt;changes&lt;/a&gt;) with a few awesome new features.  What&amp;rsquo;s new?&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Inspeqtor 0.6.0 -- init.d, cron and statsd!</title>
+      <link>https://www.mikeperham.com/2014/10/23/inspeqtor-0-6-0-init-d-cron-and-statsd/</link>
+      <pubDate>Thu, 23 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/10/23/inspeqtor-0-6-0-init-d-cron-and-statsd/</guid>
+      <description>&lt;p&gt;Inspeqtor is my new take on application infrastructure monitoring. You use it to verify rules about your database, web server, caches, etc and if anything is wrong, Inspeqtor will alert you. After the initial release 3 weeks ago, I was distracted a bit by a DMCA takedown from a similar project but thankfully that went away quickly. Since then I&amp;rsquo;ve added several awesome new features!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What&amp;rsquo;s new?&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Why Go?</title>
+      <link>https://www.mikeperham.com/2014/10/08/why-go/</link>
+      <pubDate>Wed, 08 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/10/08/why-go/</guid>
+      <description>When I decided to build Inspeqtor, I had a fundamental choice: what language should I build it in? I&amp;rsquo;ve worked in Ruby for the last 8 years so it was a natural choice: &amp;ldquo;use the tool you know best&amp;rdquo; is never a bad choice when solving your own problem.
+However I&amp;rsquo;m not building something for myself: I&amp;rsquo;m building a product that will be used by thousands of others. Since Inspeqtor is an infrastructure monitoring tool, it needs to run 24/7 efficiently and reliably.</description>
+    </item>
+    
+    <item>
+      <title>Introducing Inspeqtor</title>
+      <link>https://www.mikeperham.com/2014/10/02/introducing-inspeqtor/</link>
+      <pubDate>Thu, 02 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.mikeperham.com/2014/10/02/introducing-inspeqtor/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve written server-side applications for a decade now, and monitoring the components of your application is critical but painful. What monitors the CPU and RAM usage of your custom daemons? What monitors Redis, MySQL, memcached and the other parts of your system to ensure they are all behaving normally? What if I told you you could do all that and set it up in less than 5 minutes?&lt;/p&gt;
+&lt;p&gt;Say hello to &lt;a href=&#34;http://www.contribsys.com/inspeqtor/&#34;&gt;Inspeqtor&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.contribsys.com/inspeqtor/&#34; title=&#34;Inspeqtor&#34;&gt;&lt;img src=&#34;http://www.mikeperham.com/wp-content/uploads/2014/09/logo-inspeqtor.png&#34; alt=&#34;logo-inspeqtor&#34; width=&#34;370&#34; height=&#34;74&#34; class=&#34;alignnone size-full wp-image-1840&#34; /&gt;&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
