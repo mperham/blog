@@ -9,20 +9,23 @@ To include your event, please [click this link](https://github.com/mperham/blog/
 
 ## Sunday 11/12
 
+* TBA
 
 ## Monday 11/13
 
+* TBA
 
-## Tuesday 11/9
+## Tuesday 11/14
 
 * **Board Game Night** - 7-10pm, T&C Resort: Flamingo Lawn area - Bring your favorite game!
 
-## Wednesday 11/10
+## Wednesday 11/15
 
+* TBA
 
-## Thursday 11/11
+## Thursday 11/16
 
-
+* TBA
 
 ### Hotel
 
