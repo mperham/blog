@@ -17,8 +17,8 @@ To include your event, please [click this link](https://github.com/mperham/blog/
 
 ## Tuesday 11/14
 
-* **Board Game Night** - 7-10pm, T&C Resort: Flamingo Lawn area - Bring your favorite game! (see [map](https://www.towncountry.com/discover/hotel-map))
 * **Rooftop Ruby Event** - 6-9pm, T&C Resort: Lower Lawn of Monkey Bar (see [map](https://www.towncountry.com/discover/hotel-map))
+* **Board Game Night** - 7-10pm, T&C Resort: Flamingo Lawn area - Bring your favorite game! (see [map](https://www.towncountry.com/discover/hotel-map))
 
 ## Wednesday 11/15
 
