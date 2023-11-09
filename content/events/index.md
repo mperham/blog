@@ -22,6 +22,8 @@ To include your event, please [click this link](https://github.com/mperham/blog/
 
 ## Wednesday 11/15
 
+* **Coffee Swap** - During tail-end of lunch, 12:45PM, Golden State Ballroom.  Bring a locally roasted bag of beans from your home town, bring home a random bag from someone else. Details [on Dave Copeland's website](https://www.naildrivin5.com/rubyconf/index.html)
+
 * TBA
 
 ## Thursday 11/16
