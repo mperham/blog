@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.122.0">
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Supporting Dragonfly | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16"
+            height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Supporting Dragonfly</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2024-02-01
+  </small>
+  
+</p>
+<p>For about 15 years, Redis has been the dominant choice for background job infrastructure in Ruby.</p>
+<p>First used by Resque, Sidekiq adopted it also as a pragmatic choice which had already gained mass acceptance within the community.
+And so for the last 15 years, we&rsquo;ve used Redis widely across the industry for caching, jobs and many different data munging tasks.
+However the only constant is change.</p>
+<a href="https://dragonflydb.io" style="float: right; padding: 20px;">
+  <img src="https://raw.githubusercontent.com/dragonflydb/dragonfly/main/.github/images/logo-full.svg"
+    width="284" border="0" alt="Dragonfly">
+</a>
+<p>Dragonfly brings competition and new capabilities.
+They aim to provide a Redis-compatible tool which is better than Redis at certain tasks.
+First and most importantly, all Sidekiq test suites are passing 100%.
+There&rsquo;s no point in switching to a buggy or incomplete tool; Dragonfly has done the work to fully support every nook and cranny of Sidekiq&rsquo;s functionality.
+Performance is where you can see major differences.</p>
+<p>For normal use cases, Redis is still faster because of its single-threaded core and lack of locking but scale up and tune Dragonfly and it&rsquo;ll start to pull ahead due to its multi-core capabilities.
+The Dragonfly team developed a benchmark which stresses Sidekiq&rsquo;s basic queue processing pipeline: pulling off and executing jobs as fast as possible. They wrote a very thorough blog post talking about the work they did in <a href="https://www.dragonflydb.io/blog/running-sidekiq-with-dragonfly">tuning and benchmarking Dragonfly with Sidekiq</a>.</p>
+<p>If you want to scale past Redis&rsquo;s single core, Dragonfly can peg multiple cores while handing out hundreds of thousands of jobs per second to your Sidekiq cluster.
+Unfortunately I can&rsquo;t replicate the best of the benchmark results because the necessary hardware becomes pretty expensive.
+Here&rsquo;s it chewing through 30,000 jobs/sec on my M1 laptop but the Dragonfly team have tested it running <strong>over 400,000 jobs/sec</strong> on a massive EC2 machine running 96 cores (to run 96 Sidekiq processes in parallel).</p>
+<pre tabindex="0"><code>RUBY_YJIT_ENABLE=1 PROCESSES=8 QUEUES=8 THREADS=10 ITERATIONS=100 ELEMENTS=1000 bin/multi_queue_bench
+Dragonfly 1.14.1: 800000 jobs in 26.1067 sec, 30643 jobs/sec
+</code></pre><p>Typical business applications processing thousands or even millions of jobs per day may not benefit from Dragonfly but if your job cluster is approaching the limits of scale, you really only had one choice: move to multiple Redis shards.
+Now you have another choice in Sidekiq 7.2: switch to Dragonfly.
+Read the <a href="https://github.com/sidekiq/sidekiq/wiki/Using-Dragonfly">Using Dragonfly</a> wiki page which covers the best tips and tricks for running Dragonfly + Sidekiq.</p>
+
+    </article>
+  </div>
+
+  
+  
+
+  
+
+  
+</body>
+
+</html>

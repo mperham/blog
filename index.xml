@@ -6,10 +6,21 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 11 Sep 2023 12:27:34 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 01 Feb 2024 09:00:00 -0800</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Supporting Dragonfly</title>
+      <link>https://www.mikeperham.com/2024/02/01/supporting-dragonfly/</link>
+      <pubDate>Thu, 01 Feb 2024 09:00:00 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2024/02/01/supporting-dragonfly/</guid>
+      <description>For about 15 years, Redis has been the dominant choice for background job infrastructure in Ruby.
+First used by Resque, Sidekiq adopted it also as a pragmatic choice which had already gained mass acceptance within the community. And so for the last 15 years, we&amp;rsquo;ve used Redis widely across the industry for caching, jobs and many different data munging tasks. However the only constant is change.
+Dragonfly brings competition and new capabilities.</description>
+    </item>
     
     <item>
       <title>Ruby HTTP Server from scratch</title>
@@ -98,16 +109,6 @@ Job Performance Metrics! Embedded mode! Capsules! Strict args! But with all thes
       <guid>https://www.mikeperham.com/2022/06/17/coming-soon-in-sidekiq-2022-edition/</guid>
       <description>I just released Sidekiq 6.5 and I&amp;rsquo;ve got a lot of changes on the roadmap for Sidekiq 7.0. Here&amp;rsquo;s what&amp;rsquo;s coming soon so you can plan too.
 New Transaction-aware Client Sidekiq has long had a &amp;ldquo;problem&amp;rdquo; with executing jobs very fast, before any associated transaction has committed, leading to &amp;ldquo;Cannot find Model id=1234&amp;rdquo; errors. Sidekiq 6.5 introduced beta support for a new Sidekiq::Client option which will delay all job pushes until the current transaction has committed.</description>
-    </item>
-    
-    <item>
-      <title>🎉 Happy 10th Birthday, Sidekiq! 🎂</title>
-      <link>https://www.mikeperham.com/2022/01/17/happy-10th-birthday-sidekiq/</link>
-      <pubDate>Mon, 17 Jan 2022 09:00:00 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2022/01/17/happy-10th-birthday-sidekiq/</guid>
-      <description>It&amp;rsquo;s hard for me to believe these words but I pushed Sidekiq&amp;rsquo;s first commit on Jan 16th, 2012. Ten years ago. The public announcement. One month later. One quarter later.
-Some context for those new to this blog: Sidekiq is the most popular background job system for the Ruby programming language. Every application has tasks which are important: send an email, charge a credit card, reserve inventory for an order, synchronize some data to a 3rd party service, etc.</description>
     </item>
     
   </channel>
