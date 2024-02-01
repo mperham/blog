@@ -18,7 +18,7 @@ However the only constant is change.
     width="284" border="0" alt="Dragonfly">
 </a>
 
-Dragonfly brings competition and new capabilities.
+[Dragonfly](https://dragonflydb.io) brings competition and new capabilities.
 They aim to provide a Redis-compatible tool which is better than Redis at certain tasks.
 First and most importantly, all Sidekiq test suites are passing 100%.
 There's no point in switching to a buggy or incomplete tool; Dragonfly has done the work to fully support every nook and cranny of Sidekiq's functionality.
