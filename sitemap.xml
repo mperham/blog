@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://www.mikeperham.com/sidekiq-internals/</loc>
+    <lastmod>2024-02-04T16:00:23+01:00</lastmod>
+  </url><url>
     <loc>https://www.mikeperham.com/</loc>
     <lastmod>2024-02-01T00:00:00+00:00</lastmod>
   </url><url>

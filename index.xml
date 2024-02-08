@@ -12,6 +12,17 @@
     
     
     <item>
+      <title>How does Sidekiq work?</title>
+      <link>https://www.mikeperham.com/sidekiq-internals/</link>
+      <pubDate>Sun, 04 Feb 2024 16:00:23 +0100</pubDate>
+      
+      <guid>https://www.mikeperham.com/sidekiq-internals/</guid>
+      <description>2024-02-04
+This article was originally published on DanSvetlov.me and is republished here with permission of the author. This article is relevant to Sidekiq v7.
+Sidekiq is one of the most ubiquitous1 Ruby background job processors out there. To anybody who has worked with Ruby on and off Rails, it needs no introduction. Sidekiq has a 10+ year track record of being an efficient, battle-tested and simple-to-use solution for offloading the execution of application logic into the background.</description>
+    </item>
+    
+    <item>
       <title>Supporting Dragonfly</title>
       <link>https://www.mikeperham.com/2024/02/01/supporting-dragonfly/</link>
       <pubDate>Thu, 01 Feb 2024 09:00:00 -0800</pubDate>
@@ -99,16 +110,6 @@ Job Performance Metrics! Embedded mode! Capsules! Strict args! But with all thes
       
       <guid>https://www.mikeperham.com/2022/07/14/modernizing-einhorn/</guid>
       <description>Einhorn is a Ruby gem which provides the ability to manage multiple forked processes of Unix services. Stripe originally built Einhorn to manage their internal collection of services in production but stopped actively maintaining the gem several years ago. I recently asked for and was granted ownership of the gem so that I could provide maintenance going forward. This blog post is meant to document how I took over and what I did, I hope others find this interesting and perhaps even useful.</description>
-    </item>
-    
-    <item>
-      <title>Coming Soon in Sidekiq, 2022 edition</title>
-      <link>https://www.mikeperham.com/2022/06/17/coming-soon-in-sidekiq-2022-edition/</link>
-      <pubDate>Fri, 17 Jun 2022 09:00:00 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2022/06/17/coming-soon-in-sidekiq-2022-edition/</guid>
-      <description>I just released Sidekiq 6.5 and I&amp;rsquo;ve got a lot of changes on the roadmap for Sidekiq 7.0. Here&amp;rsquo;s what&amp;rsquo;s coming soon so you can plan too.
-New Transaction-aware Client Sidekiq has long had a &amp;ldquo;problem&amp;rdquo; with executing jobs very fast, before any associated transaction has committed, leading to &amp;ldquo;Cannot find Model id=1234&amp;rdquo; errors. Sidekiq 6.5 introduced beta support for a new Sidekiq::Client option which will delay all job pushes until the current transaction has committed.</description>
     </item>
     
   </channel>
