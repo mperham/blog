@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>memcached on Mike Perham</title>
+    <title>Memcached on Mike Perham</title>
     <link>https://www.mikeperham.com/tags/memcached/</link>
-    <description>Recent content in memcached on Mike Perham</description>
+    <description>Recent content in Memcached on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 30 Aug 2010 00:00:00 +0000</lastBuildDate>

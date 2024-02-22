@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>cassandra on Mike Perham</title>
+    <title>Cassandra on Mike Perham</title>
     <link>https://www.mikeperham.com/tags/cassandra/</link>
-    <description>Recent content in cassandra on Mike Perham</description>
+    <description>Recent content in Cassandra on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 20 Mar 2010 00:00:00 +0000</lastBuildDate>

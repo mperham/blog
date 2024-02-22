@@ -6,17 +6,26 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 01 Feb 2024 09:00:00 -0800</lastBuildDate>
+    <lastBuildDate>Thu, 22 Feb 2024 10:59:46 -0800</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>How does Sidekiq work?</title>
-      <link>https://www.mikeperham.com/sidekiq-internals/</link>
+      <link>https://www.mikeperham.com/2024/02/22/how-does-sidekiq-work/</link>
+      <pubDate>Thu, 22 Feb 2024 10:59:46 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2024/02/22/how-does-sidekiq-work/</guid>
+      <description>A few weeks ago, I sat gobsmacked at my laptop reading one of the most impressive technical deep dives I&amp;rsquo;ve ever read. Dan Svetlov wrote a blog post &amp;ldquo;How does Sidekiq really work?&amp;rdquo; on his blog which delved deep into Sidekiq&amp;rsquo;s internals, explaining how it actually works. The most impressive part of this blog post is that it was 100% accurate. There were no mistakes or misunderstandings, Dan did the work and shows the receipts.</description>
+    </item>
+    
+    <item>
+      <title>How does Sidekiq work?</title>
+      <link>https://www.mikeperham.com/how-sidekiq-works/</link>
       <pubDate>Sun, 04 Feb 2024 16:00:23 +0100</pubDate>
       
-      <guid>https://www.mikeperham.com/sidekiq-internals/</guid>
+      <guid>https://www.mikeperham.com/how-sidekiq-works/</guid>
       <description>2024-02-04
 This article was originally published on DanSvetlov.me and is republished here with permission of the author. This article is relevant to Sidekiq v7.
 Sidekiq is one of the most ubiquitous1 Ruby background job processors out there. To anybody who has worked with Ruby on and off Rails, it needs no introduction. Sidekiq has a 10+ year track record of being an efficient, battle-tested and simple-to-use solution for offloading the execution of application logic into the background.</description>
@@ -101,15 +110,6 @@ Job Performance Metrics! Embedded mode! Capsules! Strict args! But with all thes
       
       <guid>https://www.mikeperham.com/2022/07/29/sidekiq-and-request-specific-context/</guid>
       <description>At some point in growing a large-scale software system, you&amp;rsquo;ll require &amp;ldquo;out of band&amp;rdquo; context: data which is not explicitly passed as an argument to a function but rather implicitly attached to the request, job or event being processed. Usually context is implemented as thread-local variables; your code first sets up the necessary context and then processes the request. A common example is multi-tenancy: you might want to limit any data queried by a given request to a database schema specific to a given tenant.</description>
-    </item>
-    
-    <item>
-      <title>Modernizing Einhorn</title>
-      <link>https://www.mikeperham.com/2022/07/14/modernizing-einhorn/</link>
-      <pubDate>Thu, 14 Jul 2022 08:41:10 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2022/07/14/modernizing-einhorn/</guid>
-      <description>Einhorn is a Ruby gem which provides the ability to manage multiple forked processes of Unix services. Stripe originally built Einhorn to manage their internal collection of services in production but stopped actively maintaining the gem several years ago. I recently asked for and was granted ownership of the gem so that I could provide maintenance going forward. This blog post is meant to document how I took over and what I did, I hope others find this interesting and perhaps even useful.</description>
     </item>
     
   </channel>
