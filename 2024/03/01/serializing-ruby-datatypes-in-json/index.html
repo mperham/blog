@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.123.6">
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Serializing Ruby datatypes in JSON | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16"
+            height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Serializing Ruby datatypes in JSON</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2024-03-01
+  </small>
+  
+</p>
+<p>Ruby&rsquo;s JSON library allows you to convert Ruby datatypes into a JSON document, as long as those types are native to JSON: String, bool, int, float, nil, Hash and Array.
+Everything else converts to a String by default; if you use any other core datatypes, they will not survive a <code>JSON.generate/JSON.parse</code> round trip. Here I pass a Range, Symbol and Time; notice how the end result is three Strings instead of the actual types:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> require <span style="color:#e6db74">&#34;json&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">JSON</span><span style="color:#f92672">.</span>generate(<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">..</span><span style="color:#ae81ff">5</span>, <span style="color:#e6db74">:foo</span>, <span style="color:#66d9ef">Time</span><span style="color:#f92672">.</span>now<span style="color:#f92672">]</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;[</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">0..5</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">foo</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">2024-03-01 09:48:06 -0800</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">]&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">JSON</span><span style="color:#f92672">.</span>parse(_)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;0..5&#34;</span>, <span style="color:#e6db74">&#34;foo&#34;</span>, <span style="color:#e6db74">&#34;2024-03-01 09:48:06 -0800&#34;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>I recently discovered a feature of JSON where you can opt-into a set of extensions which can serialize most core datatypes. I get back exactly the same objects I serialized:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> require <span style="color:#e6db74">&#34;json/add/core&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">JSON</span><span style="color:#f92672">.</span>generate(<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">..</span><span style="color:#ae81ff">5</span>, <span style="color:#e6db74">:foo</span>, <span style="color:#66d9ef">Time</span><span style="color:#f92672">.</span>now<span style="color:#f92672">]</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;[{</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">json_class</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">Range</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">a</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:[0,5,false]},{</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">json_class</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">Symbol</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">s</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">foo</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">},{</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">json_class</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">Time</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">s</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:1709315467,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">n</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:612985000}]&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> s <span style="color:#f92672">=</span> _
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">JSON</span><span style="color:#f92672">.</span>parse(s)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>{<span style="color:#e6db74">&#34;json_class&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#34;Range&#34;</span>, <span style="color:#e6db74">&#34;a&#34;</span><span style="color:#f92672">=&gt;[</span><span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">5</span>, <span style="color:#66d9ef">false</span><span style="color:#f92672">]</span>},
+</span></span><span style="display:flex;"><span> {<span style="color:#e6db74">&#34;json_class&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#34;Symbol&#34;</span>, <span style="color:#e6db74">&#34;s&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#34;foo&#34;</span>},
+</span></span><span style="display:flex;"><span> {<span style="color:#e6db74">&#34;json_class&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#34;Time&#34;</span>, <span style="color:#e6db74">&#34;s&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#ae81ff">1709315467</span>, <span style="color:#e6db74">&#34;n&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#ae81ff">612985000</span>}<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">JSON</span><span style="color:#f92672">.</span>parse(s, <span style="color:#e6db74">create_additions</span>: <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">..</span><span style="color:#ae81ff">5</span>, <span style="color:#e6db74">:foo</span>, <span style="color:#ae81ff">2024</span><span style="color:#f92672">-</span><span style="color:#ae81ff">03</span><span style="color:#f92672">-</span><span style="color:#ae81ff">01</span> <span style="color:#ae81ff">09</span>:<span style="color:#ae81ff">51</span>:<span style="color:#ae81ff">07</span><span style="color:#f92672">.</span><span style="color:#ae81ff">612985</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">0800</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>You need to require <code>json/add/core</code> and use the <code>create_additions</code> keyword to signal to <code>JSON.parse</code> that the document may contain those optional &ldquo;additions&rdquo;.</p>
+<p>It appears to work well and a benchmark shows that it adds little to no overhead.</p>
+<p>There is one major caveat: <strong>Symbol hash keys still don&rsquo;t work</strong>.
+Unfortunately this is the number one complaint with Sidekiq&rsquo;s argument processing and these additions do not solve that issue.
+Let me explain why.</p>
+<h2 id="the-trouble-with-symbol-keys">The Trouble with Symbol Keys</h2>
+<p>The JSON standard says &ldquo;JSON keys are strings, always on the left of the colon, and must be wrapped in double quotes&rdquo;.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;mike&#34;</span>: <span style="color:#ae81ff">123</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;bob&#34;</span>: <span style="color:#e6db74">&#34;brother&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>With Ruby, it is idiomatic to use Symbols rather than Strings for Hash keys and sometimes for values too:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">:mike</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">123</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">:bob</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">:brother</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The trouble is how the JSON additions serial the non-JSON-native types: by converting them into a JSON object which holds the relevant state for the object:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">JSON</span><span style="color:#f92672">.</span>generate(<span style="color:#f92672">[</span><span style="color:#e6db74">:foo</span><span style="color:#f92672">]</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;[{</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">json_class</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">=&gt;</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">Symbol</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">, </span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">s</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">=&gt;</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">foo</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">}]&#34;</span>
+</span></span></code></pre></div><p>The problem is that an Object cannot be a Hash key in JSON; this is not legal:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">{</span><span style="color:#f92672">&#34;json_class&#34;</span>:<span style="color:#e6db74">&#34;Symbol&#34;</span>,<span style="color:#f92672">&#34;s&#34;</span>:<span style="color:#e6db74">&#34;mike&#34;</span>}<span style="color:#960050;background-color:#1e0010">:</span> <span style="color:#ae81ff">123</span><span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>  {<span style="color:#f92672">&#34;json_class&#34;</span>:<span style="color:#e6db74">&#34;Symbol&#34;</span>,<span style="color:#f92672">&#34;s&#34;</span>:<span style="color:#e6db74">&#34;bob&#34;</span>}<span style="color:#960050;background-color:#1e0010">:</span> {<span style="color:#f92672">&#34;json_class&#34;</span>:<span style="color:#e6db74">&#34;Symbol&#34;</span>,<span style="color:#f92672">&#34;s&#34;</span>:<span style="color:#e6db74">&#34;brother&#34;</span>}
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">}</span>
+</span></span></code></pre></div><p>So Hash keys must be converted to raw Strings. One possible way to implement this would be to smuggle the type within the String itself:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">JSON</span><span style="color:#f92672">.</span>generate({ <span style="color:#e6db74">:mike</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">123</span>, <span style="color:#e6db74">:bob</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">:brother</span> })
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;{</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">_s:mike</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:123,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">_s:bob</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:{</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">json_class</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">Symbol</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">s</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">brother</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">}}&#34;</span>
+</span></span></code></pre></div><p>And so I have proposed just that to the JSON gem in <a href="https://github.com/flori/json/issues/570">issue #570</a>. If we can get Symbol smuggling support, Sidekiq should be able to support Symbols in job arguments, a huge quality of life improvement for my users. ActiveJob may be able to greatly simply its own marshalling by leveraging this functionality too. Everyone downstream would benefit. If you want to see this supported, please go to that issue and put in a reaction to show your interest.</p>
+
+    </article>
+  </div>
+
+  
+  
+
+  
+
+  
+</body>
+
+</html>

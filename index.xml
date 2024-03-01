@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Serializing Ruby datatypes in JSON</title>
+      <link>https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/</link>
+      <pubDate>Fri, 01 Mar 2024 09:42:08 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/</guid>
+      <description>Ruby&amp;rsquo;s JSON library allows you to convert Ruby datatypes into a JSON document, as long as those types are native to JSON: String, bool, int, float, nil, Hash and Array. Everything else converts to a String by default; if you use any other core datatypes, they will not survive a JSON.generate/JSON.parse round trip. Here I pass a Range, Symbol and Time; notice how the end result is three Strings instead of the actual types:</description>
+    </item>
+    
+    <item>
       <title>How does Sidekiq work?</title>
       <link>https://www.mikeperham.com/2024/02/22/how-does-sidekiq-work/</link>
       <pubDate>Thu, 22 Feb 2024 10:59:46 -0800</pubDate>
@@ -101,15 +110,6 @@ Which types of jobs executed? Which types of jobs took the most amount of time t
       <guid>https://www.mikeperham.com/2022/09/27/sidekiq-7.0-beta-now-available/</guid>
       <description>Yesterday I released the first public beta of Sidekiq 7.0. This is a major new release with several huge new features, several features removed, APIs refactored and updated requirements.
 Job Performance Metrics! Embedded mode! Capsules! Strict args! But with all these awesome new features, we refactored a LOT of internal APIs and likely broke a bunch of things. In other words, we really need people to test it and open issues in order to get a smooth 7.</description>
-    </item>
-    
-    <item>
-      <title>Sidekiq and Request-Specific Context</title>
-      <link>https://www.mikeperham.com/2022/07/29/sidekiq-and-request-specific-context/</link>
-      <pubDate>Fri, 29 Jul 2022 19:43:06 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2022/07/29/sidekiq-and-request-specific-context/</guid>
-      <description>At some point in growing a large-scale software system, you&amp;rsquo;ll require &amp;ldquo;out of band&amp;rdquo; context: data which is not explicitly passed as an argument to a function but rather implicitly attached to the request, job or event being processed. Usually context is implemented as thread-local variables; your code first sets up the necessary context and then processes the request. A common example is multi-tenancy: you might want to limit any data queried by a given request to a database schema specific to a given tenant.</description>
     </item>
     
   </channel>
