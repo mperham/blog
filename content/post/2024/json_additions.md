@@ -3,7 +3,6 @@ title: "Serializing Ruby datatypes in JSON"
 date: 2024-03-01T09:42:08-08:00
 publishdate: 2024-03-01
 lastmod: 2024-03-01
-draft: true
 tags: []
 ---
 
