@@ -6,10 +6,21 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 01 Mar 2024 09:42:08 -0800</lastBuildDate>
+    <lastBuildDate>Mon, 22 Apr 2024 08:53:20 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Redis Licensing Changes and You</title>
+      <link>https://www.mikeperham.com/2024/04/22/redis-licensing-changes-and-you/</link>
+      <pubDate>Mon, 22 Apr 2024 08:53:20 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2024/04/22/redis-licensing-changes-and-you/</guid>
+      <description>A few weeks ago, the owners of Redis changed its licensing from BSD to a more limited source available license. As far as I know this was done in order to prevent service providers from adding their own closed source, proprietary changes to their Redis service offerings.
+In principle I like this change.
+My Faktory project uses the AGPL license for the same purpose: Faktory is open source and anyone who offers Faktory as a service with proprietary changes should have to open source those changes too.</description>
+    </item>
     
     <item>
       <title>Serializing Ruby datatypes in JSON</title>
@@ -100,16 +111,6 @@ Why? Why would you want to do this? Embedding can make for a simpler deployment:
       <guid>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-metrics/</guid>
       <description>Sidekiq 7.0 introduces a new subsystem for gathering job execution data along with a new Metrics tab within the Web UI to visualize this data. The data is designed to help you answer a few questions:
 Which types of jobs executed? Which types of jobs took the most amount of time to execute? How has the performance of Job X changed recently? When did any deploys occur during this time? The graphs only show data for the last hour.</description>
-    </item>
-    
-    <item>
-      <title>Sidekiq 7.0 Beta now Available</title>
-      <link>https://www.mikeperham.com/2022/09/27/sidekiq-7.0-beta-now-available/</link>
-      <pubDate>Tue, 27 Sep 2022 15:17:08 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2022/09/27/sidekiq-7.0-beta-now-available/</guid>
-      <description>Yesterday I released the first public beta of Sidekiq 7.0. This is a major new release with several huge new features, several features removed, APIs refactored and updated requirements.
-Job Performance Metrics! Embedded mode! Capsules! Strict args! But with all these awesome new features, we refactored a LOT of internal APIs and likely broke a bunch of things. In other words, we really need people to test it and open issues in order to get a smooth 7.</description>
     </item>
     
   </channel>

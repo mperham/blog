@@ -3,7 +3,10 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.mikeperham.com/</loc>
-    <lastmod>2024-03-01T00:00:00+00:00</lastmod>
+    <lastmod>2024-04-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.mikeperham.com/2024/04/22/redis-licensing-changes-and-you/</loc>
+    <lastmod>2024-04-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/</loc>
     <lastmod>2024-03-01T00:00:00+00:00</lastmod>
