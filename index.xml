@@ -6,10 +6,19 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Apr 2024 08:53:20 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 03 Jul 2024 09:00:00 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Iteration and Sidekiq 7.3.0</title>
+      <link>https://www.mikeperham.com/2024/07/03/iteration-and-sidekiq-7.3.0/</link>
+      <pubDate>Wed, 03 Jul 2024 09:00:00 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2024/07/03/iteration-and-sidekiq-7.3.0/</guid>
+      <description>Sidekiq is the most popular background job framework for Ruby and works really well if you follow the design guidelines: keep your jobs short and idempotent. What happens if you have a job which processes a large amount of data serially, the infamous long-running job? In that case, deployments can lead to the job failing mid-way because the job will not gracefully allow the Sidekiq process to restart. To fix this, Sidekiq 7.</description>
+    </item>
     
     <item>
       <title>Redis Licensing Changes and You</title>
@@ -101,16 +110,6 @@ What&amp;rsquo;s New? Metrics One thing I know: everybody loves big beautiful gr
       <guid>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/</guid>
       <description>Sidekiq 7.0 can be embedded within another process so you do not need to run a separate Sidekiq process. This is called embedding.
 Why? Why would you want to do this? Embedding can make for a simpler deployment: you deploy one larger process instead of two separate processes, now you only need to monitor and manage one process. Embedding also requires less total memory since both subsystems will share most of the Ruby data structures and code in memory.</description>
-    </item>
-    
-    <item>
-      <title>Sidekiq 7.0: Metrics</title>
-      <link>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-metrics/</link>
-      <pubDate>Thu, 27 Oct 2022 09:20:55 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-metrics/</guid>
-      <description>Sidekiq 7.0 introduces a new subsystem for gathering job execution data along with a new Metrics tab within the Web UI to visualize this data. The data is designed to help you answer a few questions:
-Which types of jobs executed? Which types of jobs took the most amount of time to execute? How has the performance of Job X changed recently? When did any deploys occur during this time? The graphs only show data for the last hour.</description>
     </item>
     
   </channel>

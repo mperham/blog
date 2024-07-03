@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.128.1">
+
+  
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Iteration and Sidekiq 7.3.0 | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16"
+            height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Iteration and Sidekiq 7.3.0</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2024-07-03
+  </small>
+  
+</p>
+<p>Sidekiq is the most popular background job framework for Ruby and works really well if you follow the design guidelines: keep your jobs short and idempotent.
+What happens if you have a job which processes a large amount of data serially, the infamous long-running job?
+In that case, deployments can lead to the job failing mid-way because the job will not gracefully allow the Sidekiq process to restart.
+To fix this, Sidekiq 7.3 just shipped with a major new feature: <a href="https://github.com/sidekiq/sidekiq/wiki/Iteration"><strong>Iterable Jobs</strong></a>.</p>
+<p>The MVP for Sidekiq 7.3 is <a href="https://github.com/fatkodima">Dima Fatko</a>, who&rsquo;s worked on several Sidekiq improvements in the last six months, including the majority of the Iteration work.
+Thank you Dima!</p>
+<h2 id="iteration">Iteration</h2>
+<p>A common cause of long-running jobs is processing a large amount of data in a loop.
+For example, below we iterate through each each Product in our database.
+If there are one million Products, this might take a while!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProductImageChecker</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Job</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">Product</span><span style="color:#f92672">.</span>all<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>store<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># do something with product</span>
+</span></span><span style="display:flex;"><span>      product<span style="color:#f92672">.</span>check_image
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Note the major flaw in the code above: if an error occurs or a deploy is triggered, the job will restart Product processing from the very beginning.</p>
+<p>With <code>Sidekiq::IterableJob</code>, we break the loop into discrete chunks which Sidekiq knows about, allowing Sidekiq to break the processing at any point in the loop.
+Notice we don&rsquo;t provide a <code>perform</code> method but rather two methods which control the work loop:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProductImageChecker</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">IterableJob</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build_enumerator</span>(<span style="color:#f92672">*</span>args, <span style="color:#e6db74">cursor</span>:)
+</span></span><span style="display:flex;"><span>    active_record_records_enumerator(<span style="color:#66d9ef">Product</span><span style="color:#f92672">.</span>all, <span style="color:#e6db74">cursor</span>: cursor)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">each_iteration</span>(item, <span style="color:#f92672">*</span>args)
+</span></span><span style="display:flex;"><span>    item<span style="color:#f92672">.</span>check_image
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">on_complete</span>
+</span></span><span style="display:flex;"><span>    logger<span style="color:#f92672">.</span>info { <span style="color:#e6db74">&#34;Finished checking product images!&#34;</span> }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Internally this looks something like:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)
+</span></span><span style="display:flex;"><span>  e <span style="color:#f92672">=</span> build_enumerator(<span style="color:#f92672">*</span>args)
+</span></span><span style="display:flex;"><span>  e<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>item, cursor<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>    save_cursor(cursor) <span style="color:#66d9ef">if</span> stopping? <span style="color:#f92672">||</span> five_seconds_passed?
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">raise</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Job</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Interrupted</span> <span style="color:#66d9ef">if</span> stopping?
+</span></span><span style="display:flex;"><span>    each_iteration(item, <span style="color:#f92672">*</span>args)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>The magic is in that cursor; it tracks where we are within the sequence.
+Sidekiq will persist the cursor automatically, either upon <code>stopping?</code> or every five seconds.
+If the job needs to stop halfway through, it will resume right where it left off.
+If the Sidekiq process crashes, your loop will resume within five seconds of where it crashed.</p>
+<h2 id="enumerators">Enumerators</h2>
+<p>There are helper methods for creating enumerators for ActiveRecord, CSV and arrays, all of which are cursor-aware.
+See <a href="https://github.com/sidekiq/sidekiq/blob/main/lib/sidekiq/job/iterable/enumerators.rb"><code>lib/sidekiq/job/iterable/enumerators.rb</code></a>.
+These helper methods are available to all <code>Sidekiq::IterableJob</code> instances.</p>
+<h2 id="callbacks">Callbacks</h2>
+<p>Iterable jobs support four callback methods which you can override:</p>
+<ul>
+<li><code>on_start</code> - the first time this job is started</li>
+<li><code>on_resume</code> - any future time this job is started after interruption</li>
+<li><code>on_stop</code> - when we are done processing for now, can be due to completion or interruption</li>
+<li><code>on_complete</code> - when your Enumerator has finished</li>
+</ul>
+<p>Callbacks take no arguments.
+You can save the job arguments in <code>build_enumerator</code> if you want access to them in the callbacks.</p>
+<h2 id="iteration-vs-batches">Iteration vs Batches</h2>
+<p>How does Iteration compare with Sidekiq Pro&rsquo;s Batches?
+Batching allows you to decompose some work into a set of smaller jobs which can execute in parallel.
+Iteration allows you to decompose some work into a sequence of steps, but which still execute serially as a single job.
+You can override the <code>on_complete</code> callback to run a task after the sequence has been processed but you won&rsquo;t see the benefit of parallel execution.</p>
+<h2 id="history">History</h2>
+<p>Job iteration first appeared from Shopify, with their <a href="https://github.com/shopify/job-iteration"><code>shopify/job-iteration</code></a> gem.
+Dima Fatko built a version of that API for native Sidekiq jobs with his <a href="https://github.com/fatkodima/sidekiq-iteration"><code>fatkodima/sidekiq-iteration</code></a> gem.
+I approached him about the feature and he kindly agreed to promote the code to Sidekiq core.</p>
+<h2 id="web-security">Web Security</h2>
+<p>The one other change I want to highlight is a move to increase the security of the Web UI.
+Version 7.2.0 had a XSS CVE slip into the release so I decided to improve our security by disabling all &lt;script&gt; tags within the Web UI html.
+Starting in v7.3.0 you can use static JS files, but not raw JS code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt; ... &lt;/<span style="color:#f92672">script</span>&gt;       // bad, wont work
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;my-extension/file.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt; // good, will work
+</span></span></code></pre></div><p>Instead I&rsquo;ve added a new API to register web extensions, along with a <code>script_tag</code> helper method which can reference your static .js files.
+See <a href="https://github.com/sidekiq/sidekiq/tree/main/examples/webui-ext"><code>examples/webui-ext</code></a> for all of the details.
+I&rsquo;m hopeful that, with this change, Sidekiq&rsquo;s Web UI will be immune to future XSS attacks.</p>
+<h2 id="anything-else">Anything Else?</h2>
+<ul>
+<li>Sidekiq Enterprise can now use Redis Cluster for its rate limiters, allowing rate limiters to scale horizontally. Sidekiq&rsquo;s core functionality still cannot use Redis Cluster.</li>
+<li>Sidekiq&rsquo;s default job logging (the &ldquo;start&rdquo; and &ldquo;done&rdquo; lines) can now be disabled.</li>
+<li>The default Redis timeout has been raised from 1 second to 3 seconds, as this was generating ReadTimeoutErrors for some heavily loaded Sidekiq processes.</li>
+</ul>
+<p>Please see the <a href="https://github.com/sidekiq/sidekiq/blob/main/Changes.md">changelog</a> for issue numbers and further discussion.
+Thanks for reading and I hope Sidekiq 7.3 works well for you.</p>
+
+    </article>
+  </div>
+
+  
+  
+
+  
+
+  
+</body>
+
+</html>
