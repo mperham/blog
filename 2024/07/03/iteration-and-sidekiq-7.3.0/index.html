@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.128.1">
+  <meta name="generator" content="Hugo 0.128.2">
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -203,13 +203,13 @@ If there are one million Products, this might take a while!</p>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Job</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">Product</span><span style="color:#f92672">.</span>all<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>store<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">Product</span><span style="color:#f92672">.</span>all<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>product<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>      <span style="color:#75715e"># do something with product</span>
 </span></span><span style="display:flex;"><span>      product<span style="color:#f92672">.</span>check_image
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
-</span></span></code></pre></div><p>Note the major flaw in the code above: if an error occurs or a deploy is triggered, the job will restart Product processing from the very beginning.</p>
+</span></span></code></pre></div><p>Note a major flaw in the code above: if an error occurs or a deploy is triggered, the job will restart Product processing from the very beginning.</p>
 <p>With <code>Sidekiq::IterableJob</code>, we break the loop into discrete chunks which Sidekiq knows about, allowing Sidekiq to break the processing at any point in the loop.
 Notice we don&rsquo;t provide a <code>perform</code> method but rather two methods which control the work loop:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProductImageChecker</span>
@@ -265,10 +265,10 @@ Dima Fatko built a version of that API for native Sidekiq jobs with his <a href=
 I approached him about the feature and he kindly agreed to promote the code to Sidekiq core.</p>
 <h2 id="web-security">Web Security</h2>
 <p>The one other change I want to highlight is a move to increase the security of the Web UI.
-Version 7.2.0 had a XSS CVE slip into the release so I decided to improve our security by disabling all &lt;script&gt; tags within the Web UI html.
-Starting in v7.3.0 you can use static JS files, but not raw JS code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt; ... &lt;/<span style="color:#f92672">script</span>&gt;       // bad, wont work
-</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;my-extension/file.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt; // good, will work
+Version 7.2.0 had a XSS CVE slip into the release so I decided to improve our security by disabling all inline &lt;script&gt; tags within the Web UI html.
+Starting in v7.3.0 you can use static JS files, but not inline JS code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt; ... &lt;/<span style="color:#f92672">script</span>&gt;                       <span style="color:#75715e">&lt;!-- bad, wont work --&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;my-extension/file.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt; <span style="color:#75715e">&lt;!-- good, will work --&gt;</span>
 </span></span></code></pre></div><p>Instead I&rsquo;ve added a new API to register web extensions, along with a <code>script_tag</code> helper method which can reference your static .js files.
 See <a href="https://github.com/sidekiq/sidekiq/tree/main/examples/webui-ext"><code>examples/webui-ext</code></a> for all of the details.
 I&rsquo;m hopeful that, with this change, Sidekiq&rsquo;s Web UI will be immune to future XSS attacks.</p>
