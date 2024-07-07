@@ -25,7 +25,7 @@ class ProductImageChecker
   include Sidekiq::Job
 
   def perform(*args)
-    Product.all.each do |store|
+    Product.all.each do |product|
       # do something with product
       product.check_image
     end
@@ -33,7 +33,7 @@ class ProductImageChecker
 end
 ```
 
-Note the major flaw in the code above: if an error occurs or a deploy is triggered, the job will restart Product processing from the very beginning.
+Note a major flaw in the code above: if an error occurs or a deploy is triggered, the job will restart Product processing from the very beginning.
 
 With `Sidekiq::IterableJob`, we break the loop into discrete chunks which Sidekiq knows about, allowing Sidekiq to break the processing at any point in the loop.
 Notice we don't provide a `perform` method but rather two methods which control the work loop:
@@ -108,12 +108,12 @@ I approached him about the feature and he kindly agreed to promote the code to S
 ## Web Security
 
 The one other change I want to highlight is a move to increase the security of the Web UI.
-Version 7.2.0 had a XSS CVE slip into the release so I decided to improve our security by disabling all &lt;script&gt; tags within the Web UI html.
-Starting in v7.3.0 you can use static JS files, but not raw JS code:
+Version 7.2.0 had a XSS CVE slip into the release so I decided to improve our security by disabling all inline &lt;script&gt; tags within the Web UI html.
+Starting in v7.3.0 you can use static JS files, but not inline JS code:
 
 ```html
-<script> ... </script>       // bad, wont work
-<script src="my-extension/file.js"></script> // good, will work
+<script> ... </script>                       <!-- bad, wont work -->
+<script src="my-extension/file.js"></script> <!-- good, will work -->
 ```
 
 Instead I've added a new API to register web extensions, along with a `script_tag` helper method which can reference your static .js files.
@@ -127,4 +127,4 @@ I'm hopeful that, with this change, Sidekiq's Web UI will be immune to future XS
 * The default Redis timeout has been raised from 1 second to 3 seconds, as this was generating ReadTimeoutErrors for some heavily loaded Sidekiq processes.
 
 Please see the [changelog](https://github.com/sidekiq/sidekiq/blob/main/Changes.md) for issue numbers and further discussion.
-Thanks for reading and I hope Sidekiq 7.3 works well for you. 
+Thanks for reading and I hope Sidekiq 7.3 works well for you.
