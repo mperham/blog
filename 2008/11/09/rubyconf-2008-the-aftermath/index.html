@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2008/11/09/rubyconf-2008-the-aftermath/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="RubyConf 2008: The Aftermath">
+  <meta property="og:description" content="I got back to Austin last night after a great three days in Orlando at RubyConf. I thought my talk went well and the crowd had several interesting questions so I know someone was paying attention. :-)
+Given that my interests lie in server-side performance and scalability, I saw two linked trends developing:
+Threads suck (on Ruby?)
+They work reasonably well in Java but you should avoid them if humanly possible in Ruby. They have two fundamental drawbacks: 1) the programming model makes safe concurrency difficult to code and test; and 2) the various Ruby VMs have enough differences in their threading models that you can’t get good, reliable concurrency even with well-written multi-threaded code. The current best practice is to move to an evented IO model, which allows a single process to handle many requests concurrently and will peg a single core on a modern processor. To peg all the cores, you should scale with multiple Ruby processes, a la the traditional pack of Mongrels with Rails.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2008-11-09T00:00:00+00:00">
+    <meta property="article:modified_time" content="2008-11-09T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2021/07/15/on-multi-platform-docker-images/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="On Multi-Platform Docker images">
+  <meta property="og:description" content="Until recently, Faktory only supported the x86_64 platform. With the rise of the Apple Silicon chip and AWS Graviton, it was obvious that I would need to roll out ARM64 support soon. This week I spent several days fighting Docker’s support for multi-platform images and wanted to document what I learned.
+Faktory OSS The Faktory OSS build was relatively straightforward, with three steps for each platform:
+Build the ./faktory binary on the host. Compress the binary with upx (this cuts the binary in half, 10MB -&gt; 5MB) Run buildx for that platform to copy the binary into the platform-specific image and load it into the local registry for testing. dimg: clean generate ## Make cross-platform Docker images for the current version GOOS=linux GOARCH=amd64 go build -o faktory cmd/faktory/daemon.go upx -qq ./faktory docker buildx build --platform linux/amd64 --tag contribsys/faktory:$(VERSION) --tag contribsys/faktory:latest --load . GOOS=linux GOARCH=arm64 go build -o faktory cmd/faktory/daemon.go upx -qq ./faktory docker buildx build --platform linux/arm64 --tag contribsys/faktory:$(VERSION) --tag contribsys/faktory:latest --load . Once that is done, a simple push sends the built images to docker.io:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2021-07-15T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-07-15T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

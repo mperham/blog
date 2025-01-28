@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2012/12/12/12-gems-of-christmas-1-puma/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="12 Gems of Christmas #1 -- puma">
+  <meta property="og:description" content="I’ve spent the last few years working to advance and improve Ruby’s efficiency through concurrency, first with EventMachine and fibers and now with Actors and multithreading so it shouldn’t surprise you that my #1 pick is puma. It’s my belief that puma and sidekiq are a new breed of Ruby infrastructure that can dramatically improve your application’s efficiency — should you decide to take advantage of them.
+puma is a pure Ruby, Rack-based web server and drops right in as a replacement for thin or unicorn. Unlike unicorn or thin, puma is designed to run multithreaded by default so you get far better memory efficiency. A typical single threaded Rails unicorn process takes 250MB. puma defaults to a maximum of 16 threads per process so one puma process can replace 16 unicorn processes taking 4GB of RAM! puma, like all multithreaded libraries, works best in a truly concurrent Ruby VM like JRuby or Rubinius but you’ll still get a big win running on MRI.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2012-12-12T00:00:00+00:00">
+    <meta property="article:modified_time" content="2012-12-12T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

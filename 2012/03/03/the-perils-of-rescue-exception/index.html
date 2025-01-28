@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2012/03/03/the-perils-of-rescue-exception/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="The Perils of &#34;rescue Exception&#34;">
+  <meta property="og:description" content="Ruby’s standard exception handling looks like this.
+begin do_something rescue =&gt; ex # do something with the error end This will catch all StandardErrors and its subclasses. A frequent issue I see in Ruby code is this:
+begin do_something rescue Exception =&gt; ex # Apparently I REALLY want to know if this # block of code fails for any reason. end This is a BAD, BAD idea, dear reader, and here’s why. Ruby uses Exceptions for other things than your application code errors. One example is the Interrupt class which is a SignalException. Ruby sends this Exception to all threads so that when the process gets an INT/Ctrl-C signal, all the threads will unwind and the process will shutdown. If you rescue Exception, you will potentially catch this exception and ignore it, making your thread and process an unkillable computing zombie. Your only choice will be to pull out your kill -9 shotgun and aim for the head.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2012-03-03T00:00:00+00:00">
+    <meta property="article:modified_time" content="2012-03-03T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

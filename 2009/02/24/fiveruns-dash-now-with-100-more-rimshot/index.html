@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2009/02/24/fiveruns-dash-now-with-100-more-rimshot/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="FiveRuns Dash, now with 100% more rimshot!">
+  <meta property="og:description" content="I’m giving away a free copy of my iPhone app, Zinger, to every person who gets their app running with our new metrics service, Dash. Just email me. Steps (documented in more depth here):
+Request an invite by signing up at https://dash.fiveruns.com Log into Dash, create a new Rails application and note your application token. Install the gem: sudo gem install json sudo gem install fiveruns-dash-rails -s http://gems.github.com Add the gem to your config/environment.rb Rails::Initializer.run do |config| config.gem &#39;json&#39; # needed because of a bug in json_pure config.gem &#39;fiveruns-dash-rails&#39;, :lib =&gt; &#39;fiveruns_dash_rails&#39;, :source =&gt; &#39;http://gems.github.com&#39; Add the initializer file config/initializers/dash.rb to start Dash: if defined?(Fiveruns::Dash) Fiveruns::Dash::Rails.start(:production =&gt; &#39;YOUR-APP-TOKEN-HERE&#39;) end This will start Dash in the production environment. We don’t recommend using Dash in development mode. If you have a staging environment, you can create a separate app for that environment and combine the two like so:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2009-02-24T00:00:00+00:00">
+    <meta property="article:modified_time" content="2009-02-24T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

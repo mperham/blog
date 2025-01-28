@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/03/30/using-activerecord-with-eventmachine/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Using ActiveRecord with EventMachine">
+  <meta property="og:description" content="Given all my work with Fibers and EventMachine over the last three months, it should come as no surprise that I’ve been working on infrastructure based on Fibers and EventMachine to get maximum scalability without the callback style of code which I dislike for many reasons. Watch my talk on scaling with EventMachine if you need more background on the problem.
+Now that I have RabbitMQ, Cassandra, Solr and the Amazon AWS services evented, the only holdup was ActiveRecord. Some people may advocate using another ORM layer but when you have 2-3 other Rails apps, all sharing 100&#43; models, you can’t afford to maintain two separate ORM layers. Plus, frankly I like the Rails stack: it works pretty well, is thoroughly documented and every Ruby developer is familiar with it.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2010-03-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2010-03-30T00:00:00+00:00">
+    <meta property="article:tag" content="Eventmachine">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

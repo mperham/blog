@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2020/06/02/trimming-dependencies-concurrent-ruby/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Trimming Dependencies: concurrent-ruby">
+  <meta property="og:description" content="I’ve advocated for fewer dependencies for years now. Every long-running project needs to periodically re-evaluate their usage of each dependency and the value it provides. To that end, I recently considered Sidekiq’s dependencies:
+redis-rb - the Redis client connection_pool - provide threaded access to Redis connections rack - required to standardize Sidekiq’s Web UI rack-protection - necessary to provide CSRF protection for write actions in the Web UI We might be able to remove rack-protection gem if we re-implement the CSRF functionality but none of the other gems are easy to remove (indeed, as I was writing this post, @seuros stepped up and took on issue #4587).">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2020-06-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-06-02T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

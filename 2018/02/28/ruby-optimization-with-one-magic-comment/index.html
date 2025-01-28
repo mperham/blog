@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2018/02/28/ruby-optimization-with-one-magic-comment/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Ruby Optimization with One Magic Comment">
+  <meta property="og:description" content="Software performance optimization is simple: find a way to do less. Ruby has a reputation for being slow and, while that impression is a decade out of date, one of the leading offenders has been the garbage collector.
+This leads to the question: can we speed up Ruby by creating less garbage? Absolutely!
+A String Primer Ruby has an unfortunate default semantic that all Strings are mutable:
+string = &#34;&#34; string &lt;&lt; &#34;mike&#34; This allocates two Strings, &#34;&#34; and “mike”. The first, empty String is then mutated to contain “mike”. However String mutation is quite rare, more common is something like this:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-02-28T07:00:00-08:00">
+    <meta property="article:modified_time" content="2018-02-28T07:00:00-08:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

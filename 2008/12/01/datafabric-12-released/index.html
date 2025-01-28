@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2008/12/01/datafabric-12-released/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="DataFabric 1.2 released">
+  <meta property="og:description" content="DataFabric 1.2 supports ActiveRecord 2.2 and its overhauled connection handling. Believe me, this is a good thing. The old connection handling code was awful; the new code is much nicer.
+How It Works
+data_fabric 1.0 supported dynamic connections by proxying the connection stored in the global static connection hash. This is thread-unsafe and therefore didn’t support ActiveRecord’s multithreaded mode (allow_concurrency = true).
+data_fabric 1.2 supports ActiveRecord 2.0 and 2.1 through the exact same code as data_fabric 1.1 except refactored to load only when those two versions are detected. If ActiveRecord 2.2 or greater is detected, the new proxy code is used. The new proxy works on a per-class basis and overrides the four class methods which make up the public connection API on ActiveRecord::Base:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2008-12-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2008-12-01T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

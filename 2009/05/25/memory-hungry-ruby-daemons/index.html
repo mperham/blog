@@ -5,9 +5,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2009/05/25/memory-hungry-ruby-daemons/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Memory-hungry Ruby daemons">
+  <meta property="og:description" content="We’ve had a perplexing issue with our Ruby daemons at OneSpot: they seem to grow to 300-400MB each within about 30 minutes, at which point our Monit scripts restart them. We suspected a memory leak and so upgraded from stock Ruby 1.8.5 shipped with CentOS to the latest REE 1.8.6 but nothing changed. I also saw a very similar issue at FiveRuns. Why is this problem seemingly endemic, even with completely different source code? After some thought and research I think I understand the root clause of the problem: it’s part of Ruby’s history and design.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2009-05-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2009-05-25T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

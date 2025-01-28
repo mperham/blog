@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2013/10/17/the-emperor-has-no-clothes/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="The Emperor has no Clothes">
+  <meta property="og:description" content="“In theory, theory and practice are the same. In practice, they are not.” — Albert Einstein
+The original Dynamo paper created a wave of interest in the CAP theorem and gave rise to the recent crop of distributed databases: Cassandra, Riak, et al. These systems are generally AP where C can be tuned to provide some guarantee of consistency, i.e. they do their best to provide CAP according to the application’s needs. For instance, you might have a cluster of 5 nodes where a write to the cluster will return success if 3 of the nodes acknowledge the write. The cluster will still be available even if two of the machines fail.
+In theory they are a great way to ensure availability to your application in the face of network failures. In practice, I believe these databases are so complex that they often provide less availability than a simpler CP system like a SQL database.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2013-10-17T00:00:00+00:00">
+    <meta property="article:modified_time" content="2013-10-17T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

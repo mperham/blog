@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2016/06/24/profiling-crystal-on-osx/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Profiling Crystal on OSX">
+  <meta property="og:description" content="How do I profile my program to determine where it is slow?
+This is one of the first questions any developer asks after building a non-toy program. Crystal has a reputation for being quite fast but every language has tricks and optimizations we miss.
+Since Crystal uses the LLVM compiler suite, we can reuse a lot of the infrastructure which knows about LLVM-compiled binaries. Net result: the OSX Developer Tools include a beautiful profiler that works with Crystal binaries out of the box - so awesome! If you have XCode installed (and if you are reading this blog, it’s very likely you do), you can profile a Crystal binary right now, here’s how.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-06-24T00:00:00+00:00">
+    <meta property="article:modified_time" content="2016-06-24T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

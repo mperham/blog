@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2019/12/17/workload-isolation-with-queue-sharding/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Workload Isolation with Queue Sharding">
+  <meta property="og:description" content="A number of customers have contacted me with a common problem:
+We run a multi-tenant system where our users can perform an action which results in a huge number of jobs being enqueued. When this happens, other users see significant delays in their jobs being processed while our Sidekiq cluster works through the backlog for that one user.
+The issue is this: if you give 100% of your resources to process that user’s backlog, 100% of your customers will feel the pain of that backlog delay. For years I’ve recommended customers use a simple setup with three queues: critical, default and bulk. If user A throws 100,000 jobs into bulk, processing those jobs would be low priority and perhaps take one or two hours. That backlog will not block critical or default jobs but it will delay any bulk processing by other users.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2019-12-17T10:55:37-08:00">
+    <meta property="article:modified_time" content="2019-12-17T10:55:37-08:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

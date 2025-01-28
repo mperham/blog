@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2016/02/05/happy-birthday-sidekiq/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Happy 4th Birthday, Sidekiq">
+  <meta property="og:description" content="Four years ago today I shipped Sidekiq 0.5.0. 110 versions later, it’s still changing every day. Pretty amazing. So what’s new?
+Sidekiq Enterprise Sidekiq Enterprise gained two major new features this month.
+Historical Metrics Sidekiq Enterprise can now send the global counts you see at the top of the Web UI to Statsd for monitoring and display within your metrics dashboard. Read More
+STATSD = ::Statsd.new(...) Sidekiq.configure_server do |config| config.save_history(STATSD) end Multi-Process If you start N Sidekiq processes, each process is completely separate and must be managed individually.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-02-05T00:00:00+00:00">
+    <meta property="article:modified_time" content="2016-02-05T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

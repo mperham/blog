@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2016/02/09/kill-your-dependencies/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Kill Your Dependencies">
+  <meta property="og:description" content="This post talks about Ruby but it’s true of every language community: Python, JavaScript, Java, etc. The scourge of dependencies spares no one.
+This is a dependency visualization of every Rails app I’ve ever used. Does any of this sound familiar:
+Gemfile with 100s of entries. Test gems loading in production. Each Rails process takes 100s of megabytes of RAM. The Rubygems system is commendable for how easy it makes packaging up Ruby for others to reuse. But that very ease means it’s also quite easy for those gems to pull in other gems transitively, leading to Rails apps which “download the Internet” and have hundreds of dependencies.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-02-09T00:00:00+00:00">
+    <meta property="article:modified_time" content="2016-02-09T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

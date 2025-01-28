@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2012/11/03/current-thoughts-on-ruby-performance/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Current Thoughts on MRI Performance">
+  <meta property="og:description" content="Threading and concurrency, as usual, have been a big topic of conversation at Rubyconf 2012. Myself, Tony Arcieri, Charles Nutter, Brian Ford and others all beat the drum of our multi-core future and the reality that MRI is not ready for it.
+That’s why I’m disappointed in the Ruby 2.0 release. I had hoped they would use the major version bump to break backwards compatibility and unlock a lot of the problems that have been holding back MRI. My understanding is that the native extensions API is responsible for much of the problems: if user-level C code is executing, nothing else can execute because of unprotected, direct access to memory.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2012-11-03T00:00:00+00:00">
+    <meta property="article:modified_time" content="2012-11-03T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

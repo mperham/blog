@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2009/06/22/slabs-pages-chunks-and-memcached/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Slabs, Pages, Chunks and Memcached">
+  <meta property="og:description" content="Many people don’t know this but the latest memcached release (1.2.8 right now) can be about 15% more efficient in its memory usage than older releases. If you have a 600MB memcached server, upgrading will magically “gain” you 100MB of RAM. Why is this?
+When you ask memcached to store a value, it looks up the “slab” associated with that value. A slab holds values within a particular size range. Slabs are composed of 1MB pages, which are broken into chunks of the slab’s size. Let’s say your value is 1001 bytes; memcached will look up the slab which holds values between 1000 and 2000 bytes. It then finds a page with an empty chunk and inserts the value into that chunk. Note that a chunk is fixed in size – it must be 2000 bytes in order to store the largest value for the slab.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2009-06-22T00:00:00+00:00">
+    <meta property="article:modified_time" content="2009-06-22T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

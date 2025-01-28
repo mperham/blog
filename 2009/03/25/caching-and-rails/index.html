@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2009/03/25/caching-and-rails/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Caching and Rails">
+  <meta property="og:description" content="Here’s the slides from my AOR talk last night: Caching, Memcached and Rails (600KB).
+Caching, Memcached And Rails I was a little unhappy with my wrapup – the one thing I wanted to teach people was when to use each different caching mechanism provided by Rails and I didn’t really revisit and summarize that content. So here’s a quick summary:
+HTTP caching – prefer this over all other mechanisms. This is really the only mechanism that prevents the request from ever hitting Ruby. This topic is big enough for a book so I won’t cover it here but review the Expires, Etag and Cache-Control headers to understand how HTTP caching works. You’ll need to configure Varnish, Squid, mod_cache or some other HTTP caching proxy. Page caching – I believe this is really legacy from before Rails supported HTTP caching properly. Stick with HTTP caching and proper headers. Action caching – useful when the entire page contents can be cached but you need to run before_filters (e.g. to ensure the user is logged in). Use AJAX/javascript to do minor customization to the cached content. Fragment caching – useful when various boxes of content on the page can be cached, but have different dependencies and need to be expired at different times Object caching (the Rails.cache.fetch method) – the most granular mechanism. Good for caching the results of intensive logic or queries. I hope this helps demystify the myriad of caching mechanisms Rails supports. If you want to learn even more, Gregg Pollack has an amazing set of videos on Scaling Rails which covers caching in great depth. Happy Caching!">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2009-03-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2009-03-25T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

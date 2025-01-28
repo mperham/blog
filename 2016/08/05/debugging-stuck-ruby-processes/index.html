@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2016/08/05/debugging-stuck-ruby-processes/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Debugging stuck Ruby processes">
+  <meta property="og:description" content="My Ruby process has stopped doing any work, what’s wrong?
+This is an uncommon but occasional problem for many people, especially with large applications using lots of native extensions.
+Step 1 - Thread backtraces A Sidekiq process will print out the backtrace of every thread when you send it the TTIN signal.
+kill -TTIN &lt;pid&gt; Side note: YMMV for other types of Ruby processes: resque, unicorn, puma, passenger, etc. Check the gem documentation or open an issue with the maintainers if it’s not clear how to get backtraces from your process.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-08-05T00:00:00+00:00">
+    <meta property="article:modified_time" content="2016-08-05T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

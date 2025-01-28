@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2008/11/22/data_fabric-110-released/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="data_fabric 1.1.0 released">
+  <meta property="og:description" content="Justin Balthrop at Geni was nice enough to donate a few fixes to data_fabric. The major issue was that when the connection changed, the plugin established a brand new connection. With his changes, data_fabric will now cache the connection and reuse it. This can lead to a noticeable performance increase if your code was switching connections frequently.
+The logging code was also refactored to simplify it and fix a nil pointer I frequently ran into.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2008-11-22T00:00:00+00:00">
+    <meta property="article:modified_time" content="2008-11-22T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

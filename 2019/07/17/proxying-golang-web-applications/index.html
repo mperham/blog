@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Proxying Golang Web Applications">
+  <meta property="og:description" content="Recently someone posted an issue asking if Faktory could support putting nginx in front of Faktory’s Web UI. Normally you access the Web UI like http://localhost:7420/ but they wanted it to look something like http://somehost:8080/faktory. That’s quite common when trying to wrap multiple systems into something that looks like one website to the browser.
+The issue is that the Web UI assumed it was at the root, so it hardcoded paths like /static/application.css. If you mount the Web UI at /faktory, you want that CSS URL to become /faktory/static/application.css.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2019-07-17T16:26:43-07:00">
+    <meta property="article:modified_time" content="2019-07-17T16:26:43-07:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

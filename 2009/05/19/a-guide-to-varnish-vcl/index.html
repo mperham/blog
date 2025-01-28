@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2009/05/19/a-guide-to-varnish-vcl/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="A Guide to Varnish VCL">
+  <meta property="og:description" content="I’ve been working with Varnish 2.0 for the last two weeks, going from complete n00b to someone who knows enough to feel I can improve the terrible lack of documentation for Varnish and VCL. There’s not a lot out there and what’s there is hard to find and sometimes erroneous. I’m hoping this post will help others like me who are struggling with Varnish and VCL.
+Basics
+VCL is essentially a set of stubs which you can override to provide your own behavior. It is very limited in what it can do, primarily for performance reasons. You don’t have access to the filesystem and the language has no variables or loops.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2009-05-19T00:00:00+00:00">
+    <meta property="article:modified_time" content="2009-05-19T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

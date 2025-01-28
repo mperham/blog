@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/03/17/cassandra-internals-reading/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Cassandra Internals -- Reading">
+  <meta property="og:description" content="In my previous post, I discussed how writes happen in Cassandra and why they are so fast. Now we’ll look at reads and learn why they are slow.
+Reading and Consistency
+One of the fundamental thereoms in distributed systems is Brewer’s CAP theorem: distributed systems can have Consistency, Availability and Partition-tolerance properties but can only guarantee two. In the case of Cassandra, they guarantee AP and loosen consistency to what is known as eventual consistency. Consider a write and a read that are very close together in time. Let’s say you have a key “A” with a value of “123” in your cluster. Now you update “A” to be “456”. The write is sent to N different nodes, each of which takes some time to write the value. Now you ask for a read of “A”. Some of those nodes might still have “123” for the value while others have “456”. They will all eventually return “456” but it is not guaranteed when (in practice, usually just a few milliseconds). You’ll see why this is important in a second.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2010-03-17T00:00:00+00:00">
+    <meta property="article:modified_time" content="2010-03-17T00:00:00+00:00">
+    <meta property="article:tag" content="Cassandra">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

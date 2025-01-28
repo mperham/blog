@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2016/06/14/test-driving-sidekiq-and-crystal/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Test Driving Sidekiq and Crystal">
+  <meta property="og:description" content="It’s alive! I’ve finished the initial port of the three core pieces of Sidekiq, the client API, the job execution engine and the Web UI, to Crystal. Let’s assume we have a Ruby app using Sidekiq.rb and integrate Sidekiq.cr to run beside it.
+Getting Started Sidekiq.cr has a Getting Started wiki page which walks you through the basics of setting up a new Crystal app. Follow those directions. Once complete, you should have a Worker named Sample::MyWorker that we can call. We’re going to build the Sidekiq.cr binary and run it with ./sidekiq -q crystal. Sidekiq.cr is now listening for jobs on the crystal queue only. Any Ruby-based jobs should use other queues so the Crystal worker will never see them - exactly what we want.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-06-14T00:00:00+00:00">
+    <meta property="article:modified_time" content="2016-06-14T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

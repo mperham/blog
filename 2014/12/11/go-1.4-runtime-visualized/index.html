@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2014/12/11/go-1.4-runtime-visualized/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Go 1.4 runtime visualized">
+  <meta property="og:description" content="Go 1.4 is out! I won’t reiterate the changes, read the release notes for that. But it’s one thing to read that things have improved – what if I could show you the improvement?
+These snapshots are from an upcoming feature for Inspeqtor Pro: real-time memory and GC monitoring for any Go-based daemon. They show the first 3 minutes of Inspeqtor Pro itself starting up. After 1 minute, it sends an alert email. That big spike you see is all the code required to send email to Gmail (net/smtp, TLS, etc) being paged into memory. The small but regular bumps in Allocated Memory are from Inspeqtor Pro gathering system metrics every 15 seconds.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2014-12-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2014-12-11T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

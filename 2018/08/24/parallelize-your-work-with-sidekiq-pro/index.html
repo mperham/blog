@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2018/08/24/parallelize-your-work-with-sidekiq-pro/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Parallelize your work with Sidekiq Pro">
+  <meta property="og:description" content="A common issue for Sidekiq users are long jobs: jobs which process in serial a long list of things. Why not parallelize that work and make it a lot faster?
+Map/Reduce is a pattern for distributed computing: a list of things is mapped onto a set of jobs. Your Sidekiq workers execute those jobs in parallel and store the results of the work. Something then reduces those calculations into a single result. In this way, large volumes of work can be done in parallel, speeding up batch processing.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-08-24T09:00:00-07:00">
+    <meta property="article:modified_time" content="2018-08-24T09:00:00-07:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

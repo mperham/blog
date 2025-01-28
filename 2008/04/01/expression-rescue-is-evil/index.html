@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2008/04/01/expression-rescue-is-evil/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Expression Rescue is Evil">
+  <meta property="og:description" content="One of the cleaner syntax options Ruby gives you is what I call expression rescues. Take this:
+&lt;br /&gt; &lt;%= @item.parent.name rescue &#39;None&#39; %&gt;&lt;br /&gt; This code is an example of a pretty standard requirement: printing out the name of the parent of an item. If the item does not have a parent, it will print ‘None’. Under the covers, the following is happening:
+Ruby calls the parent method on @item Ruby calls the name method on the result Since the parent is nil, an ‘undefined method `name’ for nil’ error will be raised This error is caught by the rescue clause and the rescue expression evaluated The result of the rescue expression is returned as the result of the overall expression So what’s the problem? There’s several in my experience:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2008-04-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2008-04-01T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2008/11/06/introducing-politics/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Introducing Politics">
+  <meta property="og:description" content="I’m going to be introducing my new Politics gem at RubyConf 2008 tomorrow. This gem provides a few modules which solve a couple of distributed computing problems we were having at FiveRuns in providing fault tolerant, scalable processing across many machines.
+Here’s my RubyConf slides (1MB, Keynote), minus the screencasts I created to demo the two worker modules in action.
+There are two modules provided:
+TokenWorker ensures that one process from a group of redundant processes will be elected to perform processing for the next N seconds. StaticQueueWorker distributes a predefined set of work to a dynamic set of processes every N seconds. Both depend on the standard Ruby library and memcached. StaticQueueWorker also depends on net-mdns for Bonjour functionality.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2008-11-06T00:00:00+00:00">
+    <meta property="article:modified_time" content="2008-11-06T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

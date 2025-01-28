@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Introducing Phat, an Asynchronous Rails app">
+  <meta property="og:description" content="Phat is my new Rails 2.3.5 application which runs 100% asynchronous, supporting many concurrent requests in a single Ruby process.
+This is a new breed of Rails application which uses a new mode of execution available in Ruby 1.9: single Thread, multiple Fiber. Existing modes of execution suck:
+Single thread harkens back to the days of Rails 1.x, where you started N mongrels to handle up to N concurrent requests. Multiple threads is better but still has fundamental issues in Ruby. Autoloading is simply broken and Ruby’s thread implementation does not scale at all due to the GIL. Here’s a sample action which uses memcached and the database. There’s nothing odd here – it’s the same old Rails API and codebase we are used to as Ruby developers, it just executes differently under the covers.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2010-04-03T00:00:00+00:00">
+    <meta property="article:modified_time" content="2010-04-03T00:00:00+00:00">
+    <meta property="article:tag" content="Eventmachine">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

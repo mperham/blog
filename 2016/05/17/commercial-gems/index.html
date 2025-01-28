@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2016/05/17/commercial-gems/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Serving your own Commercial Rubygems">
+  <meta property="og:description" content="It’s not well known but with Rubygems and Bundler, you can distribute access-controlled commercial Rubygems. My gems, Sidekiq Pro and Sidekiq Enterprise, are the most well known example but I’m not a wizard: anyone can distribute gems to a limited set of customers. Here’s how I do it.
+A $5/mo DigitalOcean instance running Apache. No database, no app server. I have a set of bash scripts which can build a server in 5 minutes. To serve gems, you need to have Apache serve a directory of static files. You’ll need a VirtualHost entry with something like this: &lt;VirtualHost *:443&gt; ServerName my-server.com DocumentRoot /var/www/gems SSLEngine on &lt;Location /&gt; AuthType basic AuthName &#34;private area&#34; AuthBasicProvider file AuthUserFile /var/www/gems-passwd Require valid-user &lt;/Location&gt; To control access to those gems, you need a /var/www/gems-passwd file which contains your user / password pairs. The username / passwords are a hash based on the customer’s email address. The contents look like this: 1a7fe3bd:$apr1$0RtyG.1v$D/o5n25i2YmPiTOGAPPI21 d41be46c:$apr1$.dFnnB5F$Ne2YtTP12q9iM9/ZQvoL01 09120f77:$apr1$ERLqbLvS$El2Llj6MJlWDWQnJKcrR80 The command to generate an entry is htpasswd -nb user pwd.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2016-05-17T00:00:00+00:00">
+    <meta property="article:modified_time" content="2016-05-17T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

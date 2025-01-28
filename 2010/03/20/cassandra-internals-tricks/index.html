@@ -5,9 +5,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/03/20/cassandra-internals-tricks/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Cassandra Internals -- Tricks!">
+  <meta property="og:description" content="In my previous posts, I covered how Cassandra reads and writes data. In this post, I want to explain some of the trickery that Cassandra uses to provide a scalable distributed system.
+Gossip
+Cassandra is a cluster of individual nodes – there’s no “master” node or single point of failure – so each node must actively verify the state of the other cluster members. They do this with a mechanism known as gossip. Each node ‘gossips’ to 1-3 other nodes every second about the state of each node in the cluster. The gossip data is versioned so that any change for a node will quickly propagate throughout the entire cluster. In this way, every node will know the current state of every other node: whether it is bootstrapping, running normally, etc.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2010-03-20T00:00:00+00:00">
+    <meta property="article:modified_time" content="2010-03-20T00:00:00+00:00">
+    <meta property="article:tag" content="Cassandra">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

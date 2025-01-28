@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2011/05/04/background-processing-vs-message-queueing/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Background Processing vs Message Queueing">
+  <meta property="og:description" content="One common simplification I see engineers make is equating message queueing with background processing. This is what they are missing: message queueing is a superset of background processing. All message processing is done in the background but background processing does not have to be done via message queues.
+Take a simple use case: “I want to send a welcome email when a user registers”. Commonly you want to send this email in the background so it does not impact the user’s experience. Do you need to install ActiveMQ, RabbitMQ or Resque to do this? Certainly not.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2011-05-04T00:00:00+00:00">
+    <meta property="article:modified_time" content="2011-05-04T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

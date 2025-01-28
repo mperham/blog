@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2023/09/11/ruby-http-server-from-scratch/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Ruby HTTP Server from scratch">
+  <meta property="og:description" content="Recently I decided to add support for Kubernetes HTTP health checks to Sidekiq Enterprise. This means, within each Sidekiq worker process, we need to implement an HTTP server which listens on port X and simply returns 200/OK if the process is alive.
+Notice we have really basic requirements here: no need for serving files or arbitrary dynamic content. We only respond to “/” so there’s no need for routes, paths or query parameter handling. Because the health check should only be used within private networking, we have no need for TLS or https support.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2023-09-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-09-11T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

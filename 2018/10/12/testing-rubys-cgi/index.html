@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2018/10/12/testing-rubys-cgi/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Testing Ruby&#39;s CGI">
+  <meta property="og:description" content="CGI is a standard for generating HTML pages from scripts executed as child processes by a web server. I explained CGI and how I use it in a previous post, CGI: Ruby’s Bare Metal. I like to use CGI because it means that I don’t have to run any Ruby app server (e.g. puma, passenger, unicorn) 24/7. Less moving parts == more robust!
+Those app servers get most of the press these days so sadly CGI doesn’t have much support and documentation; I couldn’t find anything on how to test CGI scripts. These scripts handle my business, they need to work so I decided to put some effort into testing CGI. You, dear reader, are the benefactor!">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-10-12T08:59:06-07:00">
+    <meta property="article:modified_time" content="2018-10-12T08:59:06-07:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

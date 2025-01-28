@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/02/09/cassandra-and-eventmachine/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Cassandra and EventMachine">
+  <meta property="og:description" content="I spent this past weekend adding eventmachine support for the Cassandra gem. We’re using Cassandra at OneSpot as our next-gen data store and need EM support. They were nice enough to pull my changes yesterday so the next release of the thrift_client and cassandra gems should work in EM. You just need to do this:
+require &#39;thrift_client/event_machine&#39; EM.run do Fiber.new do @twitter = Cassandra.new(&#39;Twitter&#39;, &#34;127.0.0.1:9160&#34;, :transport =&gt; Thrift::EventMachineTransport, :transport_wrapper =&gt; nil) @twitter.clear_keyspace! EM.stop end.resume end The key is the :transport and :transport_wrapper options which override the default, Socket-based implementation. Like all of my EventMachine code, this requires Ruby 1.9.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2010-02-09T00:00:00+00:00">
+    <meta property="article:modified_time" content="2010-02-09T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

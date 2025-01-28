@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/11/22/apache-tuning/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Apache Tuning">
+  <meta property="og:description" content="Want to wreck your afternoon? Just have a poorly configured WordPress install linked from Hacker News. Here’s the postmortem.
+In my case, my slice was freezing. I didn’t know what the problem was until I ran top and saw this. Yikes.
+The problem was the Apache is configured by default to allow up to 150 Apache processes. Each process took 5-10MB of real memory so my slice’s 512MB was quickly overwhelmed. But why was it creating 150 processes in the first place? Shouldn’t WP-SuperCache respond very quickly, such that the process can serve many requests per second? Yes, but…">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2010-11-22T00:00:00+00:00">
+    <meta property="article:modified_time" content="2010-11-22T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

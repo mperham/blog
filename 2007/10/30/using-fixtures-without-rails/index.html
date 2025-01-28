@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2007/10/30/using-fixtures-without-rails/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Using Fixtures without Rails">
+  <meta property="og:description" content="We’ve got several applications internal to FiveRuns which are Ruby but not Rails. They use ActiveRecord for database access but not the rest of the Rails stack. We still wanted to use fixtures to provide a foundation of data for our testing though so I spent a few hours figuring out how to get fixtures working in a non-Rails world. In essence you need to add this to your test_helper.rb:
+&lt;br /&gt; ENV[&#34;RAILS_ENV&#34;] = &#34;test&#34;&lt;br /&gt; RAILS_ENV = &#34;test&#34;&lt;br /&gt; require &#39;rubygems&#39;&lt;br /&gt; require &#39;test/unit&#39;&lt;br /&gt; require &#39;active_record&#39;&lt;br /&gt; require &#39;active_record/fixtures&#39;&lt;br /&gt; filename = File.join(File.dirname(__FILE__), &#34;../config/database.yml&#34;)&lt;br /&gt; ActiveRecord::Base.configurations = YAML::load(ERB.new(IO.read(filename)).result)&lt;br /&gt; ActiveRecord::Base.establish_connection&lt;br /&gt; Test::Unit::TestCase.use_instantiated_fixtures = false&lt;br /&gt; Test::Unit::TestCase.use_transactional_fixtures = true&lt;br /&gt; Test::Unit::TestCase.fixture_path = File.join(File.dirname(__FILE__), &#39;fixtures&#39;)&lt;br /&gt; The only Rails-ism you need to copy is the config/database.yml file. The setup above expects your fixtures to live in a “fixtures” directory below the test_helper.rb, which is how Rails does it also. The first two lines are hacks so that ActiveRecord will know the current environment without having to pull in the config/environment.rb stuff that Rails uses.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2007-10-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2007-10-30T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

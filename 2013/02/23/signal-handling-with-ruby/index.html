@@ -5,9 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2013/02/23/signal-handling-with-ruby/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Signal Handling with Ruby 2.0">
+  <meta property="og:description" content="A user recently ran Sidekiq with Ruby 2.0 and found that the signal handling did not work well at all. Ctrl-C and other signals resulted in some ominous stack traces.
+It turns out that Ruby 2.0 locks down what you can do in a signal handler in order to prevent unsafe or possibly non-deterministic behavior. You can’t take a Mutex within a signal handler anymore as this could result in a thread context switch or even deadlock. In fact you can’t even write to a Logger because it tries to use a Mutex internally.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2013-02-23T00:00:00+00:00">
+    <meta property="article:modified_time" content="2013-02-23T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 

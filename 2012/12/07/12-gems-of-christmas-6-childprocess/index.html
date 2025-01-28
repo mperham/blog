@@ -5,9 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0">
+  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2012/12/07/12-gems-of-christmas-6-childprocess/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="12 Gems of Christmas #6 -- childprocess">
+  <meta property="og:description" content="Ruby has many different gems and APIs for spawning child processes but none I like more than childprocess. posix-spawn and open4 are popular alternatives but childprocess has a clean Ruby API and aims to work on all Ruby platforms.
+Here we have an example setting up a child process pipeline, performing the equivalent of ps aux | grep -E &#39;redis|memcached&#39;.
+require &#39;childprocess&#39; listing = ChildProcess.build(&#34;ps&#34;, &#34;aux&#34;) search = ChildProcess.build(&#34;grep&#34;, &#39;-E&#39;, %w(redis memcached).join(&#39;|&#39;)) search.duplex = true search.io.stdout = STDOUT search.start listing.io.stdout = search.io.stdin listing.start listing.wait search.io.stdin.close search.wait With subprocesses, the tricky bit is usually hooking up the IO streams correctly. In this case, the duplex flag signals that you want to write to STDIN of the process (i.e. use it as the RHS of a pipe). Everything else is pretty straightforward; childprocess makes multi-processing with Ruby simple.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2012-12-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2012-12-07T00:00:00+00:00">
 
-  
   <meta name="description" content="Ruby, OSS and the Internet">
   
 
