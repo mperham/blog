@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-10-14T00:00:00Z
-published: true
 title: Optimizing Sidekiq
 url: /2015/10/14/optimizing-sidekiq/
 ---

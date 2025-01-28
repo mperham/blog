@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-06-19T00:00:00Z
-published: true
 title: Inspeqtor Pro now Open Source
 url: /2015/06/19/inspeqtor-pro-now-oss/
 ---

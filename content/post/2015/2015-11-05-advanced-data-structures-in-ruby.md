@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-11-05T00:00:00Z
-published: true
 title: Advanced Data Structures in Ruby
 url: /2015/11/05/advanced-data-structures-in-ruby/
 ---

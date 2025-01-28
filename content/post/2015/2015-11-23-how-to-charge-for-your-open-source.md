@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-11-23T00:00:00Z
-published: true
 title: How to Charge for your Open Source
 url: /2015/11/23/how-to-charge-for-your-open-source/
 ---

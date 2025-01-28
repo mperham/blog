@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-02-18T00:00:00Z
-published: true
 title: Sidekiq Pro 2.0!
 url: /2015/02/18/sidekiq-pro-2.0/
 ---

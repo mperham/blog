@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2016-05-17T00:00:00Z
-published: true
 title: Serving your own Commercial Rubygems
 url: /2016/05/17/commercial-gems/
 ---

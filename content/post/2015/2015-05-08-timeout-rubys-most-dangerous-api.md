@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-05-08T00:00:00Z
-published: true
 title: 'Timeout: Ruby''s Most Dangerous API'
 url: /2015/05/08/timeout-rubys-most-dangerous-api/
 ---

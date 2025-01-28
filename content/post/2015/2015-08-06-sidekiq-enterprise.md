@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-08-06T00:00:00Z
-published: true
 title: Sidekiq Enterprise
 url: /2015/08/06/sidekiq-enterprise/
 ---

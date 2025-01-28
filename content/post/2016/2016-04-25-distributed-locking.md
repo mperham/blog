@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2016-04-25T00:00:00Z
-published: true
 title: Distributed Locking with Redis and Ruby
 url: /2016/04/25/distributed-locking/
 ---

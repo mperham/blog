@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2016-06-14T00:00:00Z
-published: true
 title: Test Driving Sidekiq and Crystal
 url: /2016/06/14/test-driving-sidekiq-and-crystal/
 ---

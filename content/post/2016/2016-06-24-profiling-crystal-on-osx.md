@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2016-06-24T00:00:00Z
-published: true
 title: Profiling Crystal on OSX
 url: /2016/06/24/profiling-crystal-on-osx/
 ---

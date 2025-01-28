@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-09-24T00:00:00Z
-published: true
 title: Storing Data with Redis
 url: /2015/09/24/storing-data-with-redis/
 ---

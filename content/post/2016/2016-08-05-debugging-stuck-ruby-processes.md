@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2016-08-05T00:00:00Z
-published: true
 title: Debugging stuck Ruby processes
 url: /2016/08/05/debugging-stuck-ruby-processes/
 ---

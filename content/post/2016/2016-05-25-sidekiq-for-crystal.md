@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2016-05-25T00:00:00Z
-published: true
 title: Sidekiq for Crystal
 url: /2016/05/25/sidekiq-for-crystal/
 ---

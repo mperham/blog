@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-01-05T00:00:00Z
-published: true
 title: 'CGI: Ruby''s Bare Metal'
 url: /2015/01/05/cgi-rubys-bare-metal/
 ---

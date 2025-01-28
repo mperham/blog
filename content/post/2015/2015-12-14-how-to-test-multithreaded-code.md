@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-12-14T00:00:00Z
-published: true
 title: How to Test Multithreaded Code
 url: /2015/12/14/how-to-test-multithreaded-code/
 ---

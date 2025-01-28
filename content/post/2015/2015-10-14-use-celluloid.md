@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-10-14T00:00:00Z
-published: true
 title: Should you use Celluloid?
 url: /2015/10/14/should-you-use-celluloid/
 ---

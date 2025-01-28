@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2017-02-01T00:00:00Z
-published: true
 title: What can I do?
 url: /2017/02/01/what-can-i-do/
 ---

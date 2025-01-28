@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-07-16T00:00:00Z
-published: true
 title: Sidekiq and Upstart
 url: /2015/07/16/sidekiq-and-upstart/
 ---

@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-06-01T00:00:00Z
-published: true
 title: Sidekiq Pro Gem Server Outage
 url: /2015/06/01/sidekiq-pro-gem-server-outage/
 ---

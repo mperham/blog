@@ -1,7 +1,6 @@
 ---
 author: Mike Perham
 date: 2015-02-04T00:00:00Z
-published: true
 title: Indie Developers in Ruby, 2015 Ed.
 url: /2015/02/04/indie-developers-in-ruby-2015-edition/
 ---
