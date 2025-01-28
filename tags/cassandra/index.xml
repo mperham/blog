@@ -17,9 +17,9 @@
       <pubDate>Sat, 20 Mar 2010 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2010/03/20/cassandra-internals-tricks/</guid>
-      <description>In my previous posts, I covered how Cassandra reads and writes data. In this post, I want to explain some of the trickery that Cassandra uses to provide a scalable distributed system.
-Gossip
-Cassandra is a cluster of individual nodes &amp;ndash; there&amp;rsquo;s no &amp;ldquo;master&amp;rdquo; node or single point of failure &amp;ndash; so each node must actively verify the state of the other cluster members. They do this with a mechanism known as gossip.</description>
+      <description>&lt;p&gt;In my previous posts, I covered how Cassandra &lt;a href=&#34;https://www.mikeperham.com/2010/03/17/cassandra-internals-reading/&#34;&gt;reads&lt;/a&gt; and &lt;a href=&#34;https://www.mikeperham.com/2010/03/13/cassandra-internals-writing/&#34;&gt;writes&lt;/a&gt; data. In this post, I want to explain some of the trickery that Cassandra uses to provide a scalable distributed system.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Gossip&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Cassandra is a cluster of individual nodes &amp;ndash; there&amp;rsquo;s no &amp;ldquo;master&amp;rdquo; node or single point of failure &amp;ndash; so each node must actively verify the state of the other cluster members. They do this with a mechanism known as &lt;a href=&#34;http://wiki.apache.org/cassandra/ArchitectureGossip&#34;&gt;gossip&lt;/a&gt;. Each node &amp;lsquo;gossips&amp;rsquo; to 1-3 other nodes every second about the state of each node in the cluster. The gossip data is versioned so that any change for a node will quickly propagate throughout the entire cluster. In this way, every node will know the current state of every other node: whether it is bootstrapping, running normally, etc.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -28,9 +28,10 @@ Cassandra is a cluster of individual nodes &amp;ndash; there&amp;rsquo;s no &amp
       <pubDate>Wed, 17 Mar 2010 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2010/03/17/cassandra-internals-reading/</guid>
-      <description>In my previous post, I discussed how writes happen in Cassandra and why they are so fast. Now we&amp;rsquo;ll look at reads and learn why they are slow.
-Reading and Consistency
-One of the fundamental thereoms in distributed systems is Brewer&amp;rsquo;s CAP theorem: distributed systems can have Consistency, Availability and Partition-tolerance properties but can only guarantee two. In the case of Cassandra, they guarantee AP and loosen consistency to what is known as eventual consistency.</description>
+      <description>&lt;p&gt;&lt;img src=&#34;http://incubator.apache.org/cassandra/media/img/cassandra_logo.png&#34; alt=&#34;Cassandra logo&#34;&gt;&lt;/p&gt;
+&lt;p&gt;In my &lt;a href=&#34;https://www.mikeperham.com/2010/03/13/cassandra-internals-writing/&#34;&gt;previous post&lt;/a&gt;, I discussed how writes happen in Cassandra and why they are so fast. Now we&amp;rsquo;ll look at reads and learn why they are slow.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Reading and Consistency&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;One of the fundamental thereoms in distributed systems is &lt;a href=&#34;http://en.wikipedia.org/wiki/CAP_theorem&#34;&gt;Brewer&amp;rsquo;s CAP theorem&lt;/a&gt;: distributed systems can have Consistency, Availability and Partition-tolerance properties but can only guarantee two. In the case of Cassandra, they guarantee AP and loosen consistency to what is known as &lt;em&gt;eventual consistency&lt;/em&gt;. Consider a write and a read that are very close together in time. Let&amp;rsquo;s say you have a key &amp;ldquo;A&amp;rdquo; with a value of &amp;ldquo;123&amp;rdquo; in your cluster. Now you update &amp;ldquo;A&amp;rdquo; to be &amp;ldquo;456&amp;rdquo;. The write is sent to N different nodes, each of which takes some time to write the value. Now you ask for a read of &amp;ldquo;A&amp;rdquo;. Some of those nodes might still have &amp;ldquo;123&amp;rdquo; for the value while others have &amp;ldquo;456&amp;rdquo;. They will all eventually return &amp;ldquo;456&amp;rdquo; but it is not guaranteed when (in practice, usually just a few milliseconds). You&amp;rsquo;ll see why this is important in a second.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -39,7 +40,8 @@ One of the fundamental thereoms in distributed systems is Brewer&amp;rsquo;s CAP
       <pubDate>Sat, 13 Mar 2010 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2010/03/13/cassandra-internals-writing/</guid>
-      <description>We&amp;rsquo;ve started using Cassandra as our next-generation data storage engine at OneSpot (replacing a very large Postgresql machine with a cluster of EC2 machines) and so I&amp;rsquo;ve been using it for the last few weeks. As I&amp;rsquo;m an infrastructure nerd and a big believer in understanding the various layers in the stack, I&amp;rsquo;ve been reading up a bit on how Cassandra works and wanted to write a summary for others to benefit from.</description>
+      <description>&lt;p&gt;&lt;img src=&#34;http://incubator.apache.org/cassandra/media/img/cassandra_logo.png&#34; alt=&#34;Cassandra logo&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ve started using Cassandra as our next-generation data storage engine at &lt;a href=&#34;http://www.onespot.com&#34;&gt;OneSpot&lt;/a&gt; (replacing a very large Postgresql machine with a cluster of EC2 machines) and so I&amp;rsquo;ve been using it for the last few weeks. As I&amp;rsquo;m an infrastructure nerd and a big believer in understanding the various layers in the stack, I&amp;rsquo;ve been reading up a bit on how Cassandra works and wanted to write a summary for others to benefit from. Since Cassandra is known to have very good write performance, I thought I would cover that first.&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -17,8 +17,14 @@
       <pubDate>Fri, 25 Apr 2008 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2008/04/25/syntactic-sugar/</guid>
-      <description>There&amp;rsquo;s only one thing I miss in Java that Ruby doesn&amp;rsquo;t have:
-String[] list = { &#34;Foo&#34;, &#34;Bar&#34;, &#34;Blaz&#34;, } Note the last trailing comma. This is a syntax error in Ruby but legal in Java. If you add another element later, you don&amp;rsquo;t need to remember to add a comma to the previous entry. Minor, sure, but useful, especially with interpreted languages where syntax errors are not found until runtime.</description>
+      <description>&lt;p&gt;There&amp;rsquo;s only one thing I miss in Java that Ruby doesn&amp;rsquo;t have:&lt;/p&gt;
+&lt;pre&gt;String[] list = {
+&#34;Foo&#34;,
+&#34;Bar&#34;,
+&#34;Blaz&#34;,
+}
+&lt;/pre&gt;
+&lt;p&gt;Note the last trailing comma. This is a syntax error in Ruby but legal in Java. If you add another element later, you don&amp;rsquo;t need to remember to add a comma to the previous entry. Minor, sure, but useful, especially with interpreted languages where syntax errors are not found until runtime.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -27,8 +33,8 @@ String[] list = { &#34;Foo&#34;, &#34;Bar&#34;, &#34;Blaz&#34;, } Note the last 
       <pubDate>Sun, 30 Dec 2007 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2007/12/30/java-is-becoming-the-new-cobol/</guid>
-      <description>This is exactly the conclusion I came to 2 years ago after playing with Ruby two years ago. Java was a good leap forward from C but Ruby is the next leap forward IMO now that it has mainstream momentum.
-Java is becoming the new Cobol </description>
+      <description>&lt;p&gt;This is exactly the conclusion I came to 2 years ago after playing with Ruby two years ago.  Java was a good leap forward from C but Ruby is the next leap forward IMO now that it has mainstream momentum.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.infoworld.com/article/07/12/28/52FE-underreported-java_1.html&#34;&gt;Java is becoming the new Cobol &lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

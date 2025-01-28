@@ -17,8 +17,8 @@
       <pubDate>Wed, 15 Oct 2014 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2014/10/15/stupid-go-tricks-in-janus/</guid>
-      <description>I&amp;rsquo;ve used Janus as my main text editor for the last few years; it&amp;rsquo;s a good solution for people like myself that want to quickly install not just MacVim but also a curated set of plugins necessary to have a productive IDE for Ruby/JS development.
-Side note: learn vim if you&amp;rsquo;re a developer and don&amp;rsquo;t know it already. Every Unix environment in the world has vim installed. Learning vim is an excellent investment of your time and ensures you can be productive everywhere, not just your own machine.</description>
+      <description>&lt;p&gt;I&amp;rsquo;ve used &lt;a href=&#34;https://github.com/carlhuda/janus/&#34;&gt;Janus&lt;/a&gt; as my main text editor for the last few years; it&amp;rsquo;s a good solution for people like myself that want to quickly install not just MacVim but also a curated set of plugins necessary to have a productive IDE for Ruby/JS development.&lt;/p&gt;
+&lt;p&gt;Side note: &lt;strong&gt;learn vim if you&amp;rsquo;re a developer and don&amp;rsquo;t know it already&lt;/strong&gt;. Every Unix environment in the world has vim installed. Learning vim is an excellent investment of your time and ensures you can be productive everywhere, not just your own machine.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -104,8 +104,8 @@ Side note: learn vim if you&amp;rsquo;re a developer and don&amp;rsquo;t know it
       <pubDate>Thu, 12 Sep 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/09/12/the-three-best-debugging-tools/</guid>
-      <description>1. Your Coworker
-It&amp;rsquo;s happened to me over and over: I&amp;rsquo;ll spend hours trying to track down a problem. In frustration, I&amp;rsquo;ll ask a coworker to look at the code and frequently they will point out the problem in seconds. It&amp;rsquo;s called situational blindness and it means that you will often overlook the bug right in front of your eyes because you&amp;rsquo;ve looked at it so much, your mind has started to ignore it.</description>
+      <description>&lt;p&gt;&lt;strong&gt;1. Your Coworker&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s happened to me over and over: I&amp;rsquo;ll spend hours trying to track down a problem. In frustration, I&amp;rsquo;ll ask a coworker to look at the code and frequently they will point out the problem in seconds. It&amp;rsquo;s called situational blindness and it means that you will often overlook the bug right in front of your eyes because you&amp;rsquo;ve looked at it so much, your mind has started to ignore it.&lt;/p&gt;</description>
     </item>
     
   </channel>

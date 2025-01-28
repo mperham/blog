@@ -17,9 +17,18 @@
       <pubDate>Thu, 22 May 2008 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2008/05/22/ruby-scoping-oddity/</guid>
-      <description>This prints out &amp;ldquo;1&amp;rdquo;:
-`
-begin a = 1 raise RuntimeError, &#34;foo&#34; rescue =&gt; e puts a end ` I would think that a would be out of scope inside the rescue section but I guess Ruby considers the rescue section part of the begin/end block?</description>
+      <description>&lt;p&gt;This prints out &amp;ldquo;1&amp;rdquo;:&lt;/p&gt;
+&lt;p&gt;`&lt;/p&gt;&lt;/p&gt;
+&lt;pre&gt;
+  begin
+    a = 1
+    raise RuntimeError, &#34;foo&#34;
+  rescue =&gt; e
+    puts a
+  end
+&lt;/pre&gt;
+&lt;p&gt;`
+&lt;p&gt;I would think that &lt;em&gt;a&lt;/em&gt; would be out of scope inside the rescue section but I guess Ruby considers the rescue section part of the begin/end block?&lt;/p&gt;</description>
     </item>
     
   </channel>

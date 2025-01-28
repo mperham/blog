@@ -54,8 +54,8 @@
       <pubDate>Wed, 13 Nov 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/11/13/advanced-sidekiq-host-specific-queues/</guid>
-      <description>This is the first in a series of posts offering neat tricks to get the most out of Sidekiq.
-Recently we rewrote part of The Clymb to process images asynchronously using Sidekiq. The user uploads the image file, it is saved to disk and a job created to process the file. Almost immediately we saw a bunch of retries with the error &amp;ldquo;Unable to find file xyz.jpg&amp;rdquo;. We just uploaded the file, how could it not be there?</description>
+      <description>&lt;p&gt;This is the first in a series of posts offering neat tricks to get the most out of Sidekiq.&lt;/p&gt;
+&lt;p&gt;Recently we rewrote part of The Clymb to process images asynchronously using Sidekiq. The user uploads the image file, it is saved to disk and a job created to process the file. Almost immediately we saw a bunch of retries with the error &amp;ldquo;Unable to find file xyz.jpg&amp;rdquo;. We just uploaded the file, how could it not be there?&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -73,8 +73,12 @@ Recently we rewrote part of The Clymb to process images asynchronously using Sid
       <pubDate>Sat, 10 Aug 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/08/10/lua-and-sidekiq-pro/</guid>
-      <description>I&amp;rsquo;ve started working with Redis 2.6&amp;rsquo;s embedded Lua support to power new features for Sidekiq Pro. I think there&amp;rsquo;s a rich vein of functionality to be tapped here for several reasons:
-Server-side execution = performance O(n) algorithms perform much better when you don&amp;rsquo;t have network latency. For example, Sidekiq Pro 1.2 adds a Sidekiq::Queue#delete_job API which scans a queue and deletes the job with the given JID. Previously this required network round trips and so performed poorly, even when using paging.</description>
+      <description>&lt;p&gt;I&amp;rsquo;ve started working with Redis 2.6&amp;rsquo;s embedded Lua support to power new features for Sidekiq Pro. I think there&amp;rsquo;s a rich vein of functionality to be tapped here for several reasons:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Server-side execution = performance&lt;/strong&gt; O(n) algorithms perform much better when you don&amp;rsquo;t have network latency. For example, Sidekiq Pro 1.2 adds a &lt;code&gt;Sidekiq::Queue#delete_job&lt;/code&gt; API which scans a queue and deletes the job with the given JID. Previously this required network round trips and so performed poorly, even when using paging. With a queue size of 10,000 jobs, my benchmark deleting 200 random jobs with the Lua version is 15x faster (1.5sec vs 20sec).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Atomic execution&lt;/strong&gt; Lua operations execute atomically in Redis so you can add complex logic to mutate data within Redis without the need for locks.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There&amp;rsquo;s a caveat of course: Redis is single-threaded so executing a user-defined Lua script can add significant latency to other Redis operations if you aren&amp;rsquo;t careful with performance. O(n^2) algorithms are definitely a no-no and minimizing O(n) algorithms is still a good idea if you want your Redis server to continue to perform well. Nevertheless I think Lua has real potential for developing some cool new features.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -83,10 +87,10 @@ Server-side execution = performance O(n) algorithms perform much better when you
       <pubDate>Sun, 26 May 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/05/26/celluloid-and-sidekiq-hackfest-in-portland/</guid>
-      <description>Tim Carey-Smith (aka halorgium, Celluloid committer) and I are meeting for a Celluloid and Sidekiq hackfest this Wednesday in Portland. Join us for anything related to Ruby, concurrency, threading, asynchronous processing and lots of other SEO-friendly buzzwords!
-Where: Lucky Lab NW (20th and Quimby)
-When: Wednesday May 29th, 6-10pm
-Who: Anyone interested</description>
+      <description>&lt;p&gt;Tim Carey-Smith (aka halorgium, Celluloid committer) and I are meeting for a Celluloid and Sidekiq hackfest this Wednesday in Portland. Join us for anything related to Ruby, concurrency, threading, asynchronous processing and lots of other SEO-friendly buzzwords!&lt;/p&gt;
+&lt;p&gt;Where: Lucky Lab NW (20th and Quimby)&lt;br&gt;
+When: Wednesday May 29th, 6-10pm&lt;br&gt;
+Who: Anyone interested&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -104,9 +108,9 @@ Who: Anyone interested</description>
       <pubDate>Tue, 07 May 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/05/07/sidekiq-pro-reaches-1-0/</guid>
-      <description>I announced Sidekiq Pro seven months ago and since then I&amp;rsquo;ve released 15 versions with both minor bugfixes and major new features.
-Today I decided to pull the trigger and call it 1.0! I&amp;rsquo;ve moved the Sidekiq Pro changelog to the sidekiq repo for better visibility for all Sidekiq users. Watsi, Litmus, Customer.io and Travis-CI are just a few of the companies that have upgraded to Pro.
-To celebrate the 1.</description>
+      <description>&lt;p&gt;I announced &lt;a href=&#34;http://sidekiq.org/&#34;&gt;Sidekiq Pro&lt;/a&gt; seven months ago and since then I&amp;rsquo;ve released 15 versions with both minor bugfixes and major new features.&lt;/p&gt;
+&lt;p&gt;Today I decided to pull the trigger and call it 1.0! I&amp;rsquo;ve moved the &lt;a href=&#34;https://github.com/mperham/sidekiq/blob/master/Pro-Changes.md&#34;&gt;Sidekiq Pro changelog&lt;/a&gt; to the sidekiq repo for better visibility for all Sidekiq users. &lt;a href=&#34;https://watsi.org/&#34;&gt;Watsi&lt;/a&gt;, &lt;a href=&#34;http://litmus.com/&#34;&gt;Litmus&lt;/a&gt;, &lt;a href=&#34;http://customer.io/&#34;&gt;Customer.io&lt;/a&gt; and &lt;a href=&#34;https://travis-ci.org/&#34;&gt;Travis-CI&lt;/a&gt; are just a few of the companies that have upgraded to Pro.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;To celebrate the 1.0 release, I&amp;rsquo;m giving away one free license to an existing Sidekiq user!&lt;/strong&gt; All you have to do is tweet an image of your current dashboard &amp;ldquo;Processed&amp;rdquo; count and say you want Sidekiq Pro. Here&amp;rsquo;s The Clymb&amp;rsquo;s dashboard:&lt;/p&gt;</description>
     </item>
     
   </channel>

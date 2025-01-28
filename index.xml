@@ -6,10 +6,26 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 03 Jul 2024 09:00:00 -0700</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jan 2025 12:06:36 -0800</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Sponsoring Hanami</title>
+      <link>https://www.mikeperham.com/2025/01/17/sponsoring-hanami/</link>
+      <pubDate>Fri, 17 Jan 2025 12:06:36 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2025/01/17/sponsoring-hanami/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m happy to announce a &lt;a href=&#34;https://opencollective.com/hanami&#34;&gt;substantial $12,000 grant&lt;/a&gt; to the &lt;a href=&#34;https://hanamirb.org&#34;&gt;Hanami&lt;/a&gt; framework.
+I&amp;rsquo;ve been a massive believer in Open Source software since publishing my first open source project in 1995.
+There&amp;rsquo;s nothing more empowering than direct access to the exact source code needed to solve a problem.&lt;/p&gt;
+&lt;figure style=&#34;float: right;&#34;&gt;
+  &lt;img style=&#34;border: solid white 0px;&#34; src=&#34;https://hanamirb.org/images/home-background.jpg&#34; width=&#34;400px&#34; /&gt;
+&lt;/figure&gt;
+&lt;p&gt;But Ruby has a problem: it&amp;rsquo;s mostly a monoculture around Rails.
+Merb and Sinatra provided valuable app framework options in the past, I believe we need new options for the future.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Iteration and Sidekiq 7.3.0</title>
@@ -17,7 +33,10 @@
       <pubDate>Wed, 03 Jul 2024 09:00:00 -0700</pubDate>
       
       <guid>https://www.mikeperham.com/2024/07/03/iteration-and-sidekiq-7.3.0/</guid>
-      <description>Sidekiq is the most popular background job framework for Ruby and works really well if you follow the design guidelines: keep your jobs short and idempotent. What happens if you have a job which processes a large amount of data serially, the infamous long-running job? In that case, deployments can lead to the job failing mid-way because the job will not gracefully allow the Sidekiq process to restart. To fix this, Sidekiq 7.</description>
+      <description>&lt;p&gt;Sidekiq is the most popular background job framework for Ruby and works really well if you follow the design guidelines: keep your jobs short and idempotent.
+What happens if you have a job which processes a large amount of data serially, the infamous long-running job?
+In that case, deployments can lead to the job failing mid-way because the job will not gracefully allow the Sidekiq process to restart.
+To fix this, Sidekiq 7.3 just shipped with a major new feature: &lt;a href=&#34;https://github.com/sidekiq/sidekiq/wiki/Iteration&#34;&gt;&lt;strong&gt;Iterable Jobs&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -26,9 +45,11 @@
       <pubDate>Mon, 22 Apr 2024 08:53:20 -0700</pubDate>
       
       <guid>https://www.mikeperham.com/2024/04/22/redis-licensing-changes-and-you/</guid>
-      <description>A few weeks ago, the owners of Redis changed its licensing from BSD to a more limited source available license. As far as I know this was done in order to prevent service providers from adding their own closed source, proprietary changes to their Redis service offerings.
-In principle I like this change.
-My Faktory project uses the AGPL license for the same purpose: Faktory is open source and anyone who offers Faktory as a service with proprietary changes should have to open source those changes too.</description>
+      <description>&lt;p&gt;A few weeks ago, the owners of Redis changed its licensing from BSD to a more limited source available license.
+As far as I know this was done in order to prevent service providers from adding their own closed source, proprietary changes to their Redis service offerings.&lt;/p&gt;
+&lt;p&gt;In principle I like this change.&lt;/p&gt;
+&lt;p&gt;My &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt; project uses the AGPL license for the same purpose: Faktory is open source and anyone who offers Faktory as a service &lt;strong&gt;with proprietary changes&lt;/strong&gt; should have to open source those changes too.
+I consider this a valuable quid pro quo: if you change my open source to make money, you must contribute some of that value back to the community in return.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -37,7 +58,8 @@ My Faktory project uses the AGPL license for the same purpose: Faktory is open s
       <pubDate>Fri, 01 Mar 2024 09:42:08 -0800</pubDate>
       
       <guid>https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/</guid>
-      <description>Ruby&amp;rsquo;s JSON library allows you to convert Ruby datatypes into a JSON document, as long as those types are native to JSON: String, bool, int, float, nil, Hash and Array. Everything else converts to a String by default; if you use any other core datatypes, they will not survive a JSON.generate/JSON.parse round trip. Here I pass a Range, Symbol and Time; notice how the end result is three Strings instead of the actual types:</description>
+      <description>&lt;p&gt;Ruby&amp;rsquo;s JSON library allows you to convert Ruby datatypes into a JSON document, as long as those types are native to JSON: String, bool, int, float, nil, Hash and Array.
+Everything else converts to a String by default; if you use any other core datatypes, they will not survive a &lt;code&gt;JSON.generate/JSON.parse&lt;/code&gt; round trip. Here I pass a Range, Symbol and Time; notice how the end result is three Strings instead of the actual types:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -46,7 +68,10 @@ My Faktory project uses the AGPL license for the same purpose: Faktory is open s
       <pubDate>Thu, 22 Feb 2024 10:59:46 -0800</pubDate>
       
       <guid>https://www.mikeperham.com/2024/02/22/how-does-sidekiq-work/</guid>
-      <description>A few weeks ago, I sat gobsmacked at my laptop reading one of the most impressive technical deep dives I&amp;rsquo;ve ever read. Dan Svetlov wrote a blog post &amp;ldquo;How does Sidekiq really work?&amp;rdquo; on his blog which delved deep into Sidekiq&amp;rsquo;s internals, explaining how it actually works. The most impressive part of this blog post is that it was 100% accurate. There were no mistakes or misunderstandings, Dan did the work and shows the receipts.</description>
+      <description>&lt;p&gt;A few weeks ago, I sat gobsmacked at my laptop reading one of the most impressive technical deep dives I&amp;rsquo;ve ever read.
+Dan Svetlov wrote a blog post &amp;ldquo;How does Sidekiq really work?&amp;rdquo; on &lt;a href=&#34;https://dansvetlov.me&#34;&gt;his blog&lt;/a&gt; which delved deep into Sidekiq&amp;rsquo;s internals, explaining how it actually works.
+The most impressive part of this blog post is that it was 100% accurate.
+There were no mistakes or misunderstandings, Dan did the work and shows the receipts.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -55,9 +80,11 @@ My Faktory project uses the AGPL license for the same purpose: Faktory is open s
       <pubDate>Sun, 04 Feb 2024 16:00:23 +0100</pubDate>
       
       <guid>https://www.mikeperham.com/how-sidekiq-works/</guid>
-      <description>2024-02-04
-This article was originally published on DanSvetlov.me and is republished here with permission of the author. This article is relevant to Sidekiq v7.
-Sidekiq is one of the most ubiquitous1 Ruby background job processors out there. To anybody who has worked with Ruby on and off Rails, it needs no introduction. Sidekiq has a 10+ year track record of being an efficient, battle-tested and simple-to-use solution for offloading the execution of application logic into the background.</description>
+      <description>&lt;p&gt;2024-02-04&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This article was originally published on &lt;a href=&#34;https://dansvetlov.me/sidekiq-internals/&#34;&gt;DanSvetlov.me&lt;/a&gt; and is republished here with permission of the author. This article is relevant to Sidekiq v7.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/sidekiq/sidekiq&#34;&gt;Sidekiq&lt;/a&gt; is one of the most ubiquitous&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; Ruby background job processors out there. To anybody who has worked with Ruby on and off Rails, it needs no introduction. Sidekiq has a 10+ year track record of being an efficient, battle-tested and simple-to-use solution for offloading the execution of application logic into the background.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -66,9 +93,19 @@ Sidekiq is one of the most ubiquitous1 Ruby background job processors out there.
       <pubDate>Thu, 01 Feb 2024 09:00:00 -0800</pubDate>
       
       <guid>https://www.mikeperham.com/2024/02/01/supporting-dragonfly/</guid>
-      <description>For about 15 years, Redis has been the dominant choice for background job infrastructure in Ruby.
-First used by Resque, Sidekiq adopted it also as a pragmatic choice which had already gained mass acceptance within the community. And so for the last 15 years, we&amp;rsquo;ve used Redis widely across the industry for caching, jobs and many different data munging tasks. However the only constant is change.
-Dragonfly brings competition and new capabilities.</description>
+      <description>&lt;p&gt;For about 15 years, Redis has been the dominant choice for background job infrastructure in Ruby.&lt;/p&gt;
+&lt;p&gt;First used by Resque, Sidekiq adopted it also as a pragmatic choice which had already gained mass acceptance within the community.
+And so for the last 15 years, we&amp;rsquo;ve used Redis widely across the industry for caching, jobs and many different data munging tasks.
+However the only constant is change.&lt;/p&gt;
+&lt;a href=&#34;https://dragonflydb.io&#34; style=&#34;float: right; padding: 20px;&#34;&gt;
+  &lt;img src=&#34;https://raw.githubusercontent.com/dragonflydb/dragonfly/main/.github/images/logo-full.svg&#34;
+    width=&#34;284&#34; border=&#34;0&#34; alt=&#34;Dragonfly&#34;&gt;
+&lt;/a&gt;
+&lt;p&gt;&lt;a href=&#34;https://dragonflydb.io&#34;&gt;Dragonfly&lt;/a&gt; brings competition and new capabilities.
+They aim to provide a Redis-compatible tool which is better than Redis at certain tasks.
+First and most importantly, all Sidekiq test suites are passing 100%.
+There&amp;rsquo;s no point in switching to a buggy or incomplete tool; Dragonfly has done the work to fully support every nook and cranny of Sidekiq&amp;rsquo;s functionality.
+Performance is where you can see major differences.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -77,8 +114,11 @@ Dragonfly brings competition and new capabilities.</description>
       <pubDate>Mon, 11 Sep 2023 12:27:34 -0700</pubDate>
       
       <guid>https://www.mikeperham.com/2023/09/11/ruby-http-server-from-scratch/</guid>
-      <description>Recently I decided to add support for Kubernetes HTTP health checks to Sidekiq Enterprise. This means, within each Sidekiq worker process, we need to implement an HTTP server which listens on port X and simply returns 200/OK if the process is alive.
-Notice we have really basic requirements here: no need for serving files or arbitrary dynamic content. We only respond to &amp;ldquo;/&amp;rdquo; so there&amp;rsquo;s no need for routes, paths or query parameter handling.</description>
+      <description>&lt;p&gt;Recently I decided to add support for Kubernetes HTTP health checks to Sidekiq Enterprise.
+This means, within each Sidekiq worker process, we need to implement an HTTP server which listens on port X and simply returns 200/OK if the process is alive.&lt;/p&gt;
+&lt;p&gt;Notice we have really basic requirements here: no need for serving files or arbitrary dynamic content.
+We only respond to &amp;ldquo;/&amp;rdquo; so there&amp;rsquo;s no need for routes, paths or query parameter handling.
+Because the health check should only be used within private networking, we have no need for TLS or https support.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -98,18 +138,14 @@ This was a real learning experience for me so I thought other people might find 
       <pubDate>Thu, 27 Oct 2022 10:08:17 -0700</pubDate>
       
       <guid>https://www.mikeperham.com/2022/10/27/introducing-sidekiq-7.0/</guid>
-      <description>I&amp;rsquo;m proud to announce, after nearly a year of work, Sidekiq 7.0 is now available. Sidekiq is the most popular background job system for Ruby, used by thousands of companies around the world. This release is our biggest, most splendiforous release ever!
-What&amp;rsquo;s New? Metrics One thing I know: everybody loves big beautiful graphs! Sidekiq 7.0 has a major new feature for tracking and visualizing job execution times. Big thanks to @adamlogic of Rails Autoscale for implementing the new graphs and I hope you&amp;rsquo;ll agree he did a fantastic job.</description>
-    </item>
-    
-    <item>
-      <title>Sidekiq 7.0: Embedding</title>
-      <link>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/</link>
-      <pubDate>Thu, 27 Oct 2022 09:21:22 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/</guid>
-      <description>Sidekiq 7.0 can be embedded within another process so you do not need to run a separate Sidekiq process. This is called embedding.
-Why? Why would you want to do this? Embedding can make for a simpler deployment: you deploy one larger process instead of two separate processes, now you only need to monitor and manage one process. Embedding also requires less total memory since both subsystems will share most of the Ruby data structures and code in memory.</description>
+      <description>&lt;p&gt;I&amp;rsquo;m proud to announce, after nearly a year of work, Sidekiq 7.0 is now available.
+&lt;a href=&#34;https://sidekiq.org&#34;&gt;Sidekiq&lt;/a&gt; is the most popular background job system for Ruby, used by thousands of companies around the world.
+This release is our biggest, most splendiforous release ever!&lt;/p&gt;
+&lt;h1 id=&#34;whats-new&#34;&gt;What&amp;rsquo;s New?&lt;/h1&gt;
+&lt;h2 id=&#34;metrics&#34;&gt;Metrics&lt;/h2&gt;
+&lt;p&gt;One thing I know: everybody loves big beautiful graphs!
+Sidekiq 7.0 has a major new feature for tracking and visualizing job execution times.
+Big thanks to @adamlogic of Rails Autoscale for implementing the new graphs and I hope you&amp;rsquo;ll agree he did a fantastic job.&lt;/p&gt;</description>
     </item>
     
   </channel>

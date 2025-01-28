@@ -17,10 +17,10 @@
       <pubDate>Mon, 30 Aug 2010 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2010/08/30/dalli-memcached-for-ruby/</guid>
-      <description>Dalli is my brand new memcached client for Ruby. I&amp;rsquo;ve maintained Ruby&amp;rsquo;s memcache-client for two years now and been dissatisfied with the codebase for a while.
-Coincidentally, NorthScale approached me recently about building a pure Ruby memcached client which used the new binary protocol defined in memcached 1.4. We worked out an arrangement to sponsor the OSS project which became Dalli.
-My goals for Dalli were threefold:
-Clean sheet codebase using the binary protocol Drop-in replacement for memcache-client in Rails for a very simple upgrade path for Rails developers Equivalent or faster performance than memcache-client I&amp;rsquo;m happy to say that Dalli meets all those goals.</description>
+      <description>&lt;p&gt;&lt;img src=&#34;http://www.mikeperham.com/wp-content/uploads/2010/08/memcache_logo.png&#34; alt=&#34;&#34; title=&#34;memcache_logo&#34; width=&#34;76&#34; height=&#34;75&#34; class=&#34;alignleft size-full wp-image-619&#34; /&gt;&lt;a href=&#34;http://github.com/mperham/dalli&#34;&gt;Dalli&lt;/a&gt; is my brand new memcached client for Ruby. I&amp;rsquo;ve maintained Ruby&amp;rsquo;s memcache-client for two years now and been dissatisfied with the codebase for a while.&lt;br&gt;
+&lt;img src=&#34;http://www.mikeperham.com/wp-content/uploads/2010/08/NorthScale-Labs.gif&#34; alt=&#34;&#34; title=&#34;NorthScale Labs&#34; width=&#34;171&#34; height=&#34;62&#34; class=&#34;alignright size-full wp-image-617&#34; /&gt;&lt;br&gt;
+Coincidentally, &lt;a href=&#34;http://www.northscale.com&#34;&gt;NorthScale&lt;/a&gt; approached me recently about building a pure Ruby memcached client which used the new &lt;a href=&#34;http://code.google.com/p/memcached/wiki/MemcacheBinaryProtocol&#34;&gt;binary protocol&lt;/a&gt; defined in memcached 1.4. We worked out an arrangement to sponsor the OSS project which became Dalli.&lt;/p&gt;
+&lt;p&gt;My goals for Dalli were threefold:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -29,7 +29,7 @@ Clean sheet codebase using the binary protocol Drop-in replacement for memcache-
       <pubDate>Thu, 29 May 2008 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2008/05/29/starling-and-a-reliable-memcached-client/</guid>
-      <description>We moved part of our FiveRuns Manage infrastructure to use Starling this week. I&amp;rsquo;m rapidly becoming a convert as it has proven to be simple, fast and reliable. The Starling 0.9.3 release is somewhat long in the tooth but GitHub has several Starling forks which contain performance improvements and bugfixes, including our own fiveruns/starling fork. Our fork has proven to be about 3 times faster than 0.9.3 in raw message processing speed.</description>
+      <description>&lt;p&gt;We moved part of our &lt;a href=&#34;http://fiveruns.com/products/manage&#34;&gt;FiveRuns Manage&lt;/a&gt; infrastructure to use Starling this week. I&amp;rsquo;m rapidly becoming a convert as it has proven to be simple, fast and reliable. The Starling 0.9.3 release is somewhat long in the tooth but GitHub has several Starling forks which contain performance improvements and bugfixes, including our own &lt;a href=&#34;http://github.com/fiveruns/starling/tree/master&#34;&gt;fiveruns/starling&lt;/a&gt; fork. Our fork has proven to be about 3 times faster than 0.9.3 in raw message processing speed.&lt;/p&gt;</description>
     </item>
     
   </channel>

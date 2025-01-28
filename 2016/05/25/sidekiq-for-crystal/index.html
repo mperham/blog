@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.128.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -229,34 +229,34 @@ make bench
 </code></pre><p>This is the result for me: <strong>with zero optimization on my part, Crystal is 3.6x faster and 3x smaller</strong>.
 To process 100,000 noop jobs:</p>
 <table>
-<thead>
-<tr>
-<th>Runtime</th>
-<th>RSS</th>
-<th>Time</th>
-<th>Throughput</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>MRI 2.3.0</td>
-<td>50MB</td>
-<td>21.3</td>
-<td>4,600 jobs/sec</td>
-</tr>
-<tr>
-<td>MRI/hiredis</td>
-<td>55MB</td>
-<td>19.2</td>
-<td>5,200 jobs/sec</td>
-</tr>
-<tr>
-<td>Crystal 0.17</td>
-<td>18MB</td>
-<td>5.9</td>
-<td><strong>16,900 jobs/sec</strong></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Runtime</th>
+          <th>RSS</th>
+          <th>Time</th>
+          <th>Throughput</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>MRI 2.3.0</td>
+          <td>50MB</td>
+          <td>21.3</td>
+          <td>4,600 jobs/sec</td>
+      </tr>
+      <tr>
+          <td>MRI/hiredis</td>
+          <td>55MB</td>
+          <td>19.2</td>
+          <td>5,200 jobs/sec</td>
+      </tr>
+      <tr>
+          <td>Crystal 0.17</td>
+          <td>18MB</td>
+          <td>5.9</td>
+          <td><strong>16,900 jobs/sec</strong></td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="the-codebase-is-a-trainwreck-though-right">The codebase is a trainwreck though, right?</h2>
 <p>The code is shockingly similar to Ruby in many cases.  Take a gander at this testcase:</p>
@@ -305,11 +305,7 @@ Crystal.  If you are interested, <a href="mailto:mike@contribsys.com">email me</
   </div>
 
   
-  
 
-  
-
-  
 </body>
 
 </html>

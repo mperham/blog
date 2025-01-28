@@ -17,8 +17,12 @@
       <pubDate>Wed, 27 Jan 2010 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2010/01/27/scalable-ruby-processing-with-eventmachine/</guid>
-      <description>I gave a talk at Austin On Rails last night on using EventMachine, focused on maximizing concurrency when processing a message queue. There were a lot of questions, mostly revolving around the flow of execution within EventMachine code. To this point, there were two common stumbling points people seemed to have:
-Ruby developers are not used to treating blocks as true callbacks where they are executing at some point in the future.</description>
+      <description>&lt;p&gt;I gave a talk at Austin On Rails last night on using EventMachine, focused on maximizing concurrency when processing a message queue. There were a lot of questions, mostly revolving around the flow of execution within EventMachine code. To this point, there were two common stumbling points people seemed to have:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ruby developers are not used to treating blocks as true callbacks where they are executing at some point in the future. Blocks are usually yielded by the method they are passed to. Understanding when a block will be called is confusing.&lt;/li&gt;
+&lt;li&gt;Understanding how Fibers work and how they can make an asynchronous API appear to be synchronous to the outside world is tricky.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I hope everyone came away a little more knowledgeable about EventMachine and the types of problems it can solve. Here&amp;rsquo;s the slides for others to peruse. The presentation was recorded and I will link to recordings when I find out about them.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -27,9 +31,18 @@ Ruby developers are not used to treating blocks as true callbacks where they are
       <pubDate>Thu, 22 May 2008 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2008/05/22/ruby-scoping-oddity/</guid>
-      <description>This prints out &amp;ldquo;1&amp;rdquo;:
-`
-begin a = 1 raise RuntimeError, &#34;foo&#34; rescue =&gt; e puts a end ` I would think that a would be out of scope inside the rescue section but I guess Ruby considers the rescue section part of the begin/end block?</description>
+      <description>&lt;p&gt;This prints out &amp;ldquo;1&amp;rdquo;:&lt;/p&gt;
+&lt;p&gt;`&lt;/p&gt;&lt;/p&gt;
+&lt;pre&gt;
+  begin
+    a = 1
+    raise RuntimeError, &#34;foo&#34;
+  rescue =&gt; e
+    puts a
+  end
+&lt;/pre&gt;
+&lt;p&gt;`
+&lt;p&gt;I would think that &lt;em&gt;a&lt;/em&gt; would be out of scope inside the rescue section but I guess Ruby considers the rescue section part of the begin/end block?&lt;/p&gt;</description>
     </item>
     
   </channel>

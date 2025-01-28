@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.128.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -200,11 +200,11 @@ In this way, large volumes of work can be done in parallel, speeding up batch pr
 Processing each row might involve web crawling or some other intensive work so we can&rsquo;t process it in serial without it taking hours.
 We&rsquo;ll create a contrived example where we have a list of webpages and we want to get the bytesize of each page.
 We&rsquo;ll use Sidekiq Pro&rsquo;s Batch API to perform the work in parallel:</p>
-<pre tabindex="0"><code class="language-csv" data-lang="csv">id,name,uri
-1273,Google,https://google.com
-1209,Yahoo,https://yahoo.com
-8273,Sidekiq,https://sidekiq.org
-</code></pre><p>Now we&rsquo;ll create a worker which kicks off the CSV processing and a worker which processes each row in the CSV.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csv" data-lang="csv"><span style="display:flex;"><span><span style="color:#e6db74">id</span>,<span style="color:#e6db74">name</span>,<span style="color:#e6db74">uri</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">1273</span>,<span style="color:#e6db74">Google</span>,<span style="color:#e6db74">https://google.com</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">1209</span>,<span style="color:#e6db74">Yahoo</span>,<span style="color:#e6db74">https://yahoo.com</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">8273</span>,<span style="color:#e6db74">Sidekiq</span>,<span style="color:#e6db74">https://sidekiq.org</span>
+</span></span></code></pre></div><p>Now we&rsquo;ll create a worker which kicks off the CSV processing and a worker which processes each row in the CSV.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;csv&#39;</span>
 </span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;net/http&#39;</span>
 </span></span><span style="display:flex;"><span>
@@ -287,11 +287,7 @@ Nice.</p>
   </div>
 
   
-  
 
-  
-
-  
 </body>
 
 </html>

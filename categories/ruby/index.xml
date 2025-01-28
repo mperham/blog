@@ -17,8 +17,14 @@
       <pubDate>Wed, 26 Nov 2014 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2014/11/26/building-a-binary-tree-with-enumerable/</guid>
-      <description>I believe that the Enumerable module is the most important thing to understand if you want to go from a beginner to intermediate Rubyist. It requires you to understand two fundamental parts of Ruby: modules and blocks.
-Ruby&amp;rsquo;s standard library includes hashes, arrays, sets and thread-safe queues. One structure missing is a generic binary tree. Binary trees are great general purpose data structures: they aren&amp;rsquo;t super fast for any operations (e.</description>
+      <description>&lt;p&gt;I believe that the &lt;a href=&#34;http://www.ruby-doc.org/core-2.1.5/Enumerable.html&#34;&gt;Enumerable&lt;/a&gt; module is the &lt;strong&gt;most important&lt;/strong&gt;
+thing to understand if you want to go from a beginner to intermediate Rubyist.  It requires you to understand two
+fundamental parts of Ruby: modules and blocks.&lt;/p&gt;
+&lt;p&gt;Ruby&amp;rsquo;s standard library includes hashes, arrays, sets and thread-safe queues.  One structure missing is a generic
+binary tree.  Binary trees are great general purpose data structures: they aren&amp;rsquo;t super fast for any operations
+(e.g. lookup, insert, delete) but they aren&amp;rsquo;t super slow for those operations either.  Databases typically implement
+indexes as a tree structure; every time you insert a row into a table, a node is inserted into the index&amp;rsquo;s binary
+tree structure too.  Here&amp;rsquo;s what a binary tree &amp;ldquo;looks&amp;rdquo; like.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -27,7 +33,7 @@ Ruby&amp;rsquo;s standard library includes hashes, arrays, sets and thread-safe 
       <pubDate>Tue, 22 Apr 2014 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2014/04/22/ruby-performance-2014/</guid>
-      <description>Last year I posted a comparison of various Ruby VMs and how fast they could process N empty jobs. This is the equivalent of pumping out &amp;ldquo;Hello World&amp;rdquo; responses in an app server: it&amp;rsquo;s not very useful for application developers but it&amp;rsquo;s far more useful than a microbenchmark in determining real Ruby VM performance. Let&amp;rsquo;s take a look at the most popular three versions available today: MRI 2.1.1, MRI 2.0.0 and JRuby 1.</description>
+      <description>&lt;p&gt;Last year I posted &lt;a href=&#34;https://www.mikeperham.com/2013/06/30/background-job-processing-overhead/&#34;&gt;a comparison of various Ruby VMs and how fast they could process N empty jobs&lt;/a&gt;. This is the equivalent of pumping out &amp;ldquo;Hello World&amp;rdquo; responses in an app server: it&amp;rsquo;s not very useful for application developers but it&amp;rsquo;s far more useful than a microbenchmark in determining real Ruby VM performance. Let&amp;rsquo;s take a look at the most popular three versions available today: MRI 2.1.1, MRI 2.0.0 and JRuby 1.7.11.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -46,9 +52,27 @@ Ruby&amp;rsquo;s standard library includes hashes, arrays, sets and thread-safe 
       <pubDate>Fri, 31 Jan 2014 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2014/01/31/happy-2nd-birthday-sidekiq/</guid>
-      <description>Let&amp;rsquo;s review some numbers, from the 1st birthday:
-214,300 downloads 2144 stars 662 closed issues 266 forks 228 closed pull requests 44 versions released 25 Sidekiq Pro customers Now, on the 2nd birthday:
-1,192,259 downloads (wow, huge uptake!) 3535 stars 1420 closed issues 563 forks 380 closed pull requests 74 versions released Over 200 Sidekiq Pro customers At this point I believe I&amp;rsquo;ve achieved my goals: build the best background job framework, bar none.</description>
+      <description>&lt;p&gt;Let&amp;rsquo;s review some numbers, from the 1st birthday:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;214,300 downloads&lt;/li&gt;
+&lt;li&gt;2144 stars&lt;/li&gt;
+&lt;li&gt;662 closed issues&lt;/li&gt;
+&lt;li&gt;266 forks&lt;/li&gt;
+&lt;li&gt;228 closed pull requests&lt;/li&gt;
+&lt;li&gt;44 versions released&lt;/li&gt;
+&lt;li&gt;25 Sidekiq Pro customers&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now, on the 2nd birthday:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;1,192,259&lt;/strong&gt; downloads (wow, huge uptake!)&lt;/li&gt;
+&lt;li&gt;3535 stars&lt;/li&gt;
+&lt;li&gt;1420 closed issues&lt;/li&gt;
+&lt;li&gt;563 forks&lt;/li&gt;
+&lt;li&gt;380 closed pull requests&lt;/li&gt;
+&lt;li&gt;74 versions released&lt;/li&gt;
+&lt;li&gt;Over 200 Sidekiq Pro customers&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;At this point I believe I&amp;rsquo;ve achieved my goals: build the best background job framework, bar none. With Sidekiq I try to have it all: good performance, easy setup, deep integration with an application framework like Rails and a rich set of functionality. I hope you think I was successful in my efforts.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -102,10 +126,10 @@ Ruby&amp;rsquo;s standard library includes hashes, arrays, sets and thread-safe 
       <pubDate>Sun, 26 May 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/05/26/celluloid-and-sidekiq-hackfest-in-portland/</guid>
-      <description>Tim Carey-Smith (aka halorgium, Celluloid committer) and I are meeting for a Celluloid and Sidekiq hackfest this Wednesday in Portland. Join us for anything related to Ruby, concurrency, threading, asynchronous processing and lots of other SEO-friendly buzzwords!
-Where: Lucky Lab NW (20th and Quimby)
-When: Wednesday May 29th, 6-10pm
-Who: Anyone interested</description>
+      <description>&lt;p&gt;Tim Carey-Smith (aka halorgium, Celluloid committer) and I are meeting for a Celluloid and Sidekiq hackfest this Wednesday in Portland. Join us for anything related to Ruby, concurrency, threading, asynchronous processing and lots of other SEO-friendly buzzwords!&lt;/p&gt;
+&lt;p&gt;Where: Lucky Lab NW (20th and Quimby)&lt;br&gt;
+When: Wednesday May 29th, 6-10pm&lt;br&gt;
+Who: Anyone interested&lt;/p&gt;</description>
     </item>
     
   </channel>

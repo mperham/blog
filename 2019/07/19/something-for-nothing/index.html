@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.128.2">
+  <meta name="generator" content="Hugo 0.142.0">
 
   
   <meta name="description" content="Ruby, OSS and the Internet">
@@ -215,40 +215,40 @@ dyno</a>. We reduce the thread count so each core
 isn&rsquo;t crushed by image processing.</p>
 <p>In summary:</p>
 <table>
-<thead>
-<tr>
-<th></th>
-<th>Before</th>
-<th>After</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Dynos</td>
-<td>2</td>
-<td>1</td>
-</tr>
-<tr>
-<td>Threads</td>
-<td>80 (2 x 40)</td>
-<td>80 (4 x 20)</td>
-</tr>
-<tr>
-<td>Core usage</td>
-<td>50%</td>
-<td>100%</td>
-</tr>
-<tr>
-<td>Cost</td>
-<td>$500</td>
-<td>$250 + $179</td>
-</tr>
-<tr>
-<td>Savings</td>
-<td></td>
-<td>$71/mo</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th></th>
+          <th>Before</th>
+          <th>After</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Dynos</td>
+          <td>2</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>Threads</td>
+          <td>80 (2 x 40)</td>
+          <td>80 (4 x 20)</td>
+      </tr>
+      <tr>
+          <td>Core usage</td>
+          <td>50%</td>
+          <td>100%</td>
+      </tr>
+      <tr>
+          <td>Cost</td>
+          <td>$500</td>
+          <td>$250 + $179</td>
+      </tr>
+      <tr>
+          <td>Savings</td>
+          <td></td>
+          <td>$71/mo</td>
+      </tr>
+  </tbody>
 </table>
 <p>Before they had 1 busy core and 3 idle cores on each dyno.  Now they
 have 4 busy cores and can spin down the second dyno instance to save
@@ -265,11 +265,7 @@ you want to try it today.</p>
   </div>
 
   
-  
 
-  
-
-  
 </body>
 
 </html>

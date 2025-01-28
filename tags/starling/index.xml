@@ -17,7 +17,7 @@
       <pubDate>Thu, 29 May 2008 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2008/05/29/starling-and-a-reliable-memcached-client/</guid>
-      <description>We moved part of our FiveRuns Manage infrastructure to use Starling this week. I&amp;rsquo;m rapidly becoming a convert as it has proven to be simple, fast and reliable. The Starling 0.9.3 release is somewhat long in the tooth but GitHub has several Starling forks which contain performance improvements and bugfixes, including our own fiveruns/starling fork. Our fork has proven to be about 3 times faster than 0.9.3 in raw message processing speed.</description>
+      <description>&lt;p&gt;We moved part of our &lt;a href=&#34;http://fiveruns.com/products/manage&#34;&gt;FiveRuns Manage&lt;/a&gt; infrastructure to use Starling this week. I&amp;rsquo;m rapidly becoming a convert as it has proven to be simple, fast and reliable. The Starling 0.9.3 release is somewhat long in the tooth but GitHub has several Starling forks which contain performance improvements and bugfixes, including our own &lt;a href=&#34;http://github.com/fiveruns/starling/tree/master&#34;&gt;fiveruns/starling&lt;/a&gt; fork. Our fork has proven to be about 3 times faster than 0.9.3 in raw message processing speed.&lt;/p&gt;</description>
     </item>
     
   </channel>

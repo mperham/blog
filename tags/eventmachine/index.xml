@@ -17,9 +17,13 @@
       <pubDate>Sat, 03 Apr 2010 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/</guid>
-      <description>Phat is my new Rails 2.3.5 application which runs 100% asynchronous, supporting many concurrent requests in a single Ruby process.
-This is a new breed of Rails application which uses a new mode of execution available in Ruby 1.9: single Thread, multiple Fiber. Existing modes of execution suck:
-Single thread harkens back to the days of Rails 1.x, where you started N mongrels to handle up to N concurrent requests. Multiple threads is better but still has fundamental issues in Ruby.</description>
+      <description>&lt;p&gt;&lt;a href=&#34;http://github.com/mperham/phat&#34;&gt;Phat&lt;/a&gt; is my new Rails 2.3.5 application which runs 100% asynchronous, supporting many concurrent requests in a single Ruby process.&lt;/p&gt;
+&lt;p&gt;This is a new breed of Rails application which uses a new mode of execution available in Ruby 1.9: single Thread, multiple Fiber. Existing modes of execution suck:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Single thread harkens back to the days of Rails 1.x, where you started N mongrels to handle up to N concurrent requests.&lt;/li&gt;
+&lt;li&gt;Multiple threads is better but still has fundamental issues in Ruby. &lt;a href=&#34;http://redmine.ruby-lang.org/issues/show/921&#34;&gt;Autoloading is simply broken&lt;/a&gt; and Ruby&amp;rsquo;s thread implementation does not scale at all due to the GIL.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Here&amp;rsquo;s a sample action which uses memcached and the database. There&amp;rsquo;s nothing odd here &amp;ndash; it&amp;rsquo;s the same old Rails API and codebase we are used to as Ruby developers, it just executes differently under the covers.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -28,8 +32,8 @@ Single thread harkens back to the days of Rails 1.x, where you started N mongrel
       <pubDate>Tue, 30 Mar 2010 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2010/03/30/using-activerecord-with-eventmachine/</guid>
-      <description>Given all my work with Fibers and EventMachine over the last three months, it should come as no surprise that I&amp;rsquo;ve been working on infrastructure based on Fibers and EventMachine to get maximum scalability without the callback style of code which I dislike for many reasons. Watch my talk on scaling with EventMachine if you need more background on the problem.
-Now that I have RabbitMQ, Cassandra, Solr and the Amazon AWS services evented, the only holdup was ActiveRecord.</description>
+      <description>&lt;p&gt;Given all my work with Fibers and EventMachine over the last three months, it should come as no surprise that I&amp;rsquo;ve been working on infrastructure based on Fibers and EventMachine to get maximum scalability without the callback style of code which I dislike for many reasons. &lt;a href=&#34;https://www.mikeperham.com/2010/01/27/scalable-ruby-processing-with-eventmachine/&#34;&gt;Watch my talk on scaling with EventMachine&lt;/a&gt; if you need more background on the problem.&lt;/p&gt;
+&lt;p&gt;Now that I have RabbitMQ, Cassandra, Solr and the Amazon AWS services evented, the only holdup was ActiveRecord. Some people may advocate using another ORM layer but when you have 2-3 other Rails apps, all sharing 100+ models, you can&amp;rsquo;t afford to maintain two separate ORM layers. Plus, frankly I like the Rails stack: it works pretty well, is thoroughly documented and every Ruby developer is familiar with it.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -38,7 +42,7 @@ Now that I have RabbitMQ, Cassandra, Solr and the Amazon AWS services evented, t
       <pubDate>Wed, 10 Feb 2010 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2010/02/10/asynchronous-dns-resolution/</guid>
-      <description>Ruby has a serious scalability problem most Rubyists are unaware of. When you lookup the IP address for a hostname, the entire Ruby process blocks by default. If you have a slow DNS server, your process can grind to a halt waiting for hostname resolution. Ruby comes standard with a fix, resolv-replace, which provides a DNS resolver that does not block the entire process. It does however block the Thread, like any other instance of blocking I/O.</description>
+      <description>&lt;p&gt;Ruby has a serious scalability problem most Rubyists are unaware of. When you lookup the IP address for a hostname, the entire Ruby process blocks by default. If you have a slow DNS server, your process can grind to a halt waiting for hostname resolution. Ruby comes standard with a fix, resolv-replace, which provides a DNS resolver that does not block the entire process. It does however block the Thread, like any other instance of blocking I/O.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -47,8 +51,12 @@ Now that I have RabbitMQ, Cassandra, Solr and the Amazon AWS services evented, t
       <pubDate>Wed, 27 Jan 2010 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2010/01/27/scalable-ruby-processing-with-eventmachine/</guid>
-      <description>I gave a talk at Austin On Rails last night on using EventMachine, focused on maximizing concurrency when processing a message queue. There were a lot of questions, mostly revolving around the flow of execution within EventMachine code. To this point, there were two common stumbling points people seemed to have:
-Ruby developers are not used to treating blocks as true callbacks where they are executing at some point in the future.</description>
+      <description>&lt;p&gt;I gave a talk at Austin On Rails last night on using EventMachine, focused on maximizing concurrency when processing a message queue. There were a lot of questions, mostly revolving around the flow of execution within EventMachine code. To this point, there were two common stumbling points people seemed to have:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ruby developers are not used to treating blocks as true callbacks where they are executing at some point in the future. Blocks are usually yielded by the method they are passed to. Understanding when a block will be called is confusing.&lt;/li&gt;
+&lt;li&gt;Understanding how Fibers work and how they can make an asynchronous API appear to be synchronous to the outside world is tricky.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I hope everyone came away a little more knowledgeable about EventMachine and the types of problems it can solve. Here&amp;rsquo;s the slides for others to peruse. The presentation was recorded and I will link to recordings when I find out about them.&lt;/p&gt;</description>
     </item>
     
   </channel>

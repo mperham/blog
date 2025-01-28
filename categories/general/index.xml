@@ -17,7 +17,7 @@
       <pubDate>Sat, 25 May 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/05/25/paralysis-of-choice/</guid>
-      <description>When I talk to younger developers about starting to blog, they often say things like &amp;ldquo;I don&amp;rsquo;t know what to write about&amp;rdquo; or &amp;ldquo;I have nothing to say&amp;rdquo;. This is because there is simply a paradox of too much to say, or what is commonly referred to as paralysis of choice. The field of software engineering is a complex one, full of detail. Trying to encompass all that detail can be terrifying.</description>
+      <description>&lt;p&gt;When I talk to younger developers about starting to blog, they often say things like &amp;ldquo;I don&amp;rsquo;t know what to write about&amp;rdquo; or &amp;ldquo;I have nothing to say&amp;rdquo;. This is because there is simply a paradox of too much to say, or what is commonly referred to as &lt;a href=&#34;http://everything2.com/title/choice+paralysis&#34;&gt;paralysis of choice&lt;/a&gt;. The field of software engineering is a complex one, full of detail. Trying to encompass all that detail can be terrifying.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -26,11 +26,11 @@
       <pubDate>Wed, 13 Feb 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/02/13/bill-gates/</guid>
-      <description>Some back of the envelope numbers I was pondering this morning:
-40 hours / week * 50 weeks / year = 2000 hr / yr
-Bill Gates is worth about $66 billion. He&amp;rsquo;s worked for about 33 years now.
-66 billion / 33 years = $2 billion/year / 2000 = $1 million / hour.
-Bill Gates has made roughly $1 million per hour over the length of his career. Most people would be happy to make that amount in a decade.</description>
+      <description>&lt;p&gt;Some back of the envelope numbers I was pondering this morning:&lt;/p&gt;
+&lt;p&gt;40 hours / week * 50 weeks / year = 2000 hr / yr&lt;/p&gt;
+&lt;p&gt;Bill Gates is worth about $66 billion. He&amp;rsquo;s worked for about 33 years now.&lt;/p&gt;
+&lt;p&gt;66 billion / 33 years = $2 billion/year / 2000 = $1 million / hour.&lt;/p&gt;
+&lt;p&gt;Bill Gates has made roughly $1 million per hour over the length of his career. Most people would be happy to make that amount in a decade. No moral or judgment here, just an astonishing number to think about.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -39,9 +39,9 @@ Bill Gates has made roughly $1 million per hour over the length of his career. M
       <pubDate>Sun, 14 Oct 2012 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2012/10/14/sexism-and-programming/</guid>
-      <description>In my experience, sexism is not overt in the software world. I do think there is an unspoken bias against anyone who is not a white male. For all the talk of egalitarianism in Silicon Valley, this is my belief:
-White men have to prove their incompetence. Everyone else has to prove their competence.
-This is why I think it is important to support organizations like RailsGirls looking to educate and improve the engineering skills of those minority groups.</description>
+      <description>&lt;p&gt;In my experience, sexism is not overt in the software world. I do think there is an unspoken bias against anyone who is not a white male. For all the talk of egalitarianism in Silicon Valley, this is my belief:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;White men have to prove their incompetence. Everyone else has to prove their competence.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This is why I think it is important to support organizations like &lt;a href=&#34;http://railsgirls.com/&#34;&gt;RailsGirls&lt;/a&gt; looking to educate and improve the engineering skills of those minority groups. Until this bias is truly gone, white men will continue to dominate programming unless we give those minorities special opportunities to advance.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -50,7 +50,7 @@ This is why I think it is important to support organizations like RailsGirls loo
       <pubDate>Sat, 04 Feb 2012 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2012/02/04/im-back/</guid>
-      <description>I haven&amp;rsquo;t blogged much for the last year because most of my technical blogging went to the Carbon Five blog. Now that I&amp;rsquo;ve moved to Portland and have a new job at TheClymb I&amp;rsquo;ll be returning my attention to my own blog so expect new content regularly again!</description>
+      <description>&lt;p&gt;I haven&amp;rsquo;t blogged much for the last year because most of my technical blogging went to the &lt;a href=&#34;http://blog.carbonfive.com&#34;&gt;Carbon Five blog&lt;/a&gt;. Now that I&amp;rsquo;ve moved to Portland and have a new job at &lt;a href=&#34;http://www.theclymb.com/invite-from/mperham&#34;&gt;TheClymb&lt;/a&gt; I&amp;rsquo;ll be returning my attention to my own blog so expect new content regularly again!&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -59,7 +59,7 @@ This is why I think it is important to support organizations like RailsGirls loo
       <pubDate>Mon, 05 Nov 2007 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2007/11/05/how-to-know-if-your-airport-is-cool/</guid>
-      <description>I got 1.5MB/sec downloads while waiting for my flight home at the Charlotte airport. And trust me, that was not burst but sustained. Free T1-speed Internet access? Holy cow!</description>
+      <description>&lt;p&gt;I got 1.5MB/sec downloads while waiting for my flight home at the Charlotte airport. And trust me, that was not burst but sustained.  Free T1-speed Internet access? Holy cow!&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -68,7 +68,7 @@ This is why I think it is important to support organizations like RailsGirls loo
       <pubDate>Fri, 21 Sep 2007 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2007/09/21/fun-with-acronyms/</guid>
-      <description>Am I the only one who laughs when I do a Google search for &amp;ldquo;Merb&amp;rdquo;? I mean I know Ruby guys are usually pretty nerdy. What is Google trying to tell us? :-)</description>
+      <description>&lt;p&gt;Am I the only one who laughs when I do a &lt;a href=&#34;http://www.google.com/search?q=merb&#34;&gt;Google search for &amp;ldquo;Merb&amp;rdquo;&lt;/a&gt;?  I mean I know Ruby guys are usually pretty nerdy.  What is Google trying to tell us?  :-)&lt;/p&gt;</description>
     </item>
     
   </channel>

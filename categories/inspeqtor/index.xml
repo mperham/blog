@@ -36,8 +36,8 @@
       <pubDate>Wed, 08 Oct 2014 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2014/10/08/why-go/</guid>
-      <description>When I decided to build Inspeqtor, I had a fundamental choice: what language should I build it in? I&amp;rsquo;ve worked in Ruby for the last 8 years so it was a natural choice: &amp;ldquo;use the tool you know best&amp;rdquo; is never a bad choice when solving your own problem.
-However I&amp;rsquo;m not building something for myself: I&amp;rsquo;m building a product that will be used by thousands of others. Since Inspeqtor is an infrastructure monitoring tool, it needs to run 24/7 efficiently and reliably.</description>
+      <description>&lt;p&gt;When I decided to build &lt;a href=&#34;https://github.com/mperham/inspeqtor&#34;&gt;Inspeqtor&lt;/a&gt;, I had a fundamental choice: what language should I build it in? I&amp;rsquo;ve worked in Ruby for the last 8 years so it was a natural choice: &amp;ldquo;use the tool you know best&amp;rdquo; is never a bad choice when solving your own problem.&lt;/p&gt;
+&lt;p&gt;However I&amp;rsquo;m not building something for myself: I&amp;rsquo;m building a product that will be used by thousands of others. Since Inspeqtor is an infrastructure monitoring tool, it needs to run 24/7 efficiently and reliably. I also want everyone to be able to install and use Inspeqtor with the absolute bare minimum of hassle. This means minimizing third-party dependencies like the Ruby VM itself, gems, etc. In the end, I needed to select the right tool for the job, not just the tool I know.&lt;/p&gt;</description>
     </item>
     
     <item>

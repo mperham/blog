@@ -17,8 +17,16 @@
       <pubDate>Sat, 17 May 2014 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/</guid>
-      <description>Starting in MySQL 5.6.5, datetime columns can have an actual useful default of CURRENT_TIMESTAMP and MySQL will auto-populate the columns as necessary. This is incredibly handy if you ever do bulk updates in SQL, now you don&amp;rsquo;t need to remember to set updated_at! Inserting records manually will auto-populate those columns too. Let&amp;rsquo;s try it:
-def up create_table :rows do |t| t.integer :value t.datetime :created_at, null: false, default: &#34;CURRENT_TIMESTAMP&#34; t.datetime :updated_at, null: false, default: &#34;</description>
+      <description>&lt;p&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/5.6/en/timestamp-initialization.html&#34;&gt;Starting in MySQL 5.6.5&lt;/a&gt;, datetime columns can have an actual useful default of CURRENT_TIMESTAMP and MySQL will auto-populate the columns as necessary. This is incredibly handy if you ever do bulk updates in SQL, now you don&amp;rsquo;t need to remember to set updated_at! Inserting records manually will auto-populate those columns too. Let&amp;rsquo;s try it:&lt;/p&gt;
+&lt;pre class=&#34;brush: ruby; gutter: false; title: ; notranslate&#34; title=&#34;&#34;&gt;def up
+  create_table :rows do |t|
+    t.integer :value
+    t.datetime :created_at, null: false, default: &#34;CURRENT_TIMESTAMP&#34;
+    t.datetime :updated_at, null: false, default: &#34;CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP&#34;
+  end
+end
+&lt;/pre&gt;
+&lt;p&gt;Run that and we&amp;rsquo;ll see this:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -45,11 +53,12 @@ def up create_table :rows do |t| t.integer :value t.datetime :created_at, null: 
       <pubDate>Wed, 17 Apr 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/04/17/board-games-and-beverages-at-railsconf-2013/</guid>
-      <description>You are invited to a whimsical evening of merriment and gamesmanship!
-What: Board Games and Beverages
-Where: Skyroom Lounge, top of Red Lion Hotel, across the street from Railsconf
-When: Tuesday, 4/30 7-11pm
-The Skyroom has a great view of Portland so try to get there before sundown. We should have enough games for everyone but bring your favorite if you&amp;rsquo;d like. They have food if you need a late dinner.</description>
+      <description>&lt;img src=&#34;http://www.wired.com/geekdad/wp-content/uploads/2009/12/carcassonne-board.jpg&#34; width=&#34;600&#34; height=&#34;401&#34; alt=&#34;Carcassonne&#34; class=&#34;aligncenter&#34; /&gt;
+&lt;p&gt;You are invited to a whimsical evening of merriment and gamesmanship!&lt;/p&gt;
+&lt;p&gt;What: Board Games and Beverages&lt;br&gt;
+Where: &lt;a href=&#34;http://www.yelp.com/biz/windows-skyroom-and-lounge-portland&#34;&gt;Skyroom Lounge&lt;/a&gt;, top of Red Lion Hotel, across the street from Railsconf&lt;br&gt;
+When: Tuesday, 4/30 7-11pm&lt;/p&gt;
+&lt;p&gt;The Skyroom has a great view of Portland so try to get there before sundown. We should have enough games for everyone but bring your favorite if you&amp;rsquo;d like. They have food if you need a late dinner. They have room for 250 so I&amp;rsquo;m hoping we&amp;rsquo;ll have plenty of room for everyone.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -58,13 +67,15 @@ The Skyroom has a great view of Portland so try to get there before sundown. We 
       <pubDate>Thu, 11 Apr 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/04/11/railsconf-2013-events/</guid>
-      <description>Want to know what&amp;rsquo;s going on during Railsconf 2013 outside of the conference center? Here&amp;rsquo;s a list of all events open to the public, this page will be updated as I learn of more events. Email mperham at gmail with event details.
-Sunday 4/28
-KidsCodeCamp, 10am-4pm, Multnomah Arts Center
-PlanetArgon.com Gorge Hike, 12:30-6:30pm, meet at Convention Center
-Monday 4/29
-Tech Women&amp;rsquo;s Communities Social, 7-9pm, NewRelic HQ
-Code Fellows Happy Hour, 7:30-9:30pm, Rontoms</description>
+      <description>&lt;p&gt;Want to know what&amp;rsquo;s going on during Railsconf 2013 outside of the conference center? Here&amp;rsquo;s a list of all events open to the public, this page will be updated as I learn of more events. Email mperham at gmail with event details.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Sunday 4/28&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://portlandkidscodecamp.eventbrite.com/&#34;&gt;KidsCodeCamp&lt;/a&gt;, 10am-4pm, Multnomah Arts Center&lt;br&gt;
+&lt;a href=&#34;http://www.eventbrite.com/event/5636226104&#34;&gt;PlanetArgon.com Gorge Hike&lt;/a&gt;, 12:30-6:30pm, meet at Convention Center&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Monday 4/29&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://techwomennightportland.eventbrite.com/&#34;&gt;Tech Women&amp;rsquo;s Communities Social&lt;/a&gt;, 7-9pm, NewRelic HQ&lt;br&gt;
+&lt;a href=&#34;http://codefellowshappyhourpdx.eventbrite.com/&#34;&gt;Code Fellows Happy Hour&lt;/a&gt;, 7:30-9:30pm, Rontoms&lt;br&gt;
+&lt;a href=&#34;http://www.eventbrite.com/event/6375243525&#34;&gt;ZenCoder and SendGrid Party&lt;/a&gt;, 7:30-9:30pm, Ground Kontrol&lt;br&gt;
+&lt;a href=&#34;https://pivotalrailsconf2013.eventbrite.com/&#34;&gt;Pivotal Labs Mixer&lt;/a&gt;, 9-11pm, Spirit of &amp;lsquo;77&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -73,8 +84,8 @@ Code Fellows Happy Hour, 7:30-9:30pm, Rontoms</description>
       <pubDate>Tue, 11 Dec 2012 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2012/12/11/12-gems-of-christmas-2-bullet/</guid>
-      <description>ActiveRecord has been a huge boon for web development in promoting conventions in databases. Every new company I joined we had to determine how to name tables, primary keys and indexes. Standardizing id, automatic timestamps, pluralizing nouns, all of it makes development easier and more friendly to developers who just want to build stuff, not worry about every mundane detail.
-All is not wine and roses though, ActiveRecord suffers from a common ORM performance issue: the N+1 query problem.</description>
+      <description>&lt;p&gt;ActiveRecord has been a huge boon for web development in promoting conventions in databases. Every new company I joined we had to determine how to name tables, primary keys and indexes. Standardizing id, automatic timestamps, pluralizing nouns, all of it makes development easier and more friendly to developers who just want to build stuff, not worry about every mundane detail.&lt;/p&gt;
+&lt;p&gt;All is not wine and roses though, ActiveRecord suffers from a common ORM performance issue: the N+1 query problem. Find all shopping carts created in the last month and print out the number of items in those carts. This is what you might see in your terminal:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -83,8 +94,17 @@ All is not wine and roses though, ActiveRecord suffers from a common ORM perform
       <pubDate>Sat, 08 Dec 2012 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2012/12/08/12-gems-of-christmas-5-lograge/</guid>
-      <description>Rails has a problem: its production logging is somewhat lacking. By default, Rails will emit a bunch of lines for each request, which makes grepping the output tougher than it should be. Look at this, it&amp;rsquo;s nice to look at but painful to aggregate:
-Started GET &#34;/&#34; for 127.0.0.1 at 2012-03-10 14:28:14 +0100 Processing by HomeController#index as HTML Rendered text template within layouts/application (0.0ms) Rendered layouts/_assets.html.erb (2.0ms) Rendered layouts/_top.html.erb (2.6ms) Rendered layouts/_about.</description>
+      <description>&lt;p&gt;Rails has a problem: its production logging is somewhat lacking. By default, Rails will emit a bunch of lines for each request, which makes grepping the output tougher than it should be. Look at this, it&amp;rsquo;s nice to look at but painful to aggregate:&lt;/p&gt;
+&lt;pre&gt;Started GET &#34;/&#34; for 127.0.0.1 at 2012-03-10 14:28:14 +0100
+Processing by HomeController#index as HTML
+  Rendered text template within layouts/application (0.0ms)
+  Rendered layouts/_assets.html.erb (2.0ms)
+  Rendered layouts/_top.html.erb (2.6ms)
+  Rendered layouts/_about.html.erb (0.3ms)
+  Rendered layouts/_google_analytics.html.erb (0.4ms)
+Completed 200 OK in 79ms (Views: 78.8ms | ActiveRecord: 0.0ms)
+&lt;/pre&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/roidrage/lograge&#34;&gt;Lograge&lt;/a&gt; &amp;rsquo;tames&amp;rsquo; Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here&amp;rsquo;s some output from &lt;a href=&#34;http://theclymb.com/invite-from/mperham&#34;&gt;The Clymb&lt;/a&gt; production logging with lograge enabled:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -93,7 +113,7 @@ Started GET &#34;/&#34; for 127.0.0.1 at 2012-03-10 14:28:14 +0100 Processing by
       <pubDate>Tue, 04 Dec 2012 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2012/12/04/12-gems-of-christmas-9-pundit/</guid>
-      <description>When it comes to authorization, Ryan Bates&amp;rsquo; CanCan gem is the 800 lb gorilla that most Rails apps use. pundit is the latest gem from Jonas Nicklas (author of Carrierwave and Capybara) with some interesting ideas that you might like. Pundit uses code conventions along with a plain old Ruby API to make for a very simple implementation. First, write a policy for each type of model you wish to authorize:</description>
+      <description>&lt;p&gt;When it comes to authorization, Ryan Bates&amp;rsquo; CanCan gem is the 800 lb gorilla that most Rails apps use. &lt;a href=&#34;https://github.com/elabs/pundit&#34;&gt;pundit&lt;/a&gt; is the latest gem from Jonas Nicklas (author of Carrierwave and Capybara) with some interesting ideas that you might like. Pundit uses code conventions along with a plain old Ruby API to make for a very simple implementation. First, write a policy for each type of model you wish to authorize:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -102,8 +122,20 @@ Started GET &#34;/&#34; for 127.0.0.1 at 2012-03-10 14:28:14 +0100 Processing by
       <pubDate>Mon, 03 Dec 2012 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2012/12/03/12-gems-of-christmas-10-konacha/</guid>
-      <description>It&amp;rsquo;s got a crazy name but solves a serious problem that continues to vex the Rails community: javascript testing. There are a number of libraries out there that try to solve the problem but konacha is the first I&amp;rsquo;m aware of that integrates tightly with Rails 3 and Sprockets to make JavaScript testing as easy as possible within your Rails app. For instance, you might have spec/javascripts/array_sum_spec.js:
-//= require array_sum describe(&#34;</description>
+      <description>&lt;p&gt;It&amp;rsquo;s got a crazy name but solves a serious problem that continues to vex the Rails community: javascript testing. There are a number of libraries out there that try to solve the problem but &lt;a href=&#34;https://github.com/jfirebaugh/konacha&#34;&gt;konacha&lt;/a&gt; is the first I&amp;rsquo;m aware of that integrates tightly with Rails 3 and Sprockets to make JavaScript testing as easy as possible within your Rails app. For instance, you might have &lt;code&gt;spec/javascripts/array_sum_spec.js&lt;/code&gt;:&lt;/p&gt;
+&lt;pre lang=&#34;javascript&#34;&gt;//= require array_sum
+
+describe(&#34;Array#sum&#34;, function() {
+  it(&#34;returns 0 when the Array is empty&#34;, function() {
+    [].sum().should.equal(0);
+  });
+
+  it(&#34;returns the sum of numeric elements&#34;, function() {
+    [1,2,3].sum().should.equal(6);
+  });
+});
+&lt;/pre&gt;
+&lt;p&gt;You can load HTML template fixtures via Sprocket&amp;rsquo;s JS template support. For example, in &lt;code&gt;spec/javascripts/templates/hello.jst.ejs&lt;/code&gt;:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -112,7 +144,7 @@ Started GET &#34;/&#34; for 127.0.0.1 at 2012-03-10 14:28:14 +0100 Processing by
       <pubDate>Sat, 25 Aug 2012 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2012/08/25/using-statsd-with-rails/</guid>
-      <description>One of the things I&amp;rsquo;ve had on my mind at The Clymb is better runtime monitoring for our website and servers. We have NewRelic but I always want more. With this in mind, I decided to try out statsd to collect and aggregate metrics for visualization. By using statsd, you get two benefits: 1) metric aggregation so you don&amp;rsquo;t have to pay for N machines reporting metrics to a pay service and 2) control over where your metrics go so you can route them to Graphite, Librato Metrics or any other standard metrics service.</description>
+      <description>&lt;p&gt;One of the things I&amp;rsquo;ve had on my mind at &lt;a href=&#34;http://www.theclymb.com/invite-from/mperham&#34;&gt;The Clymb&lt;/a&gt; is better runtime monitoring for our website and servers. We have NewRelic but I always want more. With this in mind, I decided to try out &lt;a href=&#34;http://github.com/etsy/statsd&#34;&gt;statsd&lt;/a&gt; to collect and aggregate metrics for visualization. By using statsd, you get two benefits: 1) metric aggregation so you don&amp;rsquo;t have to pay for N machines reporting metrics to a pay service and 2) control over where your metrics go so you can route them to Graphite, Librato Metrics or any other standard metrics service.&lt;/p&gt;</description>
     </item>
     
   </channel>
