@@ -3,7 +3,6 @@ title: "Conventional Commits"
 date: 2025-01-30T11:27:04-08:00
 publishdate: 2025-01-30
 lastmod: 2025-01-30
-draft: true
 tags: []
 ---
 
