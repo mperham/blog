@@ -12,6 +12,21 @@
     
     
     <item>
+      <title>Conventional Commits</title>
+      <link>https://www.mikeperham.com/2025/01/30/conventional-commits/</link>
+      <pubDate>Thu, 30 Jan 2025 11:27:04 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2025/01/30/conventional-commits/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://www.conventionalcommits.org/en/v1.0.0/&#34;&gt;Conventional Commits&lt;/a&gt; is a defacto standard for writing commit messages in a manner more useful for both humans and machines. Examples:&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;feat(batches): adjust callback data model to conform to naming standards
+ci: add ruby 3.4 to matrix
+style: upgrade standard formatting
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;I learned of conventional commits recently and like the simplicity and ease of use.
+I want to use this standard going forward for all of my projects but I had one problem: how do I train myself to use this every time?
+It&amp;rsquo;s too easy to forget or skip without some sort of prompt or cheatsheet so that&amp;rsquo;s exactly what I did!&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Sponsoring Hanami</title>
       <link>https://www.mikeperham.com/2025/01/17/sponsoring-hanami/</link>
       <pubDate>Fri, 17 Jan 2025 12:06:36 -0800</pubDate>
@@ -130,22 +145,6 @@ Because the health check should only be used within private networking, we have 
       <description>&lt;p&gt;Recently I made some minor changes to Sidekiq Enterprise 7.1 in order to greatly increase the scalability of the Rate Limiter feature.
 Redis has a little-known feature which allows you to safely use &lt;code&gt;MULTI&lt;/code&gt; transactions with multiple keys in a cluster.
 This was a real learning experience for me so I thought other people might find this interesting.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Introducing Sidekiq 7.0</title>
-      <link>https://www.mikeperham.com/2022/10/27/introducing-sidekiq-7.0/</link>
-      <pubDate>Thu, 27 Oct 2022 10:08:17 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2022/10/27/introducing-sidekiq-7.0/</guid>
-      <description>&lt;p&gt;I&amp;rsquo;m proud to announce, after nearly a year of work, Sidekiq 7.0 is now available.
-&lt;a href=&#34;https://sidekiq.org&#34;&gt;Sidekiq&lt;/a&gt; is the most popular background job system for Ruby, used by thousands of companies around the world.
-This release is our biggest, most splendiforous release ever!&lt;/p&gt;
-&lt;h1 id=&#34;whats-new&#34;&gt;What&amp;rsquo;s New?&lt;/h1&gt;
-&lt;h2 id=&#34;metrics&#34;&gt;Metrics&lt;/h2&gt;
-&lt;p&gt;One thing I know: everybody loves big beautiful graphs!
-Sidekiq 7.0 has a major new feature for tracking and visualizing job execution times.
-Big thanks to @adamlogic of Rails Autoscale for implementing the new graphs and I hope you&amp;rsquo;ll agree he did a fantastic job.&lt;/p&gt;</description>
     </item>
     
   </channel>
