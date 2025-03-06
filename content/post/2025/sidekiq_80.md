@@ -1,29 +1,31 @@
 ---
 title: "Introducing Sidekiq 8.0"
 date: 2025-03-05T12:09:25-08:00
-publishdate: 2025-03-05
-lastmod: 2025-03-05
+publishdate: 2025-03-10
+lastmod: 2025-03-10
 tags: []
 ---
 
 After six months of hard work, I'm thrilled to announce the general availability of Sidekiq 8.0! 🥳🎉
 
-## What's New?
 
-Head over to [docs/8.0-Upgrade.md](https://github.com/sidekiq/sidekiq/blob/main/docs/8.0-Upgrade.md) for the upgrade notes.
-New to Sidekiq? See [Test Drive](#test-drive) to get started quickly.
+New to Sidekiq? Got a Ruby/Rails app and want to try it out? See [Test Drive](#test-drive) to get started quickly.
+
+Over the next few weeks I plan to publish several blog posts which go deep into the changes described below.
+Subscribe to my [RSS feed](https://www.mikeperham.com/index.xml) if you want to see those posts when they are published.
+
+## What's New?
 
 ### Profiling
 
-Sidekiq 8.0 makes job profiling in production **so easy**:
+Profiling allows you to see how long your code takes to execute, allowing you to find unexpected performace problems. Sidekiq 8.0 makes job profiling in production **so easy**:
 
 ```ruby
 MyJob.set(profile: "mike").perform_async(...args...)
 ```
 
-That's it!
 If you tag a job with a `profile` attribute, Sidekiq will run it within [Vernier](https://vernier.prof) and store the report in Redis.
-Access the profile report in the new `Profiles` tab of the Web UI.
+You access the profile report in the new `Profiles` tab of the Web UI.
 For more details, refer to the [Profiling](https://github.com/sidekiq/sidekiq/wiki/Profiling) wiki page.
 
 ### Web UI
@@ -88,8 +90,9 @@ brew services start valkey
 
 Now follow the directions in https://github.com/sidekiq/sidekiq/wiki/Getting-Started to give Sidekiq a try.
 
-## Conclusion
+## ...and so much more!
 
-These are the main highlights.
+These are the main highlights but there are many smaller tweaks and fixes.
+See the [Changelog](https://github.com/sidekiq/sidekiq/blob/main/Changes.md#800) for more detail.
 I hope you find a valuable improvement or feature to love here.
-Keep on 'kiqing!
+Keep on 'kiqing! ❤️

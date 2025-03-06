@@ -3,7 +3,6 @@ title: "Sponsoring Hanami"
 date: 2025-01-17T12:06:36-08:00
 publishdate: 2025-01-17
 lastmod: 2025-01-17
-draft: false
 tags: []
 ---
 
