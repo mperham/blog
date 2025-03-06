@@ -8,8 +8,11 @@ tags: []
 
 After six months of hard work, I'm thrilled to announce the general availability of Sidekiq 8.0! 🥳🎉
 
+## Status
 
-New to Sidekiq? Got a Ruby/Rails app and want to try it out? See [Test Drive](#test-drive) to get started quickly.
+Sidekiq is used by thousands of Ruby applications around the world to scale job processing up to billions of jobs/day.
+Current Sidekiq Enterprise customers are reporting a grand total of 1,806,671,058,604 jobs processed, almost two trillion, with my largest customer executing up to 250,000 jobs/sec.
+Got a Ruby/Rails app and want to try out Sidekiq? See [Test Drive](#test-drive) to get started quickly.
 
 Over the next few weeks I plan to publish several blog posts which go deep into the changes described below.
 Subscribe to my [RSS feed](https://www.mikeperham.com/index.xml) if you want to see those posts when they are published.
