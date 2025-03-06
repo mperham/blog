@@ -8,9 +8,10 @@ tags: []
 
 After six months of hard work, I'm thrilled to announce the general availability of Sidekiq 8.0! 🥳🎉
 
-## What's New
+## What's New?
 
 Head over to [docs/8.0-Upgrade.md](https://github.com/sidekiq/sidekiq/blob/main/docs/8.0-Upgrade.md) for the upgrade notes.
+New to Sidekiq? See [Test Drive](#test-drive) to get started quickly.
 
 ### Profiling
 
@@ -58,7 +59,7 @@ Previously data was limited to 8 hours.
 Redis 7.0 is the minimum required version.
 Sidekiq also officially supports Valkey and DragonflyDB, providing users with options in terms of datastore provider.
 
-Ruby 3.2.1 is now the minimum Ruby version supported.
+Ruby 3.2 is now the minimum Ruby version supported.
 Rails 7.0 and later versions are also supported.
 
 Sidekiq does not require Rails, unlike many modern job systems which require Active Job.
@@ -68,6 +69,26 @@ We like providing options!
 ### Commercial
 
 Sidekiq Pro and Enterprise 8.0 will be released soon.
+
+### Test Drive
+
+Want to take Sidekiq for a test drive on your local machine? If you can run Docker containers, you can run Valkey (an open source clone of Redis) in seconds:
+
+```
+# add this line to ~/.zshrc or ~/.bashrc
+alias valkey="docker run -p 6379:6379 valkey/valkey:latest"
+
+# run this anytime to start valkey locally
+valkey
+
+# On a Mac with Homebrew? Run this:
+brew install valkey
+brew services start valkey
+```
+
+Now follow the directions in https://github.com/sidekiq/sidekiq/wiki/Getting-Started to give Sidekiq a try.
+
+## Conclusion
 
 These are the main highlights.
 I hope you find a valuable improvement or feature to love here.
