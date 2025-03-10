@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/11/22/apache-tuning/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2010/11/22/apache-tuning/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Apache Tuning">
   <meta property="og:description" content="Want to wreck your afternoon? Just have a poorly configured WordPress install linked from Hacker News. Here’s the postmortem.
@@ -205,14 +205,14 @@ blockquote,
 <p><a href="http://virtualthreads.blogspot.com/2006/01/tuning-apache-part-1.html">Keep-Alives</a> try to help client performance. This is a performance tweak that will kill you. By default, Apache is configured to hold the process locked for a given socket for 15 seconds (!!?) in case that socket makes another request. <strong>That&rsquo;s a terrible, terrible default: you should never lock resources waiting for human input.</strong> So in 15 seconds, Hacker News delivered me 50-100 requests. These requests all generated their own process, quickly overwhelming my RAM and swap and effectively freezing my slice.</p>
 <p>I lowered the maximum number of processes (MaxClients) to 20 and the keep-alive timeout from 15 to 2 seconds. Before I was seeing load averages in the 100s and since reconfiguration, my slice&rsquo;s load average has been under 1 all afternoon. Here&rsquo;s the config I changed:</p>
 <blockquote>
-<h1 id="heading"></h1>
+<h1></h1>
 <p># KeepAliveTimeout: Number of seconds to wait for the next request from the<br>
 # same client on the same connection.</p>
-<h1 id="heading-1"></h1>
+<h1></h1>
 <p>KeepAliveTimeout 2</p>
-<h2 id="heading-2"></h2>
+<h2></h2>
 <p>## Server-Pool Size Regulation (MPM specific)</p>
-<h2 id="heading-3"></h2>
+<h2></h2>
 <p># prefork MPM<br>
 # StartServers: number of server processes to start<br>
 # MinSpareServers: minimum number of server processes which are kept spare<br>
@@ -223,8 +223,7 @@ StartServers 5<br>
 MinSpareServers 5<br>
 MaxSpareServers 10<br>
 MaxClients 20<br>
-</IfModule></p>
-</blockquote>
+</IfModule></p></blockquote>
 
     </article>
   </div>

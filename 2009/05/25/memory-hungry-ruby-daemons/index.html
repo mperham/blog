@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2009/05/25/memory-hungry-ruby-daemons/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2009/05/25/memory-hungry-ruby-daemons/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Memory-hungry Ruby daemons">
   <meta property="og:description" content="We’ve had a perplexing issue with our Ruby daemons at OneSpot: they seem to grow to 300-400MB each within about 30 minutes, at which point our Monit scripts restart them. We suspected a memory leak and so upgraded from stock Ruby 1.8.5 shipped with CentOS to the latest REE 1.8.6 but nothing changed. I also saw a very similar issue at FiveRuns. Why is this problem seemingly endemic, even with completely different source code? After some thought and research I think I understand the root clause of the problem: it’s part of Ruby’s history and design.">
@@ -220,15 +220,13 @@ So MRI will initially allocate the application RUBY_HEAP_MIN_SLOTS or 10,000 slo
 </li>
 </ul>
 </li>
-</ul>
-</blockquote>
+</ul></blockquote>
 <p>export RUBY_HEAP_SLOTS_INCREMENT=100000
 export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 </pre></p>
 <blockquote>
 <pre><code>    That gives our daemon ~80MB to start and each heap is a fixed 10MB. Our daemon stabilizes at ~120MB and the memory usage doesn't change, even after hours of processing. My takeaway: if you own a Ruby daemon, you need to tune the heap to ensure it does not take too much memory!
-</code></pre>
-</blockquote>
+</code></pre></blockquote>
 
     </article>
   </div>

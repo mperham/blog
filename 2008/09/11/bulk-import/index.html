@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2008/09/11/bulk-import/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2008/09/11/bulk-import/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Bulk Import">
   <meta property="og:description" content="Some quick performance numbers around bulk insert of data into MySQL. This test inserts 1000 rows into a table. Rails 2.1.0, ar-extensions 0.8.0 and MySQL 5.0.45 on a MacBook Pro running Leopard. I tested a number of configurations but the interesting ones are plain old iteration calling save, using ar-extensions’ import method and bare metal execute.

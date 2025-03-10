@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/09/19/dalli-performance-and-garbage-collection/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2010/09/19/dalli-performance-and-garbage-collection/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Dalli Performance and Garbage Collection">
   <meta property="og:description" content="I did an interesting experiment to compare memcache-client and Dalli performance this morning. I wanted to understand which library allocated more objects in order to know which library would have more GC overhead. Ruby 1.9 has a new module GC::Profiler which will generate a report with stats about each GC run. Since both gems have an identical benchmark suite, I ran the GC Profiler on the benchmark suite for each:

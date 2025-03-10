@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2007/10/19/using-svnexternals/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2007/10/19/using-svnexternals/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using svn:externals">
   <meta property="og:description" content="Subversion allows you to pull external code into your code by using the svn:externals property. It’s pretty simple to use; assume we have a library “foo” which we want to pull into the current directory. This script will add the external reference for you:
@@ -200,8 +200,7 @@ blockquote,
 </p>
 <p>Subversion allows you to pull external code into your code by using the svn:externals property. It&rsquo;s pretty simple to use; assume we have a library &ldquo;foo&rdquo; which we want to pull into the current directory.  This script will add the external reference for you:</p>
 <blockquote>
-<pre>TMP=current.tmp
-</blockquote>
+<pre>TMP=current.tmp</blockquote>
 <p>svn pg &ndash;strict svn:externals &gt; $TMP
 echo &ldquo;$1 $2&rdquo; &gt;&gt; $TMP
 svn ps svn:externals &ndash;file $TMP .

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2008/08/19/mysql-innodb-clustered-indexes-and-rails/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2008/08/19/mysql-innodb-clustered-indexes-and-rails/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="MySQL InnoDB Clustered Indexes and Rails">
   <meta property="og:description" content="Joe has written an excellent post about one of the more arcane scalability changes you can make to your ActiveRecord schema. In essence, the performance problem is this: mysql tries to write rows in order of the primary key index and ActiveRecord creates an artificial PK called ID. So if I write rows #19 and #20, they will be right next to each other on disk, which is fine if 19 and 20 are related. If they have no relation, their proximity is useless.">

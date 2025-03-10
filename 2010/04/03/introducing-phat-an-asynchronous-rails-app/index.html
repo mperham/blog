@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Introducing Phat, an Asynchronous Rails app">
   <meta property="og:description" content="Phat is my new Rails 2.3.5 application which runs 100% asynchronous, supporting many concurrent requests in a single Ruby process.
@@ -241,8 +241,7 @@ end
 <p>Without EventMachine:<br>
 Requests per second: 4.39 [#/sec] (mean)</p>
 <p>With EventMachine:<br>
-Requests per second: 21.31 [#/sec] (mean)</p>
-</blockquote>
+Requests per second: 21.31 [#/sec] (mean)</p></blockquote>
 <p>That&rsquo;s it! There&rsquo;s no magic here: you can make your Rails app a &ldquo;phat&rdquo; app by following the same guidelines above. Fire up one thin instance per processor/core, put nginx in front of it and it should scale like crazy!</p>
 
     </article>

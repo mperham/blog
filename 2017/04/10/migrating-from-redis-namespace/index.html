@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2017/04/10/migrating-from-redis-namespace/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2017/04/10/migrating-from-redis-namespace/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Migrating from redis-namespace">
   <meta property="og:description" content="In a blog post in 2015, Storing Data with Redis, I wrote about your options for partitioning data stored within Redis and came down pretty hard on using key namespacing via redis-namespace. The redis-namespace gem allows you to share a Redis database among several applications by prefixing every key with a namespace but it’s a terrible hack that no one should use. Redis already has a native solution if you want to share a Redis instance: databases. The default database is 0. Here’s how to point Sidekiq to use database 1 instead:">
@@ -222,8 +222,7 @@ database indexes and stick with it.</p>
 not share a Redis instance at all.  If you use Redis for caching and
 jobs and your budget is &gt;$0, you should have two different Redis instances
 with different configurations. Job data is closer to transactional data,
-they can probably share the same Redis if necessary.</p>
-</blockquote>
+they can probably share the same Redis if necessary.</p></blockquote>
 <p><em>&ldquo;Our current application uses redis-namespace.  How do we migrate away from namespace usage without losing everything we have currently?&rdquo;</em></p>
 <p>Ah, this is possible but non-trivial, as with all data migrations.
 I will assume you are running Sidekiq.
@@ -273,8 +272,7 @@ migrate your Redis data to strip off the namespace from the key.  You
 shut down the old processes (<strong>anything</strong> that talks to Redis with the namespace),
 run the migration script, and start everything with the new setup once it&rsquo;s complete.</p>
 <blockquote>
-<p>How long will it take?</p>
-</blockquote>
+<p>How long will it take?</p></blockquote>
 <p>This is an excellent question, look at the size of your databases:</p>
 <pre tabindex="0"><code>$ redis-cli info
 [snip]

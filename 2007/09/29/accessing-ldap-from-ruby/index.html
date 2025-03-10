@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Accessing LDAP from Ruby">
   <meta property="og:description" content="Ok, we’ve got our nifty Apache DS running with some custom data. This doesn’t do much unless our application can access the data in order to perform some sort of logic. So let’s connect the two worlds!
@@ -201,8 +201,7 @@ blockquote,
 <p>Ok, we&rsquo;ve got our nifty Apache DS running with some custom data. This doesn&rsquo;t do much unless our application can access the data in order to perform some sort of logic. So let&rsquo;s connect the two worlds!</p>
 <p>Make sure your Apache DS server is up and running. We first need to install a Ruby API for accessing LDAP. I found the simplest to use was ruby-net-ldap:</p>
 <blockquote>
-<pre>gem install ruby-net-ldap</pre>
-</blockquote>
+<pre>gem install ruby-net-ldap</pre></blockquote>
 <p>Next, create a simple ldaptest.rb file to use the API:</p>
 <pre>require 'net/ldap'
 
@@ -218,8 +217,7 @@ end</pre>
 <p>Running it should give this output:</p>
 <blockquote>
 <p>mikeperham:~$ ruby -rubygems ldaptest.rb<br>
-DN: uid=mike,ou=engineering,dc=fiveruns,dc=com</p>
-</blockquote>
+DN: uid=mike,ou=engineering,dc=fiveruns,dc=com</p></blockquote>
 <p>It works! Everything from this point on is just gravy. You can explore the <a href="http://www.gemjack.com/gems/ruby-net-ldap-0.0.4/index.html">ruby-net-ldap rdoc</a> in more depth or try more advanced libraries like <a href="http://wiki.rubyonrails.org/rails/pages/ActiveLDAP">ActiveLdap</a>.</p>
 
     </article>

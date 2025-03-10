@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2015/12/14/how-to-test-multithreaded-code/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2015/12/14/how-to-test-multithreaded-code/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="How to Test Multithreaded Code">
   <meta property="og:description" content="Multithreaded code is hard to write and even harder to test. Since much of my work is dedicated to making Ruby threading easier for my users and customers, I thought some might be interested in the patterns I’ve developed to make multithreaded code as simple and testable as possible.
@@ -207,8 +207,7 @@ interested in the patterns I&rsquo;ve developed to make multithreaded code as si
 and testable as possible.</p>
 <h2 id="separate-threading-from-work">Separate Threading from Work</h2>
 <blockquote>
-<p>If you can&rsquo;t test a big block of code, break it into a set of smaller testable pieces.</p>
-</blockquote>
+<p>If you can&rsquo;t test a big block of code, break it into a set of smaller testable pieces.</p></blockquote>
 <p><a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L24">Sidekiq::Processor</a> is an object which is designed to run in its own
 thread and doesn&rsquo;t have any public API aside from starting/stopping the
 thread.</p>

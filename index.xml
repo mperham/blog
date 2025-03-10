@@ -6,10 +6,23 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Jan 2025 11:27:04 -0800</lastBuildDate>
+    <lastBuildDate>Wed, 05 Mar 2025 12:09:25 -0800</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Introducing Sidekiq 8.0</title>
+      <link>https://www.mikeperham.com/2025/03/05/introducing-sidekiq-8.0/</link>
+      <pubDate>Wed, 05 Mar 2025 12:09:25 -0800</pubDate>
+      
+      <guid>https://www.mikeperham.com/2025/03/05/introducing-sidekiq-8.0/</guid>
+      <description>&lt;p&gt;After six months of hard work, I&amp;rsquo;m thrilled to announce the general availability of Sidekiq 8.0! 🥳🎉&lt;/p&gt;
+&lt;h2 id=&#34;status&#34;&gt;Status&lt;/h2&gt;
+&lt;p&gt;Sidekiq is used by thousands of Ruby applications around the world to scale job processing up to billions of jobs/day.
+Current Sidekiq Enterprise customers are reporting a grand total of 1,806,671,058,604 jobs processed, almost two trillion, with my largest customer executing up to 250,000 jobs/sec.
+Got a Ruby/Rails app and want to try out Sidekiq? See &lt;a href=&#34;#test-drive&#34;&gt;Test Drive&lt;/a&gt; to get started quickly.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Conventional Commits</title>
@@ -97,8 +110,7 @@ There were no mistakes or misunderstandings, Dan did the work and shows the rece
       <guid>https://www.mikeperham.com/how-sidekiq-works/</guid>
       <description>&lt;p&gt;2024-02-04&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;This article was originally published on &lt;a href=&#34;https://dansvetlov.me/sidekiq-internals/&#34;&gt;DanSvetlov.me&lt;/a&gt; and is republished here with permission of the author. This article is relevant to Sidekiq v7.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;This article was originally published on &lt;a href=&#34;https://dansvetlov.me/sidekiq-internals/&#34;&gt;DanSvetlov.me&lt;/a&gt; and is republished here with permission of the author. This article is relevant to Sidekiq v7.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/sidekiq/sidekiq&#34;&gt;Sidekiq&lt;/a&gt; is one of the most ubiquitous&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; Ruby background job processors out there. To anybody who has worked with Ruby on and off Rails, it needs no introduction. Sidekiq has a 10+ year track record of being an efficient, battle-tested and simple-to-use solution for offloading the execution of application logic into the background.&lt;/p&gt;</description>
     </item>
     
@@ -134,17 +146,6 @@ This means, within each Sidekiq worker process, we need to implement an HTTP ser
 &lt;p&gt;Notice we have really basic requirements here: no need for serving files or arbitrary dynamic content.
 We only respond to &amp;ldquo;/&amp;rdquo; so there&amp;rsquo;s no need for routes, paths or query parameter handling.
 Because the health check should only be used within private networking, we have no need for TLS or https support.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Scaling Huge Transactional Datasets with Redis Cluster</title>
-      <link>https://www.mikeperham.com/2023/05/08/scaling-huge-transactional-datasets-with-redis-cluster/</link>
-      <pubDate>Mon, 08 May 2023 09:00:00 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2023/05/08/scaling-huge-transactional-datasets-with-redis-cluster/</guid>
-      <description>&lt;p&gt;Recently I made some minor changes to Sidekiq Enterprise 7.1 in order to greatly increase the scalability of the Rate Limiter feature.
-Redis has a little-known feature which allows you to safely use &lt;code&gt;MULTI&lt;/code&gt; transactions with multiple keys in a cluster.
-This was a real learning experience for me so I thought other people might find this interesting.&lt;/p&gt;</description>
     </item>
     
   </channel>

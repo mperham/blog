@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2007/10/22/using-the-rrdtool-ruby-bindings-with-osx/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2007/10/22/using-the-rrdtool-ruby-bindings-with-osx/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using the RRDTool Ruby bindings with OSX">
   <meta property="og:description" content="RRDTool is a nice metric storage and graphing library. We’re using its Ruby binding internally to integrate RRDTool into our product but I was having problems getting it running:
@@ -206,12 +206,10 @@ blockquote,
 <p>&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;dyld: NSLinkModule() error<br>
 dyld: Symbol not found: _rrd_graph<br>
 Referenced from: /usr/local/lib/ruby/site_ruby/1.8/universal-darwin8.0/RRD.bundle<br>
-Expected in: flat namespace</p>
-</blockquote>
+Expected in: flat namespace</p></blockquote>
 <p>This error is due to the Ruby binding not being able to find the native RRD library, librrd. When you install rrdtool via Mac Ports, it installs everything in /opt/local, not /usr/local. What you need to do is update <code>extconf.rb</code> in <code>rrdtool-1.2.x/bindings/ruby</code> and change the following line so that the binding will look in the proper location for the Mac Ports install:</p>
 <blockquote>
-<p>dir_config(&ldquo;rrd&rdquo;,&quot;../../src&quot;,&quot;/opt/local/lib&quot;)</p>
-</blockquote>
+<p>dir_config(&ldquo;rrd&rdquo;,&quot;../../src&quot;,&quot;/opt/local/lib&quot;)</p></blockquote>
 <p>Now run <code>ruby extconf.rb ; make ; sudo make install</code> to install the modified Ruby binding.</p>
 
     </article>

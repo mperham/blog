@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2019/07/19/something-for-nothing/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2019/07/19/something-for-nothing/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Something For Nothing">
   <meta property="og:description" content="Do you like free things? Would you like to get something for nothing? Are you a Sidekiq user? If you answered yes to these questions, I have a case study in how one customer effectively got Sidekiq Enterprise for free.
@@ -205,8 +205,7 @@ case study in how one customer effectively got Sidekiq Enterprise for
 free.</p>
 <p>One Friday morning, two engineers jumped into my weekly Happy Hour to ask me about a Sidekiq problem they were having.</p>
 <blockquote>
-<p>&ldquo;We have two Sidekiq dynos with 40 threads each: we find that after about 5 minutes, they are only using about 20 threads; shouldn&rsquo;t all 40 threads pick up jobs? The jobs perform image processing.&rdquo;</p>
-</blockquote>
+<p>&ldquo;We have two Sidekiq dynos with 40 threads each: we find that after about 5 minutes, they are only using about 20 threads; shouldn&rsquo;t all 40 threads pick up jobs? The jobs perform image processing.&rdquo;</p></blockquote>
 <pre tabindex="0"><code>bundle exec sidekiq -c 40
 </code></pre><p>They were using two Heroku <code>performance-m</code> dynos, which cost $250/month each.</p>
 <h2 id="mri-has-a-limit">MRI has a Limit</h2>

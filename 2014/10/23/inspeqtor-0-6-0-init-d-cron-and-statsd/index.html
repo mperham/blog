@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2014/10/23/inspeqtor-0-6-0-init-d-cron-and-statsd/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2014/10/23/inspeqtor-0-6-0-init-d-cron-and-statsd/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Inspeqtor 0.6.0 -- init.d, cron and statsd!">
   <meta property="og:description" content="Inspeqtor is my new take on application infrastructure monitoring. You use it to verify rules about your database, web server, caches, etc and if anything is wrong, Inspeqtor will alert you. After the initial release 3 weeks ago, I was distracted a bit by a DMCA takedown from a similar project but thankfully that went away quickly. Since then I’ve added several awesome new features!
@@ -215,7 +215,7 @@ check service mysql
 <h3 id="export-data">Export data</h3>
 <p>Use the new <code>inspeqtorctl export</code> command to dump the latest metric data in JSON format. There&rsquo;s a million things you can do once you have the raw data: your imagination is the only limit!</p>
 <p>Inspeqtor got a few new features and so did <a href="http://contribsys.com/inspeqtor">Inspeqtor Pro</a>.</p>
-<h3 id="pro----monitor-recurring-jobs">Pro &ndash; Monitor recurring jobs</h3>
+<h3 id="pro--monitor-recurring-jobs">Pro &ndash; Monitor recurring jobs</h3>
 <p>Cron jobs are special because they run in their own cron environment sandbox and are easy to misconfigure. At some point every developer has seen a cron job which works perfectly on their own machine but fails in production due to some environmental bug. With Inspeqtor Pro you give it a list of jobs in /etc/inspeqtor/jobs.d/*.inq along with how often they should &ldquo;check in&rdquo; and Inspeqtor will alert you if a job has not checked in within the given window.</p>
 <pre>
 # /etc/inspeqtor/jobs.d/whatever.inq
@@ -229,7 +229,7 @@ check jobs
 OK
 </pre>
 <p>If Inspeqtor does not see a check in within the given period of time, it will fire an alert. <a href="https://github.com/mperham/inspeqtor/wiki/Pro-Recurring-Jobs">More detail in the wiki</a>.</p>
-<h3 id="pro----export-to-statsd">Pro &ndash; Export to Statsd</h3>
+<h3 id="pro--export-to-statsd">Pro &ndash; Export to Statsd</h3>
 <p>Inspeqtor Pro can send collected metrics directly to your Statsd server, meaning you can graph and visualize them with Graphite, Librato, Datadog or others. The integration literally couldn&rsquo;t be simpler, requiring just a single line to your inspeqtor.conf:</p>
 <pre>
 # /etc/inspeqtor/inspeqtor.conf

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/how-sidekiq-works/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/how-sidekiq-works/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="How does Sidekiq work?">
   <meta property="og:description" content="2024-02-04
@@ -191,8 +191,7 @@ blockquote,
       <h1>How does Sidekiq work?</h1>
 <p>2024-02-04</p>
 <blockquote>
-<p>This article was originally published on <a href="https://dansvetlov.me/sidekiq-internals/">DanSvetlov.me</a> and is republished here with permission of the author. This article is relevant to Sidekiq v7.</p>
-</blockquote>
+<p>This article was originally published on <a href="https://dansvetlov.me/sidekiq-internals/">DanSvetlov.me</a> and is republished here with permission of the author. This article is relevant to Sidekiq v7.</p></blockquote>
 <p><a href="https://github.com/sidekiq/sidekiq">Sidekiq</a> is one of the most ubiquitous<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> Ruby background job processors out there. To anybody who has worked with Ruby on and off Rails, it needs no introduction. Sidekiq has a 10+ year track record of being an efficient, battle-tested and simple-to-use solution for offloading the execution of application logic into the background.</p>
 <p>It utilizes a threaded model for job processing, uses Redis as a backend and claims to have an &lsquo;at least once&rsquo; semantic when it comes to processing jobs (with a caveat) in a free open-source version. Sidekiq also offers 2 additional paid versions - Pro and Enterprise, each of them introducing additional features and extensions. For obvious reasons, I will not go into the details of these versions.</p>
 <p>This article will delve into the internals of Sidekiq to highlight its key aspects, as well as design and implementation decisions that I personally find interesting or peculiar, by diving directly into the source code and following a job through its full lifecycle.</p>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2008/05/06/ruby-threads-and-exit-codes/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2008/05/06/ruby-threads-and-exit-codes/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Ruby, Threads and Exit Codes">
   <meta property="og:description" content="A question for you Ruby nerds: the $? variable gives access to the exit code for the last process launched by Ruby. Is referencing $? a race condition in a system with many threads launching many subprocesses? If it is truly a global variable, then it’s inherently unsafe, but it could also be implemented with a thread-local variable. Any idea which it is?

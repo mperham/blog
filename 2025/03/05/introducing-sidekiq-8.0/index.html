@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2025/03/05/introducing-sidekiq-8.0/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Introducing Sidekiq 8.0">
+  <meta property="og:description" content="After six months of hard work, I’m thrilled to announce the general availability of Sidekiq 8.0! 🥳🎉
+Status Sidekiq is used by thousands of Ruby applications around the world to scale job processing up to billions of jobs/day. Current Sidekiq Enterprise customers are reporting a grand total of 1,806,671,058,604 jobs processed, almost two trillion, with my largest customer executing up to 250,000 jobs/sec. Got a Ruby/Rails app and want to try out Sidekiq? See Test Drive to get started quickly.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-03-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-03-10T00:00:00+00:00">
+
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Introducing Sidekiq 8.0 | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16"
+            height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Introducing Sidekiq 8.0</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2025-03-10
+  </small>
+  
+</p>
+<p>After six months of hard work, I&rsquo;m thrilled to announce the general availability of Sidekiq 8.0! 🥳🎉</p>
+<h2 id="status">Status</h2>
+<p>Sidekiq is used by thousands of Ruby applications around the world to scale job processing up to billions of jobs/day.
+Current Sidekiq Enterprise customers are reporting a grand total of 1,806,671,058,604 jobs processed, almost two trillion, with my largest customer executing up to 250,000 jobs/sec.
+Got a Ruby/Rails app and want to try out Sidekiq? See <a href="#test-drive">Test Drive</a> to get started quickly.</p>
+<p>Over the next few weeks I plan to publish several blog posts which go deep into the changes described below.
+Subscribe to my <a href="https://www.mikeperham.com/index.xml">RSS feed</a> if you want to see those posts when they are published.</p>
+<h2 id="whats-new">What&rsquo;s New?</h2>
+<h3 id="profiling">Profiling</h3>
+<p>Profiling allows you to see how long your code takes to execute, allowing you to find unexpected performace problems. Sidekiq 8.0 makes job profiling in production <strong>so easy</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">MyJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">profile</span>: <span style="color:#e6db74">&#34;mike&#34;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>args<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><p>If you tag a job with a <code>profile</code> attribute, Sidekiq will run it within <a href="https://vernier.prof">Vernier</a> and store the report in Redis.
+You access the profile report in the new <code>Profiles</code> tab of the Web UI.
+For more details, refer to the <a href="https://github.com/sidekiq/sidekiq/wiki/Profiling">Profiling</a> wiki page.</p>
+<h3 id="web-ui">Web UI</h3>
+<p>The Web UI has undergone a significant overhaul.
+For years, we relied on Bootstrap 3.3.7 but now we&rsquo;ve removed the dependency altogether.
+It was an absolute delight to discover that modern CSS, with its support for variables, can be used without a build process.
+Many thanks to <a href="https://github.com/antoinem">@antoinem</a> for contributing the majority of this work.
+The look and feel of the pages have improved dramatically, take a look at this beauty!</p>
+<p><img src="/images/webui_80.png" alt="webui"></p>
+<p>Sidekiq::Web&rsquo;s routing code has been extensively rewritten and a new configuration API has been introduced for web extensions to use.</p>
+<p>Lastly, a significant performance regression was discovered while testing Sidekiq&rsquo;s profiling support.
+Pages now render faster because they no longer load 20 YAML files on every request.</p>
+<h3 id="iteration">Iteration</h3>
+<p>Job iteration is a new feature that enables you to divide long-running jobs into smaller chunks of work.
+With this feature, you can construct jobs that can safely execute for days, provided that each iteration step takes less than 30 seconds.
+For instance, consider a job that performs data migration for millions of accounts, where each step migrates 100 accounts.
+This feature was introduced in version 7.3 and has undergone refinement in the subsequent months.
+I strongly encourage all Sidekiq users to review the <a href="https://github.com/sidekiq/sidekiq/wiki/Iteration">Iteration</a> wiki page to learn more.</p>
+<h3 id="metrics">Metrics</h3>
+<p>Job runtime metrics now support displaying data for 24/48/72 hours, allowing you to observe multi-day usage patterns.
+Previously data was limited to 8 hours.</p>
+<h3 id="requirements">Requirements</h3>
+<p>Redis 7.0 is the minimum required version.
+Sidekiq also officially supports Valkey and DragonflyDB, providing users with options in terms of datastore provider.</p>
+<p>Ruby 3.2 is now the minimum Ruby version supported.
+Rails 7.0 and later versions are also supported.</p>
+<p>Sidekiq does not require Rails, unlike many modern job systems which require Active Job.
+Sidekiq can be used by any Ruby application whether using Rails, <a href="https://hanamirb.org">Hanami</a>, <a href="https://sinatrarb.com">Sinatra</a>, <a href="http://roda.jeremyevans.net">Roda</a>, or no framework at all.
+We like providing options!</p>
+<h3 id="commercial">Commercial</h3>
+<p>Sidekiq Pro and Enterprise 8.0 will be released soon.</p>
+<h3 id="test-drive">Test Drive</h3>
+<p>Want to take Sidekiq for a test drive on your local machine? If you can run Docker containers, you can run Valkey (an open source clone of Redis) in seconds:</p>
+<pre tabindex="0"><code># add this line to ~/.zshrc or ~/.bashrc
+alias valkey=&#34;docker run -p 6379:6379 valkey/valkey:latest&#34;
+
+# run this anytime to start valkey locally
+valkey
+
+# On a Mac with Homebrew? Run this:
+brew install valkey
+brew services start valkey
+</code></pre><p>Now follow the directions in <a href="https://github.com/sidekiq/sidekiq/wiki/Getting-Started">https://github.com/sidekiq/sidekiq/wiki/Getting-Started</a> to give Sidekiq a try.</p>
+<h2 id="and-so-much-more">&hellip;and so much more!</h2>
+<p>These are the main highlights but there are many smaller tweaks and fixes.
+See the <a href="https://github.com/sidekiq/sidekiq/blob/main/Changes.md#800">Changelog</a> for more detail.
+I hope you find a valuable improvement or feature to love here.
+Keep on &lsquo;kiqing! ❤️</p>
+
+    </article>
+  </div>
+
+  
+
+</body>
+
+</html>

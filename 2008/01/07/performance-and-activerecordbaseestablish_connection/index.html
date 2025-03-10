@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2008/01/07/performance-and-activerecordbaseestablish_connection/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2008/01/07/performance-and-activerecordbaseestablish_connection/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Performance and ActiveRecord::Base.establish_connection">
   <meta property="og:description" content="I’ve got a library which requires its own database so I’m using a shared superclass for my models which uses establish_connection to point to a different database than the default one used by ActiveRecord::Base.connection. The problem is performance. I’m inserting and updating a large amount of data in a single unit test method and finding that when I use the customized connection, my performance goes from 20 seconds to 45 seconds! If I change my library to use ActiveRecord::Base’s connection, the peformance returns to 20 seconds. I’m using AR 2.0.1 with the mysql C driver on OSX.">

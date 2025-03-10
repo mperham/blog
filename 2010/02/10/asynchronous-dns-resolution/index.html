@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2010/02/10/asynchronous-dns-resolution/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2010/02/10/asynchronous-dns-resolution/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Asynchronous DNS Resolution">
   <meta property="og:description" content="Ruby has a serious scalability problem most Rubyists are unaware of. When you lookup the IP address for a hostname, the entire Ruby process blocks by default. If you have a slow DNS server, your process can grind to a halt waiting for hostname resolution. Ruby comes standard with a fix, resolv-replace, which provides a DNS resolver that does not block the entire process. It does however block the Thread, like any other instance of blocking I/O.">

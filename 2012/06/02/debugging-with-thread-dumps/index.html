@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.142.0"><meta property="og:url" content="https://www.mikeperham.com/2012/06/02/debugging-with-thread-dumps/">
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2012/06/02/debugging-with-thread-dumps/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Debugging with Thread Dumps">
   <meta property="og:description" content="I recently upgraded TheClymb to use the Redis 3.0 gem. When I did this, our test suite halted mid-spec and pegged the CPU at 100%. I suspected an infinite loop but how do you determine where the loop is? A naive approach might use a binary search with print statements but I realized I could do something more effective: dump thread backtraces for the current process.
