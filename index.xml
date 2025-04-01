@@ -6,10 +6,24 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 05 Mar 2025 12:09:25 -0800</lastBuildDate>
+    <lastBuildDate>Tue, 01 Apr 2025 12:07:17 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Sidekiq 8.0: Improvements to the Web UI</title>
+      <link>https://www.mikeperham.com/2025/04/01/sidekiq-8.0-improvements-to-the-web-ui/</link>
+      <pubDate>Tue, 01 Apr 2025 12:07:17 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2025/04/01/sidekiq-8.0-improvements-to-the-web-ui/</guid>
+      <description>&lt;p&gt;Since its release last month, Sidekiq 8.0 has been very smooth with few reported issues.
+I&amp;rsquo;ve been quite happy with the rollout and wanted to provide a little more context about the changes.
+My goals for any user-friendly, high quality software is to reduce dependencies and keep it simple.
+Sidekiq 8.0 brings a significant overhaul to its Web UI and these changes further those goals.&lt;/p&gt;
+&lt;p&gt;The Web UI was introduced in 2012 in Sidekiq 0.9 and used Sinatra for its framework along with Twitter Bootstrap for CSS.
+Sidekiq 4.2 removed the Sinatra dependency (thanks @badosu!) and made the Web UI a plain Rack app with no framework.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Introducing Sidekiq 8.0</title>
@@ -133,19 +147,6 @@ They aim to provide a Redis-compatible tool which is better than Redis at certai
 First and most importantly, all Sidekiq test suites are passing 100%.
 There&amp;rsquo;s no point in switching to a buggy or incomplete tool; Dragonfly has done the work to fully support every nook and cranny of Sidekiq&amp;rsquo;s functionality.
 Performance is where you can see major differences.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Ruby HTTP Server from scratch</title>
-      <link>https://www.mikeperham.com/2023/09/11/ruby-http-server-from-scratch/</link>
-      <pubDate>Mon, 11 Sep 2023 12:27:34 -0700</pubDate>
-      
-      <guid>https://www.mikeperham.com/2023/09/11/ruby-http-server-from-scratch/</guid>
-      <description>&lt;p&gt;Recently I decided to add support for Kubernetes HTTP health checks to Sidekiq Enterprise.
-This means, within each Sidekiq worker process, we need to implement an HTTP server which listens on port X and simply returns 200/OK if the process is alive.&lt;/p&gt;
-&lt;p&gt;Notice we have really basic requirements here: no need for serving files or arbitrary dynamic content.
-We only respond to &amp;ldquo;/&amp;rdquo; so there&amp;rsquo;s no need for routes, paths or query parameter handling.
-Because the health check should only be used within private networking, we have no need for TLS or https support.&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2025/04/01/sidekiq-8.0-improvements-to-the-web-ui/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Sidekiq 8.0: Improvements to the Web UI">
+  <meta property="og:description" content="Since its release last month, Sidekiq 8.0 has been very smooth with few reported issues. I’ve been quite happy with the rollout and wanted to provide a little more context about the changes. My goals for any user-friendly, high quality software is to reduce dependencies and keep it simple. Sidekiq 8.0 brings a significant overhaul to its Web UI and these changes further those goals.
+The Web UI was introduced in 2012 in Sidekiq 0.9 and used Sinatra for its framework along with Twitter Bootstrap for CSS. Sidekiq 4.2 removed the Sinatra dependency (thanks @badosu!) and made the Web UI a plain Rack app with no framework.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-04-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-04-01T00:00:00+00:00">
+
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Sidekiq 8.0: Improvements to the Web UI | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16"
+            height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Sidekiq 8.0: Improvements to the Web UI</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2025-04-01
+  </small>
+  
+</p>
+<p>Since its release last month, Sidekiq 8.0 has been very smooth with few reported issues.
+I&rsquo;ve been quite happy with the rollout and wanted to provide a little more context about the changes.
+My goals for any user-friendly, high quality software is to reduce dependencies and keep it simple.
+Sidekiq 8.0 brings a significant overhaul to its Web UI and these changes further those goals.</p>
+<p>The Web UI was introduced in 2012 in Sidekiq 0.9 and used Sinatra for its framework along with Twitter Bootstrap for CSS.
+Sidekiq 4.2 removed the Sinatra dependency (thanks @badosu!) and made the Web UI a plain Rack app with no framework.</p>
+<h2 id="vanilla-css">Vanilla CSS</h2>
+<p>Sidekiq 8.0 removes the Bootstrap CSS framework and uses <a href="https://github.com/sidekiq/sidekiq/blob/main/web/assets/stylesheets/style.css">vanilla CSS</a>.</p>
+<p>Historically web developers had to use a build process to generate CSS because the CSS standard didn&rsquo;t support variables (so things like colors were hardcoded everywhere).
+This was the value that Bootstrap provided to Sidekiq: we built it once so Sidekiq didn&rsquo;t need a build process, we just used the generated classes in bootstrap.css.</p>
+<p>But Bootstrap has changed significantly since we last touched it. We were using v3.3.7 from 2016 and they are on v5.3.3 now, with each major version requiring significant CSS changes.
+Upgrading proved to be difficult, I attempted it once or twice and quickly gave up. I opened an issue and hoped for a miracle.</p>
+<p>My front end and UX skills may be minimal but the Open Source community is amazing.
+@antoinem saw the open issue and <a href="https://github.com/sidekiq/sidekiq/pull/6551">migrated Sidekiq&rsquo;s CSS</a>.
+Modern CSS supports variables so we can DRY up the CSS classes and don&rsquo;t need Bootstrap or a build process anymore.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>:<span style="color:#a6e22e">root</span> {
+</span></span><span style="display:flex;"><span>  --color-primary: <span style="color:#a6e22e">oklch</span>(<span style="color:#ae81ff">48</span><span style="color:#66d9ef">%</span> <span style="color:#ae81ff">0.2</span> <span style="color:#ae81ff">13</span>);
+</span></span><span style="display:flex;"><span>  --color-bg: <span style="color:#a6e22e">oklch</span>(<span style="color:#ae81ff">99</span><span style="color:#66d9ef">%</span> <span style="color:#ae81ff">0.005</span> <span style="color:#ae81ff">256</span>);
+</span></span><span style="display:flex;"><span>  --color-elevated: <span style="color:#a6e22e">oklch</span>(<span style="color:#ae81ff">100</span><span style="color:#66d9ef">%</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">256</span>);
+</span></span><span style="display:flex;"><span>  --color-border: <span style="color:#a6e22e">oklch</span>(<span style="color:#ae81ff">95</span><span style="color:#66d9ef">%</span> <span style="color:#ae81ff">0.005</span> <span style="color:#ae81ff">256</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span><span style="color:#f92672">body</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">background</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span><span style="color:#66d9ef">color</span><span style="color:#f92672">-</span>bg);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">color</span>: <span style="color:#a6e22e">var</span>(<span style="color:#f92672">--</span><span style="color:#66d9ef">color</span><span style="color:#f92672">-</span><span style="color:#66d9ef">text</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Special attention was paid to color accessibility to ensure enough contrast for easy reading.
+My eyes aren&rsquo;t as young as they were in 2012!</p>
+<p>Also note that any framework will contain pieces that we don&rsquo;t use.
+Bootstrap.css was 165k in size.
+Our vanilla CSS is 16k in size, an order of magnitude smaller!</p>
+<h2 id="internals">Internals</h2>
+<p>Much of the web internals hadn&rsquo;t changed since 4.2 and as it was written by someone else, I was not confident in my own understanding of how it worked.
+<a href="https://github.com/sidekiq/sidekiq/pull/6532">I refactored much of it</a> to help my own understanding and to remove any unnecessary code.
+For instance, helper methods now distinguish between route and URL parameters, preventing an attacker from overriding one type with another.</p>
+<p>The other major refactoring was providing a configuration API.
+Before, Sidekiq::Web&rsquo;s configuration API was ad hoc, we now have a proper API which looks similar to the existing Sidekiq configuration APIs:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># config/routes.rb</span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#34;sidekiq/web&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">.</span>configure <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>register(<span style="color:#66d9ef">Some</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Extension</span>, <span style="color:#f92672">...</span>)
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>use <span style="color:#66d9ef">Some</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Rack</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Middleware</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>app_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://acmecorp.com&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><h2 id="profiling">Profiling</h2>
+<p>Before I started my refactoring, I explicitly wanted to get a baseline for performance.
+I ran Sidekiq::Web 7 through Vernier to see the current performance and was shocked at how bad it was.
+Empty pages were taking 50-100ms to render.
+Vernier made it very easy to find the bug: loading YAML files on every request due to incorrect caching.
+Empty pages now render in 1-3ms; the fix was backported to 7.3.</p>
+<p><strong>Profile your code, Dear Reader!</strong>
+You&rsquo;ll be amazed at the low hanging fruit and easy wins you can find with just a few minutes of investigation.</p>
+<h2 id="summary">Summary</h2>
+<p>The fact that the Web UI has been so stable for the last decade is a point in favor of my rules: reduce dependencies, keep it simple.
+Open standards like CSS change very slowly but improvements like variables allowed us to remove a dependency and shrink our total CSS size by an order of magnitude.</p>
+<p>Much faster rendering. 10x smaller CSS. I hope you find Sidekiq 8&rsquo;s Web UI incredibly fast and a delight to use.</p>
+<p>❤️❤️❤️</p>
+
+    </article>
+  </div>
+
+  
+
+</body>
+
+</html>
