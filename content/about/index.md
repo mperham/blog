@@ -15,7 +15,7 @@ I've volunteered and supported organizations like [BikePortland.org][0], [losn.o
 
 ## Then
 
-<img src="/wp-content/uploads/2007/09/family.jpg" alt="family" width="827" height="586" class="aligncenter size-full
+<img src="/wp-content/uploads/2007/09/family.jpg" alt="family" width="827" class="aligncenter size-full
 wp-image-1332" />
 
 ## Now
