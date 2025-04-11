@@ -33,40 +33,5 @@ rssLimit = 10
   faviconMsApplicationTileColor = "#da532c"
   faviconThemeColor = "#ffffff"
   author = "Mike Perham"
-  email = "mperham@gmail.com"
+  email = "mike@perham.net"
   github = "mperham"
-
-[blackfriday]
-  smartypants = false
-
-[markup]
-  defaultMarkdownHandler = "goldmark"
-  [markup.goldmark]
-    [markup.goldmark.extensions]
-      definitionList = true
-      footnote = true
-      linkify = true
-      strikethrough = true
-      table = true
-      taskList = true
-      typographer = true
-    [markup.goldmark.parser]
-      attribute = true
-      autoHeadingID = true
-    [markup.goldmark.renderer]
-      hardWraps = false
-      unsafe = true
-      xHTML = false
-  [markup.highlight]
-    codeFences = true
-    hl_Lines = ""
-    lineNoStart = 1
-    lineNos = false
-    lineNumbersInTable = true
-    noClasses = true
-    style = "monokai"
-    tabWidth = 4
-  [markup.tableOfContents]
-    endLevel = 6
-    startLevel = 2
-
