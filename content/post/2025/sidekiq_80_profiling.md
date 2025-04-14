@@ -72,6 +72,8 @@ NB: you can download and store the profile data elsewhere if you need more long 
 
 If there is no data in your Profiles tab, double check that you are creating the job in the same environment and that you aren't using Active Job.
 
+![profile UI](https://private-user-images.githubusercontent.com/2911/387799744-e8410f59-2417-42bf-9a47-f058ab466da8.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQ2NjM1ODIsIm5iZiI6MTc0NDY2MzI4MiwicGF0aCI6Ii8yOTExLzM4Nzc5OTc0NC1lODQxMGY1OS0yNDE3LTQyYmYtOWE0Ny1mMDU4YWI0NjZkYTgucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI1MDQxNCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNTA0MTRUMjA0MTIyWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9ZjkxMmE3MjQ1YTA2MDBjODI2ZTcyYjc1ZjM2OGE5OGQxYzdhZWM0YzhhNzExMzE0MGFjNjFmNGZmNDFmODAxMiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.3-GK75ZjIbaBwCLioYx8nvoedWh-tSWbJhOjQj8cAXQ)
+
 Viewing your profile is as simple as clicking "View" which will open your data in Firefox Profiler, a single page JavaScript app.
 First thing I always do is check "Invert call stack"; that's how you immediately drill into the places which took the most wall time when executing.
 From that point you'll expand the call tree to find where your code is calling those hotspots; there's a good chance you'll immediately have ideas on how to minimize those hotspots and speed up your code.
