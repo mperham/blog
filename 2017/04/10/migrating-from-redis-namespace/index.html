@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2017/04/10/migrating-from-redis-namespace/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2017/04/10/migrating-from-redis-namespace/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Migrating from redis-namespace">
   <meta property="og:description" content="In a blog post in 2015, Storing Data with Redis, I wrote about your options for partitioning data stored within Redis and came down pretty hard on using key namespacing via redis-namespace. The redis-namespace gem allows you to share a Redis database among several applications by prefixing every key with a namespace but it’s a terrible hack that no one should use. Redis already has a native solution if you want to share a Redis instance: databases. The default database is 0. Here’s how to point Sidekiq to use database 1 instead:">

@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2011/02/15/filling-out-pdf-forms-with-jruby/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2011/02/15/filling-out-pdf-forms-with-jruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Filling out PDF forms with JRuby">
   <meta property="og:description" content="I recently had to figure out how to programmatically fill out a PDF based on the form input from a Rails application. It looks like there’s nothing native to Ruby but there is a comprehensive PDF library called iText which will handle form duties. Using JRuby, we can access their Java API to fill out the form pretty easily:
-require &#39;java&#39; require &#39;iText-5.0.6.jar&#39; module Pdf include_package &#34;com.itextpdf.text.pdf&#34; include_package &#34;java.io&#34; def self.write reader = PdfReader.new(&#39;application.pdf&#39;); stamper = PdfStamper.new(reader, FileOutputStream.new(&#39;completed.pdf&#39;)) form = stamper.acro_fields puts &#34;Form has these fields: #{form.fields.key_set.to_a}&#34; form.set_field(&#34;some_zipcode_field&#34;, &#34;94115&#34;) stamper.close end end Pdf.write Obviously sample code, not production quality, etc. Really the only hard/tedious part is mapping field names to Ruby object attribute values. If you have a complex form, you may have tens or even hundreds of set_field calls.">
+Obviously sample code, not production quality, etc. Really the only hard/tedious part is mapping field names to Ruby object attribute values. If you have a complex form, you may have tens or even hundreds of set_field calls.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -198,25 +198,8 @@ blockquote,
   
 </p>
 <p>I recently had to figure out how to programmatically fill out a PDF based on the form input from a Rails application. It looks like there&rsquo;s nothing native to Ruby but there is a comprehensive PDF library called <a href="http://api.itextpdf.com/">iText</a> which will handle <a href="http://itextpdf.com/themes/keyword.php?id=247">form</a> duties. Using JRuby, we can access their Java API to fill out the form pretty easily:</p>
-<pre lang="ruby">require 'java'
-require 'iText-5.0.6.jar'
-
-module Pdf
-  include_package "com.itextpdf.text.pdf"
-  include_package "java.io"
-
-  def self.write
-    reader = PdfReader.new('application.pdf');
-    stamper = PdfStamper.new(reader, FileOutputStream.new('completed.pdf'))
-    form = stamper.acro_fields
-    puts "Form has these fields: #{form.fields.key_set.to_a}"
-    form.set_field("some_zipcode_field", "94115")
-    stamper.close
-  end
-end
-
-Pdf.write
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Obviously sample code, not production quality, etc. Really the only hard/tedious part is mapping field names to Ruby object attribute values. If you have a complex form, you may have tens or even hundreds of <code>set_field</code> calls.</p>
 
     </article>

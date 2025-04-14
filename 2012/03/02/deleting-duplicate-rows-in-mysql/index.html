@@ -5,13 +5,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2012/03/02/deleting-duplicate-rows-in-mysql/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/03/02/deleting-duplicate-rows-in-mysql/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Deleting Duplicate Rows in MySQL">
   <meta property="og:description" content="You have a table with duplicate rows – somehow a unique index didn’t get created and a bug has added duplicate records to your table. A pox upon that bug!
 Here’s two easy ways to clean out that table quickly.
 Use ALTER IGNORE on MySQL 5.1&#43; MySQL will allow you to create a unique index on a table with duplicate records with its IGNORE SQL extension:
-ALTER IGNORE TABLE &#39;SHIPMENTS&#39; ADD UNIQUE INDEX (CART_ID, TRACKING_NUMBER) Duplicates will be deleted. ALTER IGNORE does not normally work in Percona because of their InnoDB fast index creation feature but if you “set session old_alter_table=1” beforehand, Percona will use the old alter table behavior.">
+Duplicates will be deleted. ALTER IGNORE does not normally work in Percona because of their InnoDB fast index creation feature but if you “set session old_alter_table=1” beforehand, Percona will use the old alter table behavior.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -205,21 +205,14 @@ blockquote,
 <li>Use ALTER IGNORE on MySQL 5.1+</li>
 </ol>
 <p>MySQL will allow you to create a unique index on a table with duplicate records with its IGNORE SQL extension:</p>
-<pre lang="sql">
-ALTER IGNORE TABLE 'SHIPMENTS' ADD UNIQUE INDEX (CART_ID, TRACKING_NUMBER)
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Duplicates will be deleted. ALTER IGNORE does not normally work in Percona because of their InnoDB fast index creation feature but if you &ldquo;set session old_alter_table=1&rdquo; beforehand, Percona will use the old alter table behavior.</p>
 <ol start="2">
 <li>Recreate the table with GROUP BY</li>
 </ol>
-<pre lang="ruby">
-execute 'CREATE TABLE shipments_deduped like shipments;'
-execute 'INSERT shipments_deduped SELECT * FROM shipments GROUP BY cart_id, tracking_number;'
-execute 'RENAME TABLE shipments TO shipments_with_dupes;'
-execute 'RENAME TABLE shipments_deduped TO shipments;'
-add_index :shipments, [:cart_id, :tracking_number], :unique => true
-execute 'DROP TABLE shipments_with_dupes;'
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Recreating the table is much, much faster than trying to delete the records in the existing table and doesn&rsquo;t lock the existing table, making your application downtime minimal. This method will not work if MySQL&rsquo;s sql_mode includes ONLY_FULL_GROUP_BY.</p>
 
     </article>

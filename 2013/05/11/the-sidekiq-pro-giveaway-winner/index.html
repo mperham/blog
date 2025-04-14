@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2013/05/11/the-sidekiq-pro-giveaway-winner/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2013/05/11/the-sidekiq-pro-giveaway-winner/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Sidekiq Pro Giveaway Winner!">
   <meta property="og:description" content="I’m happy to announce the winner of my Sidekiq Pro 1.0 license giveaway is Libin Pan, whose company already uses Sidekiq pretty heavily, having run billions of jobs through Sidekiq in the last year. Let’s hear his story:">
@@ -200,7 +200,7 @@ blockquote,
 <blockquote>
 <p>I work for Demandbase, a B2B marketing company, we help our client to identify the companies who visited their online properties.</p>
 <p>We were using resque before, because of the nature of forking, the memory and compute power is a big cost for us. So we switched to sidekiq soon after you released it. And we love it.</p>
-<img src="http://www.mikeperham.com/wp-content/uploads/2013/05/BJzXcEFCcAE-8a2.jpg" alt="BJzXcEFCcAE-8a2" width="658" height="178" class="aligncenter size-full wp-image-1339" />
+<!-- raw HTML omitted -->
 <p>We&rsquo;re using it in several projects, this screenshot is just one of them, a larger one of course. This sidekiq cluster handles the aggregation of realtime traffic for some clients. There&rsquo;re two major sidekiq workers, one normalizes the traffic, another one updates all the aggregation counts. Every task is very small and fast, and sidekiq is a perfect tool for it.</p>
 <p>There&rsquo;re 4 sidekiq worker servers, and every one has 4 processes which every one has 25 workers. As we are all on EC2, we use spot instances for part of the cluster so we can add more workers as needed, so it could grow up from 400 to 800 or more.</p>
 <p>The technology is nothing special but solid, Rails + Redis + Sharded MySQL.</p></blockquote>

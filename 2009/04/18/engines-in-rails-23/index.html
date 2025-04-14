@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2009/04/18/engines-in-rails-23/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/04/18/engines-in-rails-23/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Engines in Rails 2.3">
   <meta property="og:description" content="Engines have been around Rails for years but it wasn’t until the recent 2.3 release that Rails officially supported Engines. So what is an Engine? An Engine is a Rails plugin with full MVC capabilities. In essence, that means your Engine has an app directory with helpers, controllers, models and views just like a standard Rails application. You add an engine to vendor/plugins or through config.gem in your application, just like a plugin, but additionally its app directory is effectively overlaid on top of your application’s app directory.">
@@ -199,31 +199,8 @@ blockquote,
 <p>Engines have been around Rails for years but it wasn&rsquo;t until the recent 2.3 release that Rails officially supported Engines. So what is an Engine? An Engine is a Rails plugin with full MVC capabilities. In essence, that means your Engine has an app directory with helpers, controllers, models and views just like a standard Rails application. You add an engine to <code>vendor/plugins</code> or through <code>config.gem</code> in your application, just like a plugin, but additionally its app directory is effectively overlaid on top of your application&rsquo;s app directory.</p>
 <p>Let&rsquo;s spelunk through the code:</p>
 <p><code>rails-2.3.2/lib/rails/plugin/loader.rb</code></p>
-<pre lang="ruby">def configure_engines
-          if engines.any?
-            add_engine_routing_configurations
-            add_engine_controller_paths
-            add_engine_view_paths
-          end
-        end
-
-        def add_engine_routing_configurations
-          engines.select(&#038;:routed?).collect(&#038;:routing_file).each do |routing_file|
-            ActionController::Routing::Routes.add_configuration_file(routing_file)
-          end
-        end
-
-        def add_engine_controller_paths
-          ActionController::Routing.controller_paths += engines.collect(&#038;:controller_path)
-        end
-
-        def add_engine_view_paths
-          # reverse it such that the last engine can overwrite view paths from the first, like with routes
-          paths = ActionView::PathSet.new(engines.collect(&#038;:view_path).reverse)
-          ActionController::Base.view_paths.concat(paths)
-          ActionMailer::Base.view_paths.concat(paths) if configuration.frameworks.include?(:action_mailer)
-        end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>For each engine, we add any routes, any controllers and any views. Additionally, the directories within app will be added to the global LOAD_PATH, as with a normal application. Note that engines are processed in order exactly like plugins: alphabetically or based on the order they are listed in <code>config/environment.rb</code>.</p>
 <p>There are some limitations you should be aware of:</p>
 <ul>

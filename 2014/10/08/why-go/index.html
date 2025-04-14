@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2014/10/08/why-go/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/10/08/why-go/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Why Go?">
   <meta property="og:description" content="When I decided to build Inspeqtor, I had a fundamental choice: what language should I build it in? I’ve worked in Ruby for the last 8 years so it was a natural choice: “use the tool you know best” is never a bad choice when solving your own problem.
@@ -206,16 +206,8 @@ blockquote,
 <p><strong>Full development workflow</strong></p>
 <p>To paraphrase the poet John Donne: &ldquo;No programming language is an island&rdquo;. Go ships with tools for testing, code profiling, documentation, cross compiling and syntax formatting. There was only one thing I felt that Go should provide that it doesn&rsquo;t: an assert package for test code. Here&rsquo;s <a href="https://github.com/mperham/inspeqtor/blob/master/events_test.go#L25">some example code</a> which uses a 3rd party assert package I like. Adding if blocks here for every check would really hurt the readability of the code.</p>
 <p>So far I&rsquo;m very pleased with how well Go has worked out for Inspeqtor. I&rsquo;ve been running Inspeqtor on my server for about two months now and never once has it gone over 10MB of RAM or any significant CPU usage. Here&rsquo;s Inspeqtor monitoring itself:</p>
-<pre class="brush: plain; gutter: false; title: ; notranslate" title="">$ sudo inspeqtorctl status
-Inspeqtor Pro 0.5.0, uptime: 54h14m14s, pid: 11645
-
-Service: inspeqtor [Up/11645]
-  cpu:system                  0.1%           
-  cpu:total_system            0.0%           
-  cpu:total_user              0.1%           
-  cpu:user                    0.1%       90%
-  memory:rss                  8.97m      10m
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Every language has strengths and weaknesses. For this purpose, Go has worked out great.</p>
 <p>PS C and C++ were never considered. I vowed in 1997 to never manage my own memory again and not for a single day have I ever regretted that decision.</p>
 

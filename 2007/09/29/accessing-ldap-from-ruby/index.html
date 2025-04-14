@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Accessing LDAP from Ruby">
   <meta property="og:description" content="Ok, we’ve got our nifty Apache DS running with some custom data. This doesn’t do much unless our application can access the data in order to perform some sort of logic. So let’s connect the two worlds!
 Make sure your Apache DS server is up and running. We first need to install a Ruby API for accessing LDAP. I found the simplest to use was ruby-net-ldap:
-gem install ruby-net-ldap Next, create a simple ldaptest.rb file to use the API:">
+Next, create a simple ldaptest.rb file to use the API:">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -201,19 +201,10 @@ blockquote,
 <p>Ok, we&rsquo;ve got our nifty Apache DS running with some custom data. This doesn&rsquo;t do much unless our application can access the data in order to perform some sort of logic. So let&rsquo;s connect the two worlds!</p>
 <p>Make sure your Apache DS server is up and running. We first need to install a Ruby API for accessing LDAP. I found the simplest to use was ruby-net-ldap:</p>
 <blockquote>
-<pre>gem install ruby-net-ldap</pre></blockquote>
+<!-- raw HTML omitted --></blockquote>
 <p>Next, create a simple ldaptest.rb file to use the API:</p>
-<pre>require 'net/ldap'
-
-username = 'uid=admin,ou=system'
-password = 'secret'
-ldap_con = Net::LDAP.new( {:host =&gt; 'localhost', :port =&gt; 10389, :auth =&gt;
-    { :method =&gt; :simple, :username =&gt; username, :password =&gt; password }} )
-treebase = "dc=fiveruns,dc=com"
-op_filter = Net::LDAP::Filter.eq( "objectClass", "person" )
-ldap_con.search( :base =&gt; treebase, :filter =&gt; op_filter, :attributes=&gt; 'dn') do |entry|
-  puts "DN: #{entry.dn}"
-end</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Running it should give this output:</p>
 <blockquote>
 <p>mikeperham:~$ ruby -rubygems ldaptest.rb<br>

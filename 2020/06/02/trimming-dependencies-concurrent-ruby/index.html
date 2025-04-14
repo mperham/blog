@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2020/06/02/trimming-dependencies-concurrent-ruby/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2020/06/02/trimming-dependencies-concurrent-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Trimming Dependencies: concurrent-ruby">
   <meta property="og:description" content="I’ve advocated for fewer dependencies for years now. Every long-running project needs to periodically re-evaluate their usage of each dependency and the value it provides. To that end, I recently considered Sidekiq’s dependencies:
@@ -269,7 +269,7 @@ there&rsquo;s no guarantee how long that arrangement will last. <strong>Without
 maintenance, OSS projects are a snapshot in time: eventually they will
 become outdated.</strong></p>
 <p>Once I removed all usage of the gem I booted a bare Sidekiq Pro process, had it process a few thousand jobs, and examined the RSS before and after:</p>
-<p><strong>Before</strong>: 60MB<br/>
+<p><strong>Before</strong>: 60MB<!-- raw HTML omitted -->
 <strong>After</strong>: 50MB</p>
 <p><strong>10MB shaved off by removing concurrent-ruby!!!</strong></p>
 <h3 id="conclusion">Conclusion</h3>

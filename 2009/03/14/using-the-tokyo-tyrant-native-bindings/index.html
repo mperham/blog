@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2009/03/14/using-the-tokyo-tyrant-native-bindings/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/03/14/using-the-tokyo-tyrant-native-bindings/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using the Tokyo Tyrant native bindings">
   <meta property="og:description" content="My previous examination of Tokyo Tyrant’s memcache protocol support showed how you can use memcache-client directly with TT. John Mettraux has created Ruby bindings for TT’s own native client for ultimate speed. Let’s take a look at how this affects performance:
-require &#39;rufus/tokyo/tyrant&#39; db = Rufus::Tokyo::Tyrant.new(&#39;localhost&#39;, 1978) Benchmark.bm(20) do |b| b.report &#39;native-write&#39; do 10_000.times do |idx| db[idx.to_s] = idx.to_s*100 end end b.report &#39;native-read&#39; do 10_000.times do db[rand(100).to_s] end end end user system total real native-write 0.150000 0.220000 0.370000 ( 1.079804) native-read 0.160000 0.210000 0.370000 ( 1.093927) memcache186-write 0.530000 0.210000 0.740000 ( 1.750988) memcache186-read 0.580000 0.200000 0.780000 ( 1.830207) memcache191-write 0.430000 0.230000 0.660000 ( 1.528519) memcache191-read 0.410000 0.220000 0.630000 ( 1.591678) I’ve included the memcache protocol times right after for comparision. Notice the system time is basically unchanged but the user time is dramatically lower. This is the overhead of the memcache-client’s pure Ruby networking layer. Ruby is a great language but its networking implementation is not blindingly fast. There’s definite improvement in Ruby 1.9.1 but still nowhere near bare metal.">
+I’ve included the memcache protocol times right after for comparision. Notice the system time is basically unchanged but the user time is dramatically lower. This is the overhead of the memcache-client’s pure Ruby networking layer. Ruby is a great language but its networking implementation is not blindingly fast. There’s definite improvement in Ruby 1.9.1 but still nowhere near bare metal.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -198,30 +198,10 @@ blockquote,
   
 </p>
 <p>My previous examination of Tokyo Tyrant&rsquo;s memcache protocol support showed how you can use memcache-client directly with TT. John Mettraux has created <a href="http://github.com/jmettraux/rufus-tokyo">Ruby bindings</a> for TT&rsquo;s own native client for ultimate speed. Let&rsquo;s take a look at how this affects performance:</p>
-<pre lang="ruby">require 'rufus/tokyo/tyrant'
-
-db = Rufus::Tokyo::Tyrant.new('localhost', 1978)
-Benchmark.bm(20) do |b|
-  b.report 'native-write' do
-    10_000.times do |idx|
-      db[idx.to_s] = idx.to_s*100
-    end
-  end
-  b.report 'native-read' do
-    10_000.times do
-      db[rand(100).to_s]
-    end
-  end
-end
-</pre>
-<pre>user     system      total        real
-native-write             0.150000   0.220000   0.370000 (  1.079804)
-native-read              0.160000   0.210000   0.370000 (  1.093927)
-memcache186-write        0.530000   0.210000   0.740000 (  1.750988)
-memcache186-read         0.580000   0.200000   0.780000 (  1.830207)
-memcache191-write        0.430000   0.230000   0.660000 (  1.528519)
-memcache191-read         0.410000   0.220000   0.630000 (  1.591678)
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>I&rsquo;ve included the memcache protocol times right after for comparision. Notice the system time is basically unchanged but the user time is dramatically lower. This is the overhead of the memcache-client&rsquo;s pure Ruby networking layer. Ruby is a great language but its networking implementation is not blindingly fast. There&rsquo;s definite improvement in Ruby 1.9.1 but still nowhere near bare metal.</p>
 
     </article>

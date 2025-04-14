@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2015/05/08/timeout-rubys-most-dangerous-api/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2015/05/08/timeout-rubys-most-dangerous-api/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Timeout: Ruby&#39;s Most Dangerous API">
   <meta property="og:description" content="In the last 3 months, I’ve worked with a half dozen Sidekiq users plagued with mysterious stability problems. All were caused by the same thing: Ruby’s terrible Timeout module. I strongly urge everyone reading this to remove any usage of Timeout from your codebase; odds are very good you will see an increase in stability.
-You, using Timeout. You might think I’m overreacting or hyping up the problem: I’m not. Here’s Charles Nutter, lead developer of JRuby, writing about how Timeout is fundamentally broken and cannot be used safely in 2008.">
+You might think I’m overreacting or hyping up the problem: I’m not. Here’s Charles Nutter, lead developer of JRuby, writing about how Timeout is fundamentally broken and cannot be used safely in 2008.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -201,10 +201,7 @@ blockquote,
 All were caused by the same thing: Ruby&rsquo;s terrible <code>Timeout</code> module.  I strongly urge everyone reading
 this to remove any usage of <code>Timeout</code> from your codebase; odds are very good you will see an increase
 in stability.</p>
-<figure style="float:right">
-  <img src="/wp-content/uploads/2015/05/using-timeout.jpg" width="419">
-  <figcaption style="text-align: right"><i>You, using Timeout.</i></figcaption>
-</figure>
+<!-- raw HTML omitted -->
 <p>You might think I&rsquo;m overreacting or hyping up the problem: I&rsquo;m not.  Here&rsquo;s Charles Nutter, lead developer
 of JRuby, writing about how <a href="http://blog.headius.com/2008/02/rubys-threadraise-threadkill-timeoutrb.html">Timeout is fundamentally broken</a>
 and cannot be used safely <strong>in 2008</strong>.</p>

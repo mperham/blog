@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2011/06/01/optimizing-heroku/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2011/06/01/optimizing-heroku/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Optimizing Heroku">
   <meta property="og:description" content="I spent some time recently playing with a trivial Rails 3 app using girl_friday and learned a few interesting things:
@@ -204,7 +204,7 @@ blockquote,
 <p>Michael&rsquo;s post on <a href="http://michaelvanrooijen.com/articles/2011/06/01-more-concurrency-on-a-single-heroku-dyno-with-the-new-celadon-cedar-stack/">using Unicorn with Heroku</a> is a fantastic idea and great way to improve the efficiency of your Heroku application&rsquo;s web dynos.</p>
 </li>
 <li>
-<p>Heroku imposes a limit of 15 threads per Ruby process (there is an open question about this, it might just be a bug in the Heroku Cedar stack, which is still beta). If you are using thin, you get 1 process and 15 threads per dyno. If you are using Unicorn, you get 3 processes<sup>*</sup> and 45 threads. <strong>UPDATE: I don&rsquo;t believe Heroku has a thread limit, just a memory limit.</strong></p>
+<p>Heroku imposes a limit of 15 threads per Ruby process (there is an open question about this, it might just be a bug in the Heroku Cedar stack, which is still beta). If you are using thin, you get 1 process and 15 threads per dyno. If you are using Unicorn, you get 3 processes<!-- raw HTML omitted -->*<!-- raw HTML omitted --> and 45 threads. <strong>UPDATE: I don&rsquo;t believe Heroku has a thread limit, just a memory limit.</strong></p>
 </li>
 <li>
 <p>girl_friday defaults to 5 threads per queue. With the thread limit on Heroku, you&rsquo;ll want to carefully ration the size of each queue. girl_friday&rsquo;s Rack status app can tell you at runtime which queues are busy and which are quiet for tuning purposes.</p>

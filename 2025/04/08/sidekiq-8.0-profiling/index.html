@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2025/04/08/sidekiq-8.0-profiling/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Sidekiq 8.0: Profiling">
+  <meta property="og:description" content="Sidekiq is the most popular background job framework for Ruby applications and over the last 13 years, it has reached maturity in its feature set. It has filled out much of its original design so adding a major new feature is a comparatively rare event these days.
+For years I’ve wanted Ruby to support thread-safe profiling. Historically Ruby’s profiling APIs were process-global. Data is collected for everything running in the process, making job profiling within a running Sidekiq process noisy and harder to read than ideal.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-04-08T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-04-08T00:00:00+00:00">
+
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Sidekiq 8.0: Profiling | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16"
+            height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Sidekiq 8.0: Profiling</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2025-04-08
+  </small>
+  
+</p>
+<p>Sidekiq is the most popular background job framework for Ruby applications and over the last 13 years, it has reached maturity in its feature set.
+It has filled out much of its original design so adding a major new feature is a comparatively rare event these days.</p>
+<p>For years I&rsquo;ve wanted Ruby to support thread-safe profiling.
+Historically Ruby&rsquo;s profiling APIs were process-global.
+Data is collected for everything running in the process, making job profiling within a running Sidekiq process noisy and harder to read than ideal.</p>
+<p>But Ruby 3.2 changed the game!
+Thread profiling APIs took a big leap forward where we can target a specific thread and focus on its data and now that Sidekiq 8.0 requires Ruby 3.2, all the stars are aligned for a <strong>major new feature</strong>!
+In fact Vernier&rsquo;s overhead is low enough that we can profile in production without a significant impact on job throughput.</p>
+<h2 id="why-profiling">Why Profiling?</h2>
+<p>Profiling allows you to see exact runtime performance numbers for your code, showing you exactly where your code is spending its time.
+One quick profile can show one or more major performance problems in your code.
+Want to be a 10x developer?
+Profiling is one of those tools you need to learn.</p>
+<h2 id="profiling-at-runtime">Profiling at Runtime</h2>
+<p>Activating profiling takes two steps:</p>
+<ol>
+<li>Include <code>vernier</code> in your Gemfile:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>gem <span style="color:#e6db74">&#34;vernier&#34;</span>
+</span></span></code></pre></div><ol start="2">
+<li>Create a job in production (not development!) with a <code>profile</code> token:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">SomeJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">profile</span>: <span style="color:#e6db74">&#34;bob&#34;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
+</span></span></code></pre></div><blockquote>
+<p>Unfortunately profiling doesn&rsquo;t work with Active Job because AJ doesn&rsquo;t allow arbitrary key/values in the job payload; it ignores the <code>profile</code> element whereas Sidekiq::Job retains unknown key/values. I hope Active Job will support custom elements for triggering middleware and other aspects like profiling and logging in the future.</p></blockquote>
+<p>Profiling is activated right before the Rails Executor is activated (<code>@reloader</code> below).
+This ensures that any Rails callbacks and server middleware are included in the profiling data as they can contain performance hotspots.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># lib/sidekiq/processor.rb</span>
+</span></span><span style="display:flex;"><span>@job_logger<span style="color:#f92672">.</span>prepare(job_hash) <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  @retrier<span style="color:#f92672">.</span>global(jobstr, queue) <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    @job_logger<span style="color:#f92672">.</span>call(job_hash, queue) <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>      stats(jobstr, queue) <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>        profile(job_hash) <span style="color:#66d9ef">do</span> <span style="color:#75715e"># &lt;=========== Call into profiler</span>
+</span></span><span style="display:flex;"><span>          @reloader<span style="color:#f92672">.</span>call <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>            klass <span style="color:#f92672">=</span> <span style="color:#66d9ef">Object</span><span style="color:#f92672">.</span>const_get(job_hash<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;class&#34;</span><span style="color:#f92672">]</span>)
+</span></span></code></pre></div><p>The integration code is right here: <a href="https://github.com/sidekiq/sidekiq/blob/main/lib/sidekiq/profiler.rb">lib/sidekiq/profiler.rb</a>.
+When the job executes, Sidekiq looks for a <code>profile</code> token in the job.
+If found, it does three things:</p>
+<ol>
+<li>Set up the runtime data for this profile run.</li>
+<li>Activate Vernier and yields execution to <code>Vernier.profile</code> to run your job code with the profiling APIs active.</li>
+<li>Push the generated profiler output and runtime data to Redis so the user can access the data within the Web UI.</li>
+</ol>
+<p>The result is that Redis now has a Hash object with the name <code>$token-$jid</code> which stores the profile data for that job.</p>
+<h2 id="viewing-the-profile">Viewing the Profile</h2>
+<p>Once you&rsquo;ve got a job profiled, you&rsquo;ll want to view the data to find performance problems or hotspots.
+The Web UI&rsquo;s Profiles tab contains your profiling data.
+Profiling data expires after one day, this is aggressive because profiling is usually very easy to re-run (just create a new job) and can change with every deployment so we don&rsquo;t want to hang on to obsolete data.
+NB: you can download and store the profile data elsewhere if you need more long term storage for before/after comparisons (it&rsquo;s a gzipped blob of JSON).</p>
+<p>If there is no data in your Profiles tab, double check that you are creating the job in the same environment and that you aren&rsquo;t using Active Job.</p>
+<p><img src="https://private-user-images.githubusercontent.com/2911/387799744-e8410f59-2417-42bf-9a47-f058ab466da8.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDQ2NjM1ODIsIm5iZiI6MTc0NDY2MzI4MiwicGF0aCI6Ii8yOTExLzM4Nzc5OTc0NC1lODQxMGY1OS0yNDE3LTQyYmYtOWE0Ny1mMDU4YWI0NjZkYTgucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI1MDQxNCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNTA0MTRUMjA0MTIyWiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9ZjkxMmE3MjQ1YTA2MDBjODI2ZTcyYjc1ZjM2OGE5OGQxYzdhZWM0YzhhNzExMzE0MGFjNjFmNGZmNDFmODAxMiZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.3-GK75ZjIbaBwCLioYx8nvoedWh-tSWbJhOjQj8cAXQ" alt="profile UI"></p>
+<p>Viewing your profile is as simple as clicking &ldquo;View&rdquo; which will open your data in Firefox Profiler, a single page JavaScript app.
+First thing I always do is check &ldquo;Invert call stack&rdquo;; that&rsquo;s how you immediately drill into the places which took the most wall time when executing.
+From that point you&rsquo;ll expand the call tree to find where your code is calling those hotspots; there&rsquo;s a good chance you&rsquo;ll immediately have ideas on how to minimize those hotspots and speed up your code.</p>
+<p><a href="https://vernier.prof/from-url/https%3A%2F%2Fraw.githubusercontent.com%2Fjhawthorn%2Fvernier-examples%2Fmain%2Fsimple_rails_request.json/calltree/?globalTrackOrder=0&amp;invertCallstack&amp;thread=0&amp;timelineType=category&amp;v=10">Here&rsquo;s a sample profile of a Rails request</a>.
+It looks pretty optimized, I don&rsquo;t see any immediate hot spots to tune.
+If you see one method taking 50% of the time, you&rsquo;ve found something to optimize, maybe your database query needs an index or to eager load an association to fix an N+1 bug.
+Those are pervasive issues with Active Record.</p>
+<h2 id="caveats">Caveats</h2>
+<p>Ruby&rsquo;s newer profiling APIs are thread-friendly but they are still process-global.
+You can&rsquo;t profile two different jobs at the same time.
+For this reason, don&rsquo;t <strong>ever</strong> add <code>sidekiq_options profile: &lt;token&gt;</code> so every single job of a particular type is profiled.
+The job will crash with an error.</p>
+<h2 id="results">Results</h2>
+<p>Profiling is one of those skills that requires a mental model which is hard to teach in a blog post.
+Try out the profiling functionality, play with the Firefox Profiler UI and you&rsquo;ll start to understand the data and what&rsquo;s happening.
+Open an issue if you have a problem or if we can improve something.
+Good luck and happy profiling!</p>
+
+    </article>
+  </div>
+
+  
+
+</body>
+
+</html>

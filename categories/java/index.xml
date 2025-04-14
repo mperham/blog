@@ -18,12 +18,8 @@
       
       <guid>https://www.mikeperham.com/2008/04/25/syntactic-sugar/</guid>
       <description>&lt;p&gt;There&amp;rsquo;s only one thing I miss in Java that Ruby doesn&amp;rsquo;t have:&lt;/p&gt;
-&lt;pre&gt;String[] list = {
-&#34;Foo&#34;,
-&#34;Bar&#34;,
-&#34;Blaz&#34;,
-}
-&lt;/pre&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;Note the last trailing comma. This is a syntax error in Ruby but legal in Java. If you add another element later, you don&amp;rsquo;t need to remember to add a comma to the previous entry. Minor, sure, but useful, especially with interpreted languages where syntax errors are not found until runtime.&lt;/p&gt;</description>
     </item>
     

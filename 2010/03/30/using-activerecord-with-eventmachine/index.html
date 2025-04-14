@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2010/03/30/using-activerecord-with-eventmachine/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/03/30/using-activerecord-with-eventmachine/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using ActiveRecord with EventMachine">
   <meta property="og:description" content="Given all my work with Fibers and EventMachine over the last three months, it should come as no surprise that I’ve been working on infrastructure based on Fibers and EventMachine to get maximum scalability without the callback style of code which I dislike for many reasons. Watch my talk on scaling with EventMachine if you need more background on the problem.
@@ -214,7 +214,7 @@ blockquote,
 <p><a href="http://github.com/mperham/em_postgresql/blob/master/lib/postgres_connection.rb">postgres_connection</a> is a basic, EM-aware Postgres driver. It provides the Fibered <code>exec()</code> method which makes the whole thing asynchronous.</p>
 <ul>
 <li><a href="http://github.com/mperham/em_postgresql/blob/master/lib/active_record/connection_adapters/em_postgresql_adapter.rb">em_postgresql_adapter.rb</a> wraps postgres_connection to make it a proper ActiveRecord driver.</li>
-<li><a href="http://github.com/mperham/em_postgresql/blob/master/lib/active_record/patches.rb">patches.rb</a> overrides a bunch of AR&rsquo;s internal connection pooling to make it Fiber-friendly.</ul>
+<li><a href="http://github.com/mperham/em_postgresql/blob/master/lib/active_record/patches.rb">patches.rb</a> overrides a bunch of AR&rsquo;s internal connection pooling to make it Fiber-friendly.<!-- raw HTML omitted -->
 Unfortunately the latter makes one hack necessary &ndash; we have to have a list of current Fibers to release any lingering connections associated with those Fibers. The Threaded version can use <code>Thread.list</code> but Ruby does not provide an equivalent method for Fibers. Instead I require the application to register a FiberPool with AR to clear stale connections.</li>
 </ul>
 <p>So what does it all mean? Well, here&rsquo;s <a href="http://github.com/mperham/em_postgresql/blob/master/examples/app.rb">a Sinatra application</a> that uses plain old ActiveRecord and <strong>is completely asynchronous</strong>! Try <code>ab -n 100 -c 20 http://localhost:9292/test</code> to hit the app with 20 concurrent connections; it will process them all in parallel, without any painful threading issues (autoloading, misbehaving extensions, etc). Awesome!</p>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2008/02/25/death-doom-and-daemons/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/02/25/death-doom-and-daemons/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Death, Doom and Daemons!">
   <meta property="og:description" content="We’re actually starting to run the new FiveRuns service daemons internally and found that they were dying due to various issues so I integrated a little bit of ActionMailer code to email the dev team when a daemon dies with the relevant details. Below is what I did – do you have any tips for monitoring Ruby daemon processes?">
@@ -198,45 +198,17 @@ blockquote,
 </p>
 <p>We&rsquo;re actually starting to run the new FiveRuns service daemons internally and found that they were dying due to various issues so I integrated a little bit of ActionMailer code to email the dev team when a daemon dies with the relevant details.  Below is what I did &ndash; do you have any tips for monitoring Ruby daemon processes?</p>
 <p>First we need to create an ActionMailer which will send email:</p>
-<pre>class DemiseMailer &lt; ActionMailer::Base
-  def condolences(name, err)
-    require 'socket'
-
-    recipients  Array('Development &lt;nosuchemail@example.com&gt;')
-    from        'DemiseMailer &lt;nosuchemail@example.com&gt;'
-    subject     "#{name} died on #{Socket.gethostname}"
-    body({ :name =&gt; name, :error =&gt; err })
-  end
-end</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>and call the mailer when the daemon dies:</p>
-<pre>begin
-  loader = Loader::Engine.new
-  loader.load(true)
-rescue =&gt; e
-  DemiseMailer.deliver_condolences('loader', e) if RAILS_ENV == 'production'
-  raise e
-end</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Now we put the email template in <em>demise_mailer/condolences.erb</em>:</p>
-<pre>I regret to inform you that your daemon, &lt;%= @name %&gt;, passed away at &lt;%= Time.now %&gt;
-while running on &lt;%= Socket.gethostname %&gt;.
-
-Its last words were:
-
-&lt;%= @error.to_s %&gt;
-&lt;%= @error.backtrace.join("nt") %&gt;
-
-My condolences on your loss.
-
-Sincerely,
-DemiseMailer</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>and finally configure ActionMailer to send SMTP email:</p>
-<pre>ActionMailer::Base.template_root = File.expand_path(File.dirname(__FILE__))
-ActionMailer::Base.smtp_settings = {
-  :address =&gt; 'email.example.com',
-  :domain  =&gt; 'example.com',
-  :port =&gt; 587
-}
-ActionMailer::Base.raise_delivery_errors = true</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Seems to work pretty well so far.  Drop me a comment if you use it or have suggestions to improve it!</p>
     </article>
   </div>

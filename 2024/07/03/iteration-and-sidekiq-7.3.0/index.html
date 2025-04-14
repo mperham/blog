@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2024/07/03/iteration-and-sidekiq-7.3.0/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2024/07/03/iteration-and-sidekiq-7.3.0/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Iteration and Sidekiq 7.3.0">
   <meta property="og:description" content="Sidekiq is the most popular background job framework for Ruby and works really well if you follow the design guidelines: keep your jobs short and idempotent. What happens if you have a job which processes a large amount of data serially, the infamous long-running job? In that case, deployments can lead to the job failing mid-way because the job will not gracefully allow the Sidekiq process to restart. To fix this, Sidekiq 7.3 just shipped with a major new feature: Iterable Jobs.">

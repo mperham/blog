@@ -48,7 +48,7 @@
       <guid>https://www.mikeperham.com/2014/10/02/introducing-inspeqtor/</guid>
       <description>&lt;p&gt;I&amp;rsquo;ve written server-side applications for a decade now, and monitoring the components of your application is critical but painful. What monitors the CPU and RAM usage of your custom daemons? What monitors Redis, MySQL, memcached and the other parts of your system to ensure they are all behaving normally? What if I told you you could do all that and set it up in less than 5 minutes?&lt;/p&gt;
 &lt;p&gt;Say hello to &lt;a href=&#34;http://www.contribsys.com/inspeqtor/&#34;&gt;Inspeqtor&lt;/a&gt;!&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://www.contribsys.com/inspeqtor/&#34; title=&#34;Inspeqtor&#34;&gt;&lt;img src=&#34;http://www.mikeperham.com/wp-content/uploads/2014/09/logo-inspeqtor.png&#34; alt=&#34;logo-inspeqtor&#34; width=&#34;370&#34; height=&#34;74&#34; class=&#34;alignnone size-full wp-image-1840&#34; /&gt;&lt;/a&gt;&lt;/p&gt;</description>
+&lt;p&gt;&lt;a href=&#34;http://www.contribsys.com/inspeqtor/&#34; title=&#34;Inspeqtor&#34;&gt;&lt;!-- raw HTML omitted --&gt;&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Introducing Phat, an Asynchronous Rails app">
   <meta property="og:description" content="Phat is my new Rails 2.3.5 application which runs 100% asynchronous, supporting many concurrent requests in a single Ruby process.
@@ -209,32 +209,12 @@ blockquote,
 <li>Multiple threads is better but still has fundamental issues in Ruby. <a href="http://redmine.ruby-lang.org/issues/show/921">Autoloading is simply broken</a> and Ruby&rsquo;s thread implementation does not scale at all due to the GIL.</li>
 </ul>
 <p>Here&rsquo;s a sample action which uses memcached and the database. There&rsquo;s nothing odd here &ndash; it&rsquo;s the same old Rails API and codebase we are used to as Ruby developers, it just executes differently under the covers.</p>
-<pre lang="ruby">class HelloController &lt; ApplicationController
-  def world
-    site_ids = Rails.cache.fetch 'site_ids', :expires_in => 1.minute do
-      Site.all.map(&#038;:id)
-    end
-    render :text => site_ids
-  end
-end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>How does it work? If you want the nitty-gritty, <a href="/2010/01/27/scalable-ruby-processing-with-eventmachine/">watch my talk on EventMachine and Fibers</a>. Everything that does network access ideally should be modified to be Fiber-aware. I&rsquo;ve updated many gems to be Fiber-aware: <a href="http://github.com/mperham/memcache-client">memcache-client</a>, <a href="http://github.com/mperham/em_postgresql">em_postgresql</a> (and activerecord), cassandra, bunny and rsolr to name a few. You&rsquo;ll also need to run thin as your app server, since all of this code assumes it is executing within EventMachine.</p>
 <p>Additionally we need to ensure that each request runs in its own Fiber. My new gem, <a href="http://github.com/mperham/rack-fiber_pool">rack-fiber_pool</a>, will do this for you, just add it as Rack middleware in <code>config/environment.rb</code>. Here&rsquo;s the basic configuration:</p>
-<pre lang="ruby"># Asynchronous DNS lookup
-require 'em-resolv-replace'
-require 'rack/fiber_pool'
-# Pull in the evented memcache-client.
-# You'll need to configure config.cache_store as normal.
-require 'memcache/event_machine'
-
-Rails::Initializer.run do |config|
-  config.cache_store = :mem_cache_store
-  # Run each request in a Fiber
-  config.middleware.use Rack::FiberPool
-  # Get rid of Rack::Lock so we don't kill our concurrency
-  config.threadsafe!
-end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Additionally we need to <a href="http://github.com/mperham/phat/blob/master/config/database.yml">configure Postgresql</a> and <a href="http://github.com/mperham/phat/blob/master/config/initializers/disable_locking.rb">disable ActionController&rsquo;s reloader mutex</a> as it really doesn&rsquo;t like fibered execution. This is ok because remember &ndash; there&rsquo;s only a single thread executing in our process!</p>
 <p>With that done, we can try some tests to see how we scale now. EventMachine works best when you have significant network latency. A simple test with database access over coffeeshop WiFi:</p>
 <blockquote>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2012/12/05/12-gems-of-christmas-8-wicked_pdf/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/12/05/12-gems-of-christmas-8-wicked_pdf/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #8 -- wicked_pdf">
   <meta property="og:description" content="We recently rolled out gift certificates in time for the holiday shopping season at The Clymb and one of our major implementation hurdles was a very innocent feature request: send the certificate via email as a PDF.
@@ -199,12 +199,8 @@ blockquote,
 </p>
 <p>We recently rolled out gift certificates in time for the holiday shopping season at <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> and one of our major implementation hurdles was a very innocent feature request: send the certificate via email as a PDF.</p>
 <p>How on earth do I create a PDF? I&rsquo;m a web developer &ndash; HTML/CSS is no problem &ndash; but PDF is a binary format and making a PDF with a &ldquo;nice&rdquo; design is way out of my bailiwick. <a href="https://github.com/mileszs/wicked_pdf">wicked_pdf</a> to the rescue! wicked_pdf wraps the <code>wkhtmltopdf</code> command line tool which can convert an HTML file into a PDF file for offline access or printing purposes. Our email code is simple: we render the HTML content and then pass it to WickedPdf for conversion.</p>
-<pre lang="ruby">pdf_str = render_to_string(:template => 'emails/gift_certificate',
-                           :layout => false,
-                           :locals => { :amount => number_to_currency(amount),
-                                        :product_code => pc.code } )
-pdfs &lt;&lt; WickedPdf.new.pdf_from_string(pdf_str)
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>With wicked_pdf, we didn&rsquo;t have to sacrifice the tools and technologies we know best in order to support PDF files. We rolled out the feature on time and no web developers were harmed in the process.</p>
 <p>I couldn&rsquo;t resist this platform to plug one of my own gems; tomorrow I&rsquo;ll cover my own favorite, under-utilized creation.</p>
 

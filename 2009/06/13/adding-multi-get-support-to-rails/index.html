@@ -5,13 +5,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2009/06/13/adding-multi-get-support-to-rails/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/06/13/adding-multi-get-support-to-rails/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Adding multi-get support to Rails">
   <meta property="og:description" content="Memcache-client has the ability to fetch multiple keys in one request but Rails does not expose this functionality. It’s really easy to add it yourself though:
 config/initializers/rails_patches.rb
-Rails.cache.instance_eval &lt;&lt;-EOM def read_multi(*keys) @data.get_multi(*keys) end EOM Rails uses read/write for its API naming so we name the method read_multi rather than get_multi. Here’s a sample usage in script/console:
-&gt;&gt; Rails.cache.write(&#39;a&#39;, 1) &gt;&gt; Rails.cache.write(&#39;b&#39;, 2) &gt;&gt; Rails.cache.write(&#39;c&#39;, 3) &gt;&gt; Rails.cache.read_multi(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;) =&gt; {&#34;a&#34;=&gt;1, &#34;b&#34;=&gt;2, &#34;c&#34;=&gt;3} Enjoy!">
+Rails uses read/write for its API naming so we name the method read_multi rather than get_multi. Here’s a sample usage in script/console:
+Enjoy!">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -201,19 +201,11 @@ blockquote,
 </p>
 <p>Memcache-client has the ability to fetch multiple keys in one request but Rails does not expose this functionality. It&rsquo;s really easy to add it yourself though:</p>
 <p><strong>config/initializers/rails_patches.rb</strong></p>
-<pre lang="ruby">Rails.cache.instance_eval &lt;&lt;-EOM
-  def read_multi(*keys)
-    @data.get_multi(*keys)
-  end
-EOM
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Rails uses read/write for its API naming so we name the method <code>read_multi</code> rather than <code>get_multi</code>. Here&rsquo;s a sample usage in script/console:</p>
-<pre lang="ruby">>> Rails.cache.write('a', 1)
->> Rails.cache.write('b', 2)
->> Rails.cache.write('c', 3)
->> Rails.cache.read_multi('a', 'b', 'c')
-=> {"a"=>1, "b"=>2, "c"=>3}
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Enjoy!</p>
 
     </article>

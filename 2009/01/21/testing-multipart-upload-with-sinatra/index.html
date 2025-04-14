@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2009/01/21/testing-multipart-upload-with-sinatra/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/01/21/testing-multipart-upload-with-sinatra/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Testing Multipart Upload with Sinatra">
   <meta property="og:description" content="Here’s how we create multipart uploads in our test suite for testing with Sinatra 0.3, similar to the post_it test helper method:
-def upload_it(path, params, rack_opts, file) @request = Rack::MockRequest.new(Sinatra.build_application) opts = normalize_rack_environment(opts) input = FiveRuns::Multipart::FileUpload.new(file, params) opts[:input] ||= input.to_s opts[&#39;CONTENT_TYPE&#39;] = input.content_type opts[&#39;CONTENT_LENGTH&#39;] = opts[:input].length @response = @request.request(&#39;POST&#39;, path, opts) end You can use it as such:
-filedata = Zlib::Deflate.deflate({&#39;foo&#39; =&gt; &#39;bar&#39;}.to_json) other_params = {&#34;pid&#34;=&gt;&#34;20256&#34;} upload_it &#34;/apps/#{app.token}/processes.json&#34;, other_params, {}, StringIO.new(filedata) Here’s the multipart helper: multipart.rb. I hope this saves someone a few hours of experimentation out there!">
+You can use it as such:
+Here’s the multipart helper: multipart.rb. I hope this saves someone a few hours of experimentation out there!">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -199,21 +199,11 @@ blockquote,
   
 </p>
 <p>Here&rsquo;s how we create multipart uploads in our test suite for testing with Sinatra 0.3, similar to the <code>post_it</code> test helper method:</p>
-<pre lang="ruby">def upload_it(path, params, rack_opts, file)
-    @request = Rack::MockRequest.new(Sinatra.build_application)
-    opts = normalize_rack_environment(opts)
-    input = FiveRuns::Multipart::FileUpload.new(file, params)
-    opts[:input] ||= input.to_s
-    opts['CONTENT_TYPE'] = input.content_type
-    opts['CONTENT_LENGTH'] = opts[:input].length
-    @response = @request.request('POST', path, opts)
-  end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>You can use it as such:</p>
-<pre lang="ruby">filedata = Zlib::Deflate.deflate({'foo' => 'bar'}.to_json)
-    other_params = {"pid"=>"20256"}
-    upload_it "/apps/#{app.token}/processes.json", other_params, {}, StringIO.new(filedata)
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Here&rsquo;s the multipart helper: <a href="http://www.mikeperham.com/wp-content/uploads/2009/01/multipart.rb">multipart.rb</a>. I hope this saves someone a few hours of experimentation out there!</p>
 
     </article>

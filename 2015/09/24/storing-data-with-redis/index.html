@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2015/09/24/storing-data-with-redis/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2015/09/24/storing-data-with-redis/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Storing Data with Redis">
   <meta property="og:description" content="Would you stuff all of your data into one database table? That’s crazy, Mike, don’t be silly! What if I told you most people do just that with Redis?
@@ -199,7 +199,7 @@ blockquote,
 </p>
 <p>Would you stuff all of your data into one database table?  <em>That&rsquo;s crazy, Mike,
 don&rsquo;t be silly!</em>  What if I told you most people do just that with Redis?</p>
-<img src="/images/redis.png" width="740px" />
+<!-- raw HTML omitted -->
 <p>Redis users often have several distinct datasets in Redis: long-lived transactional data, background job queues,
 ephemeral cached data, etc.  At the same time I see lots of people using Redis in the most naive way possible:
 put everything into one database.</p>
@@ -244,19 +244,14 @@ to use a different database than your development environment so the test suite 
 <strong>Answers: Yes, No, No</strong>.</p>
 <h3 id="instances">Instances</h3>
 <p>Running separate instances of Redis on different ports is the most flexible approach but adds significant administrative
-overhead.  If you are using Redis for caching (and you should probably use memcached<sup>1</sup> instead), use a separate instance
+overhead.  If you are using Redis for caching (and you should probably use memcached<!-- raw HTML omitted -->1<!-- raw HTML omitted --> instead), use a separate instance
 so you can <a href="http://redis.io/topics/lru-cache">tune the configuration</a> and dedicate 100% of Redis&rsquo;s single thread to serving high-traffic cache data.
 Configure another Redis instance to handle lower-traffic transactional and job data with more appropriate persistence.
 <strong>Answers: Yes, Yes, Yes</strong>.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>My main goal of this blog post is educate people on the drawbacks of stuffing everything into one Redis database.
 Namespaces are a poor solution for splitting up datasets in almost every case.</p>
-<hr/>
-1. I recommend memcached because it is designed for caching: it performs no disk I/O at all and is multithreaded so it can scale
-across all cores, handling 100,000s of requests per second.  Redis is limited to a single core so it will hit a scalability
-limit before memcached.  Using Redis for caching is totally reasonable if you want to stick
-with one tool and are comfortable with the necessary configuration and lower scalability limit per process.  Redis does
-have a nice advantage that it can persist the cache, making it much faster to warm up upon restart.
+<!-- raw HTML omitted -->
 
     </article>
   </div>

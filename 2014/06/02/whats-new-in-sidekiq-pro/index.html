@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2014/06/02/whats-new-in-sidekiq-pro/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/06/02/whats-new-in-sidekiq-pro/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="What&#39;s new in Sidekiq Pro">
   <meta property="og:description" content="Since the Sidekiq 3.0 release, I’ve been slowly chipping away at some new features in Sidekiq Pro. What’s new and upcoming?">
@@ -204,13 +204,13 @@ blockquote,
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>q <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Queue</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;business_hours_only&#34;</span>)
 </span></span><span style="display:flex;"><span>q<span style="color:#f92672">.</span>pause!</span></span></code></pre></div>
 <p>Jobs will accumulate until the queue is unpaused. As you might guess, the Web UI will show when a queue is paused:</p>
-<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-1.56.37-PM.png"><img src="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-1.56.37-PM.png" alt="Screen Shot 2014-06-01 at 1.56.37 PM" class="alignnone size-full wp-image-1673" width="808" height="314" /></a></p>
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-1.56.37-PM.png"><!-- raw HTML omitted --></a></p>
 <p><strong>Batch tweaks</strong></p>
 <p>Previously Batch <code>complete</code> and <code>success</code> callbacks were executed directly by the middleware, in the context of the job that triggered it. This meant that any failure in the callback would make Sidekiq think the job itself had failed so it would be retried. Now callbacks are executed asynchronously as their own job so they can fail and retry like any other application job.</p>
 <p>Successful batches are now removed from the UI so they don&rsquo;t overwhelm the Batches index page. Typically the developer does not want to see successful batches in the UI but wants to see failures or incomplete batches for debugging purposes.</p>
 <p><strong>Eye candy!</strong></p>
 <p>roy-sac on DeviantArt was nice enough to make an ANSI art startup banner for Sidekiq Pro. It&rsquo;s amazing what a real artist can do! This will be available in 1.7.4+.</p>
-<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-3.16.46-PM.png"><img src="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-3.16.46-PM.png" alt="Screen Shot 2014-06-01 at 3.16.46 PM" class="alignnone size-full wp-image-1683" width="705" height="370"/></a></p>
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-01-at-3.16.46-PM.png"><!-- raw HTML omitted --></a></p>
 <p><strong>Notification deprecations</strong></p>
 <p>I&rsquo;m going to remove notification schemes (campfire, hipchat, email, webhook) in Sidekiq Pro 2.0. They made batch notifications simple but the whole thing suffers from the same problem <a href="https://github.com/github/github-services">github-services</a> suffers from: there&rsquo;s a glut of different services out there and I don&rsquo;t want to add and maintain a notification wrapper for each. Since each notification scheme is a simple wrapper around the Batch <code>complete</code> callback, it&rsquo;s not hard to reproduce it in your application code. I&rsquo;ll provide examples of how to do just that as part of the upgrade notes.</p>
 <p>If you have an idea for a Sidekiq Pro feature, please <a href="https://github.com/mperham/sidekiq/issues">open an issue</a> so we can discuss. Happy &lsquo;kiqing!</p>

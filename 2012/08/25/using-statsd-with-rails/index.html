@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2012/08/25/using-statsd-with-rails/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/08/25/using-statsd-with-rails/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using Statsd with Rails">
   <meta property="og:description" content="One of the things I’ve had on my mind at The Clymb is better runtime monitoring for our website and servers. We have NewRelic but I always want more. With this in mind, I decided to try out statsd to collect and aggregate metrics for visualization. By using statsd, you get two benefits: 1) metric aggregation so you don’t have to pay for N machines reporting metrics to a pay service and 2) control over where your metrics go so you can route them to Graphite, Librato Metrics or any other standard metrics service.">
@@ -198,48 +198,14 @@ blockquote,
 </p>
 <p>One of the things I&rsquo;ve had on my mind at <a href="http://www.theclymb.com/invite-from/mperham">The Clymb</a> is better runtime monitoring for our website and servers. We have NewRelic but I always want more. With this in mind, I decided to try out <a href="http://github.com/etsy/statsd">statsd</a> to collect and aggregate metrics for visualization. By using statsd, you get two benefits: 1) metric aggregation so you don&rsquo;t have to pay for N machines reporting metrics to a pay service and 2) control over where your metrics go so you can route them to Graphite, Librato Metrics or any other standard metrics service.</p>
 <p>First you&rsquo;ll need to install a <a href="https://github.com/reinh/statsd">Ruby client</a>. The Ruby client has a nice simple API for collecting various types of metrics: counters, gauges, timings, etc.</p>
-<pre lang="sh">gem install statsd-ruby
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Next you&rsquo;ll create an initializer to instantiate the client. Note I use a namespace to differentiate between a Rails process and a Sidekiq process.</p>
-<pre lang="ruby">METRICS = Statsd.new('stats-collector.acmecorp.com', 8125)
-METRICS.namespace = (Sidekiq.server? ? 'sidekiq' : 'web')
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Now you&rsquo;ll need to sprinkle metrics reporting throughout the important parts of your application. I hooked up some basic metrics for <a href="https://github.com/TheClymb/rack-statsd">Rack</a>, Redis and ActiveRecord:</p>
-<pre lang="ruby"># Rack stats, courtesy of technoweenie
-Rails.application.middleware.insert_before ActionDispatch::Static, RackStatsD::ProcessUtilization, :stats => METRICS
-
-SELECT_DELETE = / FROM `(w+)`/
-INSERT = /^INSERT INTO `(w+)`/
-UPDATE = /^UPDATE `(w+)`/
-
-ActiveSupport::Notifications.subscribe "sql.active_record" do |name, start, finish, id, payload|
-  case payload[:sql]
-  when /^SELECT/
-    payload[:sql] =~ SELECT_DELETE
-    METRICS.increment('sql.select')
-    METRICS.timing("sql.#{$1}.select.query_time", (finish - start) * 1000, 1)
-  when /^DELETE/
-    payload[:sql] =~ SELECT_DELETE
-    METRICS.increment('sql.delete')
-    METRICS.timing("sql.#{$1}.delete.query_time", (finish - start) * 1000, 1)
-  when /^INSERT/
-    payload[:sql] =~ INSERT
-    METRICS.increment('sql.insert')
-    METRICS.timing("sql.#{$1}.insert.query_time", (finish - start) * 1000, 1)
-  when /^UPDATE/
-    payload[:sql] =~ UPDATE
-    METRICS.increment('sql.update')
-    METRICS.timing("sql.#{$1}.update.query_time", (finish - start) * 1000, 1)
-  end
-end
-
-class Redis::Client
-  # HACK: This overrides the normal Redis gem debug logging.
-  def logging(commands, &#038;block)
-    METRICS.time("redis.#{commands.first.first}.time", &#038;block)
-  end
-end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Now that we have some basic runtime stats, we still have two never-ending tasks:</p>
 <ol>
 <li>more metrics! Once you have a good solution in place, it becomes easy to add more metrics for new functionality or infrastructure &ndash; something which no pre-packaged system can provide. You&rsquo;ll want to better tune what metrics you have and add more if you still need more data.</li>

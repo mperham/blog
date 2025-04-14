@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2010/02/24/the-trouble-with-ruby-finalizers/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/02/24/the-trouble-with-ruby-finalizers/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Trouble with Ruby Finalizers">
   <meta property="og:description" content="I was test driving Devil, the developer’s image library, recently to see if it would work for us in a long-living daemon. Task #1 to that end is to verify the absence of memory leaks, which seem to be common in image libraries. It was almost immediately apparent that Devil contained a large memory leak. So I worked with John Mair to fix the issue.
@@ -199,28 +199,11 @@ blockquote,
 </p>
 <p>I was test driving <a href="http://banisterfiend.wordpress.com/2009/10/14/the-devil-image-library-for-ruby/">Devil</a>, the developer&rsquo;s image library, recently to see if it would work for us in a long-living daemon. Task #1 to that end is to verify the absence of memory leaks, which seem to be common in image libraries. It was almost immediately apparent that Devil contained a large memory leak. So I worked with John Mair to fix the issue.</p>
 <p>Devil has a Devil::Image class which uses a finalizer to delete native resources when the image is garbage collected. The problem is that Ruby finalizers are notoriously difficult to use properly so often times they aren&rsquo;t actually run. Here&rsquo;s why:</p>
-<pre lang="ruby">class Devil::Image
-    attr_reader :name, :file
-
-    def initialize(name, file)
-        @name = name
-        @file = file
-
-        ObjectSpace.define_finalizer( self, proc { IL.DeleteImages(1, [name]) } )
-    end
-end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>So what&rsquo;s wrong with this code? The issue is that the finalizer proc is a closure which holds a reference to it&rsquo;s <code>self</code>, thus making it impossible for the image object to ever be garbage collected. When creating a finalizer proc, you should always use a class method to create the proc so that it does not hold a reference to the corresponding instance, like so:</p>
-<pre lang="ruby">def initialize(name, file)
-      @name = name
-      @file = file
-
-      ObjectSpace.define_finalizer( self, self.class.finalize(name) )
-  end
-  def self.finalize(name)
-    proc { IL.DeleteImages(1, [name]) }
-  end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>A subtle and evil bug, just like its namesake!</p>
 
     </article>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2014/11/25/inspeqtor-0-7-0-total_rss-and-postgresql/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/11/25/inspeqtor-0-7-0-total_rss-and-postgresql/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Inspeqtor 0.7.0 -- total_rss and Postgresql">
   <meta property="og:description" content="I just released Inspeqtor 0.7.0 (changes) with a few awesome new features. What’s new?">
@@ -201,12 +201,8 @@ blockquote,
 <p>My main use case for Inspeqtor is monitoring forking app servers with long-living child processes,
 e.g. Unicorn or puma, and restarting them if the child processes start to bloat.  Unfortunately this
 is a common problem in the Ruby world.  Now you can do this:</p>
-<pre>
-# /etc/inspeqtor/services.d/myapp_unicorn.inq
-check service myapp_unicorn
-  # total_rss = the sum of the RSS of the master process + all child processes
-  if memory:total_rss > 2g for 4 cycles then restart, alert
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>This was the final missing bit of functionality I required to monitor Ruby on Rails applications; now I can
 uninstall Monit!</p>
 <h3 id="postgresql-metrics">Postgresql Metrics</h3>
@@ -214,17 +210,8 @@ uninstall Monit!</p>
 metrics are rather complicated to explain so I will refer you straight to the
 <a href="https://github.com/mperham/inspeqtor/wiki/Daemon-Specific-Metrics#postgresql">Postgresql wiki documentation</a> which
 lists each metric, what it means and how it is calculated.  An example is worth 1000 words:</p>
-<pre>
-# /etc/inspeqtor/services.d/postgresql.inq
-check service postgresql with username root, hostname localhost, port 5432
-  if memory:rss > 4g then alert
-  # verify block cache is effective
-  if postgresql:blk_hit_rate < 95% then alert
-  # verify total size of data + indexes
-  if postgresql:total_size > 10g then alert
-  # verify concurrent connection count
-  if postgresql:numbackends > 100 then alert
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h3 id="miscellaneous">Miscellaneous</h3>
 <p>@sorentwo contributed <code>reload</code> support (you can send HUP to a process if a rule triggers) and several
 other bug fixes.  He&rsquo;s also Inspeqtor&rsquo;s first committer, congratulations Parker!</p>

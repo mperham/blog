@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2014/09/01/library-versioning/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/09/01/library-versioning/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Library Versioning">
   <meta property="og:description" content="It’s time for our annual Semantic Versioning argument/gripefest! This time it was kicked off by Jeremy Ashkenas’s post why he believes Semantic Versioning is wishful thinking. Olivier Lacan chipped in further thoughts on the importance of a changelog.
@@ -198,28 +198,18 @@ blockquote,
   
 </p>
 <p>It&rsquo;s time for our annual Semantic Versioning argument/gripefest! This time it was kicked off by Jeremy Ashkenas&rsquo;s post <a href="https://gist.github.com/jashkenas/cbd2b088e20279ae2c8e">why he believes Semantic Versioning is wishful thinking</a>. Olivier Lacan <a href="http://olivierlacan.com/posts/the-semantics-of-software/">chipped in further thoughts on the importance of a changelog.</a></p>
-<p>Yes, Semantic Versioning is wishful thinking. Change cannot be compressed into three version numbers to guarantee safe upgrades. Developers get things wrong and forget changes such that versioning often isn&rsquo;t correct, even if they wanted to follow SemVer exactly<sup id="fnref-1785-1"><a href="#fn-1785-1" rel="footnote">1</a></sup>. I thought I would write down my own versioning policies as another example for people to consider.</p>
+<p>Yes, Semantic Versioning is wishful thinking. Change cannot be compressed into three version numbers to guarantee safe upgrades. Developers get things wrong and forget changes such that versioning often isn&rsquo;t correct, even if they wanted to follow SemVer exactly<!-- raw HTML omitted --><!-- raw HTML omitted -->1<!-- raw HTML omitted --><!-- raw HTML omitted -->. I thought I would write down my own versioning policies as another example for people to consider.</p>
 <p><strong>It&rsquo;s all about Change</strong></p>
-<p>If you aren&rsquo;t keeping a well-curated project changelog, users will hate you. This is non-negotiable <sup id="fnref-1785-2"><a href="#fn-1785-2" rel="footnote">2</a></sup>.</p>
+<p>If you aren&rsquo;t keeping a well-curated project changelog, users will hate you. This is non-negotiable <!-- raw HTML omitted --><!-- raw HTML omitted -->2<!-- raw HTML omitted --><!-- raw HTML omitted -->.</p>
 <p>Any non-trivial change should have a note in the changelog explaining it. I mentally categorize these changes into three buckets:</p>
 <ol>
-<li>Major &ndash; <em>API contracts change and user code will break!</em> Major changes should planned out carefully and upgrade notes documented well<sup id="fnref-1785-3"><a href="#fn-1785-3" rel="footnote">3</a></sup>. I try to accumulate many breaking changes over the course of a year; major bumps must be a rare occurrence because they require active participation from your users. Make this as painless as possible or you quickly lose your user&rsquo;s trust.</li>
+<li>Major &ndash; <em>API contracts change and user code will break!</em> Major changes should planned out carefully and upgrade notes documented well<!-- raw HTML omitted --><!-- raw HTML omitted -->3<!-- raw HTML omitted --><!-- raw HTML omitted -->. I try to accumulate many breaking changes over the course of a year; major bumps must be a rare occurrence because they require active participation from your users. Make this as painless as possible or you quickly lose your user&rsquo;s trust.</li>
 <li>Minor &ndash; <em>cool new features are rolled out or existing features are refactored enough that code relying on implementation details could break.</em> For instance, if I change how Sidekiq loads Rails code, I automatically consider that a minor bump because auto-loading and eager-loading is a hairy beast. Stuff probably won&rsquo;t break but just in case&hellip;</li>
 <li>Patch &ndash; <em>bug fixes, minor new APIs.</em> Miscellaneous improvements, unlikely you&rsquo;ll need to know about these changes but they are still documented.</li>
 </ol>
 <p>My versioning policy encapsulates those buckets and the changes within a given release. Depending on your own bravery, you can lock to a precise version number or allow patch or minor upgrades. This versioning combined with a reliable, curated changelog allows the user to make their own decisions about upgrading versions and easily investigate any breakage or unexpected behavior after an upgrade.</p>
-<p><strong>Footnotes</strong></p>
-<ul>
-<li id="fn-1785-1">
-  One example of my own versioning screw-up: Sidekiq 3.2.2 no longer worked on Ruby 1.9. Even though Ruby 1.9 hasn't been supported in Sidekiq 3 for months, several users were using it and complained. This change should have been rolled out as a 3.3.0 minor bump, not a patch release.&#160;<a href="#fnref-1785-1" rev="footnote">&#8617;</a>
-</li>
-<li id="fn-1785-2">
-  Here's <a href="https://github.com/mperham/sidekiq/blob/master/Changes.md">Sidekiq's changelog</a>.&#160;<a href="#fnref-1785-2" rev="footnote">&#8617;</a>
-</li>
-<li id="fn-1785-3">
-  Here's <a href="https://github.com/mperham/sidekiq/blob/master/3.0-Upgrade.md">Sidekiq 3.0's Upgrade Notes</a>.&#160;<a href="#fnref-1785-3" rev="footnote">&#8617;</a>
-</li>
-</ul>
+<p><!-- raw HTML omitted -->Footnotes<!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
     </article>
   </div>
 

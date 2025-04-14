@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2013/06/30/background-job-processing-overhead/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2013/06/30/background-job-processing-overhead/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Background Job Processing Overhead">
   <meta property="og:description" content="I wrote a simple benchmark which loads 20,000 empty jobs into Redis and then times how long it takes one Sidekiq process to finish those jobs running on my 2012 MacBook Air. The times are unsurprising (lower is better):">
@@ -203,12 +203,8 @@ MRI 1.9.3-p374 &ndash; 56 sec</p>
 <p>Just as a point of comparison, I tried the latest version of Resque too:</p>
 <p>MRI 2.0.0-p195 &ndash; 286 sec (Resque 1.24.1, one process)</p>
 <p>Defaults were used where possible, I used Sidekiq 2.13.0 with 25 worker threads and the worker was a no-op class:</p>
-<pre lang="ruby">class LazyWorker
-  include Sidekiq::Worker
-  def perform
-  end
-end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>To reproduce the benchmark:</p>
 <ol>
 <li>Install redis.</li>

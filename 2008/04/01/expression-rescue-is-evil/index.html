@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2008/04/01/expression-rescue-is-evil/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/04/01/expression-rescue-is-evil/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Expression Rescue is Evil">
   <meta property="og:description" content="One of the cleaner syntax options Ruby gives you is what I call expression rescues. Take this:
@@ -211,27 +211,15 @@ This code is an example of a pretty standard requirement: printing out the name 
 <p>So what&rsquo;s the problem? There&rsquo;s several in my experience:</p>
 <p><strong>You often can&rsquo;t tell why the rescue is needed.</strong> In the case above, the usage is straightforward. In other cases, it&rsquo;s much less obvious. Take this code:<br>
 ``</p>
-<pre>(@client.plugin_configurations.detector.configuration['paths'].inject('') {|output, path| output &lt;&lt; "#{h(path)}rn"} rescue '')</pre>
+<!-- raw HTML omitted -->
 <p>Why is this rescue needed? There&rsquo;s no way to know and the complexity of the expression implies exasperation: &ldquo;I give up trying to handle all these edge cases cleanly. Let&rsquo;s just throw in a rescue.&rdquo; So edge cases and bugs are swept under the proverbial rug.</p>
 <p><strong>They are a performance hit.</strong> Rescues are activated by raising errors. This involves creating a backtrace and this is one of the slowest operations you can perform. One raise is not going to kill you but if you are printing out 100 items, the costs will add up quickly. Here&rsquo;s some benchmark code:<br>
 ``</p>
-<pre>require 'benchmark'
-
-puts Benchmark.measure {
-  100000.times {
-    item = nil
-    item.name rescue 'None' # Use rescue
-  }
-}
-puts Benchmark.measure {
-  100000.times {
-    item = nil
-    item ? item.name : 'None' # Use tertiary logic
-  }
-}</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>And the results:</p>
-<pre>1.120000   0.110000   1.230000 (  1.225845)
-  0.030000   0.000000   0.030000 (  0.034895)</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>Rescuing is 30x slower than the equivalent ternary logic expression on Leopard&rsquo;s ruby 1.8.6.</p>
 <p>Conclusion? While performance is important, I&rsquo;d argue that code readability is more important. When you perform a ternary check, as in the benchmark above, it tells the code reader that this item could be nil. Using the equivalent rescue just tells them this expression could fail for some reason. Nuance, edge cases, newly created bugs&hellip; All are swept under the rug by the evil rescue.</p>
 

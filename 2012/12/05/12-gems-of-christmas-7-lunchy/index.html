@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2012/12/05/12-gems-of-christmas-7-lunchy/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/12/05/12-gems-of-christmas-7-lunchy/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #7 -- lunchy">
   <meta property="og:description" content="I couldn’t resist covering one of my own gems in the 12 Gems of Christmas. While I’m best known for dalli and sidekiq, lunchy has little place in my heart because it solves a minor annoyance all OSX-based developers have: starting and stopping system daemons.
 Here’s how everyone does it with standard OSX:
-launchctl load [oh, what&#39;s the blasted filename?] cd ~/Library/LaunchAgents ls launchctl load ~/Library/LaunchAgents/io.redis.redis-server.plist That’s a lot of typing and annoyance every time you want to start Redis. Here’s how you do it in lunchy:">
+That’s a lot of typing and annoyance every time you want to start Redis. Here’s how you do it in lunchy:">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -200,14 +200,11 @@ blockquote,
 </p>
 <p>I couldn&rsquo;t resist covering one of my own gems in the 12 Gems of Christmas. While I&rsquo;m best known for <a href="https://github.com/mperham/dalli">dalli</a> and <a href="http://sidekiq.org">sidekiq</a>, <a href="https://github.com/mperham/lunchy">lunchy</a> has little place in my heart because it solves a minor annoyance all OSX-based developers have: starting and stopping system daemons.</p>
 <p>Here&rsquo;s how everyone does it with standard OSX:</p>
-<pre lang="sh">launchctl load [oh, what's the blasted filename?]
-cd ~/Library/LaunchAgents
-ls
-launchctl load ~/Library/LaunchAgents/io.redis.redis-server.plist
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>That&rsquo;s a lot of typing and annoyance every time you want to start Redis. Here&rsquo;s how you do it in lunchy:</p>
-<pre lang="sh">lunchy start redis
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>No need to remember the filename of the plist file, lunchy just scans for a plist with the given substring in it. <code>lunchy ls</code> will show you all the agents you can control. See the README for the full command set available and happy l(a)unching!</p>
 <p>Tomorrow I&rsquo;ll show you an elegant gem for starting and managing your own child processes!</p>
 

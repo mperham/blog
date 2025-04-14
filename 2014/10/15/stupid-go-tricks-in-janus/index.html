@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2014/10/15/stupid-go-tricks-in-janus/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/10/15/stupid-go-tricks-in-janus/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Stupid Go tricks in Janus">
   <meta property="og:description" content="I’ve used Janus as my main text editor for the last few years; it’s a good solution for people like myself that want to quickly install not just MacVim but also a curated set of plugins necessary to have a productive IDE for Ruby/JS development.
@@ -200,10 +200,8 @@ blockquote,
 <p>I&rsquo;ve used <a href="https://github.com/carlhuda/janus/">Janus</a> as my main text editor for the last few years; it&rsquo;s a good solution for people like myself that want to quickly install not just MacVim but also a curated set of plugins necessary to have a productive IDE for Ruby/JS development.</p>
 <p>Side note: <strong>learn vim if you&rsquo;re a developer and don&rsquo;t know it already</strong>. Every Unix environment in the world has vim installed. Learning vim is an excellent investment of your time and ensures you can be productive everywhere, not just your own machine.</p>
 <p>The Janus developers recently added a better Go plugin and I wanted to call out a few features that are really cool. Put these lines in your ~/.vimrc.after:</p>
-<pre class="brush: plain; gutter: false; title: ; notranslate" title="">au FileType go nmap &lt;leader&gt;c &lt;Plug&gt;(go-coverage)
-au FileType go nmap gd &lt;Plug&gt;(go-def)
-au FileType go nmap &lt;Leader&gt;r &lt;Plug&gt;(go-rename)
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <ol>
 <li>Typing &ldquo;\c&rdquo; will open an HTML code coverage report in your browser for the current package showing test coverage.</li>
 <li>Typing &ldquo;gd&rdquo; will &ldquo;goto definition&rdquo; of the word under the cursor, allowing you to jump to methods or types.</li>

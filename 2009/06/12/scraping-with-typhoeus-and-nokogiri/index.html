@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2009/06/12/scraping-with-typhoeus-and-nokogiri/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/06/12/scraping-with-typhoeus-and-nokogiri/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Scraping with Typhoeus and Nokogiri">
   <meta property="og:description" content="I’ve been working on some cool new functionality at OneSpot. We want to provide a widget that can give the reader more context about a given article. Zemanta takes the article text and hands us back a set of semantic entities, including links to their Wikipedia page, but we wanted to get a nice blurb about each entity and figured that the opening paragraph from the Wikipedia page would be reasonable.
@@ -206,44 +206,11 @@ blockquote,
 <li>We tried Curl::Multi but it was giving us occasional bus errors.</li>
 <li>My wordpress syntax highlighter is obviously subpar when it comes to regular expressions.</li>
 </ul>
-<pre lang="ruby">require 'typhoeus'
-require 'nokogiri'
-
-class Wikipedia
-  include Typhoeus
-  #self.cache = Rails.cache.instance_variable_get(:@data)
-
-  remote_defaults :cache_responses => 7*24*60*60,
-      :user_agent => 'typhoeus crawler',
-      :timeout => 5
-
-  define_remote_method :extract,
-      :on_success => lambda {|response| Wikipedia.extract_first_paragraph(response.body) }
-
-  def self.extract_first_paragraph(content)
-    nh = Nokogiri::HTML(content)
-    str = nh.xpath("//div[@id='bodyContent']/p[1]").inner_html
-    str.gsub /href="/wiki/, 'href="http://en.wikipedia.org/wiki'
-  end
-end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>And here&rsquo;s how you use it.</p>
-<pre lang="ruby">entities = %w(
-
-http://en.wikipedia.org/wiki/Garth_Marenghi's_Darkplace
-
-
-http://en.wikipedia.org/wiki/Bus_error
-
-
-http://en.wikipedia.org/wiki/Washington
-
-)
-    content = entities.map do |url|
-      Wikipedia.extract(:base_uri => url)
-    end
-    p content
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 
     </article>
   </div>

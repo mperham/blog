@@ -6,10 +6,23 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Apr 2025 12:07:17 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 08 Apr 2025 11:30:52 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Sidekiq 8.0: Profiling</title>
+      <link>https://www.mikeperham.com/2025/04/08/sidekiq-8.0-profiling/</link>
+      <pubDate>Tue, 08 Apr 2025 11:30:52 -0700</pubDate>
+      
+      <guid>https://www.mikeperham.com/2025/04/08/sidekiq-8.0-profiling/</guid>
+      <description>&lt;p&gt;Sidekiq is the most popular background job framework for Ruby applications and over the last 13 years, it has reached maturity in its feature set.
+It has filled out much of its original design so adding a major new feature is a comparatively rare event these days.&lt;/p&gt;
+&lt;p&gt;For years I&amp;rsquo;ve wanted Ruby to support thread-safe profiling.
+Historically Ruby&amp;rsquo;s profiling APIs were process-global.
+Data is collected for everything running in the process, making job profiling within a running Sidekiq process noisy and harder to read than ideal.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Sidekiq 8.0: Improvements to the Web UI</title>
@@ -62,9 +75,7 @@ It&amp;rsquo;s too easy to forget or skip without some sort of prompt or cheatsh
       <description>&lt;p&gt;I&amp;rsquo;m happy to announce a &lt;a href=&#34;https://opencollective.com/hanami&#34;&gt;substantial $12,000 grant&lt;/a&gt; to the &lt;a href=&#34;https://hanamirb.org&#34;&gt;Hanami&lt;/a&gt; framework.
 I&amp;rsquo;ve been a massive believer in Open Source software since publishing my first open source project in 1995.
 There&amp;rsquo;s nothing more empowering than direct access to the exact source code needed to solve a problem.&lt;/p&gt;
-&lt;figure style=&#34;float: right;&#34;&gt;
-  &lt;img style=&#34;border: solid white 0px;&#34; src=&#34;https://hanamirb.org/images/home-background.jpg&#34; width=&#34;400px&#34; /&gt;
-&lt;/figure&gt;
+&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;But Ruby has a problem: it&amp;rsquo;s mostly a monoculture around Rails.
 Merb and Sinatra provided valuable app framework options in the past, I believe we need new options for the future.&lt;/p&gt;</description>
     </item>
@@ -126,27 +137,6 @@ There were no mistakes or misunderstandings, Dan did the work and shows the rece
 &lt;blockquote&gt;
 &lt;p&gt;This article was originally published on &lt;a href=&#34;https://dansvetlov.me/sidekiq-internals/&#34;&gt;DanSvetlov.me&lt;/a&gt; and is republished here with permission of the author. This article is relevant to Sidekiq v7.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/sidekiq/sidekiq&#34;&gt;Sidekiq&lt;/a&gt; is one of the most ubiquitous&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; Ruby background job processors out there. To anybody who has worked with Ruby on and off Rails, it needs no introduction. Sidekiq has a 10+ year track record of being an efficient, battle-tested and simple-to-use solution for offloading the execution of application logic into the background.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Supporting Dragonfly</title>
-      <link>https://www.mikeperham.com/2024/02/01/supporting-dragonfly/</link>
-      <pubDate>Thu, 01 Feb 2024 09:00:00 -0800</pubDate>
-      
-      <guid>https://www.mikeperham.com/2024/02/01/supporting-dragonfly/</guid>
-      <description>&lt;p&gt;For about 15 years, Redis has been the dominant choice for background job infrastructure in Ruby.&lt;/p&gt;
-&lt;p&gt;First used by Resque, Sidekiq adopted it also as a pragmatic choice which had already gained mass acceptance within the community.
-And so for the last 15 years, we&amp;rsquo;ve used Redis widely across the industry for caching, jobs and many different data munging tasks.
-However the only constant is change.&lt;/p&gt;
-&lt;a href=&#34;https://dragonflydb.io&#34; style=&#34;float: right; padding: 20px;&#34;&gt;
-  &lt;img src=&#34;https://raw.githubusercontent.com/dragonflydb/dragonfly/main/.github/images/logo-full.svg&#34;
-    width=&#34;284&#34; border=&#34;0&#34; alt=&#34;Dragonfly&#34;&gt;
-&lt;/a&gt;
-&lt;p&gt;&lt;a href=&#34;https://dragonflydb.io&#34;&gt;Dragonfly&lt;/a&gt; brings competition and new capabilities.
-They aim to provide a Redis-compatible tool which is better than Redis at certain tasks.
-First and most importantly, all Sidekiq test suites are passing 100%.
-There&amp;rsquo;s no point in switching to a buggy or incomplete tool; Dragonfly has done the work to fully support every nook and cranny of Sidekiq&amp;rsquo;s functionality.
-Performance is where you can see major differences.&lt;/p&gt;</description>
     </item>
     
   </channel>

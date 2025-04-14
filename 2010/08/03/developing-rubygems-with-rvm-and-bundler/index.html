@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2010/08/03/developing-rubygems-with-rvm-and-bundler/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/08/03/developing-rubygems-with-rvm-and-bundler/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Developing Rubygems with RVM and Bundler">
   <meta property="og:description" content="It’s safe to say that RVM and Bundler have completely changed how I interact with my Ruby applications and gems. It’s pretty well understood how to use each by itself, I didn’t have a good idea how to use them in tandem until recently. Parts of this post are based on Derek Kastner’s great post on using Bundler.
@@ -199,23 +199,11 @@ blockquote,
 </p>
 <p>It&rsquo;s safe to say that RVM and Bundler have completely changed how I interact with my Ruby applications and gems. It&rsquo;s pretty well understood how to use each by itself, I didn&rsquo;t have a good idea how to use them in tandem until recently. Parts of this post are based on <a href="http://numbers.brighterplanet.com/2010/07/28/bundler-to-the-max/">Derek Kastner&rsquo;s great post on using Bundler</a>.</p>
 <p>When I grab the source for a random rubygem from github and want to run its tests or test drive it, I use RVM and Bundler to create a sandbox so I don&rsquo;t pollute the gems used by other Ruby projects on my box:</p>
-<pre lang="bash">rvm use 1.9.2@&lt;gemname> --create
-  gem install bundler --pre
-# Would love to see this cleaned up for bundler 1.0
-# e.g. bundle install --from-gemspec
-  cat > Gemfile &lt;&lt;eom
-source 'http://rubygems.org'
-gemspec :path => '.'
-EOM
-  bundle install
-  rake
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>The only trick here is using Bundler&rsquo;s support for gemspecs to avoid the need for a separate (and redundant) Gemfile. But <a href="http://andre.arko.net/2010/05/01/bundler-for-gem-development/">Andre Arko suggests that we prefer Bundler</a> to Jeweler and I agree with him. <a href="http://github.com/technicalpickles/jeweler/issues#issue/120">Jeweler should check for an existing Gemfile</a> and defer to it for dependencies when generating the gemspec:</p>
-<pre lang="ruby">require 'bundler'
-Gem::Specification.new do |s|
-  s.add_bundler_dependencies
-end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>This means that <strong>gems should check in their gemspec into git</strong> and jeweler (or however you are generating your gemspec) should be declared as a development dependency. Do your gems pass this simple test? Any thoughts on how to make this even simpler?</p>
 
     </article>

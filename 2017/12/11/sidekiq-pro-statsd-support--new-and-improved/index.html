@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2017/12/11/sidekiq-pro-statsd-support--new-and-improved/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2017/12/11/sidekiq-pro-statsd-support--new-and-improved/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq Pro Statsd support -- new and improved!">
-  <meta property="og:description" content="Drivy&#39;s impressive Sidekiq dashboard [source] Several customers have been asking for more metrics to track Sidekiq internals: when is a job dropped due to uniqueness or expiration? I’ve had to put off the work while working on Faktory but recently I took a week off to focus on Sidekiq and implement this feature.
+  <meta property="og:description" content="Several customers have been asking for more metrics to track Sidekiq internals: when is a job dropped due to uniqueness or expiration? I’ve had to put off the work while working on Faktory but recently I took a week off to focus on Sidekiq and implement this feature.
 New and Improved Sidekiq Pro 3.6 has a brand new Statsd metrics subsystem. Statsd is a de facto universal standard for metrics in open source software, created by Etsy. Even if you use another system like InfluxDB, Prometheus or Datadog, every metrics system will have an adapter or proxy to convert Statsd metrics into their own internal format.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
@@ -197,12 +197,7 @@ blockquote,
   </small>
   
 </p>
-<div style="float: right; padding-left: 10px">
-<figure>
-<img src="//www.mikeperham.com/images/statsd.png"/>
-<figcaption><small>Drivy's impressive Sidekiq dashboard [<a href="https://drivy.engineering/sidekiq-instrumentation/">source</a>]</small></figcaption>
-</figure>
-</div>
+<!-- raw HTML omitted -->
 <p>Several customers have been asking for more metrics to track Sidekiq
 internals: when is a job dropped due to uniqueness or expiration?  I&rsquo;ve
 had to put off the work while working on
@@ -215,8 +210,7 @@ use another system like InfluxDB, Prometheus or Datadog, every
 metrics system will have an adapter or proxy to convert Statsd
 metrics into their own internal format.</p>
 <p>You plug in the Statsd client in your initializer and Sidekiq Pro will add metrics:</p>
-<div style="clear: both">
-</div>
+<!-- raw HTML omitted -->
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;statsd-ruby&#39;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">.</span>statsd <span style="color:#f92672">=</span> <span style="color:#f92672">-&gt;</span>{ <span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;127.0.0.1&#34;</span>, <span style="color:#ae81ff">8125</span>) }
 </span></span></code></pre></div><p>Note that it&rsquo;s a Proc; Sidekiq Pro uses a connection pool with several clients so a

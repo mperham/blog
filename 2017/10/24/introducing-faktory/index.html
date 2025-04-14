@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2017/10/24/introducing-faktory/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2017/10/24/introducing-faktory/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Introducing Faktory">
   <meta property="og:description" content="Yesterday I explained how a good background job framework is critical to scaling business applications. Today, meet Faktory.
@@ -204,7 +204,7 @@ scaling business applications.  Today, meet
 <p>I&rsquo;ve spent the last six months building <strong>Faktory</strong>, a new background
 job system which aims to bring the best practices developed over the
 last five years in Sidekiq <strong>to every programming language</strong>.</p>
-<center><img src="http://www.mikeperham.com/images/faktory-ui.png" width="800" height="375"/></center>
+<!-- raw HTML omitted -->
 <h2 id="the-basics">The Basics</h2>
 <p>Faktory is a server daemon which provides a simple API to produce and
 consume background jobs.  Here&rsquo;s the chatter to create and execute
@@ -256,37 +256,37 @@ for more detail.</p>
 <a href="https://github.com/contribsys/faktory/wiki/Installation">Installation wiki page</a>.
 Like all new things, it&rsquo;s rough today but it will get better over time.</p>
 <h1 id="fak">FAK</h1>
-<p>Q. Can I use it in production?</br>
+<p>Q. Can I use it in production?<!-- raw HTML omitted -->
 A. It&rsquo;s a brand new project but only you can determine how risk tolerant you are.
 I will release 1.0 when the APIs are solid and I feel it is stable.</p>
-<p>Q. Does Faktory require Redis?<br/>
+<p>Q. Does Faktory require Redis?<!-- raw HTML omitted -->
 A. No. Faktory is a standalone 64-bit Linux binary; it needs a Faktory worker
 process to consume jobs.  Redis -&gt; Sidekiq == Faktory -&gt; Faktory worker</p>
-<p>Q. Are there other things like Faktory?<br/>
+<p>Q. Are there other things like Faktory?<!-- raw HTML omitted -->
 A. Yep, beanstalkd, starling, gearman and others.  Faktory aims to be
 more feature-rich and better supported.  Many of Faktory&rsquo;s OSS competitors
 are &ldquo;dead&rdquo; and no longer supported.  I am fortunate enough to have both
 expertise in background jobs and a business model to support Faktory long-term.</p>
-<p>Q. What&rsquo;s going to happen to Sidekiq?<br/>
+<p>Q. What&rsquo;s going to happen to Sidekiq?<!-- raw HTML omitted -->
 A. Nothing.  It&rsquo;s stable, powerful and fully supported.  If you have a
 Ruby/Rails app, it&rsquo;s a natural choice for background jobs.</p>
-<p>Q. Will you have a commercial version, just like Sidekiq Pro and Enterprise?<br/>
+<p>Q. Will you have a commercial version, just like Sidekiq Pro and Enterprise?<!-- raw HTML omitted -->
 A. If Faktory sees good uptake, likely yes in 2018.
 Several features like periodic jobs, batches and unique jobs would fit
 very well into a &ldquo;Faktory Pro&rdquo;.</p>
-<p>Q. Can I help?<br/>
+<p>Q. Can I help?<!-- raw HTML omitted -->
 A. Absolutely.  Faktory&rsquo;s GitHub repo is <a href="https://github.com/contribsys/faktory">contribsys/faktory</a>;
 try it out and leave feedback.  Build a worker library in your language
 of choice.  I&rsquo;m fluent in Ruby/Go but not much beyond that.</p>
-<p>Q. Can Faktory be provisioned and managed as a SaaS?<br/>
+<p>Q. Can Faktory be provisioned and managed as a SaaS?<!-- raw HTML omitted -->
 A. I have no plans to do so myself but I imagine this would be useful to many.
 I would be happy to chat privately with people interested in offering
 Faktory as a service, Heroku add-on, etc.</p>
-<p>Q. Man, I love the q in Sidekiq.  Why no q?<br/>
+<p>Q. Man, I love the q in Sidekiq.  Why no q?<!-- raw HTML omitted -->
 A. Because &ldquo;Faqtory&rdquo; sounds like software for building this FAQ and
 a multi-billion dollar conglomerate has the worldwide trademark
 for &ldquo;Worq&rdquo;.</p>
-<p>Q. Where can I ask further questions?<br/>
+<p>Q. Where can I ask further questions?<!-- raw HTML omitted -->
 A. Since you&rsquo;ve read to the bottom, you get top sekret access to the
 <a href="https://gitter.im/contribsys/faktory">contribsys/faktory</a> Gitter chat room.
 I&rsquo;ll hang out there when I can. Stop by and say hi!</p>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.145.0"><meta property="og:url" content="https://www.mikeperham.com/2014/03/28/sidekiq-3-0/">
+  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/03/28/sidekiq-3-0/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq 3.0!">
   <meta property="og:description" content="After tons of work on Sidekiq 2.x for the last 18 months, I decided it was time for some deeper refactoring and cleanup necessitating a major version bump.
@@ -205,7 +205,7 @@ blockquote,
 <h2 id="process-heartbeat">Process Heartbeat</h2>
 <p>Each Sidekiq process now pings Redis with its current state every 5 seconds and the Web UI &ldquo;Workers&rdquo; tab has been redesigned to show a real-time view of the Sidekiq processes and the jobs they are processing. This required a large refactoring of Sidekiq&rsquo;s internal data structures in Redis, which were really based on the original Resque structures I cloned so Sidekiq 1.0 would work with resque-web. These structures were reasonable for Resque&rsquo;s process-based designed but didn&rsquo;t work well when a process had many worker threads. Ideally this redesign will fix the &ldquo;stuck worker&rdquo; problems that many people saw when their Sidekiq processes crashed.</p>
 <p>Note also I&rsquo;ve completely removed the term &ldquo;Worker&rdquo; from Sidekiq where possible in favor of the more clear &ldquo;Process&rdquo;, &ldquo;Thread&rdquo; or &ldquo;Job&rdquo;.</p>
-<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/03/Screen-Shot-2014-03-19-at-8.13.19-PM.png"><img src="/wp-content/uploads/2014/03/Screen-Shot-2014-03-19-at-8.13.19-PM.png" alt="busy tab" class="aligncenter size-full wp-image-1590" /></a></p>
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/03/Screen-Shot-2014-03-19-at-8.13.19-PM.png"><!-- raw HTML omitted --></a></p>
 <h2 id="process-lifecycle-events">Process Lifecycle Events</h2>
 <p>You can register blocks of code to run at three points during the life of a Sidekiq process:</p>
 <ol>
@@ -214,13 +214,8 @@ blockquote,
 <li><strong>shutdown</strong> &ndash; run as the last code executed by Sidekiq before it exits</li>
 </ol>
 <p>It&rsquo;ll look something like this:</p>
-<pre>
-Sidekiq.configure_server do |config|
-  config.on(:shutdown) do
-    puts "Goodbye cruel world!"
-  end
-end
-</pre>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h2 id="error-handlers">Error Handlers</h2>
 <p>Instead of relying on middleware to catch errors, Sidekiq 3.0 allows you to define one or more global error handlers to process errors generated anywhere within the Sidekiq process. All of the major error services have been contacted and some have already released gem updates to support this new feature. If yours hasn&rsquo;t, please contact support and politely notify them.</p>
 <h2 id="client-sharding">Client Sharding</h2>
