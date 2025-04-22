@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/05/19/a-guide-to-varnish-vcl/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/05/19/a-guide-to-varnish-vcl/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="A Guide to Varnish VCL">
   <meta property="og:description" content="I’ve been working with Varnish 2.0 for the last two weeks, going from complete n00b to someone who knows enough to feel I can improve the terrible lack of documentation for Varnish and VCL. There’s not a lot out there and what’s there is hard to find and sometimes erroneous. I’m hoping this post will help others like me who are struggling with Varnish and VCL.
@@ -208,16 +208,36 @@ blockquote,
 </ul>
 <p><strong>Examples</strong></p>
 <p>The Varnish VCL examples are rather sparse; here&rsquo;s a few more which may fill in some gaps. These work with Varnish 2.0.4.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>The biggest pain in all of this was the very limited logic you can perform on req.url. You don&rsquo;t have variables in VCL so you need to think in terms of regular expression groups like in the RSS/ATOM regexp above when trying to restructure the URL.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p><strong>Resources</strong></p>
+<pre tabindex="0"><code class="language-vcl" data-lang="vcl"># If the requested URL starts like &#34;/link/?&#34; then immediately pass it to the given
+# backend and DO NOT cache the result (&#34;pass&#34; basically means &#34;bypass the cache&#34;).
+if (req.url ~ &#34;^/link/?&#34;) {
+  set req.backend = web;
+  pass;
+}
+</code></pre><pre tabindex="0"><code class="language-vcl" data-lang="vcl">if (req.url ~ &#34;/$&#34;) {
+  # Handle URLs with a trailing slash by appending index.html
+  # (Useful if you are pulling from S3 which does not have default document logic)
+  # Note there&#39;s no explicit string append operator.
+  set req.url = req.url &#34;index.html&#34;;
+}
+</code></pre><pre tabindex="0"><code class="language-vcl" data-lang="vcl"># strip port from the Host header
+# (useful when testing against a local Varnish instance on port 6081)
+set req.http.Host = regsub(req.http.Host, &#34;:[0-9]+&#34;, &#34;&#34;);
+
+# /foo/bar.embed -&gt; /foo/bar/embed.js
+set req.url = regsub(req.url, &#34;(.*).embed$&#34;, &#34;1/embed.js&#34;);
+
+# Support feed URLs of the form &#34;/foo/bar.atom&#34; --&gt; &#34;/foo/bar/feed.atom&#34;
+if ((req.url ~ &#34;.(rss|atom)$&#34;) &amp;#038;&amp;#038; !(req.url ~ &#34;feed.(atom|rss)$&#34;)) {
+    set req.url = regsub(req.url, &#34;(.*).(.*)$&#34;, &#34;1/feed.2&#34;);
+}
+</code></pre><p>The biggest pain in all of this was the very limited logic you can perform on req.url. You don&rsquo;t have variables in VCL so you need to think in terms of regular expression groups like in the RSS/ATOM regexp above when trying to restructure the URL.</p>
+<pre tabindex="0"><code class="language-vcl" data-lang="vcl"># use this in vcl_fetch, don&#39;t want 404s filling up our cache, so just
+# immediately return a client error and bypass the cache.
+if (obj.status == 404) {
+  error 404 &#34;No such file&#34;;
+}
+</code></pre><p><strong>Resources</strong></p>
 <p>Here&rsquo;s the best VCL resources I could find:</p>
 <ul>
 <li><a href="http://varnish.projects.linpro.no/wiki/VCL">Varnish VCL</a></li>

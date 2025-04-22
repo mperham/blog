@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/05/05/five-common-rails-mistakes/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/05/05/five-common-rails-mistakes/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Five Common Rails Mistakes">
   <meta property="og:description" content="I’ve worked with Rails for quite a while now and in that time I’ve seen a lot of Rails applications and both read and written a lot of bad Ruby code. Here’s five common mistakes that I see in almost every Rails codebase.">
@@ -204,15 +204,15 @@ blockquote,
 </span></span><span style="display:flex;"><span>  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;name&#34;</span>
 </span></span><span style="display:flex;"><span>  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;phone&#34;</span>
 </span></span><span style="display:flex;"><span>  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;email&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>What is required? Presumably a Contact must belong_to a User and have a name — use database constraints to guarantee this. By adding <code>:null =&gt; false</code>, we ensure that the model is always consistent even if we have bugs in our validation because the database will not allow a model to be saved if it fails those constraints.</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>What is required? Presumably a Contact must belong_to a User and have a name — use database constraints to guarantee this. By adding <code>:null =&gt; false</code>, we ensure that the model is always consistent even if we have bugs in our validation because the database will not allow a model to be saved if it fails those constraints.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>create_table <span style="color:#e6db74">&#34;contacts&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>t<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>  t<span style="color:#f92672">.</span>integer  <span style="color:#e6db74">&#34;user_id&#34;</span>, <span style="color:#e6db74">:null</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#e6db74">:null</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;phone&#34;</span>
 </span></span><span style="display:flex;"><span>  t<span style="color:#f92672">.</span>string   <span style="color:#e6db74">&#34;email&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p><strong>Bonus points</strong>: use <code>:limit =&gt; N</code> to size your string columns appropriately. Strings default to 255 characters and phone probably doesn&rsquo;t need to be that big, does it?</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p><strong>Bonus points</strong>: use <code>:limit =&gt; N</code> to size your string columns appropriately. Strings default to 255 characters and phone probably doesn&rsquo;t need to be that big, does it?</p>
 <p><strong>2. Object-Oriented Programming</strong></p>
 <p>Most Rails developers do not write object-oriented Ruby code. They write MVC-oriented Ruby code by putting models and controllers in the expected locations. Most will add utility modules with class-methods in lib/, but that&rsquo;s it. It takes 2-3 years before developers realize: &ldquo;Rails is just Ruby. I can create simple objects and compose them in ways that Rails does not explicitly endorse!&rdquo;</p>
 <p><strong>Bonus points</strong>: introduce facades for any 3rd-party services you call. Provide a mock facade for use in your tests so that you don&rsquo;t actually call the 3rd party service in your test suite.</p>
@@ -221,22 +221,22 @@ blockquote,
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&lt;li class=&#39;vehicle_list&#39;&gt;&#34;</span>
 </span></span><span style="display:flex;"><span>str <span style="color:#f92672">+=</span> link_to(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">#{</span>vehicle<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>upcase<span style="color:#e6db74">}</span><span style="color:#e6db74"> Sale&#34;</span>, show_all_styles_path(vehicle<span style="color:#f92672">.</span>id, vehicle<span style="color:#f92672">.</span>url_title))
 </span></span><span style="display:flex;"><span>str <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;&lt;/li&gt;&#34;</span>
-</span></span><span style="display:flex;"><span>str<span style="color:#f92672">.</span>html_safe</span></span></code></pre></div>
-<p>Yikes, it&rsquo;s ugly and can easily lead to XSS security holes! <code>content_tag</code> is your friend.</p>
+</span></span><span style="display:flex;"><span>str<span style="color:#f92672">.</span>html_safe
+</span></span></code></pre></div><p>Yikes, it&rsquo;s ugly and can easily lead to XSS security holes! <code>content_tag</code> is your friend.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>content_tag <span style="color:#e6db74">:li</span>, <span style="color:#e6db74">:class</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;vehicle_list&#39;</span> <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>  link_to(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">#{</span>vehicle<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>upcase<span style="color:#e6db74">}</span><span style="color:#e6db74"> Sale&#34;</span>, show_all_styles_path(vehicle<span style="color:#f92672">.</span>id, vehicle<span style="color:#f92672">.</span>url_title))
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p><strong>Bonus points</strong>: start introducing helper methods that take blocks. Nested blocks are a natural fit when generating nested HTML.</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p><strong>Bonus points</strong>: start introducing helper methods that take blocks. Nested blocks are a natural fit when generating nested HTML.</p>
 <p><strong>4. Giant queries loading everything into memory</strong></p>
 <p>You need to fix some data so you&rsquo;ll just iterate through it all and fix it, right?</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">User</span><span style="color:#f92672">.</span>has_purchased(<span style="color:#66d9ef">true</span>)<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>customer<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>  customer<span style="color:#f92672">.</span>grant_role(<span style="color:#e6db74">:customer</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>You have an ecommerce site with a million customers. Let&rsquo;s say each User object takes 500 bytes. This code will take 500MB of memory at runtime! Better:</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>You have an ecommerce site with a million customers. Let&rsquo;s say each User object takes 500 bytes. This code will take 500MB of memory at runtime! Better:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">User</span><span style="color:#f92672">.</span>has_purchased(<span style="color:#66d9ef">true</span>)<span style="color:#f92672">.</span>find_each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>customer<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>  customer<span style="color:#f92672">.</span>grant_role(<span style="color:#e6db74">:customer</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p><code>find_each</code> uses <code>find_in_batches</code> to pull in 1000 records at a time, dramatically lowering the runtime memory requirements.</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p><code>find_each</code> uses <code>find_in_batches</code> to pull in 1000 records at a time, dramatically lowering the runtime memory requirements.</p>
 <p><strong>Bonus points</strong>: use <code>update_all</code> or raw SQL to perform the mass update. SQL takes time to learn well but the benefits are even more tremendous: you&rsquo;ll see a 100x improvement in the performance.</p>
 <p><strong>5. Code review!</strong></p>
 <p>I&rsquo;m guessing you are using GitHub and I&rsquo;m also guessing you aren&rsquo;t using pull requests. If you spend a day or two building a feature, do it on a branch and send a pull request. Your team will be able to review your code, offer suggestions for improvement and possible edge cases that you didn&rsquo;t consider. I guarantee your code will be higher quality for it. We&rsquo;ve switched to using pull requests for 90% of our changes at <a href="http://www.theclymb.com/invite-from/mperham">TheClymb</a> and it&rsquo;s been a 100% positive experience.</p>

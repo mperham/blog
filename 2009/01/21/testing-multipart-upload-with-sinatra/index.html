@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/01/21/testing-multipart-upload-with-sinatra/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/01/21/testing-multipart-upload-with-sinatra/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Testing Multipart Upload with Sinatra">
   <meta property="og:description" content="Here’s how we create multipart uploads in our test suite for testing with Sinatra 0.3, similar to the post_it test helper method:
-You can use it as such:
-Here’s the multipart helper: multipart.rb. I hope this saves someone a few hours of experimentation out there!">
+def upload_it(path, params, rack_opts, file) @request = Rack::MockRequest.new(Sinatra.build_application) opts = normalize_rack_environment(opts) input = FiveRuns::Multipart::FileUpload.new(file, params) opts[:input] ||= input.to_s opts[&#39;CONTENT_TYPE&#39;] = input.content_type opts[&#39;CONTENT_LENGTH&#39;] = opts[:input].length @response = @request.request(&#39;POST&#39;, path, opts) end You can use it as such:
+filedata = Zlib::Deflate.deflate({&#39;foo&#39; =&gt; &#39;bar&#39;}.to_json) other_params = {&#34;pid&#34;=&gt;&#34;20256&#34;} upload_it &#34;/apps/#{app.token}/processes.json&#34;, other_params, {}, StringIO.new(filedata) Here’s the multipart helper: multipart.rb. I hope this saves someone a few hours of experimentation out there!">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -199,12 +199,20 @@ blockquote,
   
 </p>
 <p>Here&rsquo;s how we create multipart uploads in our test suite for testing with Sinatra 0.3, similar to the <code>post_it</code> test helper method:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>You can use it as such:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Here&rsquo;s the multipart helper: <a href="http://www.mikeperham.com/wp-content/uploads/2009/01/multipart.rb">multipart.rb</a>. I hope this saves someone a few hours of experimentation out there!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">upload_it</span>(path, params, rack_opts, file)
+</span></span><span style="display:flex;"><span>  @request <span style="color:#f92672">=</span> <span style="color:#66d9ef">Rack</span><span style="color:#f92672">::</span><span style="color:#66d9ef">MockRequest</span><span style="color:#f92672">.</span>new(<span style="color:#66d9ef">Sinatra</span><span style="color:#f92672">.</span>build_application)
+</span></span><span style="display:flex;"><span>  opts <span style="color:#f92672">=</span> normalize_rack_environment(opts)
+</span></span><span style="display:flex;"><span>  input <span style="color:#f92672">=</span> <span style="color:#66d9ef">FiveRuns</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Multipart</span><span style="color:#f92672">::</span><span style="color:#66d9ef">FileUpload</span><span style="color:#f92672">.</span>new(file, params)
+</span></span><span style="display:flex;"><span>  opts<span style="color:#f92672">[</span><span style="color:#e6db74">:input</span><span style="color:#f92672">]</span> <span style="color:#f92672">||=</span> input<span style="color:#f92672">.</span>to_s
+</span></span><span style="display:flex;"><span>  opts<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;CONTENT_TYPE&#39;</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> input<span style="color:#f92672">.</span>content_type
+</span></span><span style="display:flex;"><span>  opts<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;CONTENT_LENGTH&#39;</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> opts<span style="color:#f92672">[</span><span style="color:#e6db74">:input</span><span style="color:#f92672">].</span>length
+</span></span><span style="display:flex;"><span>  @response <span style="color:#f92672">=</span> @request<span style="color:#f92672">.</span>request(<span style="color:#e6db74">&#39;POST&#39;</span>, path, opts)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>You can use it as such:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>filedata <span style="color:#f92672">=</span> <span style="color:#66d9ef">Zlib</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Deflate</span><span style="color:#f92672">.</span>deflate({<span style="color:#e6db74">&#39;foo&#39;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;bar&#39;</span>}<span style="color:#f92672">.</span>to_json)
+</span></span><span style="display:flex;"><span>other_params <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;pid&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#34;20256&#34;</span>}
+</span></span><span style="display:flex;"><span>upload_it <span style="color:#e6db74">&#34;/apps/</span><span style="color:#e6db74">#{</span>app<span style="color:#f92672">.</span>token<span style="color:#e6db74">}</span><span style="color:#e6db74">/processes.json&#34;</span>, other_params, {}, <span style="color:#66d9ef">StringIO</span><span style="color:#f92672">.</span>new(filedata)
+</span></span></code></pre></div><p>Here&rsquo;s the multipart helper: <a href="http://www.mikeperham.com/wp-content/uploads/2009/01/multipart.rb">multipart.rb</a>. I hope this saves someone a few hours of experimentation out there!</p>
 
     </article>
   </div>

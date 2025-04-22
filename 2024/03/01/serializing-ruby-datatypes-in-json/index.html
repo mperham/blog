@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Serializing Ruby datatypes in JSON">
   <meta property="og:description" content="Ruby’s JSON library allows you to convert Ruby datatypes into a JSON document, as long as those types are native to JSON: String, bool, int, float, nil, Hash and Array. Everything else converts to a String by default; if you use any other core datatypes, they will not survive a JSON.generate/JSON.parse round trip. Here I pass a Range, Symbol and Time; notice how the end result is three Strings instead of the actual types:">

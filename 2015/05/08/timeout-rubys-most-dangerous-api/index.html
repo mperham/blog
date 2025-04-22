@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2015/05/08/timeout-rubys-most-dangerous-api/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2015/05/08/timeout-rubys-most-dangerous-api/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Timeout: Ruby&#39;s Most Dangerous API">
   <meta property="og:description" content="In the last 3 months, I’ve worked with a half dozen Sidekiq users plagued with mysterious stability problems. All were caused by the same thing: Ruby’s terrible Timeout module. I strongly urge everyone reading this to remove any usage of Timeout from your codebase; odds are very good you will see an increase in stability.
-You might think I’m overreacting or hyping up the problem: I’m not. Here’s Charles Nutter, lead developer of JRuby, writing about how Timeout is fundamentally broken and cannot be used safely in 2008.">
+You, using Timeout. You might think I’m overreacting or hyping up the problem: I’m not. Here’s Charles Nutter, lead developer of JRuby, writing about how Timeout is fundamentally broken and cannot be used safely in 2008.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -201,7 +201,10 @@ blockquote,
 All were caused by the same thing: Ruby&rsquo;s terrible <code>Timeout</code> module.  I strongly urge everyone reading
 this to remove any usage of <code>Timeout</code> from your codebase; odds are very good you will see an increase
 in stability.</p>
-<!-- raw HTML omitted -->
+<figure style="float:right">
+  <img src="/wp-content/uploads/2015/05/using-timeout.jpg" width="419">
+  <figcaption style="text-align: right"><i>You, using Timeout.</i></figcaption>
+</figure>
 <p>You might think I&rsquo;m overreacting or hyping up the problem: I&rsquo;m not.  Here&rsquo;s Charles Nutter, lead developer
 of JRuby, writing about how <a href="http://blog.headius.com/2008/02/rubys-threadraise-threadkill-timeoutrb.html">Timeout is fundamentally broken</a>
 and cannot be used safely <strong>in 2008</strong>.</p>
@@ -225,16 +228,16 @@ those timeouts so you can set them in your application code.  Here&rsquo;s a few
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># Sidekiq&#39;s redis connection pool</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>redis <span style="color:#f92672">=</span> { <span style="color:#e6db74">:network_timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">:url</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;redis://localhost:3970/12&#39;</span> }
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># Generic redis-rb</span>
-</span></span><span style="display:flex;"><span>$redis <span style="color:#f92672">=</span> <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:url</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;...&#39;</span>, <span style="color:#e6db74">:connect_timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">5</span>, <span style="color:#e6db74">:timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">5</span>)</span></span></code></pre></div>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># Dalli</span>
-</span></span><span style="display:flex;"><span>$memcached <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dalli</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#39;...&#39;</span>, <span style="color:#e6db74">:socket_timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">5</span>)</span></span></code></pre></div>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># Net::HTTP</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># Generic redis-rb</span>
+</span></span><span style="display:flex;"><span>$redis <span style="color:#f92672">=</span> <span style="color:#66d9ef">Redis</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:url</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;...&#39;</span>, <span style="color:#e6db74">:connect_timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">5</span>, <span style="color:#e6db74">:timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">5</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># Dalli</span>
+</span></span><span style="display:flex;"><span>$memcached <span style="color:#f92672">=</span> <span style="color:#66d9ef">Dalli</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#39;...&#39;</span>, <span style="color:#e6db74">:socket_timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">5</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># Net::HTTP</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">Net</span><span style="color:#f92672">::</span><span style="color:#66d9ef">HTTP</span><span style="color:#f92672">.</span>start(host, port, <span style="color:#e6db74">:open_timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">5</span>, <span style="color:#e6db74">:read_timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">5</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>http<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>  http<span style="color:#f92672">.</span>request(<span style="color:#f92672">...</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>If your favorite network library does not document its timeout options, be a sport
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>If your favorite network library does not document its timeout options, be a sport
 and open a new issue or send them a PR with updated documentation.  I just did that for
 <a href="https://github.com/redis/redis-rb/pull/528">Redis</a>.</p>
 <h3 id="conclusion">Conclusion</h3>

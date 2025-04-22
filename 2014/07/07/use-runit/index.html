@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/07/07/use-runit/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2014/07/07/use-runit/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Use runit!">
   <meta property="og:description" content="I’ve been exploring a few new (to me!) technologies recently and runit is one that I’ve come away really impressed with. Linux distros have a few competing init services available: Upstart, systemd, runit or creaky old sysvinit. Having researched all of them and having built lots of server-side systems over the last two decades, I can firmly recommend runit if you want a server-focused, reliable init system based on the traditional Unix philosophy.">
@@ -202,31 +202,32 @@ blockquote,
 <p>The beauty of runit is its brevity and simplicity: the runsv command, which manages each process, is only 600 lines of code. In this post I want to explain how runit works and why I&rsquo;m so impressed. I&rsquo;m going to use the example of setting up memcached as a managed process in this post.</p>
 <p><strong>Creating a Managed Process</strong></p>
 <p>The core of runit is the <code>/etc/sv</code> directory. This directory contains a subdirectory for each process that runit can manage. We&rsquo;ll create <code>/etc/sv/memcached</code> for our new memcached process. Within the process directory, you need to create an executable script called <code>run</code> which starts the process:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>One line, dead simple. Compare that with a typical init.d script which might be 50+ lines of bash! Now that we&rsquo;ve defined the process and told runit how to start it, we need to officially activate it so runit will manage it. We do this by linking the process directory to <code>/etc/service</code> with <code>ln -s /etc/sv/memcached /etc/service/memcached</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>exec /usr/local/bin/memcached -m <span style="color:#ae81ff">64</span>
+</span></span></code></pre></div><p>One line, dead simple. Compare that with a typical init.d script which might be 50+ lines of bash! Now that we&rsquo;ve defined the process and told runit how to start it, we need to officially activate it so runit will manage it. We do this by linking the process directory to <code>/etc/service</code> with <code>ln -s /etc/sv/memcached /etc/service/memcached</code>.</p>
 <p>The /etc/service directory contains a series of soft links representing the processes currently managed by runit. The distinction is important: /etc/sv contains process definitions, /etc/service contains actively managed processes. Those readers with a little bit of Linux administration experience will recognize this pattern: it&rsquo;s exactly how the <code>/etc/init.d</code> and <code>/etc/rcN.d</code> directories in sysvinit work.</p>
 <p>Within five seconds, runit will notice the new link in /etc/service and start the memcached process.</p>
 <p><strong>Controlling your Process</strong></p>
 <p>Once up, we can control the process via the <code>sv</code> command.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>sv also allows us to send the slew of miscellaneous Unix signals, e.g. HUP, USR1, USR2, etc:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>There are sysvinit compatible verbs for processes that use typical signals:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p><strong>Logging Process Output</strong></p>
+<pre tabindex="0"><code># sends TERM, will not restart it
+sv down memcached
+</code></pre><p>sv also allows us to send the slew of miscellaneous Unix signals, e.g. HUP, USR1, USR2, etc:</p>
+<pre tabindex="0"><code>sv hup memcached
+sv 1 memcached
+sv 2 memcached
+</code></pre><p>There are sysvinit compatible verbs for processes that use typical signals:</p>
+<pre tabindex="0"><code># same as down, but waits up to 7 seconds for the process to exit
+sv stop memcached
+</code></pre><p><strong>Logging Process Output</strong></p>
 <p>Under runit, process logging becomes dead simple: your process should log to stdout only. runit provides the <code>svlogd</code> log helper to collect your process&rsquo;s standard output and save it in a system-standard location, automatically rotating the log output as necessary. To enable automatic log management, you need to create a <code>log</code> directory with a <code>run</code> script which tells runit how to start svlogd:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>The <code>/var/log/memcached</code> directory will hold the set of log files. Within this directory you may add a <code>config</code> file which configures log rotation, network logging to syslog, etc.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>exec svlogd -tt /var/log/memcached
+</span></span></code></pre></div><p>The <code>/var/log/memcached</code> directory will hold the set of log files. Within this directory you may add a <code>config</code> file which configures log rotation, network logging to syslog, etc.</p>
 <p><strong>Customizing Startup</strong></p>
 <p>The final piece of starting a process is controlling its environment: which env vars it sees, the user it runs as, etc. With runit, all of this is handled with the <code>chpst</code> (change process state) helper. If you want to run the memcached daemon as <code>nobody</code>, it&rsquo;s a slight tweak to the <code>run</code> script:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>So easy!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>exec chpst -u nobody /usr/local/bin/memcached -m <span style="color:#ae81ff">64</span>
+</span></span></code></pre></div><p>So easy!</p>
 <p><strong>Conclusion</strong></p>
 <p>runit does most of the heavily lifting required for reliable, predictable daemons: starting a daemon is frequently just a single line of shell, controlling them via signals is dead simple and using svlogd completely removes any need for log maintenance or custom logrotate scripts. Each daemon no longer needs to have its own code for forking, logging, switching users, etc. By embracing the simplicity of runit, your daemons become simpler too.</p>
 <p>If you want more info, see the <a href="http://smarden.org/runit/">runit home page</a> or <a href="https://rubyists.github.io/2011/05/02/runit-for-ruby-and-everything-else.html">this tutorial</a> written a few years ago.</p>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/12/02/12-gems-of-christmas-11-statsd-ruby/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/12/02/12-gems-of-christmas-11-statsd-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #11 -- statsd-ruby">
   <meta property="og:description" content="As software developers, it’s often our job to monitor the systems we build. Step one is to collect the data necessary for monitoring.
@@ -200,14 +200,15 @@ blockquote,
 </p>
 <p>As software developers, it&rsquo;s often our job to monitor the systems we build. Step one is to collect the data necessary for monitoring.</p>
 <p>Statsd is a nice metrics aggregation server open sourced by Etsy. We use Statsd at <a href="http://www.theclymb.com/invite-from/mperham">The Clymb</a> to collect and aggregate various technical and business metrics before uploading them to Librato Metrics for storage and display on our dashboards.</p>
-<!-- raw HTML omitted -->
+<img alt="" src="http://sidekiq.org/examples/librato.png" title="metrics" class="alignleft" width="320" height="200" />
 <p>The <a href="https://github.com/reinh/statsd" title="statsd-ruby">statsd-ruby</a> client sends metrics from all our Unicorn and Sidekiq processes to statsd. One thing I really like about statsd is that it uses UDP for network transport so sending a metric doesn&rsquo;t incur much overhead at all and I don&rsquo;t have to have statsd installed locally or in staging &ndash; the metric send will just silently fail. We set up a global METRICS variable with a Statsd client instance (instances are thread-safe so this is ok, even with Sidekiq) so our code can send metrics trivially:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Now we just sprinkle metrics throughout our code. Want to track the number and value of orders that your e-commerce site gets?</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Remember that we might have hundreds of Unicorn processes so statsd will collect and aggregate all the individual metric packets from each process into a single metric value to upload to your metrics service. With statsd and statsd-ruby working for you, you can monitor the metrics important to your business and verify the behavior of your system at runtime.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>statsd_host <span style="color:#f92672">=</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>production? ? <span style="color:#e6db74">&#39;10.10.1.100&#39;</span> : <span style="color:#e6db74">&#39;127.0.0.1&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">METRICS</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>new(statsd_host, <span style="color:#ae81ff">8125</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>namespace <span style="color:#f92672">=</span> (<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>server? ? <span style="color:#e6db74">&#39;sidekiq&#39;</span> : <span style="color:#e6db74">&#39;web&#39;</span>)
+</span></span></code></pre></div><p>Now we just sprinkle metrics throughout our code. Want to track the number and value of orders that your e-commerce site gets?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>increment(<span style="color:#e6db74">&#39;orders&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>count(<span style="color:#e6db74">&#39;orders.total&#39;</span>, @basket<span style="color:#f92672">.</span>total) <span style="color:#66d9ef">if</span> @basket<span style="color:#f92672">.</span>total <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><p>Remember that we might have hundreds of Unicorn processes so statsd will collect and aggregate all the individual metric packets from each process into a single metric value to upload to your metrics service. With statsd and statsd-ruby working for you, you can monitor the metrics important to your business and verify the behavior of your system at runtime.</p>
 <p>Tomorrow we&rsquo;ll discuss a bane of the Rails world: testing JavaScript!</p>
 
     </article>

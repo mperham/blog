@@ -5,12 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/05/22/ruby-scoping-oddity/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/05/22/ruby-scoping-oddity/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Ruby Scoping Oddity">
   <meta property="og:description" content="This prints out “1”:
-`
-I would think that a would be out of scope inside the rescue section but I guess Ruby considers the rescue section part of the begin/end block?">
+begin a = 1 raise RuntimeError, &#34;foo&#34; rescue =&gt; e puts a end I would think that a would be out of scope inside the rescue section but I guess Ruby considers the rescue section part of the begin/end block?">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -211,11 +210,13 @@ blockquote,
 
 </p>
 <p>This prints out &ldquo;1&rdquo;:</p>
-<p>`<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>I would think that <em>a</em> would be out of scope inside the rescue section but I guess Ruby considers the rescue section part of the begin/end block?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  a <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">raise</span> <span style="color:#66d9ef">RuntimeError</span>, <span style="color:#e6db74">&#34;foo&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">rescue</span> <span style="color:#f92672">=&gt;</span> e
+</span></span><span style="display:flex;"><span>  puts a
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>I would think that <em>a</em> would be out of scope inside the rescue section but I guess Ruby considers the rescue section part of the begin/end block?</p>
 
     </article>
   </div>

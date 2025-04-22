@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/04/15/introspecting-restful-apis/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/04/15/introspecting-restful-apis/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Introspecting RESTful APIs">
   <meta property="og:description" content="I integrated the Youtube REST API into my pet project in about thirty minutes tonight. It’s amazing how far the Internet has come in providing solid, useful services. The QuartzRuby guys have published active_youtube, a simple ActiveResource wrapper to make integration with your Rails application easy. The problem is really one of documentation: aside from the simple examples, there’s none. And there was my problem: now that I had a Youtube::Video object, what can I do with it? This is not a trivial problem – ActiveResource just acts as a wrapper around the XML data that Youtube sends me which means the object is just a glorified tree of data and can change based on the XML that is sent.">
@@ -197,11 +197,17 @@ blockquote,
   
 </p>
 <p>I integrated the Youtube REST API into my pet project in about thirty minutes tonight.  It&rsquo;s amazing how far the Internet has come in providing solid, useful services.  The QuartzRuby guys have published <a href="http://www.quarkruby.com/2008/2/12/active-youtube">active_youtube</a>, a simple ActiveResource wrapper to make integration with your Rails application easy.  The problem is really one of documentation: aside from the simple examples, there&rsquo;s none.  And there was my problem: now that I had a Youtube::Video object, what can I do with it?  This is not a trivial problem &ndash; ActiveResource just acts as a wrapper around the XML data that Youtube sends me which means the object is just a glorified tree of data and can change based on the XML that is sent.</p>
-<p>irb to the rescue!  Ruby&rsquo;s dynamic nature is the perfect complement to this conundrum.  Playing with the objects in the console answered all my questions in 5 minutes.<br>
-``</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>As you can see, ActiveResource creates accessor methods for the attributes automatically. You can traverse the XML tree easily with this method and determine the exact data required for your site.</p>
+<p>irb to the rescue!  Ruby&rsquo;s dynamic nature is the perfect complement to this conundrum.  Playing with the objects in the console answered all my questions in 5 minutes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span> script<span style="color:#f92672">/</span>console
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> search <span style="color:#f92672">=</span> <span style="color:#66d9ef">Youtube</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Video</span><span style="color:#f92672">.</span>find(<span style="color:#e6db74">:first</span>, <span style="color:#e6db74">:params</span> <span style="color:#f92672">=&gt;</span> {<span style="color:#e6db74">:vq</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;ruby&#39;</span>, <span style="color:#e6db74">:&#34;max-results&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;5&#39;</span>})
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>a lot of junk<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> video <span style="color:#f92672">=</span> search<span style="color:#f92672">.</span>entry<span style="color:#f92672">.</span>first
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>slightly less junk<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> video<span style="color:#f92672">.</span>attributes<span style="color:#f92672">.</span>keys
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;rating&#34;</span>, <span style="color:#e6db74">&#34;category&#34;</span>, <span style="color:#e6db74">&#34;comments&#34;</span>, <span style="color:#e6db74">&#34;title&#34;</span>, <span style="color:#e6db74">&#34;published&#34;</span>, <span style="color:#e6db74">&#34;statistics&#34;</span>, <span style="color:#e6db74">&#34;author&#34;</span>, <span style="color:#e6db74">&#34;id&#34;</span>, <span style="color:#e6db74">&#34;content&#34;</span>, <span style="color:#e6db74">&#34;link&#34;</span>, <span style="color:#e6db74">&#34;group&#34;</span>, <span style="color:#e6db74">&#34;updated&#34;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> video<span style="color:#f92672">.</span>group<span style="color:#f92672">.</span>attributes<span style="color:#f92672">.</span>keys
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;thumbnail&#34;</span>, <span style="color:#e6db74">&#34;category&#34;</span>, <span style="color:#e6db74">&#34;player&#34;</span>, <span style="color:#e6db74">&#34;title&#34;</span>, <span style="color:#e6db74">&#34;description&#34;</span>, <span style="color:#e6db74">&#34;content&#34;</span>, <span style="color:#e6db74">&#34;duration&#34;</span>, <span style="color:#e6db74">&#34;keywords&#34;</span><span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>As you can see, ActiveResource creates accessor methods for the attributes automatically. You can traverse the XML tree easily with this method and determine the exact data required for your site.</p>
 
     </article>
   </div>

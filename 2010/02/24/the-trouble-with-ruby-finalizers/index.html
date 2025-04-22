@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/02/24/the-trouble-with-ruby-finalizers/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/02/24/the-trouble-with-ruby-finalizers/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Trouble with Ruby Finalizers">
   <meta property="og:description" content="I was test driving Devil, the developer’s image library, recently to see if it would work for us in a long-living daemon. Task #1 to that end is to verify the absence of memory leaks, which seem to be common in image libraries. It was almost immediately apparent that Devil contained a large memory leak. So I worked with John Mair to fix the issue.
@@ -199,12 +199,27 @@ blockquote,
 </p>
 <p>I was test driving <a href="http://banisterfiend.wordpress.com/2009/10/14/the-devil-image-library-for-ruby/">Devil</a>, the developer&rsquo;s image library, recently to see if it would work for us in a long-living daemon. Task #1 to that end is to verify the absence of memory leaks, which seem to be common in image libraries. It was almost immediately apparent that Devil contained a large memory leak. So I worked with John Mair to fix the issue.</p>
 <p>Devil has a Devil::Image class which uses a finalizer to delete native resources when the image is garbage collected. The problem is that Ruby finalizers are notoriously difficult to use properly so often times they aren&rsquo;t actually run. Here&rsquo;s why:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>So what&rsquo;s wrong with this code? The issue is that the finalizer proc is a closure which holds a reference to it&rsquo;s <code>self</code>, thus making it impossible for the image object to ever be garbage collected. When creating a finalizer proc, you should always use a class method to create the proc so that it does not hold a reference to the corresponding instance, like so:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>A subtle and evil bug, just like its namesake!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Devil</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Image</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">attr_reader</span> <span style="color:#e6db74">:name</span>, <span style="color:#e6db74">:file</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(name, file)
+</span></span><span style="display:flex;"><span>    @name <span style="color:#f92672">=</span> name
+</span></span><span style="display:flex;"><span>    @file <span style="color:#f92672">=</span> file
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">ObjectSpace</span><span style="color:#f92672">.</span>define_finalizer( self, proc { <span style="color:#66d9ef">IL</span><span style="color:#f92672">.</span>DeleteImages(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">[</span>name<span style="color:#f92672">]</span>) } )
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>So what&rsquo;s wrong with this code? The issue is that the finalizer proc is a closure which holds a reference to it&rsquo;s <code>self</code>, thus making it impossible for the image object to ever be garbage collected. When creating a finalizer proc, you should always use a class method to create the proc so that it does not hold a reference to the corresponding instance, like so:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(name, file)
+</span></span><span style="display:flex;"><span>  @name <span style="color:#f92672">=</span> name
+</span></span><span style="display:flex;"><span>  @file <span style="color:#f92672">=</span> file
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">ObjectSpace</span><span style="color:#f92672">.</span>define_finalizer( self, self<span style="color:#f92672">.</span>class<span style="color:#f92672">.</span>finalize(name) )
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">self</span><span style="color:#f92672">.</span><span style="color:#a6e22e">finalize</span>(name)
+</span></span><span style="display:flex;"><span>  proc { <span style="color:#66d9ef">IL</span><span style="color:#f92672">.</span>DeleteImages(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">[</span>name<span style="color:#f92672">]</span>) }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>A subtle and evil bug, just like its namesake!</p>
 
     </article>
   </div>

@@ -75,7 +75,9 @@ It&amp;rsquo;s too easy to forget or skip without some sort of prompt or cheatsh
       <description>&lt;p&gt;I&amp;rsquo;m happy to announce a &lt;a href=&#34;https://opencollective.com/hanami&#34;&gt;substantial $12,000 grant&lt;/a&gt; to the &lt;a href=&#34;https://hanamirb.org&#34;&gt;Hanami&lt;/a&gt; framework.
 I&amp;rsquo;ve been a massive believer in Open Source software since publishing my first open source project in 1995.
 There&amp;rsquo;s nothing more empowering than direct access to the exact source code needed to solve a problem.&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;figure style=&#34;float: right;&#34;&gt;
+  &lt;img style=&#34;border: solid white 0px;&#34; src=&#34;https://hanamirb.org/images/home-background.jpg&#34; width=&#34;400px&#34; /&gt;
+&lt;/figure&gt;
 &lt;p&gt;But Ruby has a problem: it&amp;rsquo;s mostly a monoculture around Rails.
 Merb and Sinatra provided valuable app framework options in the past, I believe we need new options for the future.&lt;/p&gt;</description>
     </item>

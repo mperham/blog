@@ -5,13 +5,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/06/13/adding-multi-get-support-to-rails/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/06/13/adding-multi-get-support-to-rails/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Adding multi-get support to Rails">
   <meta property="og:description" content="Memcache-client has the ability to fetch multiple keys in one request but Rails does not expose this functionality. It’s really easy to add it yourself though:
 config/initializers/rails_patches.rb
-Rails uses read/write for its API naming so we name the method read_multi rather than get_multi. Here’s a sample usage in script/console:
-Enjoy!">
+Rails.cache.instance_eval &amp;lt;&amp;lt;-EOM def read_multi(*keys) @data.get_multi(*keys) end EOM Rails uses read/write for its API naming so we name the method read_multi rather than get_multi. Here’s a sample usage in script/console:
+&gt;&gt; Rails.cache.write(&#39;a&#39;, 1) &gt;&gt; Rails.cache.write(&#39;b&#39;, 2) &gt;&gt; Rails.cache.write(&#39;c&#39;, 3) &gt;&gt; Rails.cache.read_multi(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;) =&gt; {&#34;a&#34;=&gt;1, &#34;b&#34;=&gt;2, &#34;c&#34;=&gt;3} Enjoy!">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -201,12 +201,18 @@ blockquote,
 </p>
 <p>Memcache-client has the ability to fetch multiple keys in one request but Rails does not expose this functionality. It&rsquo;s really easy to add it yourself though:</p>
 <p><strong>config/initializers/rails_patches.rb</strong></p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Rails uses read/write for its API naming so we name the method <code>read_multi</code> rather than <code>get_multi</code>. Here&rsquo;s a sample usage in script/console:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Enjoy!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>cache<span style="color:#f92672">.</span>instance_eval <span style="color:#f92672">&amp;</span>lt;<span style="color:#f92672">&amp;</span>lt;<span style="color:#f92672">-</span><span style="color:#66d9ef">EOM</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">read_multi</span>(<span style="color:#f92672">*</span>keys)
+</span></span><span style="display:flex;"><span>    @data<span style="color:#f92672">.</span>get_multi(<span style="color:#f92672">*</span>keys)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">EOM</span>
+</span></span></code></pre></div><p>Rails uses read/write for its API naming so we name the method <code>read_multi</code> rather than <code>get_multi</code>. Here&rsquo;s a sample usage in script/console:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>cache<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>cache<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>cache<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;c&#39;</span>, <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>cache<span style="color:#f92672">.</span>read_multi(<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> {<span style="color:#e6db74">&#34;a&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;b&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#34;c&#34;</span><span style="color:#f92672">=&gt;</span><span style="color:#ae81ff">3</span>}
+</span></span></code></pre></div><p>Enjoy!</p>
 
     </article>
   </div>

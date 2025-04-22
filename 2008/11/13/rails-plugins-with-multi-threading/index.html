@@ -5,13 +5,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/11/13/rails-plugins-with-multi-threading/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/11/13/rails-plugins-with-multi-threading/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Rails Plugins with Multi-Threading">
   <meta property="og:description" content="I tested tracknowledge with Rails 2.2 yesterday. The main problem was with plugins: two out of the six I use failed with the same issue when used with threadsafe!
 The issue is that ActiveSupport’s autoloading is turned off once threadsafe! is executed because autoloading is inherently thread-unsafe. These plugins were not explicitly requiring their classes in init.rb but instead relying on autoloading like so:
 config/environment.rb:
-Yes, ExceptionNotifier was one of the broken plugins along with the GeoKit plugin. The fix is simple:">
+Rails::Initializer.run do |config| config.threadsafe! end ExceptionNotifier.exception_recipients = %w(mikeATtracknowledge.org) Yes, ExceptionNotifier was one of the broken plugins along with the GeoKit plugin. The fix is simple:">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -202,12 +202,21 @@ blockquote,
 <p>I tested <a href="http://www.tracknowledge.org">tracknowledge</a> with Rails 2.2 yesterday. The main problem was with plugins: two out of the six I use failed with the same issue when used with threadsafe!</p>
 <p>The issue is that ActiveSupport&rsquo;s autoloading is turned off once threadsafe! is executed because autoloading is inherently thread-unsafe. These plugins were not explicitly requiring their classes in init.rb but instead relying on autoloading like so:</p>
 <p><strong>config/environment.rb</strong>:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Yes, ExceptionNotifier was one of the broken plugins along with the GeoKit plugin. The fix is simple:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>If you maintain a Rails plugin, make sure you verify that all classes are loaded in init.rb or you could very well have problems too.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">Rails</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Initializer</span><span style="color:#f92672">.</span>run <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>threadsafe!
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ExceptionNotifier</span><span style="color:#f92672">.</span>exception_recipients <span style="color:#f92672">=</span> <span style="color:#e6db74">%w(mikeATtracknowledge.org)</span>
+</span></span></code></pre></div><p>Yes, ExceptionNotifier was one of the broken plugins along with the GeoKit plugin. The fix is simple:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span>diff --git a/vendor/plugins/exception_notification/init.rb b/vendor/plugins/exception_notification/init.rb
+</span></span><span style="display:flex;"><span>index b39bd95..b1dd2d9 100644
+</span></span><span style="display:flex;"><span><span style="color:#f92672">--- a/vendor/plugins/exception_notification/init.rb
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/vendor/plugins/exception_notification/init.rb
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -1 +1,4 @@
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> require &#34;action_mailer&#34;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+require &#39;exception_notifier&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+require &#39;exception_notifiable&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+require &#39;exception_notifier_helper&#39;
+</span></span></span></code></pre></div><p>If you maintain a Rails plugin, make sure you verify that all classes are loaded in init.rb or you could very well have problems too.</p>
 
     </article>
   </div>

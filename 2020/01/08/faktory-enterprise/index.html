@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2020/01/08/faktory-enterprise/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2020/01/08/faktory-enterprise/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Faktory Enterprise">
   <meta property="og:description" content="The best way to kick off 2020 is by shipping something massive for me: Faktory Enterprise.
@@ -222,7 +222,7 @@ each worker process may only process 5 jobs from <code>bulk</code> at a time.
 If each worker process has 15 threads, you&rsquo;ll have 10 threads left to
 process other queues.
 Of course it comes with a handy Web UI for monitoring:</p>
-<!-- raw HTML omitted -->
+<img title="queue throttle ui" src="https://raw.githubusercontent.com/contribsys/faktory/master/example/webui-throttle.png" width="100%"/>
 <p>I&rsquo;ve never built this feature in Sidekiq for a number of reasons:</p>
 <ol start="0">
 <li>Sidekiq workers talk directly to Redis.</li>

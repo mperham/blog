@@ -37,7 +37,7 @@
       
       <guid>https://www.mikeperham.com/2014/09/01/library-versioning/</guid>
       <description>&lt;p&gt;It&amp;rsquo;s time for our annual Semantic Versioning argument/gripefest! This time it was kicked off by Jeremy Ashkenas&amp;rsquo;s post &lt;a href=&#34;https://gist.github.com/jashkenas/cbd2b088e20279ae2c8e&#34;&gt;why he believes Semantic Versioning is wishful thinking&lt;/a&gt;. Olivier Lacan &lt;a href=&#34;http://olivierlacan.com/posts/the-semantics-of-software/&#34;&gt;chipped in further thoughts on the importance of a changelog.&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Yes, Semantic Versioning is wishful thinking. Change cannot be compressed into three version numbers to guarantee safe upgrades. Developers get things wrong and forget changes such that versioning often isn&amp;rsquo;t correct, even if they wanted to follow SemVer exactly&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;1&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;. I thought I would write down my own versioning policies as another example for people to consider.&lt;/p&gt;</description>
+&lt;p&gt;Yes, Semantic Versioning is wishful thinking. Change cannot be compressed into three version numbers to guarantee safe upgrades. Developers get things wrong and forget changes such that versioning often isn&amp;rsquo;t correct, even if they wanted to follow SemVer exactly&lt;sup id=&#34;fnref-1785-1&#34;&gt;&lt;a href=&#34;#fn-1785-1&#34; rel=&#34;footnote&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. I thought I would write down my own versioning policies as another example for people to consider.&lt;/p&gt;</description>
     </item>
     
     <item>

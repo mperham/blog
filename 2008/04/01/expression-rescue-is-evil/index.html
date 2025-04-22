@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/04/01/expression-rescue-is-evil/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/04/01/expression-rescue-is-evil/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Expression Rescue is Evil">
   <meta property="og:description" content="One of the cleaner syntax options Ruby gives you is what I call expression rescues. Take this:
-&lt;br /&gt; &lt;%= @item.parent.name rescue &#39;None&#39; %&gt;&lt;br /&gt; This code is an example of a pretty standard requirement: printing out the name of the parent of an item. If the item does not have a parent, it will print ‘None’. Under the covers, the following is happening:
+&lt;%= @item.parent.name rescue &#39;None&#39; %&gt; This code is an example of a pretty standard requirement: printing out the name of the parent of an item. If the item does not have a parent, it will print ‘None’. Under the covers, the following is happening:
 Ruby calls the parent method on @item Ruby calls the name method on the result Since the parent is nil, an ‘undefined method `name’ for nil’ error will be raised This error is caught by the rescue clause and the rescue expression evaluated The result of the rescue expression is returned as the result of the overall expression So what’s the problem? There’s several in my experience:">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
@@ -198,9 +198,9 @@ blockquote,
   </small>
   
 </p>
-<p>One of the cleaner syntax options Ruby gives you is what I call expression rescues.  Take this:<br>
-<code>&lt;br /&gt; &lt;%= @item.parent.name rescue 'None' %&gt;&lt;br /&gt; </code><br>
-This code is an example of a pretty standard requirement: printing out the name of the parent of an item. If the item does not have a parent, it will print &lsquo;None&rsquo;. Under the covers, the following is happening:</p>
+<p>One of the cleaner syntax options Ruby gives you is what I call expression rescues.  Take this:</p>
+<pre tabindex="0"><code class="language-erb" data-lang="erb">&lt;%= @item.parent.name rescue &#39;None&#39; %&gt;
+</code></pre><p>This code is an example of a pretty standard requirement: printing out the name of the parent of an item. If the item does not have a parent, it will print &lsquo;None&rsquo;. Under the covers, the following is happening:</p>
 <ol>
 <li>Ruby calls the parent method on @item</li>
 <li>Ruby calls the name method on the result</li>
@@ -209,18 +209,28 @@ This code is an example of a pretty standard requirement: printing out the name 
 <li>The result of the rescue expression is returned as the result of the overall expression</li>
 </ol>
 <p>So what&rsquo;s the problem? There&rsquo;s several in my experience:</p>
-<p><strong>You often can&rsquo;t tell why the rescue is needed.</strong> In the case above, the usage is straightforward. In other cases, it&rsquo;s much less obvious. Take this code:<br>
-``</p>
-<!-- raw HTML omitted -->
-<p>Why is this rescue needed? There&rsquo;s no way to know and the complexity of the expression implies exasperation: &ldquo;I give up trying to handle all these edge cases cleanly. Let&rsquo;s just throw in a rescue.&rdquo; So edge cases and bugs are swept under the proverbial rug.</p>
-<p><strong>They are a performance hit.</strong> Rescues are activated by raising errors. This involves creating a backtrace and this is one of the slowest operations you can perform. One raise is not going to kill you but if you are printing out 100 items, the costs will add up quickly. Here&rsquo;s some benchmark code:<br>
-``</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>And the results:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Rescuing is 30x slower than the equivalent ternary logic expression on Leopard&rsquo;s ruby 1.8.6.</p>
+<p><strong>You often can&rsquo;t tell why the rescue is needed.</strong> In the case above, the usage is straightforward. In other cases, it&rsquo;s much less obvious. Take this code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>(@client<span style="color:#f92672">.</span>plugin_configurations<span style="color:#f92672">.</span>detector<span style="color:#f92672">.</span>configuration<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;paths&#39;</span><span style="color:#f92672">].</span>inject(<span style="color:#e6db74">&#39;&#39;</span>) {<span style="color:#f92672">|</span>output, path<span style="color:#f92672">|</span> output <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">#{</span>h(path)<span style="color:#e6db74">}</span><span style="color:#e6db74">rn&#34;</span>} <span style="color:#66d9ef">rescue</span> <span style="color:#e6db74">&#39;&#39;</span>)
+</span></span></code></pre></div><p>Why is this rescue needed? There&rsquo;s no way to know and the complexity of the expression implies exasperation: &ldquo;I give up trying to handle all these edge cases cleanly. Let&rsquo;s just throw in a rescue.&rdquo; So edge cases and bugs are swept under the proverbial rug.</p>
+<p><strong>They are a performance hit.</strong> Rescues are activated by raising errors. This involves creating a backtrace and this is one of the slowest operations you can perform. One raise is not going to kill you but if you are printing out 100 items, the costs will add up quickly. Here&rsquo;s some benchmark code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;benchmark&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>puts <span style="color:#66d9ef">Benchmark</span><span style="color:#f92672">.</span>measure {
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">100000</span><span style="color:#f92672">.</span>times {
+</span></span><span style="display:flex;"><span>    item <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>    item<span style="color:#f92672">.</span>name <span style="color:#66d9ef">rescue</span> <span style="color:#e6db74">&#39;None&#39;</span> <span style="color:#75715e"># Use rescue</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>puts <span style="color:#66d9ef">Benchmark</span><span style="color:#f92672">.</span>measure {
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">100000</span><span style="color:#f92672">.</span>times {
+</span></span><span style="display:flex;"><span>    item <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>    item ? item<span style="color:#f92672">.</span>name : <span style="color:#e6db74">&#39;None&#39;</span> <span style="color:#75715e"># Use tertiary logic</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>And the results:</p>
+<pre tabindex="0"><code>1.120000   0.110000   1.230000 (  1.225845)
+0.030000   0.000000   0.030000 (  0.034895)
+</code></pre><p>Rescuing is 30x slower than the equivalent ternary logic expression on Leopard&rsquo;s ruby 1.8.6.</p>
 <p>Conclusion? While performance is important, I&rsquo;d argue that code readability is more important. When you perform a ternary check, as in the benchmark above, it tells the code reader that this item could be nil. Using the equivalent rescue just tells them this expression could fail for some reason. Nuance, edge cases, newly created bugs&hellip; All are swept under the rug by the evil rescue.</p>
 
     </article>

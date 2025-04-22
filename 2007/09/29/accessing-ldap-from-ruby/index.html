@@ -5,11 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Accessing LDAP from Ruby">
   <meta property="og:description" content="Ok, we’ve got our nifty Apache DS running with some custom data. This doesn’t do much unless our application can access the data in order to perform some sort of logic. So let’s connect the two worlds!
 Make sure your Apache DS server is up and running. We first need to install a Ruby API for accessing LDAP. I found the simplest to use was ruby-net-ldap:
+gem install ruby-net-ldap
 Next, create a simple ldaptest.rb file to use the API:">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
@@ -201,11 +202,20 @@ blockquote,
 <p>Ok, we&rsquo;ve got our nifty Apache DS running with some custom data. This doesn&rsquo;t do much unless our application can access the data in order to perform some sort of logic. So let&rsquo;s connect the two worlds!</p>
 <p>Make sure your Apache DS server is up and running. We first need to install a Ruby API for accessing LDAP. I found the simplest to use was ruby-net-ldap:</p>
 <blockquote>
-<!-- raw HTML omitted --></blockquote>
+<p>gem install ruby-net-ldap</p></blockquote>
 <p>Next, create a simple ldaptest.rb file to use the API:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Running it should give this output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;net/ldap&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;uid=admin,ou=system&#39;</span>
+</span></span><span style="display:flex;"><span>password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;secret&#39;</span>
+</span></span><span style="display:flex;"><span>ldap_con <span style="color:#f92672">=</span> <span style="color:#66d9ef">Net</span><span style="color:#f92672">::</span><span style="color:#66d9ef">LDAP</span><span style="color:#f92672">.</span>new( {<span style="color:#e6db74">:host</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;localhost&#39;</span>, <span style="color:#e6db74">:port</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">10389</span>, <span style="color:#e6db74">:auth</span> <span style="color:#f92672">=&gt;</span>
+</span></span><span style="display:flex;"><span>    { <span style="color:#e6db74">:method</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">:simple</span>, <span style="color:#e6db74">:username</span> <span style="color:#f92672">=&gt;</span> username, <span style="color:#e6db74">:password</span> <span style="color:#f92672">=&gt;</span> password }} )
+</span></span><span style="display:flex;"><span>treebase <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;dc=fiveruns,dc=com&#34;</span>
+</span></span><span style="display:flex;"><span>op_filter <span style="color:#f92672">=</span> <span style="color:#66d9ef">Net</span><span style="color:#f92672">::</span><span style="color:#66d9ef">LDAP</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Filter</span><span style="color:#f92672">.</span>eq( <span style="color:#e6db74">&#34;objectClass&#34;</span>, <span style="color:#e6db74">&#34;person&#34;</span> )
+</span></span><span style="display:flex;"><span>ldap_con<span style="color:#f92672">.</span>search( <span style="color:#e6db74">:base</span> <span style="color:#f92672">=&gt;</span> treebase, <span style="color:#e6db74">:filter</span> <span style="color:#f92672">=&gt;</span> op_filter, <span style="color:#e6db74">:attributes</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;dn&#39;</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>entry<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  puts <span style="color:#e6db74">&#34;DN: </span><span style="color:#e6db74">#{</span>entry<span style="color:#f92672">.</span>dn<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Running it should give this output:</p>
 <blockquote>
 <p>mikeperham:~$ ruby -rubygems ldaptest.rb<br>
 DN: uid=mike,ou=engineering,dc=fiveruns,dc=com</p></blockquote>

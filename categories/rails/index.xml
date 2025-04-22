@@ -18,9 +18,14 @@
       
       <guid>https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/5.6/en/timestamp-initialization.html&#34;&gt;Starting in MySQL 5.6.5&lt;/a&gt;, datetime columns can have an actual useful default of CURRENT_TIMESTAMP and MySQL will auto-populate the columns as necessary. This is incredibly handy if you ever do bulk updates in SQL, now you don&amp;rsquo;t need to remember to set updated_at! Inserting records manually will auto-populate those columns too. Let&amp;rsquo;s try it:&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;Run that and we&amp;rsquo;ll see this:&lt;/p&gt;</description>
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;up&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  create_table &lt;span style=&#34;color:#e6db74&#34;&gt;:rows&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;t&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    t&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;integer &lt;span style=&#34;color:#e6db74&#34;&gt;:value&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    t&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;datetime &lt;span style=&#34;color:#e6db74&#34;&gt;:created_at&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;null&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;default&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CURRENT_TIMESTAMP&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    t&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;datetime &lt;span style=&#34;color:#e6db74&#34;&gt;:updated_at&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;null&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;default&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Run that and we&amp;rsquo;ll see this:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -47,7 +52,7 @@
       <pubDate>Wed, 17 Apr 2013 00:00:00 +0000</pubDate>
       
       <guid>https://www.mikeperham.com/2013/04/17/board-games-and-beverages-at-railsconf-2013/</guid>
-      <description>&lt;!-- raw HTML omitted --&gt;
+      <description>&lt;img src=&#34;http://www.wired.com/geekdad/wp-content/uploads/2009/12/carcassonne-board.jpg&#34; width=&#34;600&#34; height=&#34;401&#34; alt=&#34;Carcassonne&#34; class=&#34;aligncenter&#34; /&gt;
 &lt;p&gt;You are invited to a whimsical evening of merriment and gamesmanship!&lt;/p&gt;
 &lt;p&gt;What: Board Games and Beverages&lt;br&gt;
 Where: &lt;a href=&#34;http://www.yelp.com/biz/windows-skyroom-and-lounge-portland&#34;&gt;Skyroom Lounge&lt;/a&gt;, top of Red Lion Hotel, across the street from Railsconf&lt;br&gt;
@@ -89,9 +94,15 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       
       <guid>https://www.mikeperham.com/2012/12/08/12-gems-of-christmas-5-lograge/</guid>
       <description>&lt;p&gt;Rails has a problem: its production logging is somewhat lacking. By default, Rails will emit a bunch of lines for each request, which makes grepping the output tougher than it should be. Look at this, it&amp;rsquo;s nice to look at but painful to aggregate:&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/roidrage/lograge&#34;&gt;Lograge&lt;/a&gt; &amp;rsquo;tames&amp;rsquo; Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here&amp;rsquo;s some output from &lt;a href=&#34;http://theclymb.com/invite-from/mperham&#34;&gt;The Clymb&lt;/a&gt; production logging with lograge enabled:&lt;/p&gt;</description>
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Started GET &amp;#34;/&amp;#34; for 127.0.0.1 at 2012-03-10 14:28:14 +0100
+Processing by HomeController#index as HTML
+  Rendered text template within layouts/application (0.0ms)
+  Rendered layouts/_assets.html.erb (2.0ms)
+  Rendered layouts/_top.html.erb (2.6ms)
+  Rendered layouts/_about.html.erb (0.3ms)
+  Rendered layouts/_google_analytics.html.erb (0.4ms)
+Completed 200 OK in 79ms (Views: 78.8ms | ActiveRecord: 0.0ms)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/roidrage/lograge&#34;&gt;Lograge&lt;/a&gt; &amp;rsquo;tames&amp;rsquo; Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here&amp;rsquo;s some output from &lt;a href=&#34;http://theclymb.com/invite-from/mperham&#34;&gt;The Clymb&lt;/a&gt; production logging with lograge enabled:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -110,9 +121,18 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       
       <guid>https://www.mikeperham.com/2012/12/03/12-gems-of-christmas-10-konacha/</guid>
       <description>&lt;p&gt;It&amp;rsquo;s got a crazy name but solves a serious problem that continues to vex the Rails community: javascript testing. There are a number of libraries out there that try to solve the problem but &lt;a href=&#34;https://github.com/jfirebaugh/konacha&#34;&gt;konacha&lt;/a&gt; is the first I&amp;rsquo;m aware of that integrates tightly with Rails 3 and Sprockets to make JavaScript testing as easy as possible within your Rails app. For instance, you might have &lt;code&gt;spec/javascripts/array_sum_spec.js&lt;/code&gt;:&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;You can load HTML template fixtures via Sprocket&amp;rsquo;s JS template support. For example, in &lt;code&gt;spec/javascripts/templates/hello.jst.ejs&lt;/code&gt;:&lt;/p&gt;</description>
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//= require array_sum
+
+describe(&amp;#34;Array#sum&amp;#34;, function() {
+  it(&amp;#34;returns 0 when the Array is empty&amp;#34;, function() {
+    [].sum().should.equal(0);
+  });
+
+  it(&amp;#34;returns the sum of numeric elements&amp;#34;, function() {
+    [1,2,3].sum().should.equal(6);
+  });
+});
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;You can load HTML template fixtures via Sprocket&amp;rsquo;s JS template support. For example, in &lt;code&gt;spec/javascripts/templates/hello.jst.ejs&lt;/code&gt;:&lt;/p&gt;</description>
     </item>
     
     <item>

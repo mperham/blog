@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/09/22/dont-daemonize-your-daemons/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2014/09/22/dont-daemonize-your-daemons/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Don&#39;t Daemonize your Daemons!">
   <meta property="og:description" content="For years developers have followed the same arcane dozen steps to create a long-lived daemon process on Unix-based systems. These steps were state of the art in 2000 but they are no longer best practice today. Jake Gordon’s recent blog post on daemonizing Ruby processes is 100% factual but his approach is not recommended these days. Your application code should not be dealing with PID files, log redirection or other low-level concerns.">
@@ -209,9 +209,10 @@ blockquote,
 <p>What&rsquo;s the result? In development mode, your process will run in the foreground, as yourself and log to stdout: perfect for developers. In production mode, the init system will run your process as a configured user with logging sent to a specific location and log rotated automatically. Less system administration, easier debugging, simpler code, all because you leveraged the init system to do the work for you!</p>
 <p><strong>Worst Practices</strong></p>
 <p>Using a deployment tool like Capistrano to directly start any process is a bad idea. What happens when that process crashes? (Most likely it disappears and now your application is broken.) Who rotates the logs to ensure they don&rsquo;t fill the disk? (Most likely you after filling the disk the first time.) Instead, integrate your daemon into the init system, configure it to respawn if it crashes and have Capistrano manage the process via init:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>As always, KISS. Let your operating system handle daemons, respawning and logging while you focus on your application features and users.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>task <span style="color:#e6db74">:restart</span> <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  run <span style="color:#e6db74">&#34;initctl restart sidekiq&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>As always, KISS. Let your operating system handle daemons, respawning and logging while you focus on your application features and users.</p>
     </article>
   </div>
 

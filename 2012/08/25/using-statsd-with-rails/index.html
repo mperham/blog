@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/08/25/using-statsd-with-rails/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/08/25/using-statsd-with-rails/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using Statsd with Rails">
   <meta property="og:description" content="One of the things I’ve had on my mind at The Clymb is better runtime monitoring for our website and servers. We have NewRelic but I always want more. With this in mind, I decided to try out statsd to collect and aggregate metrics for visualization. By using statsd, you get two benefits: 1) metric aggregation so you don’t have to pay for N machines reporting metrics to a pay service and 2) control over where your metrics go so you can route them to Graphite, Librato Metrics or any other standard metrics service.">
@@ -198,15 +198,46 @@ blockquote,
 </p>
 <p>One of the things I&rsquo;ve had on my mind at <a href="http://www.theclymb.com/invite-from/mperham">The Clymb</a> is better runtime monitoring for our website and servers. We have NewRelic but I always want more. With this in mind, I decided to try out <a href="http://github.com/etsy/statsd">statsd</a> to collect and aggregate metrics for visualization. By using statsd, you get two benefits: 1) metric aggregation so you don&rsquo;t have to pay for N machines reporting metrics to a pay service and 2) control over where your metrics go so you can route them to Graphite, Librato Metrics or any other standard metrics service.</p>
 <p>First you&rsquo;ll need to install a <a href="https://github.com/reinh/statsd">Ruby client</a>. The Ruby client has a nice simple API for collecting various types of metrics: counters, gauges, timings, etc.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Next you&rsquo;ll create an initializer to instantiate the client. Note I use a namespace to differentiate between a Rails process and a Sidekiq process.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Now you&rsquo;ll need to sprinkle metrics reporting throughout the important parts of your application. I hooked up some basic metrics for <a href="https://github.com/TheClymb/rack-statsd">Rack</a>, Redis and ActiveRecord:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Now that we have some basic runtime stats, we still have two never-ending tasks:</p>
+<pre tabindex="0"><code>gem install statsd-ruby
+</code></pre><p>Next you&rsquo;ll create an initializer to instantiate the client. Note I use a namespace to differentiate between a Rails process and a Sidekiq process.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">METRICS</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#39;stats-collector.acmecorp.com&#39;</span>, <span style="color:#ae81ff">8125</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>namespace <span style="color:#f92672">=</span> (<span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>server? ? <span style="color:#e6db74">&#39;sidekiq&#39;</span> : <span style="color:#e6db74">&#39;web&#39;</span>)
+</span></span></code></pre></div><p>Now you&rsquo;ll need to sprinkle metrics reporting throughout the important parts of your application. I hooked up some basic metrics for <a href="https://github.com/TheClymb/rack-statsd">Rack</a>, Redis and ActiveRecord:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># Rack stats, courtesy of technoweenie</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>application<span style="color:#f92672">.</span>middleware<span style="color:#f92672">.</span>insert_before <span style="color:#66d9ef">ActionDispatch</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Static</span>, <span style="color:#66d9ef">RackStatsD</span><span style="color:#f92672">::</span><span style="color:#66d9ef">ProcessUtilization</span>, <span style="color:#e6db74">:stats</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">METRICS</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SELECT_DELETE</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">/ FROM `(w+)`/</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">INSERT</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">/^INSERT INTO `(w+)`/</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">UPDATE</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">/^UPDATE `(w+)`/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ActiveSupport</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Notifications</span><span style="color:#f92672">.</span>subscribe <span style="color:#e6db74">&#34;sql.active_record&#34;</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>name, start, finish, id, payload<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> payload<span style="color:#f92672">[</span><span style="color:#e6db74">:sql</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">when</span> <span style="color:#e6db74">/^SELECT/</span>
+</span></span><span style="display:flex;"><span>    payload<span style="color:#f92672">[</span><span style="color:#e6db74">:sql</span><span style="color:#f92672">]</span> <span style="color:#f92672">=~</span> <span style="color:#66d9ef">SELECT_DELETE</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>increment(<span style="color:#e6db74">&#39;sql.select&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>timing(<span style="color:#e6db74">&#34;sql.</span><span style="color:#e6db74">#{</span>$1<span style="color:#e6db74">}</span><span style="color:#e6db74">.select.query_time&#34;</span>, (finish <span style="color:#f92672">-</span> start) <span style="color:#f92672">*</span> <span style="color:#ae81ff">1000</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">when</span> <span style="color:#e6db74">/^DELETE/</span>
+</span></span><span style="display:flex;"><span>    payload<span style="color:#f92672">[</span><span style="color:#e6db74">:sql</span><span style="color:#f92672">]</span> <span style="color:#f92672">=~</span> <span style="color:#66d9ef">SELECT_DELETE</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>increment(<span style="color:#e6db74">&#39;sql.delete&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>timing(<span style="color:#e6db74">&#34;sql.</span><span style="color:#e6db74">#{</span>$1<span style="color:#e6db74">}</span><span style="color:#e6db74">.delete.query_time&#34;</span>, (finish <span style="color:#f92672">-</span> start) <span style="color:#f92672">*</span> <span style="color:#ae81ff">1000</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">when</span> <span style="color:#e6db74">/^INSERT/</span>
+</span></span><span style="display:flex;"><span>    payload<span style="color:#f92672">[</span><span style="color:#e6db74">:sql</span><span style="color:#f92672">]</span> <span style="color:#f92672">=~</span> <span style="color:#66d9ef">INSERT</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>increment(<span style="color:#e6db74">&#39;sql.insert&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>timing(<span style="color:#e6db74">&#34;sql.</span><span style="color:#e6db74">#{</span>$1<span style="color:#e6db74">}</span><span style="color:#e6db74">.insert.query_time&#34;</span>, (finish <span style="color:#f92672">-</span> start) <span style="color:#f92672">*</span> <span style="color:#ae81ff">1000</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">when</span> <span style="color:#e6db74">/^UPDATE/</span>
+</span></span><span style="display:flex;"><span>    payload<span style="color:#f92672">[</span><span style="color:#e6db74">:sql</span><span style="color:#f92672">]</span> <span style="color:#f92672">=~</span> <span style="color:#66d9ef">UPDATE</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>increment(<span style="color:#e6db74">&#39;sql.update&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>timing(<span style="color:#e6db74">&#34;sql.</span><span style="color:#e6db74">#{</span>$1<span style="color:#e6db74">}</span><span style="color:#e6db74">.update.query_time&#34;</span>, (finish <span style="color:#f92672">-</span> start) <span style="color:#f92672">*</span> <span style="color:#ae81ff">1000</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Redis</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># HACK: This overrides the normal Redis gem debug logging.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">logging</span>(commands, <span style="color:#f92672">&amp;</span><span style="color:#75715e">#038;block)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>time(<span style="color:#e6db74">&#34;redis.</span><span style="color:#e6db74">#{</span>commands<span style="color:#f92672">.</span>first<span style="color:#f92672">.</span>first<span style="color:#e6db74">}</span><span style="color:#e6db74">.time&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#75715e">#038;block)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Now that we have some basic runtime stats, we still have two never-ending tasks:</p>
 <ol>
 <li>more metrics! Once you have a good solution in place, it becomes easy to add more metrics for new functionality or infrastructure &ndash; something which no pre-packaged system can provide. You&rsquo;ll want to better tune what metrics you have and add more if you still need more data.</li>
 <li>alerts and visualization! Metrics are pointless if you aren&rsquo;t using them to monitor for problems and/or determine a course of action. Ideally a graph can show at a glance if there is a problem.</li>

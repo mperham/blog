@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/09/07/upgrading-tracknowledgeorg/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/09/07/upgrading-tracknowledgeorg/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Upgrading tracknowledge.org">
   <meta property="og:description" content="I’m upgrading my Rails testbed, http://www.tracknowledge.org, with the latest and greatest. The Rails world moves VERY quickly and staying on top of it can be challenging. When I built it initially in April 2008, nginx &#43; mongrel was the typical deployment model. I stuck with Apache though since it was already installed on the machine; installing and configuring nginx is a known PITA. Now I’m going to install Phusion’s Passenger and Ruby Enterprise Edition. Passenger and REE have some big advantages over the typical mongrel model, mostly around memory consumption – always a good thing on a limited VPS slice like I have. The plan:">
@@ -205,7 +205,7 @@ blockquote,
 <li>Deploy my latest <a href="http://github.com/mperham/tracknowledge">tracknowledge</a> source running on Edge Rails (i.e. 2.2 alpha).</li>
 </ol>
 <p>You might wonder why I&rsquo;m running Edge Rails.  Well, I wanted to get the multithreading and connection pooling features in ASAP so I can test them.  <a href="http://github.com/fiveruns/data_fabric">DataFabric</a> does rely on some of the innards of ActiveRecord&rsquo;s ConnectionAdapter class so I&rsquo;ll probably need to make changes to get it working on ActiveRecord 2.2.</p>
-<!-- raw HTML omitted -->
+<an hour passes>
 <p>And it&rsquo;s done!  Wow, that was pretty easy.  The hardest part by far was simply updating my app to list its gem dependencies and install those gems in the new gem repo for REE.  Kudos to the Phusion guys for making Rails deployment MUCH MUCH simpler!</p>
 
     </article>

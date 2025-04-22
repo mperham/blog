@@ -5,13 +5,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/10/16/document-oriented-database-shootout-part-2-performance/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/10/16/document-oriented-database-shootout-part-2-performance/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Document-oriented Database Shootout Part 2: Performance">
   <meta property="og:description" content="After talking about document-oriented databases in general in Part 1, for Part 2 I’ve written some code comparing MongDB 1.1.1, CouchDBX 0.9.1 and Tokyo Tyrant 1.4.32 in an apples to apples test.
 The shootout code is on Github. I welcome patches and improvements as long as they don’t bias the tests in favor of any one system.
 Results
-` ========== Running Tokyo Tyrant tests Using rufus-tokyo 1.0.0 user system total real init 0.000000 0.000000 0.000000 ( 0.013781) create 19.770000 4.260000 24.030000 ( 39.982273) query 0.160000 0.030000 0.190000 ( 0.318070) delete 0.000000 0.000000 0.000000 ( 0.421201)">
+`
+========== Running Tokyo Tyrant tests
+Using rufus-tokyo 1.0.0
+user system total real
+init 0.000000 0.000000 0.000000 ( 0.013781)
+create 19.770000 4.260000 24.030000 ( 39.982273)
+query 0.160000 0.030000 0.190000 ( 0.318070)
+delete 0.000000 0.000000 0.000000 ( 0.421201)">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -200,18 +207,30 @@ blockquote,
   
 </p>
 <p>After talking about document-oriented databases in general in <a href="http://www.mikeperham.com/2009/09/01/comparing-document-oriented-databases/">Part 1</a>, for Part 2 I&rsquo;ve written some code comparing MongDB 1.1.1, CouchDBX 0.9.1 and Tokyo Tyrant 1.4.32 in an apples to apples test.</p>
-<p><a href="http://www.mongodb.org"><!-- raw HTML omitted --></a> <a href="http://couchdb.apache.org"><!-- raw HTML omitted --></a></p>
+<p><a href="http://www.mongodb.org"><img src="http://www.mikeperham.com/wp-content/uploads/2009/10/mongodb.png" alt="mongodb" title="mongodb" width="200" height="61" class="" /></a> <a href="http://couchdb.apache.org"><img src="http://www.mikeperham.com/wp-content/uploads/2009/10/couchdb-logo2.png" alt="couchdb-logo" title="couchdb-logo" width="200" height="64" class="" /></a></p>
 <p>The <a href="http://github.com/mperham/docdb_shootout">shootout code is on Github</a>. I welcome patches and improvements as long as they don&rsquo;t bias the tests in favor of any one system.</p>
 <p><strong>Results</strong><br>
-`<!-- raw HTML omitted -->
-========== Running Tokyo Tyrant tests<!-- raw HTML omitted -->
-Using rufus-tokyo 1.0.0<!-- raw HTML omitted -->
-user     system      total        real<!-- raw HTML omitted -->
-init        0.000000   0.000000   0.000000 (  0.013781)<!-- raw HTML omitted -->
-create     19.770000   4.260000  24.030000 ( 39.982273)<!-- raw HTML omitted -->
-query       0.160000   0.030000   0.190000 (  0.318070)<!-- raw HTML omitted -->
-delete      0.000000   0.000000   0.000000 (  0.421201)<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
+`<br />
+========== Running Tokyo Tyrant tests<br />
+Using rufus-tokyo 1.0.0<br />
+user     system      total        real<br />
+init        0.000000   0.000000   0.000000 (  0.013781)<br />
+create     19.770000   4.260000  24.030000 ( 39.982273)<br />
+query       0.160000   0.030000   0.190000 (  0.318070)<br />
+delete      0.000000   0.000000   0.000000 (  0.421201)</p></p>
+<p>========== Running MongoDB tests<br />
+Using mongo + mongo_ext 0.15.1<br />
+                user     system      total        real<br />
+init        0.000000   0.000000   0.000000 (  0.005074)<br />
+create     54.710000   1.750000  56.460000 ( 57.358498)<br />
+query       0.120000   0.010000   0.130000 (  0.155486)<br />
+delete      0.000000   0.000000   0.000000 (  0.957453)</p>
+<p>========== Running CouchDB tests<br />
+Using jchris-couchrest 0.23<br />
+                user     system      total        real<br />
+init        0.000000   0.000000   0.000000 (  0.000007)<br />
+create      9.290000   0.560000   9.850000 ( 51.177824)<br />
+`
 <p><strong>init</strong> is the time required to initialize the database and create any necessary indices. In practice, this number isn&rsquo;t terribly relevant as this is usually an infrequent operation.</p>
 <p>The <strong>create</strong> operation shows how long it takes for the system to bulk load 200,000 documents. You can see that Tokyo is quite fast while the Mongo client hits the CPU pretty hard. The couchrest client seems more efficient than the other two but the task still takes longer than Tokyo.</p>
 <p>The <strong>query</strong> operation shows how long it takes to perform a non-trivial query against those 200k documents. Both Mongo and Tokyo perform about the same speed although Mongo lazy fetches the results in order to minimize network traffic when used with pagination. Tokyo returns the entire result at once AFAIK. I was not able to complete this test in a weekend using CouchDB because its view layer is so alien to me. I&rsquo;d welcome help with this task.</p>

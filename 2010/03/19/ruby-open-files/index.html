@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/03/19/ruby-open-files/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/03/19/ruby-open-files/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Ruby Open Files">
   <meta property="og:description" content="Get the number of open files for each of your Ruby processes:
-Example output:
-&lt;br /&gt; {&#34;3268&#34;=&gt;808, &#34;4513&#34;=&gt;399, &#34;4795&#34;=&gt;237, &#34;5067&#34;=&gt;178, &#34;5083&#34;=&gt;16, &#34;23751&#34;=&gt;108}&lt;br /&gt;">
+sudo lsof | grep ruby | ruby -e &#39;h=Hash.new(0);$&lt;.each_line {|line| h[line.split[1]] &#43;= 1};p h&#39; Example output:
+{&#34;3268&#34;=&gt;808, &#34;4513&#34;=&gt;399, &#34;4795&#34;=&gt;237, &#34;5067&#34;=&gt;178, &#34;5083&#34;=&gt;16, &#34;23751&#34;=&gt;108}&lt;br /&gt;">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -199,11 +199,10 @@ blockquote,
   
 </p>
 <p>Get the number of open files for each of your Ruby processes:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Example output:<br>
-<code>&lt;br /&gt; {&quot;3268&quot;=&gt;808, &quot;4513&quot;=&gt;399, &quot;4795&quot;=&gt;237, &quot;5067&quot;=&gt;178, &quot;5083&quot;=&gt;16, &quot;23751&quot;=&gt;108}&lt;br /&gt; </code></p>
-
+<pre tabindex="0"><code>sudo lsof | grep ruby | ruby -e &#39;h=Hash.new(0);$&lt;.each_line {|line| h[line.split[1]] += 1};p h&#39;
+</code></pre><p>Example output:</p>
+<pre tabindex="0"><code>{&#34;3268&#34;=&gt;808, &#34;4513&#34;=&gt;399, &#34;4795&#34;=&gt;237, &#34;5067&#34;=&gt;178, &#34;5083&#34;=&gt;16, &#34;23751&#34;=&gt;108}&lt;br /&gt;
+</code></pre>
     </article>
   </div>
 

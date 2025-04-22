@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2015/01/05/cgi-rubys-bare-metal/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2015/01/05/cgi-rubys-bare-metal/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="CGI: Ruby&#39;s Bare Metal">
   <meta property="og:description" content="How simple can you make a web request?
@@ -234,14 +234,14 @@ needs to see a 200 OK response — no fancy view rendering layer required.</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>cgi<span style="color:#f92672">.</span>out(<span style="color:#e6db74">&#34;status&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;OK&#34;</span>, <span style="color:#e6db74">&#34;type&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;text/plain&#34;</span>, <span style="color:#e6db74">&#34;connection&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;close&#34;</span>) <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;Success&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>I configured Apache to know to execute my CGI script by adding this inside the vhost configuration:</p>
-<pre tabindex="0"><code class="language-conf" data-lang="conf">ScriptAlias /stripe/ /opt/stripe/
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>I configured Apache to know to execute my CGI script by adding this inside the vhost configuration:</p>
+<pre tabindex="0"><code>ScriptAlias /stripe/ /opt/stripe/
 
 &lt;Directory /opt/stripe/&gt;
   Require all granted
-&lt;/Directory&gt;</code></pre>
-<p>Now if I request <code>http://server/stripe/event.rb</code>, Apache will call <code>/opt/stripe/event.rb</code>.</p>
+&lt;/Directory&gt;
+</code></pre><p>Now if I request <code>http://server/stripe/event.rb</code>, Apache will call <code>/opt/stripe/event.rb</code>.</p>
 <p>Look at what I&rsquo;m not running: puma or unicorn, rails or sinatra, redis or memcached, postgres or mysql, bundler,
 capistrano, etc.
 The real thing is using 3-4 gems.  That&rsquo;s it.  The script runs in a few seconds and then exits.  Nothing

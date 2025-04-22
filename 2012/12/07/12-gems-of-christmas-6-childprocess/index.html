@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/12/07/12-gems-of-christmas-6-childprocess/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/12/07/12-gems-of-christmas-6-childprocess/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #6 -- childprocess">
   <meta property="og:description" content="Ruby has many different gems and APIs for spawning child processes but none I like more than childprocess. posix-spawn and open4 are popular alternatives but childprocess has a clean Ruby API and aims to work on all Ruby platforms.
 Here we have an example setting up a child process pipeline, performing the equivalent of ps aux | grep -E &#39;redis|memcached&#39;.
-With subprocesses, the tricky bit is usually hooking up the IO streams correctly. In this case, the duplex flag signals that you want to write to STDIN of the process (i.e. use it as the RHS of a pipe). Everything else is pretty straightforward; childprocess makes multi-processing with Ruby simple.">
+require &#39;childprocess&#39; listing = ChildProcess.build(&#34;ps&#34;, &#34;aux&#34;) search = ChildProcess.build(&#34;grep&#34;, &#39;-E&#39;, %w(redis memcached).join(&#39;|&#39;)) search.duplex = true search.io.stdout = STDOUT search.start listing.io.stdout = search.io.stdin listing.start listing.wait search.io.stdin.close search.wait With subprocesses, the tricky bit is usually hooking up the IO streams correctly. In this case, the duplex flag signals that you want to write to STDIN of the process (i.e. use it as the RHS of a pipe). Everything else is pretty straightforward; childprocess makes multi-processing with Ruby simple.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -200,9 +200,22 @@ blockquote,
 </p>
 <p>Ruby has many different gems and APIs for spawning child processes but none I like more than childprocess. <a href="https://github.com/rtomayko/posix-spawn">posix-spawn</a> and <a href="https://github.com/ahoward/open4">open4</a> are popular alternatives but <a href="https://github.com/jarib/childprocess">childprocess</a> has a clean Ruby API and aims to work on all Ruby platforms.</p>
 <p>Here we have an example setting up a child process pipeline, performing the equivalent of <code>ps aux | grep -E 'redis|memcached'</code>.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>With subprocesses, the tricky bit is usually hooking up the IO streams correctly. In this case, the <code>duplex</code> flag signals that you want to write to STDIN of the process (i.e. use it as the RHS of a pipe). Everything else is pretty straightforward; childprocess makes multi-processing with Ruby simple.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;childprocess&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>listing <span style="color:#f92672">=</span> <span style="color:#66d9ef">ChildProcess</span><span style="color:#f92672">.</span>build(<span style="color:#e6db74">&#34;ps&#34;</span>, <span style="color:#e6db74">&#34;aux&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>search <span style="color:#f92672">=</span> <span style="color:#66d9ef">ChildProcess</span><span style="color:#f92672">.</span>build(<span style="color:#e6db74">&#34;grep&#34;</span>, <span style="color:#e6db74">&#39;-E&#39;</span>, <span style="color:#e6db74">%w(redis memcached)</span><span style="color:#f92672">.</span>join(<span style="color:#e6db74">&#39;|&#39;</span>))
+</span></span><span style="display:flex;"><span>search<span style="color:#f92672">.</span>duplex <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>search<span style="color:#f92672">.</span>io<span style="color:#f92672">.</span>stdout <span style="color:#f92672">=</span> <span style="color:#66d9ef">STDOUT</span>
+</span></span><span style="display:flex;"><span>search<span style="color:#f92672">.</span>start
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>listing<span style="color:#f92672">.</span>io<span style="color:#f92672">.</span>stdout <span style="color:#f92672">=</span> search<span style="color:#f92672">.</span>io<span style="color:#f92672">.</span>stdin
+</span></span><span style="display:flex;"><span>listing<span style="color:#f92672">.</span>start
+</span></span><span style="display:flex;"><span>listing<span style="color:#f92672">.</span>wait
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>search<span style="color:#f92672">.</span>io<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>close
+</span></span><span style="display:flex;"><span>search<span style="color:#f92672">.</span>wait
+</span></span></code></pre></div><p>With subprocesses, the tricky bit is usually hooking up the IO streams correctly. In this case, the <code>duplex</code> flag signals that you want to write to STDIN of the process (i.e. use it as the RHS of a pipe). Everything else is pretty straightforward; childprocess makes multi-processing with Ruby simple.</p>
 <p>Tomorrow I&rsquo;ll dive into a little gem which aims to improve Rails logging in production.</p>
 
     </article>

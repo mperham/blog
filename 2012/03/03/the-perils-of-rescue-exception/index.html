@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/03/03/the-perils-of-rescue-exception/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/03/03/the-perils-of-rescue-exception/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Perils of &#34;rescue Exception&#34;">
   <meta property="og:description" content="Ruby’s standard exception handling looks like this.
@@ -203,15 +203,15 @@ blockquote,
 </span></span><span style="display:flex;"><span>  do_something
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">rescue</span> <span style="color:#f92672">=&gt;</span> ex
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># do something with the error</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>This will catch all StandardErrors and its subclasses. A frequent issue I see in Ruby code is this:</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>This will catch all StandardErrors and its subclasses. A frequent issue I see in Ruby code is this:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
 </span></span><span style="display:flex;"><span>  do_something
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Exception</span> <span style="color:#f92672">=&gt;</span> ex
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Apparently I REALLY want to know if this</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># block of code fails for any reason.</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>This is a BAD, BAD idea, dear reader, and here&rsquo;s why. Ruby uses Exceptions for other things than your application code errors. One example is the Interrupt class which is a SignalException. Ruby sends this Exception to all threads so that when the process gets an INT/Ctrl-C signal, all the threads will unwind and the process will shutdown. If you rescue Exception, you will potentially catch this exception and ignore it, making your thread and process an unkillable computing zombie. Your only choice will be to pull out your kill -9 shotgun and aim for the head.</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>This is a BAD, BAD idea, dear reader, and here&rsquo;s why. Ruby uses Exceptions for other things than your application code errors. One example is the Interrupt class which is a SignalException. Ruby sends this Exception to all threads so that when the process gets an INT/Ctrl-C signal, all the threads will unwind and the process will shutdown. If you rescue Exception, you will potentially catch this exception and ignore it, making your thread and process an unkillable computing zombie. Your only choice will be to pull out your kill -9 shotgun and aim for the head.</p>
 <p>Here&rsquo;s an example of a Ruby script you cannot shutdown gracefully. Run it and you&rsquo;ll see exactly the behavior I&rsquo;ve described.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">while</span> <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">begin</span>
@@ -220,8 +220,8 @@ blockquote,
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">rescue</span> <span style="color:#66d9ef">Exception</span> <span style="color:#f92672">=&gt;</span> ex
 </span></span><span style="display:flex;"><span>    puts <span style="color:#e6db74">&#34;Mmmmm, brains&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>So remember, your application errors should be subclasses of StandardError and if you want to catch everything, just stick will plain old &ldquo;rescue =&gt; ex&rdquo;. Your application will behave better for it.</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>So remember, your application errors should be subclasses of StandardError and if you want to catch everything, just stick will plain old &ldquo;rescue =&gt; ex&rdquo;. Your application will behave better for it.</p>
 
     </article>
   </div>

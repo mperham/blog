@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/12/13/clojure-vs-ruby/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/12/13/clojure-vs-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Clojure vs Ruby, Part I">
   <meta property="og:description" content="I’m a performance guy, I’ll admit it. I love performance tuning and comparing code to see why one thing is slower than another. I’ve recently taken a shine to the Clojure programming language as it seems to combine two good things: an incredibly fast and reliable VM and a functional language designed for concurrency. Here’s my first performance test: the ever-reliable fibonacci method. Please remember this is just a microbenchmark, take it with a grain of salt.">
@@ -198,15 +198,25 @@ blockquote,
 </p>
 <p>I&rsquo;m a performance guy, I&rsquo;ll admit it. I love performance tuning and comparing code to see why one thing is slower than another. I&rsquo;ve recently taken a shine to the Clojure programming language as it seems to combine two good things: an incredibly fast and reliable VM and a functional language designed for concurrency. Here&rsquo;s my first performance test: the ever-reliable fibonacci method. Please remember this is just a microbenchmark, take it with a grain of salt.</p>
 <p>In Clojure:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>In Ruby:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>The JVM is Server 1.6.0_07 64-bit. Let&rsquo;s see how long each takes to calculate the 40th Fibonacci number:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Clojure&rsquo;s performance is really spectacular in this one microbenchmark compared to Ruby. There&rsquo;s some language overhead but the native speed is so fast that performance is still better than the fastest Ruby VMs. Rich Hickey has done a great job with Clojure but make no mistake, this is still mostly a hobbyist language done by one person - he can&rsquo;t afford to spend years building his own VM. Running native on the JVM has huge benefits in terms of performance.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-clj" data-lang="clj"><span style="display:flex;"><span>(<span style="color:#66d9ef">defn </span>fib [n]
+</span></span><span style="display:flex;"><span>  (<span style="color:#66d9ef">if </span>(&lt;= n <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    (+ (<span style="color:#a6e22e">fib</span> (- n <span style="color:#ae81ff">1</span>)) (<span style="color:#a6e22e">fib</span> (- n <span style="color:#ae81ff">2</span>)))
+</span></span><span style="display:flex;"><span>  )
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>In Ruby:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fib</span>(n)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">if</span> n <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  fib(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> fib(n<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>The JVM is Server 1.6.0_07 64-bit. Let&rsquo;s see how long each takes to calculate the 40th Fibonacci number:</p>
+<pre tabindex="0"><code>C (gcc 4.0.1)         2.6 sec
+Java                  1.2 sec
+Clojure 20080916     11.3 sec
+Ruby 1.9pr1          44.3 sec
+JRuby 1.1.5         118.1 sec
+Ruby 1.8.6          195.6 sec
+</code></pre><p>Clojure&rsquo;s performance is really spectacular in this one microbenchmark compared to Ruby. There&rsquo;s some language overhead but the native speed is so fast that performance is still better than the fastest Ruby VMs. Rich Hickey has done a great job with Clojure but make no mistake, this is still mostly a hobbyist language done by one person - he can&rsquo;t afford to spend years building his own VM. Running native on the JVM has huge benefits in terms of performance.</p>
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/08/03/developing-rubygems-with-rvm-and-bundler/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/08/03/developing-rubygems-with-rvm-and-bundler/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Developing Rubygems with RVM and Bundler">
   <meta property="og:description" content="It’s safe to say that RVM and Bundler have completely changed how I interact with my Ruby applications and gems. It’s pretty well understood how to use each by itself, I didn’t have a good idea how to use them in tandem until recently. Parts of this post are based on Derek Kastner’s great post on using Bundler.
@@ -199,12 +199,22 @@ blockquote,
 </p>
 <p>It&rsquo;s safe to say that RVM and Bundler have completely changed how I interact with my Ruby applications and gems. It&rsquo;s pretty well understood how to use each by itself, I didn&rsquo;t have a good idea how to use them in tandem until recently. Parts of this post are based on <a href="http://numbers.brighterplanet.com/2010/07/28/bundler-to-the-max/">Derek Kastner&rsquo;s great post on using Bundler</a>.</p>
 <p>When I grab the source for a random rubygem from github and want to run its tests or test drive it, I use RVM and Bundler to create a sandbox so I don&rsquo;t pollute the gems used by other Ruby projects on my box:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>The only trick here is using Bundler&rsquo;s support for gemspecs to avoid the need for a separate (and redundant) Gemfile. But <a href="http://andre.arko.net/2010/05/01/bundler-for-gem-development/">Andre Arko suggests that we prefer Bundler</a> to Jeweler and I agree with him. <a href="http://github.com/technicalpickles/jeweler/issues#issue/120">Jeweler should check for an existing Gemfile</a> and defer to it for dependencies when generating the gemspec:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>This means that <strong>gems should check in their gemspec into git</strong> and jeweler (or however you are generating your gemspec) should be declared as a development dependency. Do your gems pass this simple test? Any thoughts on how to make this even simpler?</p>
+<pre tabindex="0"><code>rvm use 1.9.2@&lt;gemname&gt; --create
+  gem install bundler --pre
+# Would love to see this cleaned up for bundler 1.0
+# e.g. bundle install --from-gemspec
+  cat &gt; Gemfile &lt;&lt;EOM
+source &#39;http://rubygems.org&#39;
+gemspec :path =&gt; &#39;.&#39;
+EOM
+  bundle install
+  rake
+</code></pre><p>The only trick here is using Bundler&rsquo;s support for gemspecs to avoid the need for a separate (and redundant) Gemfile. But <a href="http://andre.arko.net/2010/05/01/bundler-for-gem-development/">Andre Arko suggests that we prefer Bundler</a> to Jeweler and I agree with him. <a href="http://github.com/technicalpickles/jeweler/issues#issue/120">Jeweler should check for an existing Gemfile</a> and defer to it for dependencies when generating the gemspec:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;bundler&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Gem</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Specification</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>s<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  s<span style="color:#f92672">.</span>add_bundler_dependencies
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>This means that <strong>gems should check in their gemspec into git</strong> and jeweler (or however you are generating your gemspec) should be declared as a development dependency. Do your gems pass this simple test? Any thoughts on how to make this even simpler?</p>
 
     </article>
   </div>

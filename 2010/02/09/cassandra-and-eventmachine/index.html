@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/02/09/cassandra-and-eventmachine/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/02/09/cassandra-and-eventmachine/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Cassandra and EventMachine">
   <meta property="og:description" content="I spent this past weekend adding eventmachine support for the Cassandra gem. We’re using Cassandra at OneSpot as our next-gen data store and need EM support. They were nice enough to pull my changes yesterday so the next release of the thrift_client and cassandra gems should work in EM. You just need to do this:
-The key is the :transport and :transport_wrapper options which override the default, Socket-based implementation. Like all of my EventMachine code, this requires Ruby 1.9.">
+require &#39;thrift_client/event_machine&#39; EM.run do Fiber.new do @twitter = Cassandra.new(&#39;Twitter&#39;, &#34;127.0.0.1:9160&#34;, :transport =&gt; Thrift::EventMachineTransport, :transport_wrapper =&gt; nil) @twitter.clear_keyspace! EM.stop end.resume end The key is the :transport and :transport_wrapper options which override the default, Socket-based implementation. Like all of my EventMachine code, this requires Ruby 1.9.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -198,9 +198,15 @@ blockquote,
   
 </p>
 <p>I spent this past weekend adding eventmachine support for the Cassandra gem. We&rsquo;re using Cassandra at <a href="http://www.onespot.com">OneSpot</a> as our next-gen data store and need EM support. They were nice enough to pull my changes yesterday so the next release of the <code>thrift_client</code> and <code>cassandra</code> gems should work in EM. You just need to do this:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>The key is the <code>:transport</code> and <code>:transport_wrapper</code> options which override the default, Socket-based implementation. Like all of my EventMachine code, this requires Ruby 1.9.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;thrift_client/event_machine&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">EM</span><span style="color:#f92672">.</span>run <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Fiber</span><span style="color:#f92672">.</span>new <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    @twitter <span style="color:#f92672">=</span> <span style="color:#66d9ef">Cassandra</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#39;Twitter&#39;</span>, <span style="color:#e6db74">&#34;127.0.0.1:9160&#34;</span>, <span style="color:#e6db74">:transport</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">Thrift</span><span style="color:#f92672">::</span><span style="color:#66d9ef">EventMachineTransport</span>, <span style="color:#e6db74">:transport_wrapper</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>    @twitter<span style="color:#f92672">.</span>clear_keyspace!
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">EM</span><span style="color:#f92672">.</span>stop
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span><span style="color:#f92672">.</span>resume
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>The key is the <code>:transport</code> and <code>:transport_wrapper</code> options which override the default, Socket-based implementation. Like all of my EventMachine code, this requires Ruby 1.9.</p>
 
     </article>
   </div>

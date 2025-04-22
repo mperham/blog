@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/04/18/engines-in-rails-23/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/04/18/engines-in-rails-23/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Engines in Rails 2.3">
   <meta property="og:description" content="Engines have been around Rails for years but it wasn’t until the recent 2.3 release that Rails officially supported Engines. So what is an Engine? An Engine is a Rails plugin with full MVC capabilities. In essence, that means your Engine has an app directory with helpers, controllers, models and views just like a standard Rails application. You add an engine to vendor/plugins or through config.gem in your application, just like a plugin, but additionally its app directory is effectively overlaid on top of your application’s app directory.">
@@ -199,9 +199,31 @@ blockquote,
 <p>Engines have been around Rails for years but it wasn&rsquo;t until the recent 2.3 release that Rails officially supported Engines. So what is an Engine? An Engine is a Rails plugin with full MVC capabilities. In essence, that means your Engine has an app directory with helpers, controllers, models and views just like a standard Rails application. You add an engine to <code>vendor/plugins</code> or through <code>config.gem</code> in your application, just like a plugin, but additionally its app directory is effectively overlaid on top of your application&rsquo;s app directory.</p>
 <p>Let&rsquo;s spelunk through the code:</p>
 <p><code>rails-2.3.2/lib/rails/plugin/loader.rb</code></p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>For each engine, we add any routes, any controllers and any views. Additionally, the directories within app will be added to the global LOAD_PATH, as with a normal application. Note that engines are processed in order exactly like plugins: alphabetically or based on the order they are listed in <code>config/environment.rb</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">configure_engines</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> engines<span style="color:#f92672">.</span>any?
+</span></span><span style="display:flex;"><span>    add_engine_routing_configurations
+</span></span><span style="display:flex;"><span>    add_engine_controller_paths
+</span></span><span style="display:flex;"><span>    add_engine_view_paths
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_engine_routing_configurations</span>
+</span></span><span style="display:flex;"><span>  engines<span style="color:#f92672">.</span>select(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:routed?</span>)<span style="color:#f92672">.</span>collect(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:routing_file</span>)<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>routing_file<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">ActionController</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Routing</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Routes</span><span style="color:#f92672">.</span>add_configuration_file(routing_file)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_engine_controller_paths</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">ActionController</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Routing</span><span style="color:#f92672">.</span>controller_paths <span style="color:#f92672">+=</span> engines<span style="color:#f92672">.</span>collect(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:controller_path</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_engine_view_paths</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># reverse it such that the last engine can overwrite view paths from the first, like with routes</span>
+</span></span><span style="display:flex;"><span>  paths <span style="color:#f92672">=</span> <span style="color:#66d9ef">ActionView</span><span style="color:#f92672">::</span><span style="color:#66d9ef">PathSet</span><span style="color:#f92672">.</span>new(engines<span style="color:#f92672">.</span>collect(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:view_path</span>)<span style="color:#f92672">.</span>reverse)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">ActionController</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>view_paths<span style="color:#f92672">.</span>concat(paths)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>view_paths<span style="color:#f92672">.</span>concat(paths) <span style="color:#66d9ef">if</span> configuration<span style="color:#f92672">.</span>frameworks<span style="color:#f92672">.</span>include?(<span style="color:#e6db74">:action_mailer</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>For each engine, we add any routes, any controllers and any views. Additionally, the directories within app will be added to the global LOAD_PATH, as with a normal application. Note that engines are processed in order exactly like plugins: alphabetically or based on the order they are listed in <code>config/environment.rb</code>.</p>
 <p>There are some limitations you should be aware of:</p>
 <ul>
 <li>No migration support: while the engine can add models, it is not obvious how to manage any database structure needed by the engine. I would imagine the engine should use the install.rb hook to copy migrations to the app&rsquo;s <code>db/migrate</code> directory.</li>

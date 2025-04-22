@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/03/03/using-memcache-client-16x-in-rails-23/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/03/03/using-memcache-client-16x-in-rails-23/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using memcache-client 1.6.x in Rails &lt; 2.3">
   <meta property="og:description" content="Jemery Kemper recently upgraded Rails 2.3’s vendored copy of memcache-client to the 1.6.4 release. But what do you do if you are running Rails 2.1/2.2 and want to take advantage of the massive speedup in 1.6.x? You write some really ugly code that performs brain surgery on the Ruby environment to override ActiveSupport. Create config/initializers/memcache-client-upgrade.rb with this code:
-If someone knows of a cleaner way to do this, please let me know.">
+require &#39;rubygems&#39; # Brain surgery to use our own version of memcache-client without # having to modify activesupport directly. # Unload any previous instance of the class if Object.const_defined? :MemCache Object.instance_eval { remove_const :MemCache } end # Pull in the exact version we want gem &#39;memcache-client&#39;, &#39;1.6.5&#39; # Ensure that the memcache-client path is at the front of the loadpath $LOAD_PATH.each do |path| if path =~ /memcache-client/ $LOAD_PATH.delete(path) $LOAD_PATH.unshift(path) end end # If Ruby thinks it&#39;s already loaded memcache.rb, force # a reload otherwise just require. if $&#34;.find { |file| file =~ /Amemcache.rbZ/ } load &#39;memcache.rb&#39; else require &#39;memcache&#39; end If someone knows of a cleaner way to do this, please let me know.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -198,9 +198,31 @@ blockquote,
   
 </p>
 <p>Jemery Kemper <a href="http://github.com/rails/rails/commit/e56b3e4c0b60b2b86f5ca9c5e5a0b22fa34d37ab">recently upgraded</a> Rails 2.3&rsquo;s vendored copy of memcache-client to the 1.6.4 release. But what do you do if you are running Rails 2.1/2.2 and want to take advantage of the massive speedup in 1.6.x? You write some really ugly code that performs brain surgery on the Ruby environment to override ActiveSupport. Create <code>config/initializers/memcache-client-upgrade.rb</code> with this code:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>If someone knows of a cleaner way to do this, please let me know.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;rubygems&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Brain surgery to use our own version of memcache-client without</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># having to modify activesupport directly.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Unload any previous instance of the class</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">Object</span><span style="color:#f92672">.</span>const_defined? <span style="color:#e6db74">:MemCache</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Object</span><span style="color:#f92672">.</span>instance_eval { remove_const <span style="color:#e6db74">:MemCache</span> }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Pull in the exact version we want</span>
+</span></span><span style="display:flex;"><span>gem <span style="color:#e6db74">&#39;memcache-client&#39;</span>, <span style="color:#e6db74">&#39;1.6.5&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Ensure that the memcache-client path is at the front of the loadpath</span>
+</span></span><span style="display:flex;"><span>$LOAD_PATH<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>path<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> path <span style="color:#f92672">=~</span> <span style="color:#e6db74">/memcache-client/</span>
+</span></span><span style="display:flex;"><span>    $LOAD_PATH<span style="color:#f92672">.</span>delete(path)
+</span></span><span style="display:flex;"><span>    $LOAD_PATH<span style="color:#f92672">.</span>unshift(path)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># If Ruby thinks it&#39;s already loaded memcache.rb, force</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># a reload otherwise just require.</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> $&#34;<span style="color:#f92672">.</span>find { <span style="color:#f92672">|</span>file<span style="color:#f92672">|</span> file <span style="color:#f92672">=~</span> <span style="color:#e6db74">/Amemcache.rbZ/</span> }
+</span></span><span style="display:flex;"><span>  load <span style="color:#e6db74">&#39;memcache.rb&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  require <span style="color:#e6db74">&#39;memcache&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>If someone knows of a cleaner way to do this, please let me know.</p>
 
     </article>
   </div>

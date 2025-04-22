@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/10/02/introducing-inspeqtor/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2014/10/02/introducing-inspeqtor/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Introducing Inspeqtor">
   <meta property="og:description" content="I’ve written server-side applications for a decade now, and monitoring the components of your application is critical but painful. What monitors the CPU and RAM usage of your custom daemons? What monitors Redis, MySQL, memcached and the other parts of your system to ensure they are all behaving normally? What if I told you you could do all that and set it up in less than 5 minutes?
@@ -199,18 +199,27 @@ blockquote,
 </p>
 <p>I&rsquo;ve written server-side applications for a decade now, and monitoring the components of your application is critical but painful. What monitors the CPU and RAM usage of your custom daemons? What monitors Redis, MySQL, memcached and the other parts of your system to ensure they are all behaving normally? What if I told you you could do all that and set it up in less than 5 minutes?</p>
 <p>Say hello to <a href="http://www.contribsys.com/inspeqtor/">Inspeqtor</a>!</p>
-<p><a href="http://www.contribsys.com/inspeqtor/" title="Inspeqtor"><!-- raw HTML omitted --></a></p>
+<p><a href="http://www.contribsys.com/inspeqtor/" title="Inspeqtor"><img src="http://www.mikeperham.com/wp-content/uploads/2014/09/logo-inspeqtor.png" alt="logo-inspeqtor" width="370" height="74" class="alignnone size-full wp-image-1840" /></a></p>
 <p>Inspeqtor is a Linux daemon which understands processes and major, popular pieces of application infrastructure. You write very simple rules about the services running on the machine and Inspeqtor will notify you when those rules are breached, processes disappear or change PID.</p>
 <p>Inspeqtor understands the notion of an <strong>application deploy</strong> and will not notify you during the deploy process since change is normal and expected.</p>
 <p>I want Inspeqtor to be incredibly easy to set up and monitor common, useful metrics. Here&rsquo;s how to monitor mysql:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p><strong>That&rsquo;s it</strong>, just a few words of readable English, no XML, YAML or other painful formats. Inspeqtor talks to your init system to find the PID and monitor CPU and RAM. It knows how to log into mysql to gather metrics.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># /etc/inspeqtor/conf.d/mysql.inq</span>
+</span></span><span style="display:flex;"><span>check service mysql with username dbuser, password thepass, socket /tmp/mysql.sock
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> memory:rss &amp;gt; 1g <span style="color:#66d9ef">then</span> alert
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> cpu:user &amp;gt; 90% <span style="color:#66d9ef">then</span> alert
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># inspeqtor checks every 15 seconds</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># more than 50 queries per sec, let me know</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> mysql:Queries &amp;gt; <span style="color:#ae81ff">750</span> <span style="color:#66d9ef">then</span> alert
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># watch out for those slow queries!</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> mysql:Slow_queries &amp;gt; <span style="color:#ae81ff">10</span> <span style="color:#66d9ef">then</span> alert
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># you can even monitor slave replication lag!</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> mysql:Seconds_Behind_Master &amp;gt; <span style="color:#ae81ff">30</span> <span style="color:#66d9ef">then</span> alert
+</span></span></code></pre></div><p><strong>That&rsquo;s it</strong>, just a few words of readable English, no XML, YAML or other painful formats. Inspeqtor talks to your init system to find the PID and monitor CPU and RAM. It knows how to log into mysql to gather metrics.</p>
 <p><strong>Look at this awesomeness</strong></p>
 <p>Get current status of all services with <code>inspeqtorctl status</code>:</p>
-<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-29-at-10.15.39.png"><!-- raw HTML omitted --></a></p>
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-29-at-10.15.39.png"><img src="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-29-at-10.15.39.png" alt="Screen Shot 2014-09-29 at 10.15.39" width="545" height="158" class="alignnone size-full wp-image-1906" /></a></p>
 <p>See the graph for a specific metric over the last hour <strong>right in your console</strong> with <code>inspeqtorctl show host load:1</code>:</p>
-<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-26-at-10.39.09.png"><!-- raw HTML omitted --></a></p>
+<p><a href="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-26-at-10.39.09.png"><img src="http://www.mikeperham.com/wp-content/uploads/2014/09/Screen-Shot-2014-09-26-at-10.39.09.png" alt="Screen Shot 2014-09-26 at 10.39.09" width="524" height="42" class="alignnone size-full wp-image-1892" /></a></p>
 <p>Inspeqtor is a single binary written in Go. It has no runtime dependencies and uses little memory. I&rsquo;m hoping a fast, efficient language makes for a monitoring tool you can rely on.</p>
 <p><strong>But wait, THERE&rsquo;S MORE!</strong></p>
 <p>Of course there&rsquo;s <a href="http://www.contribsys.com/inspeqtor/">Inspeqtor Pro</a>. The commercial version adds even more features:</p>

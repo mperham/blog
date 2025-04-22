@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/12/08/12-gems-of-christmas-5-lograge/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/12/08/12-gems-of-christmas-5-lograge/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #5 -- lograge">
   <meta property="og:description" content="Rails has a problem: its production logging is somewhat lacking. By default, Rails will emit a bunch of lines for each request, which makes grepping the output tougher than it should be. Look at this, it’s nice to look at but painful to aggregate:
-Lograge ’tames’ Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here’s some output from The Clymb production logging with lograge enabled:">
+Started GET &#34;/&#34; for 127.0.0.1 at 2012-03-10 14:28:14 &#43;0100 Processing by HomeController#index as HTML Rendered text template within layouts/application (0.0ms) Rendered layouts/_assets.html.erb (2.0ms) Rendered layouts/_top.html.erb (2.6ms) Rendered layouts/_about.html.erb (0.3ms) Rendered layouts/_google_analytics.html.erb (0.4ms) Completed 200 OK in 79ms (Views: 78.8ms | ActiveRecord: 0.0ms) Lograge ’tames’ Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here’s some output from The Clymb production logging with lograge enabled:">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -198,15 +198,27 @@ blockquote,
   
 </p>
 <p>Rails has a problem: its production logging is somewhat lacking. By default, Rails will emit a bunch of lines for each request, which makes grepping the output tougher than it should be. Look at this, it&rsquo;s nice to look at but painful to aggregate:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p><a href="https://github.com/roidrage/lograge">Lograge</a> &rsquo;tames&rsquo; Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here&rsquo;s some output from <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> production logging with lograge enabled:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Ah, much cleaner! (and notice the HTTP status value is a float. :-) This format gives us the critical request information required for performance tuning and is easily digestible by simple scripts. Enabling it is trivial:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Much happier logs lead to much happier developers. Happy logging! Tomorrow I&rsquo;ll cover a gem (or two!?) designed to make email development happier&hellip;</p>
+<pre tabindex="0"><code>Started GET &#34;/&#34; for 127.0.0.1 at 2012-03-10 14:28:14 +0100
+Processing by HomeController#index as HTML
+  Rendered text template within layouts/application (0.0ms)
+  Rendered layouts/_assets.html.erb (2.0ms)
+  Rendered layouts/_top.html.erb (2.6ms)
+  Rendered layouts/_about.html.erb (0.3ms)
+  Rendered layouts/_google_analytics.html.erb (0.4ms)
+Completed 200 OK in 79ms (Views: 78.8ms | ActiveRecord: 0.0ms)
+</code></pre><p><a href="https://github.com/roidrage/lograge">Lograge</a> &rsquo;tames&rsquo; Rails production logging setup to emit one line per request, a la Apache or nginx. The output is key-value pairs; parsing it into a hash is trivial. Here&rsquo;s some output from <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> production logging with lograge enabled:</p>
+<pre tabindex="0"><code>Nov 24 13:31:27 app-1 rails[22622]: method=GET path=/brand-event/2818/show-product/183537?f=mi format=html controller=presentations action=show_product status=200.00 duration=237.54 view=206.14 db=17.12
+Nov 24 13:31:28 app-1 rails[22630]: method=GET path=/brand-event/2818/show-product/183539?f=mi format=html controller=presentations action=show_product status=200.00 duration=125.37 view=94.05 db=17.59
+Nov 24 13:31:28 app-1 rails[22622]: method=GET path=/brand-event/2818/show-product/183541?f=mi format=html controller=presentations action=show_product status=200.00 duration=117.47 view=86.00 db=16.79
+Nov 24 13:31:28 app-1 rails[22630]: method=GET path=/brand-event/2818/show-product/183548?f=mi format=html controller=presentations action=show_product status=200.00 duration=132.09 view=97.69 db=20.69
+Nov 24 13:31:28 app-1 rails[22622]: method=GET path=/brand-event/2818/show-product/183554?f=mi format=html controller=presentations action=show_product status=200.00 duration=119.36 view=84.44 db=18.87
+Nov 24 13:31:29 app-1 rails[22622]: method=GET path=/basket/tracking_pixels format=html controller=baskets action=tracking_pixels status=200.00 duration=71.47 view=41.00 db=23.65
+</code></pre><p>Ah, much cleaner! (and notice the HTTP status value is a float. :-) This format gives us the critical request information required for performance tuning and is easily digestible by simple scripts. Enabling it is trivial:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># config/environments/production.rb</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">MyApp</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Application</span><span style="color:#f92672">.</span>configure <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>lograge<span style="color:#f92672">.</span>enabled <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Much happier logs lead to much happier developers. Happy logging! Tomorrow I&rsquo;ll cover a gem (or two!?) designed to make email development happier&hellip;</p>
 
     </article>
   </div>

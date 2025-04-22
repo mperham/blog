@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/03/10/systemtimer-11-crash/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/03/10/systemtimer-11-crash/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="SystemTimer 1.1 crash">
   <meta property="og:description" content="We’re trying to use SystemTimer 1.1 on 64-bit Ubuntu and find that it crashes. An hour’s worth of investigation led to this fix:
-I hope this helps someone else with the same problem. The author has been notified.">
+--- a/ext/system_timer/system_timer_native.c &#43;&#43;&#43; b/ext/system_timer/system_timer_native.c @@ -25,7 &#43;25,7 @@ static void install_ruby_sigalrm_handler(VALUE); static void restore_original_ruby_sigalrm_handler(VALUE); static void restore_original_sigalrm_mask_when_blocked(); static void restore_original_timer_interval(); -static void set_itimerval_with_minimum_1s_interval(struct itimerval *, int); &#43;static void set_itimerval_with_minimum_1s_interval(struct itimerval *, VALUE); static void set_itimerval(struct itimerval *, int); static void restore_sigalrm_mask(sigset_t *previous_mask); static void log_debug(char*, ...); @@ -262,7 &#43;262,7 @@ static void init_sigalarm_mask() } static void set_itimerval_with_minimum_1s_interval(struct itimerval *value, - int seconds) { &#43; VALUE seconds) { int sanitized_second_interval; I hope this helps someone else with the same problem. The author has been notified.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -198,9 +198,26 @@ blockquote,
   
 </p>
 <p>We&rsquo;re trying to use SystemTimer 1.1 on 64-bit Ubuntu and find that it crashes. An hour&rsquo;s worth of investigation led to this fix:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>I hope this helps someone else with the same problem. The author has been notified.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#f92672">--- a/ext/system_timer/system_timer_native.c
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/ext/system_timer/system_timer_native.c
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -25,7 +25,7 @@ static void install_ruby_sigalrm_handler(VALUE);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> static void restore_original_ruby_sigalrm_handler(VALUE);
+</span></span><span style="display:flex;"><span> static void restore_original_sigalrm_mask_when_blocked();
+</span></span><span style="display:flex;"><span> static void restore_original_timer_interval();
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-static void set_itimerval_with_minimum_1s_interval(struct itimerval *, int);
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+static void set_itimerval_with_minimum_1s_interval(struct itimerval *, VALUE);
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span> static void set_itimerval(struct itimerval *, int);
+</span></span><span style="display:flex;"><span> static void restore_sigalrm_mask(sigset_t *previous_mask);
+</span></span><span style="display:flex;"><span> static void log_debug(char*, ...);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -262,7 +262,7 @@ static void init_sigalarm_mask()
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> static void set_itimerval_with_minimum_1s_interval(struct itimerval *value,
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-                                                   int seconds) {
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+                                                   VALUE seconds) {
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>
+</span></span><span style="display:flex;"><span>     int sanitized_second_interval;
+</span></span></code></pre></div><p>I hope this helps someone else with the same problem. The author has been notified.</p>
 
     </article>
   </div>

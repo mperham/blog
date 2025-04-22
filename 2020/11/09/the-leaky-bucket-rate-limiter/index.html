@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Leaky Bucket rate limiter">
   <meta property="og:description" content="A few months ago, a customer asked if I could supply a “leaky bucket” rate limiter as part of Sidekiq Enterprise’s rate limiter suite. It took me a while to find the time and energy to work on it (my need to mentally escape the 2020 election eventually did the trick).
@@ -201,7 +201,9 @@ blockquote,
 rate limiter as part of Sidekiq Enterprise&rsquo;s <a href="https://github.com/mperham/sidekiq/wiki/Ent-Rate-Limiting#leaky-bucket">rate limiter</a> suite. It
 took me a while to find the time and energy to work on it (my need to
 mentally escape the 2020 election eventually did the trick).</p>
-<!-- raw HTML omitted -->
+<figure>
+  <img alt="leaky bucket" credit="courtesy of the Cloudflare blog" src="/images/leaky.png" width="50%" style="float: right; padding: 10px;"/>
+</figure>
 <p>I went into this process knowing the basics of the <a href="https://en.wikipedia.org/wiki/Leaky_bucket">leaky bucket</a>
 algorithm but with no idea how to implement it. I&rsquo;m not going to cover
 the algorithm here but check out that Wikipedia page if you want

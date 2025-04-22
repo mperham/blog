@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2013/11/13/advanced-sidekiq-host-specific-queues/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2013/11/13/advanced-sidekiq-host-specific-queues/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Advanced Sidekiq: Host-specific Queues">
   <meta property="og:description" content="This is the first in a series of posts offering neat tricks to get the most out of Sidekiq.
@@ -201,13 +201,23 @@ blockquote,
 <p>Recently we rewrote part of The Clymb to process images asynchronously using Sidekiq. The user uploads the image file, it is saved to disk and a job created to process the file. Almost immediately we saw a bunch of retries with the error &ldquo;Unable to find file xyz.jpg&rdquo;. We just uploaded the file, how could it not be there?</p>
 <p>The problem is that we have multiple app servers and they all run Unicorn and Sidekiq. This means the file can be uploaded to a Unicorn on app-1 and the job processed by a Sidekiq on app-2. The job queue is global to the cluster but the filesystem is local. The solution is a cool hack: use a queue which is processed only by Sidekiq processes on that server.</p>
 <p>First we need to tell each Sidekiq process to listen to a queue named after the machine&rsquo;s hostname. In your <code>config/sidekiq.yml</code>, do this:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Sidekiq runs the YAML file through ERB automatically so you can easily add the queue dynamically.</p>
+<pre tabindex="0"><code>---
+:verbose: false
+:concurrency: 25
+:queues:
+  - default
+  - &lt;%= `hostname`.strip %&gt;
+</code></pre><p>Sidekiq runs the YAML file through ERB automatically so you can easily add the queue dynamically.</p>
 <p>Second, we need to configure the jobs to use the queue:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Now when we create an ImageUploadProcessor job, it will be saved to a queue named after the machine&rsquo;s hostname and processed by a Sidekiq worker on that machine. Easy!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ImageUploadProcessor</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
+</span></span><span style="display:flex;"><span>  sidekiq_options <span style="color:#e6db74">queue</span>: <span style="color:#e6db74">`hostname`</span><span style="color:#f92672">.</span>strip
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(filename)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># process image</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Now when we create an ImageUploadProcessor job, it will be saved to a queue named after the machine&rsquo;s hostname and processed by a Sidekiq worker on that machine. Easy!</p>
 
     </article>
   </div>

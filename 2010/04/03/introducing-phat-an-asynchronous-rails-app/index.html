@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/04/03/introducing-phat-an-asynchronous-rails-app/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Introducing Phat, an Asynchronous Rails app">
   <meta property="og:description" content="Phat is my new Rails 2.3.5 application which runs 100% asynchronous, supporting many concurrent requests in a single Ruby process.
@@ -209,13 +209,31 @@ blockquote,
 <li>Multiple threads is better but still has fundamental issues in Ruby. <a href="http://redmine.ruby-lang.org/issues/show/921">Autoloading is simply broken</a> and Ruby&rsquo;s thread implementation does not scale at all due to the GIL.</li>
 </ul>
 <p>Here&rsquo;s a sample action which uses memcached and the database. There&rsquo;s nothing odd here &ndash; it&rsquo;s the same old Rails API and codebase we are used to as Ruby developers, it just executes differently under the covers.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>How does it work? If you want the nitty-gritty, <a href="/2010/01/27/scalable-ruby-processing-with-eventmachine/">watch my talk on EventMachine and Fibers</a>. Everything that does network access ideally should be modified to be Fiber-aware. I&rsquo;ve updated many gems to be Fiber-aware: <a href="http://github.com/mperham/memcache-client">memcache-client</a>, <a href="http://github.com/mperham/em_postgresql">em_postgresql</a> (and activerecord), cassandra, bunny and rsolr to name a few. You&rsquo;ll also need to run thin as your app server, since all of this code assumes it is executing within EventMachine.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HelloController</span> <span style="color:#f92672">&amp;</span>lt; <span style="color:#66d9ef">ApplicationController</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">world</span>
+</span></span><span style="display:flex;"><span>    site_ids <span style="color:#f92672">=</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>cache<span style="color:#f92672">.</span>fetch <span style="color:#e6db74">&#39;site_ids&#39;</span>, <span style="color:#e6db74">:expires_in</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">.</span>minute <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">Site</span><span style="color:#f92672">.</span>all<span style="color:#f92672">.</span>map(<span style="color:#f92672">&amp;</span><span style="color:#75715e">#038;:id)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    render <span style="color:#e6db74">:text</span> <span style="color:#f92672">=&gt;</span> site_ids
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>How does it work? If you want the nitty-gritty, <a href="/2010/01/27/scalable-ruby-processing-with-eventmachine/">watch my talk on EventMachine and Fibers</a>. Everything that does network access ideally should be modified to be Fiber-aware. I&rsquo;ve updated many gems to be Fiber-aware: <a href="http://github.com/mperham/memcache-client">memcache-client</a>, <a href="http://github.com/mperham/em_postgresql">em_postgresql</a> (and activerecord), cassandra, bunny and rsolr to name a few. You&rsquo;ll also need to run thin as your app server, since all of this code assumes it is executing within EventMachine.</p>
 <p>Additionally we need to ensure that each request runs in its own Fiber. My new gem, <a href="http://github.com/mperham/rack-fiber_pool">rack-fiber_pool</a>, will do this for you, just add it as Rack middleware in <code>config/environment.rb</code>. Here&rsquo;s the basic configuration:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Additionally we need to <a href="http://github.com/mperham/phat/blob/master/config/database.yml">configure Postgresql</a> and <a href="http://github.com/mperham/phat/blob/master/config/initializers/disable_locking.rb">disable ActionController&rsquo;s reloader mutex</a> as it really doesn&rsquo;t like fibered execution. This is ok because remember &ndash; there&rsquo;s only a single thread executing in our process!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span> <span style="color:#75715e"># Asynchronous DNS lookup</span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;em-resolv-replace&#39;</span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;rack/fiber_pool&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Pull in the evented memcache-client.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># You&#39;ll need to configure config.cache_store as normal.</span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;memcache/event_machine&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Rails</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Initializer</span><span style="color:#f92672">.</span>run <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>cache_store <span style="color:#f92672">=</span> <span style="color:#e6db74">:mem_cache_store</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Run each request in a Fiber</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>middleware<span style="color:#f92672">.</span>use <span style="color:#66d9ef">Rack</span><span style="color:#f92672">::</span><span style="color:#66d9ef">FiberPool</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Get rid of Rack::Lock so we don&#39;t kill our concurrency</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>threadsafe!
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Additionally we need to <a href="http://github.com/mperham/phat/blob/master/config/database.yml">configure Postgresql</a> and <a href="http://github.com/mperham/phat/blob/master/config/initializers/disable_locking.rb">disable ActionController&rsquo;s reloader mutex</a> as it really doesn&rsquo;t like fibered execution. This is ok because remember &ndash; there&rsquo;s only a single thread executing in our process!</p>
 <p>With that done, we can try some tests to see how we scale now. EventMachine works best when you have significant network latency. A simple test with database access over coffeeshop WiFi:</p>
 <blockquote>
 <p>Without EventMachine:<br>

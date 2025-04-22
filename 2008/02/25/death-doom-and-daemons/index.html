@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/02/25/death-doom-and-daemons/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/02/25/death-doom-and-daemons/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Death, Doom and Daemons!">
   <meta property="og:description" content="We’re actually starting to run the new FiveRuns service daemons internally and found that they were dying due to various issues so I integrated a little bit of ActionMailer code to email the dev team when a daemon dies with the relevant details. Below is what I did – do you have any tips for monitoring Ruby daemon processes?">
@@ -198,18 +198,46 @@ blockquote,
 </p>
 <p>We&rsquo;re actually starting to run the new FiveRuns service daemons internally and found that they were dying due to various issues so I integrated a little bit of ActionMailer code to email the dev team when a daemon dies with the relevant details.  Below is what I did &ndash; do you have any tips for monitoring Ruby daemon processes?</p>
 <p>First we need to create an ActionMailer which will send email:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>and call the mailer when the daemon dies:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Now we put the email template in <em>demise_mailer/condolences.erb</em>:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>and finally configure ActionMailer to send SMTP email:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Seems to work pretty well so far.  Drop me a comment if you use it or have suggestions to improve it!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DemiseMailer</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">condolences</span>(name, err)
+</span></span><span style="display:flex;"><span>    require <span style="color:#e6db74">&#39;socket&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    recipients  Array(<span style="color:#e6db74">&#39;Development &lt;nosuchemail@example.com&gt;&#39;</span>)
+</span></span><span style="display:flex;"><span>    from        <span style="color:#e6db74">&#39;DemiseMailer &lt;nosuchemail@example.com&gt;&#39;</span>
+</span></span><span style="display:flex;"><span>    subject     <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">#{</span>name<span style="color:#e6db74">}</span><span style="color:#e6db74"> died on </span><span style="color:#e6db74">#{</span><span style="color:#66d9ef">Socket</span><span style="color:#f92672">.</span>gethostname<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    body({ <span style="color:#e6db74">:name</span> <span style="color:#f92672">=&gt;</span> name, <span style="color:#e6db74">:error</span> <span style="color:#f92672">=&gt;</span> err })
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>and call the mailer when the daemon dies:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  loader <span style="color:#f92672">=</span> <span style="color:#66d9ef">Loader</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Engine</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span>  loader<span style="color:#f92672">.</span>load(<span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">rescue</span> <span style="color:#f92672">=&gt;</span> e
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">DemiseMailer</span><span style="color:#f92672">.</span>deliver_condolences(<span style="color:#e6db74">&#39;loader&#39;</span>, e) <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">RAILS_ENV</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;production&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">raise</span> e
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Now we put the email template in <em>demise_mailer/condolences.erb</em>:</p>
+<pre tabindex="0"><code>I regret to inform you that your daemon, &lt;%= @name %&gt;, passed away at &lt;%= Time.now %&gt;
+while running on &lt;%= Socket.gethostname %&gt;.
+
+Its last words were:
+
+&lt;%= @error.to_s %&gt;
+&lt;%= @error.backtrace.join(&#34;nt&#34;) %&gt;
+
+My condolences on your loss.
+
+Sincerely,
+DemiseMailer
+</code></pre><p>and finally configure ActionMailer to send SMTP email:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>template_root <span style="color:#f92672">=</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>expand_path(<span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>dirname(__FILE__))
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>smtp_settings <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">:address</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;email.example.com&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">:domain</span>  <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;example.com&#39;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">:port</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">587</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>raise_delivery_errors <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div><p>Seems to work pretty well so far.  Drop me a comment if you use it or have suggestions to improve it!</p>
     </article>
   </div>
 

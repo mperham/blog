@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/02/07/improved-deadlock-retry/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/02/07/improved-deadlock-retry/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Improved Deadlock Retry">
   <meta property="og:description" content="Anyone who’s built a reasonably complex web site on top of a database has seen database deadlock. MySQL will throw a timeout error after waiting for 30 seconds, thereby ending the deadlock in a brutal but effective manner. Rails has a plugin, known as deadlock_retry, which will catch those errors and simply retry the transaction. There’s a good chance this will work since deadlocks are race conditions but it’s not very effective for finding and solving the underlying problem.">
@@ -202,9 +202,8 @@ blockquote,
 <li>If a deadlock happens, the code will log the output of SHOW INNODB STATUS, which will indicate who was waiting for what. Knowing the tables in contention goes a long way to understanding the problem.</li>
 <li>The code now runs as a gem, not as a plugin. You don&rsquo;t need to put the code in your application, just add this config.gem reference in config/environment.rb and use <code>rake gems:install</code> to install it:</li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>This is code I wrote for our internal usage of deadlock_retry at <a href="http://fiveruns.com">FiveRuns</a>. Please let me know if you find this improvement useful.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>config<span style="color:#f92672">.</span>gem <span style="color:#e6db74">&#39;mperham-deadlock_retry&#39;</span>, <span style="color:#e6db74">:lib</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;deadlock_retry&#39;</span>, <span style="color:#e6db74">:source</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;http://gems.github.com&#39;</span>
+</span></span></code></pre></div><p>This is code I wrote for our internal usage of deadlock_retry at <a href="http://fiveruns.com">FiveRuns</a>. Please let me know if you find this improvement useful.</p>
 
     </article>
   </div>

@@ -5,10 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2010/02/27/touch-a-file/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/02/27/touch-a-file/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Touch a File">
-  <meta property="og:description" content="Here’s how to touch a file using Ruby, easy as 1-2-3:">
+  <meta property="og:description" content="Here’s how to touch a file using Ruby, easy as 1-2-3:
+File.utime(access_time, mod_time, filename)">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -197,9 +198,8 @@ blockquote,
   
 </p>
 <p>Here&rsquo;s how to touch a file using Ruby, easy as 1-2-3:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>utime(access_time, mod_time, filename)
+</span></span></code></pre></div>
     </article>
   </div>
 

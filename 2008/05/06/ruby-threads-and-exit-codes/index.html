@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/05/06/ruby-threads-and-exit-codes/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/05/06/ruby-threads-and-exit-codes/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Ruby, Threads and Exit Codes">
   <meta property="og:description" content="A question for you Ruby nerds: the $? variable gives access to the exit code for the last process launched by Ruby. Is referencing $? a race condition in a system with many threads launching many subprocesses? If it is truly a global variable, then it’s inherently unsafe, but it could also be implemented with a thread-local variable. Any idea which it is?
-``">
+output = `#{command}` if $? != 0 # Race condition? raise output end Update: modern Ruby implements it as a thread-local so it is thread-safe.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -198,10 +198,11 @@ blockquote,
   
 </p>
 <p>A question for you Ruby nerds: the <strong>$?</strong> variable gives access to the exit code for the last process launched by Ruby. Is referencing <strong>$?</strong> a race condition in a system with many threads launching many subprocesses? If it is truly a global variable, then it&rsquo;s inherently unsafe, but it could also be implemented with a thread-local variable. Any idea which it is?</p>
-<p>``<!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>output <span style="color:#f92672">=</span> <span style="color:#e6db74">`</span><span style="color:#e6db74">#{</span>command<span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> $? <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> <span style="color:#75715e"># Race condition?</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">raise</span> output
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Update: modern Ruby implements it as a thread-local so it is thread-safe.</p>
 
     </article>
   </div>

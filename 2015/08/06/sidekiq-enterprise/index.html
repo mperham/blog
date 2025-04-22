@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2015/08/06/sidekiq-enterprise/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2015/08/06/sidekiq-enterprise/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq Enterprise">
   <meta property="og:description" content="After many months of development and preparation, I’m proud to announce the newest member of the Sidekiq family: Sidekiq Enterprise. Sidekiq Enteprise is targeted at large companies and businesses which are building and scaling their operations with Sidekiq. It offers a whole new level of functionality beyond what Sidekiq and Sidekiq Pro contain.
@@ -218,8 +218,8 @@ processes, Sidekiq or not:</p>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">ERP_LIMITER</span><span style="color:#f92672">.</span>within_limit <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">Erp</span><span style="color:#f92672">.</span>do_something
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>The Limiter API allows you to limit based on concurrency or a rate limit
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>The Limiter API allows you to limit based on concurrency or a rate limit
 (e.g. 5 ops per sec).</p>
 <p>If the operation cannot be executed due to the rate limit, it will raise
 an error by default.  If this error is raised within a Sidekiq job, Sidekiq
@@ -241,8 +241,8 @@ It&rsquo;s dead simple to register a periodic job:</p>
 </span></span><span style="display:flex;"><span>    mgr<span style="color:#f92672">.</span>register <span style="color:#e6db74">&#34;* * * * *&#34;</span>, <span style="color:#66d9ef">MinutelyWorker</span>, <span style="color:#66d9ef">retry</span>: <span style="color:#ae81ff">1</span>
 </span></span><span style="display:flex;"><span>    mgr<span style="color:#f92672">.</span>register <span style="color:#e6db74">&#34;*/4 * 10 * *&#34;</span>, <span style="color:#66d9ef">OddTimedWorker</span>, <span style="color:#e6db74">queue</span>: <span style="color:#e6db74">&#39;critical&#39;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>Your Worker must take no arguments.</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Your Worker must take no arguments.</p>
 <p>The Web UI has a new &ldquo;Cron&rdquo; tab containing an overview of registered periodic jobs
 along with their recent execution history.</p>
 <p>Documentation: <a href="https://github.com/mperham/sidekiq/wiki/Ent-Periodic-Jobs">Periodic Jobs</a></p>
@@ -255,16 +255,16 @@ any jobs already pending within Redis.  If you create a job every time your
 user presses a button, you might not want a storm of clicks to create a storm of jobs.</p>
 <p>To activate the feature, add this line:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># config/initializers/sidekiq.rb</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Enterprise</span><span style="color:#f92672">.</span>unique! <span style="color:#66d9ef">unless</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>testing?</span></span></code></pre></div>
-<p>Your workers must declare their uniqueness TTL with the <code>unique_for</code> option:</p>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Enterprise</span><span style="color:#f92672">.</span>unique! <span style="color:#66d9ef">unless</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>testing?
+</span></span></code></pre></div><p>Your workers must declare their uniqueness TTL with the <code>unique_for</code> option:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyWorker</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
 </span></span><span style="display:flex;"><span>  sidekiq_options <span style="color:#e6db74">unique_for</span>: <span style="color:#ae81ff">10</span><span style="color:#f92672">.</span>minutes
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">...</span>)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<p>The uniqueness will remain in effect until the job is successfully processed or the TTL expires.
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>The uniqueness will remain in effect until the job is successfully processed or the TTL expires.
 Uniqueness is based on <code>(class, args, queue)</code> so you <strong>can</strong> push the same class/arguments
 to two different queues.</p>
 <p>Documentation: <a href="https://github.com/mperham/sidekiq/wiki/Ent-Unique-Jobs">Unique Jobs</a></p>

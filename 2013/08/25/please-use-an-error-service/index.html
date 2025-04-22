@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2013/08/25/please-use-an-error-service/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2013/08/25/please-use-an-error-service/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Please Use an Error Service!">
   <meta property="og:description" content="In The Perils of “rescue Exception” I explained one major error handling issue I see in almost all Ruby code. The second mistake I see is using logging rather than an error service.">
@@ -200,12 +200,14 @@ blockquote,
 <p>An error service is SaaS that provides error handling for your application. Your code throws an error, the service&rsquo;s client library catches the error and uploads the error message, backtrace and context to the service. You and the rest of the development team get an email when an error occurs.</p>
 <p><strong>Pain is to your body what errors are to your application.</strong> You want to know about errors as soon as possible so you can triage and understand the current health of your application.</p>
 <p>Here&rsquo;s what your code might look like if you use logging:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Insanity! Are you going to scan your logs constantly for errors? Do you look at your body constantly for wounds? Here&rsquo;s what it looks like when you use an error service:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>The error service generally integrates into Rails (and Sidekiq, too!) so that your code need do nothing. If call_foo raises an error, you&rsquo;ll get an email seconds later with a backtrace and all the context available (controller parameters, http headers, etc) which often means you can diagnose the problem in seconds.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  call_foo
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">rescue</span> <span style="color:#f92672">=&gt;</span> ex
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>logger<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#34;Unable to call foo: </span><span style="color:#e6db74">#{</span>ex<span style="color:#f92672">.</span>message<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Insanity! Are you going to scan your logs constantly for errors? Do you look at your body constantly for wounds? Here&rsquo;s what it looks like when you use an error service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>call_foo
+</span></span></code></pre></div><p>The error service generally integrates into Rails (and Sidekiq, too!) so that your code need do nothing. If call_foo raises an error, you&rsquo;ll get an email seconds later with a backtrace and all the context available (controller parameters, http headers, etc) which often means you can diagnose the problem in seconds.</p>
 <p>Errors should cause pain but don&rsquo;t let them make your code filthy with logging! Remove all that error logging and just use an error service – it&rsquo;s the sane and healthy thing to do. And once your inbox calms down, you have a pretty reasonable indicator that your app is healthy.</p>
 <p>Postscript:</p>
 <p>Since I&rsquo;m sure people will ask for error service recommendations, I do want to make clear that I&rsquo;m not endorsing any one service but here&rsquo;s a list of error services off the top of my head:</p>

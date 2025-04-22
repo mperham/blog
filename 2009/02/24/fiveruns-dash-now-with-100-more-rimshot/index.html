@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/02/24/fiveruns-dash-now-with-100-more-rimshot/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/02/24/fiveruns-dash-now-with-100-more-rimshot/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="FiveRuns Dash, now with 100% more rimshot!">
   <meta property="og:description" content="I’m giving away a free copy of my iPhone app, Zinger, to every person who gets their app running with our new metrics service, Dash. Just email me. Steps (documented in more depth here):
-Request an invite by signing up at https://dash.fiveruns.com Log into Dash, create a new Rails application and note your application token. Install the gem: Add the gem to your config/environment.rb Add the initializer file config/initializers/dash.rb to start Dash: This will start Dash in the production environment. We don’t recommend using Dash in development mode. If you have a staging environment, you can create a separate app for that environment and combine the two like so:">
+Request an invite by signing up at https://dash.fiveruns.com Log into Dash, create a new Rails application and note your application token. Install the gem: sudo gem install json sudo gem install fiveruns-dash-rails -s http://gems.github.com Add the gem to your config/environment.rb Rails::Initializer.run do |config| config.gem &#39;json&#39; # needed because of a bug in json_pure config.gem &#39;fiveruns-dash-rails&#39;, :lib =&gt; &#39;fiveruns_dash_rails&#39;, :source =&gt; &#39;http://gems.github.com&#39; Add the initializer file config/initializers/dash.rb to start Dash: if defined?(Fiveruns::Dash) Fiveruns::Dash::Rails.start(:production =&gt; &#39;YOUR-APP-TOKEN-HERE&#39;) end This will start Dash in the production environment. We don’t recommend using Dash in development mode. If you have a staging environment, you can create a separate app for that environment and combine the two like so:">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -203,22 +203,27 @@ blockquote,
 <li>Log into Dash, create a new Rails application and note your application token.</li>
 <li>Install the gem:</li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<ol start="4">
+<pre tabindex="0"><code>sudo gem install json
+sudo gem install fiveruns-dash-rails -s http://gems.github.com
+</code></pre><ol start="4">
 <li>Add the gem to your <code>config/environment.rb</code></li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<ol start="5">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">Rails</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Initializer</span><span style="color:#f92672">.</span>run <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>gem <span style="color:#e6db74">&#39;json&#39;</span> <span style="color:#75715e"># needed because of a bug in json_pure</span>
+</span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>gem <span style="color:#e6db74">&#39;fiveruns-dash-rails&#39;</span>,
+</span></span><span style="display:flex;"><span>             <span style="color:#e6db74">:lib</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;fiveruns_dash_rails&#39;</span>,
+</span></span><span style="display:flex;"><span>             <span style="color:#e6db74">:source</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;http://gems.github.com&#39;</span>
+</span></span></code></pre></div><ol start="5">
 <li>Add the initializer file <code>config/initializers/dash.rb</code> to start Dash:</li>
 </ol>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>This will start Dash in the production environment. We don&rsquo;t recommend using Dash in development mode. If you have a staging environment, you can create a separate app for that environment and combine the two like so:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Email me if you have problems &ndash; I&rsquo;m happy to help people give Dash a test drive. Dash is 100% free right now until we&rsquo;ve worked out pricing models but rest assured there will always be a free tier so you don&rsquo;t have to worry about your app costing you money in the future. I hope your Dash test drive is full of rimshots with no sad trombones!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> defined?(<span style="color:#66d9ef">Fiveruns</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Dash</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Fiveruns</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Dash</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>start(<span style="color:#e6db74">:production</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;YOUR-APP-TOKEN-HERE&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>This will start Dash in the production environment. We don&rsquo;t recommend using Dash in development mode. If you have a staging environment, you can create a separate app for that environment and combine the two like so:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> defined?(<span style="color:#66d9ef">Fiveruns</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Dash</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Fiveruns</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Dash</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>start(<span style="color:#e6db74">:production</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;PROD-TOKEN&#39;</span>, <span style="color:#e6db74">:staging</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;STAGE-TOKEN&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Email me if you have problems &ndash; I&rsquo;m happy to help people give Dash a test drive. Dash is 100% free right now until we&rsquo;ve worked out pricing models but rest assured there will always be a free tier so you don&rsquo;t have to worry about your app costing you money in the future. I hope your Dash test drive is full of rimshots with no sad trombones!</p>
 
     </article>
   </div>

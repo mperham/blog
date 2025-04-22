@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/01/14/consistent-hashing-in-memcache-client/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/01/14/consistent-hashing-in-memcache-client/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Consistent Hashing in memcache-client">
   <meta property="og:description" content="One of the most important features needed to create a scalable memcached infrastructure is consistent hashing. I recently added consistent hashing to the Ruby memcache-client project and I want to take a moment to explain why this is important.
@@ -202,9 +202,8 @@ blockquote,
 <p><strong>The Naive Approach</strong></p>
 <p>Memcached is simple in principle: just like a hashtable, a unique key maps to a value. This is simple when you have a single memcached server, but what do you do if you have two servers? Which server is the key/value pair stored on?</p>
 <p>The naive approach is to hash the key to an integer and do a modulo based on the size of the server set. For a given key, this should return the same, random server from the set every time.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>This works great &ndash; if the server set never changes.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>idx <span style="color:#f92672">=</span> <span style="color:#66d9ef">Zlib</span><span style="color:#f92672">.</span>crc32(key) <span style="color:#f92672">%</span> servers<span style="color:#f92672">.</span>size
+</span></span></code></pre></div><p>This works great &ndash; if the server set never changes.</p>
 <p><strong>Where It All Goes Wrong</strong></p>
 <p>Now our website is doing great and getting tens of hits per day so we find ourselves needing to add a new memcached server in order to handle the surge in traffic. We add the new server, restart our daemons and soon the database disk(s) grinds to a halt. <em>What happened?</em> When you change the server set, the modulo value for most of the key hashes changes. This means that memcache-client goes to the &ldquo;wrong&rdquo; server, the lookup misses and that expensive operation you are caching needs to be performed again. You essentially get a storm of recalculation as your cache contents shift from their old server to their new server.</p>
 <p><strong>Enter the Continuum</strong></p>

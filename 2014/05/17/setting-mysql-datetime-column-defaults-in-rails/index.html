@@ -5,11 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Setting MySQL DATETIME column defaults in Rails">
   <meta property="og:description" content="Starting in MySQL 5.6.5, datetime columns can have an actual useful default of CURRENT_TIMESTAMP and MySQL will auto-populate the columns as necessary. This is incredibly handy if you ever do bulk updates in SQL, now you don’t need to remember to set updated_at! Inserting records manually will auto-populate those columns too. Let’s try it:
-Run that and we’ll see this:">
+def up create_table :rows do |t| t.integer :value t.datetime :created_at, null: false, default: &#34;CURRENT_TIMESTAMP&#34; t.datetime :updated_at, null: false, default: &#34;CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP&#34; end end Run that and we’ll see this:">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -198,18 +198,35 @@ blockquote,
   
 </p>
 <p><a href="https://dev.mysql.com/doc/refman/5.6/en/timestamp-initialization.html">Starting in MySQL 5.6.5</a>, datetime columns can have an actual useful default of CURRENT_TIMESTAMP and MySQL will auto-populate the columns as necessary. This is incredibly handy if you ever do bulk updates in SQL, now you don&rsquo;t need to remember to set updated_at! Inserting records manually will auto-populate those columns too. Let&rsquo;s try it:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Run that and we&rsquo;ll see this:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Notice that Rails quotes the default value, making it invalid. We can bypass this by using a custom type to define all the special logic we need and use the generic <code>column</code> definition method:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p><strong>Big Caveat</strong>: you must make sure your database&rsquo;s timezone is set correctly. MySQL defaults to the system&rsquo;s timezone and we set our system timezone to Pacific so everything should work fine for us.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Defined like that, those columns will be populated and updated any time rows are touched, not just when Rails does it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">up</span>
+</span></span><span style="display:flex;"><span>  create_table <span style="color:#e6db74">:rows</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>t<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>    t<span style="color:#f92672">.</span>integer <span style="color:#e6db74">:value</span>
+</span></span><span style="display:flex;"><span>    t<span style="color:#f92672">.</span>datetime <span style="color:#e6db74">:created_at</span>, <span style="color:#e6db74">null</span>: <span style="color:#66d9ef">false</span>, <span style="color:#e6db74">default</span>: <span style="color:#e6db74">&#34;CURRENT_TIMESTAMP&#34;</span>
+</span></span><span style="display:flex;"><span>    t<span style="color:#f92672">.</span>datetime <span style="color:#e6db74">:updated_at</span>, <span style="color:#e6db74">null</span>: <span style="color:#66d9ef">false</span>, <span style="color:#e6db74">default</span>: <span style="color:#e6db74">&#34;CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Run that and we&rsquo;ll see this:</p>
+<pre tabindex="0"><code>ActiveRecord::StatementInvalid: Mysql2::Error: Invalid default value for &#39;created_at&#39;: CREATE TABLE `rows` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `value` int(11) NULL, `created_at` datetime DEFAULT &#39;CURRENT_TIMESTAMP&#39; NOT NULL, `updated_at` datetime DEFAULT &#39;CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP&#39; NOT NULL) ENGINE=InnoDB
+</code></pre><p>Notice that Rails quotes the default value, making it invalid. We can bypass this by using a custom type to define all the special logic we need and use the generic <code>column</code> definition method:</p>
+<pre tabindex="0"><code>CREATE_TIMESTAMP = &#39;DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP&#39;
+UPDATE_TIMESTAMP = &#39;DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP&#39;
+
+def up
+  create_table :rows do |t|
+    t.integer :value
+    t.column :created_at, CREATE_TIMESTAMP
+    t.column :updated_at, UPDATE_TIMESTAMP
+   end
+end
+</code></pre><p><strong>Big Caveat</strong>: you must make sure your database&rsquo;s timezone is set correctly. MySQL defaults to the system&rsquo;s timezone and we set our system timezone to Pacific so everything should work fine for us.</p>
+<pre tabindex="0"><code>$ mysql
+mysql&gt; select @@time_zone;
++-------------+
+| @@time_zone |
++-------------+
+| SYSTEM      |
++-------------+
+</code></pre><p>Defined like that, those columns will be populated and updated any time rows are touched, not just when Rails does it.</p>
 
     </article>
   </div>

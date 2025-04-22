@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2009/03/08/tokyo-cabinet-vs-memcached/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/03/08/tokyo-cabinet-vs-memcached/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Tokyo Cabinet vs Memcached">
   <meta property="og:description" content="Tokyo Cabinet bills itself as a next-generation DBM. Like BerkeleyDB, TC gives you low-level database operations and allows you to build your own very fast data access operations. Unlike BDB, TC has several functional layers on top of TC which provide network access, schema-less document-oriented storage (a la CouchDB) and supported bindings for many languages. This project is an infrastructure nerd’s dream!
@@ -199,15 +199,46 @@ blockquote,
 </p>
 <p><a href="http://www.igvita.com/2009/02/13/tokyo-cabinet-beyond-key-value-store/">Tokyo Cabinet</a> bills itself as a next-generation DBM. Like BerkeleyDB, TC gives you low-level database operations and allows you to build your own very fast data access operations. Unlike BDB, TC has several functional layers on top of TC which provide network access, schema-less document-oriented storage (a la CouchDB) and supported bindings for many languages. This project is an infrastructure nerd&rsquo;s dream!</p>
 <p>One interesting feature of its network access layer, Tokyo Tyrant, is support for the memcached protocol, which means we can access it via memcache-client! I downloaded tokyocabinet and tokyotyrant and built and installed them. I then started a tyrant server like so:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Let&rsquo;s try some simple benchmarks:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Results:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Not too shabby at all! Keep in mind that TC doesn&rsquo;t support time-based key expiration and is persistent. Memcached is designed to be a memory-only cache, so while the underlying semantics of the two are somewhat different, the same basic operations are available to memcache-client. In fact, you can even theoretically use TC as your Rails cache by configuring the mem_cache_store to point to your Tokyo Tyrant server instead of memcached!</p>
+<pre tabindex="0"><code>ttserver -port 45000 data.tch
+</code></pre><p>Let&rsquo;s try some simple benchmarks:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;rubygems&#39;</span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;benchmark&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>gem <span style="color:#e6db74">&#39;memcache-client&#39;</span>, <span style="color:#e6db74">&#39;1.7.0&#39;</span>
+</span></span><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;memcache&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>memcached <span style="color:#f92672">=</span> <span style="color:#66d9ef">MemCache</span><span style="color:#f92672">.</span>new(<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;localhost:11211&#39;</span><span style="color:#f92672">]</span>, <span style="color:#e6db74">:timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>tokyo <span style="color:#f92672">=</span> <span style="color:#66d9ef">MemCache</span><span style="color:#f92672">.</span>new(<span style="color:#f92672">[</span><span style="color:#e6db74">&#39;localhost:45000&#39;</span><span style="color:#f92672">]</span>, <span style="color:#e6db74">:timeout</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">nil</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">Benchmark</span><span style="color:#f92672">.</span>bm(<span style="color:#ae81ff">20</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>b<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>  b<span style="color:#f92672">.</span>report <span style="color:#e6db74">&#39;memcached-write&#39;</span> <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">10000</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>      memcached<span style="color:#f92672">.</span>set idx<span style="color:#f92672">.</span>to_s, idx<span style="color:#f92672">.</span>to_s<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">120</span>, <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  b<span style="color:#f92672">.</span>report <span style="color:#e6db74">&#39;tokyo-write&#39;</span> <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">10000</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>idx<span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>      tokyo<span style="color:#f92672">.</span>set idx<span style="color:#f92672">.</span>to_s, idx<span style="color:#f92672">.</span>to_s<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  b<span style="color:#f92672">.</span>report <span style="color:#e6db74">&#39;memcached-read&#39;</span> <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">10_000</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>      memcached<span style="color:#f92672">.</span>get(rand(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">.</span>to_s, <span style="color:#66d9ef">true</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  b<span style="color:#f92672">.</span>report <span style="color:#e6db74">&#39;tokyo-read&#39;</span> <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ae81ff">10_000</span><span style="color:#f92672">.</span>times <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>      tokyo<span style="color:#f92672">.</span>get(rand(<span style="color:#ae81ff">100</span>)<span style="color:#f92672">.</span>to_s)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Results:</p>
+<pre tabindex="0"><code>user     system      total        real
+memcached-write       0.380000   0.200000   0.580000 (  1.308354)
+tokyo-write           0.470000   0.200000   0.670000 (  1.663922)
+memcached-read        0.410000   0.170000   0.580000 (  1.354334)
+tokyo-read            0.470000   0.180000   0.650000 (  1.688558)
+</code></pre><p>Not too shabby at all! Keep in mind that TC doesn&rsquo;t support time-based key expiration and is persistent. Memcached is designed to be a memory-only cache, so while the underlying semantics of the two are somewhat different, the same basic operations are available to memcache-client. In fact, you can even theoretically use TC as your Rails cache by configuring the mem_cache_store to point to your Tokyo Tyrant server instead of memcached!</p>
 
     </article>
   </div>

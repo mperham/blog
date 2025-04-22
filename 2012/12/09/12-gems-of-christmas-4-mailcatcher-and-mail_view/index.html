@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2012/12/09/12-gems-of-christmas-4-mailcatcher-and-mail_view/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/12/09/12-gems-of-christmas-4-mailcatcher-and-mail_view/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #4 -- mailcatcher and mail_view">
   <meta property="og:description" content="Surprise, today’s blog posting is a double header!
@@ -203,17 +203,33 @@ blockquote,
 <p>Testing email can be painful, verifying delivery and look and feel quickly becomes tedious. <a href="http://mailcatcher.me">mailcatcher</a> and <a href="https://github.com/37signals/mail_view">mail_view</a> are my go-to tools for dealing with email.</p>
 <p><strong>mailcatcher</strong></p>
 <p>With mailcatcher, you install the gem and then run the <code>mailcatcher</code> binary to start the mailcatcher daemon in the background. Now you have an SMTP server running on port 1025 and an inbox available at http://localhost:1080. I configured <a href="http://theclymb.com/invite-from/mperham">The Clymb</a> Rails app to automatically use mailcatcher if it&rsquo;s running:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Now you can test email via http://localhost:1080 and not have to use gmail, hotmail, etc.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># config/initializers/email.rb</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  sock <span style="color:#f92672">=</span> <span style="color:#66d9ef">TCPSocket</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#ae81ff">1025</span>)
+</span></span><span style="display:flex;"><span>  sock<span style="color:#f92672">.</span>close
+</span></span><span style="display:flex;"><span>  catcher <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">rescue</span>
+</span></span><span style="display:flex;"><span>  catcher <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>smtp_settings <span style="color:#f92672">=</span> <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>development? <span style="color:#f92672">&amp;</span><span style="color:#75715e">#038;&amp;#038; catcher</span>
+</span></span><span style="display:flex;"><span>  { <span style="color:#e6db74">:host</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#e6db74">:port</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;1025&#39;</span>, }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  { } <span style="color:#75715e"># normal SMTP config</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Now you can test email via http://localhost:1080 and not have to use gmail, hotmail, etc.</p>
 <p><strong>mail_view</strong></p>
 <p><a href="https://github.com/37signals/mail_view">mail_view</a> is awesome for rapidly testing UI changes in email. The trick is to render the email as a webpage directly in your Rails app so you can see changes immediately with Cmd+R just like any normal webpage. You just need to set up the email to be rendered with some data; in our case we just pull random data from the database since we all work with production database snapshots.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Of course, we need to mount the mail_view engine itself:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Now we can go to http://localhost:3000/mail_view/order_receipt and immediately see what our order_receipt email looks like, no email required!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Preview</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">MailView</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">order_receipt</span>
+</span></span><span style="display:flex;"><span>    cart <span style="color:#f92672">=</span> <span style="color:#66d9ef">Cart</span><span style="color:#f92672">.</span>where(<span style="color:#e6db74">:state</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;pushed&#39;</span>)<span style="color:#f92672">.</span>order(<span style="color:#e6db74">:id</span>)<span style="color:#f92672">.</span>last
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">Emails</span><span style="color:#f92672">.</span>order_receipt(cart<span style="color:#f92672">.</span>id)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Of course, we need to mount the mail_view engine itself:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># config/routes.rb</span>
+</span></span><span style="display:flex;"><span>mount <span style="color:#66d9ef">MailPreview</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;mail_view&#39;</span> <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">Rails</span><span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>development?
+</span></span></code></pre></div><p>Now we can go to http://localhost:3000/mail_view/order_receipt and immediately see what our order_receipt email looks like, no email required!</p>
 <p>With mailcatcher and mail_view at your side, email development and testing goes from tedious to stupendous! Tomorrow we&rsquo;ll cover a gem designed to build better command line scripts in Ruby&hellip;</p>
 
     </article>

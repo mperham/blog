@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2016/02/09/kill-your-dependencies/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2016/02/09/kill-your-dependencies/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Kill Your Dependencies">
   <meta property="og:description" content="This post talks about Ruby but it’s true of every language community: Python, JavaScript, Java, etc. The scourge of dependencies spares no one.
@@ -198,7 +198,9 @@ blockquote,
   </small>
   
 </p>
-<!-- raw HTML omitted -->
+<figure style="float: right;">
+  <img style="border: solid white 0px;" src="http://wookiehangover.github.io/dependency-injection-for-fun-and-profit/img/dependency-graph2.png" width="400px" />
+</figure>
 <p>This post talks about Ruby but it&rsquo;s true of every language community: Python, JavaScript, Java, etc.  The scourge of dependencies spares no one.</p>
 <p>This is a dependency visualization of every Rails app I&rsquo;ve ever used.  Does any of this
 sound familiar:</p>
@@ -250,8 +252,8 @@ group support to disable test gems when not testing:</p>
 </span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#39;rspec&#39;</span>
 </span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#39;timecop&#39;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># etc</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span></span></span></code></pre></div>
-<h2 id="gem-developers-listen-up">Gem Developers, Listen Up!</h2>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><h2 id="gem-developers-listen-up">Gem Developers, Listen Up!</h2>
 <p>Part of your job as a library author is to treat your user and their
 application with respect.  You should make an effort to minimize your
 own dependencies so they don&rsquo;t load unnecessary code or cause issues in the user&rsquo;s application.
@@ -267,7 +269,14 @@ their application.</p>
 <p>Sidekiq, with all of its functionality, has only 3 runtime dependencies:
 <code>rack</code>, <code>connection_pool</code> and <code>redis</code>.</p>
 <h3 id="die-json-die-german-for-the-json-the">Die json, die (German for &ldquo;The json, the&rdquo;)</h3>
-<!-- raw HTML omitted -->
+<figure style="float: right;">
+  <img style="border: solid white 10px;" src="http://41.media.tumblr.com/tumblr_lh4z0xSXsx1qbohddo1_500.jpg" width="320px" />
+</figure>
+So many gems declare a dependency on json, oj, multi_json, or yajl-ruby.
+There's so many ossified layers of cruft around JSON
+processing that only one course of action makes sense: remove it all.
+JSON has been in the stdlib since 1.9, you don't need to declare any dependencies at all.
+Just `require 'json'` and let Ruby deal with it.
 <p><a href="https://github.com/rails/rails/pull/23453">Rails did it</a>, so can you!</p>
 <h3 id="why-choose-an-http-client-when-you-can-have-them-all">Why choose an HTTP client when you can have them all?</h3>
 <p>Every Rails app pulls in a half dozen different HTTP clients: faraday, rest-client,

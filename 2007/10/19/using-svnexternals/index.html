@@ -5,11 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2007/10/19/using-svnexternals/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2007/10/19/using-svnexternals/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using svn:externals">
   <meta property="og:description" content="Subversion allows you to pull external code into your code by using the svn:externals property. It’s pretty simple to use; assume we have a library “foo” which we want to pull into the current directory. This script will add the external reference for you:
-svn pg –strict svn:externals &gt; $TMP echo “$1 $2” &gt;&gt; $TMP svn ps svn:externals –file $TMP . rm $TMP svn up">
+TMP=current.tmp svn pg --strict svn:externals &gt; $TMP echo &#34;$1 $2&#34; &gt;&gt; $TMP svn ps svn:externals --file $TMP . rm $TMP svn up Call it like this:
+extern foo https://svn.myhost.com/source/libraries/foo">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -198,16 +199,16 @@ blockquote,
   
 </p>
 <p>Subversion allows you to pull external code into your code by using the svn:externals property. It&rsquo;s pretty simple to use; assume we have a library &ldquo;foo&rdquo; which we want to pull into the current directory.  This script will add the external reference for you:</p>
-<blockquote>
-<!-- raw HTML omitted --></blockquote>
-<p>svn pg &ndash;strict svn:externals &gt; $TMP
-echo &ldquo;$1 $2&rdquo; &gt;&gt; $TMP
-svn ps svn:externals &ndash;file $TMP .
-rm $TMP
-svn up<!-- raw HTML omitted --></p>
-<p>Call it like this:</p>
-<!-- raw HTML omitted -->
+<pre tabindex="0"><code>TMP=current.tmp
 
+svn pg --strict svn:externals &gt; $TMP
+echo &#34;$1 $2&#34; &gt;&gt; $TMP
+svn ps svn:externals --file $TMP .
+rm $TMP
+svn up
+</code></pre><p>Call it like this:</p>
+<pre tabindex="0"><code>extern foo https://svn.myhost.com/source/libraries/foo
+</code></pre>
     </article>
   </div>
 

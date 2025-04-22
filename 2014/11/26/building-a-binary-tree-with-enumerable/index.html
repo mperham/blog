@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2014/11/26/building-a-binary-tree-with-enumerable/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2014/11/26/building-a-binary-tree-with-enumerable/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Building a Binary Tree with Enumerable">
   <meta property="og:description" content="I believe that the Enumerable module is the most important thing to understand if you want to go from a beginner to intermediate Rubyist. It requires you to understand two fundamental parts of Ruby: modules and blocks.
@@ -219,8 +219,8 @@ along with <code>left</code> and <code>right</code> pointers to the child nodes.
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># build the first two levels of the tree pictured above</span>
 </span></span><span style="display:flex;"><span>root <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">7</span>)
 </span></span><span style="display:flex;"><span>root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">3</span>)
-</span></span><span style="display:flex;"><span>root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">12</span>)</span></span></code></pre></div>
-<p>The amazing thing about <code>Enumerable</code> is this: you implement <strong>one</strong> method, <code>each</code>, and you get dozens of useful
+</span></span><span style="display:flex;"><span>root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">12</span>)
+</span></span></code></pre></div><p>The amazing thing about <code>Enumerable</code> is this: you implement <strong>one</strong> method, <code>each</code>, and you get dozens of useful
 methods in return!  <code>each</code> knows how to iterate through elements in your data structure and so Ruby can leverage
 that to implement lots of other functionality.</p>
 <p>Remember I said that every part of a binary tree looks the same: that&rsquo;s a hallmark of a recursive data structure.
@@ -245,8 +245,8 @@ We&rsquo;ll use recursion to iterate through the tree in our <code>each</code> m
 </span></span><span style="display:flex;"><span>root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> <span style="color:#66d9ef">Node</span><span style="color:#f92672">.</span>new(<span style="color:#ae81ff">12</span>)
 </span></span><span style="display:flex;"><span>root<span style="color:#f92672">.</span>each {<span style="color:#f92672">|</span>x<span style="color:#f92672">|</span> puts x<span style="color:#f92672">.</span>data } <span style="color:#75715e"># will print &#34;3 7 12&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>puts root<span style="color:#f92672">.</span>inject(<span style="color:#ae81ff">0</span>) { <span style="color:#f92672">|</span>memo, node<span style="color:#f92672">|</span> memo <span style="color:#f92672">+=</span> node<span style="color:#f92672">.</span>data }</span></span></code></pre></div>
-<p>The final trick to Enumerable is to implement a comparison operator so Ruby can compare two
+</span></span><span style="display:flex;"><span>puts root<span style="color:#f92672">.</span>inject(<span style="color:#ae81ff">0</span>) { <span style="color:#f92672">|</span>memo, node<span style="color:#f92672">|</span> memo <span style="color:#f92672">+=</span> node<span style="color:#f92672">.</span>data }
+</span></span></code></pre></div><p>The final trick to Enumerable is to implement a comparison operator so Ruby can compare two
 Nodes and tell which one is greater.  This allows it to implement sorting, min and max operations.
 This comparison operator is commonly called the &ldquo;spaceship&rdquo; operator because <code>&lt;=&gt;</code> kinda looks
 like a spaceship if you squint.  Note we delegate the <code>&lt;=&gt;</code> call to the <code>data</code> itself.  We assume
@@ -282,8 +282,8 @@ implements <code>&lt;=&gt;</code>.</p>
 </span></span><span style="display:flex;"><span>puts <span style="color:#e6db74">&#34;MAX&#34;</span>
 </span></span><span style="display:flex;"><span>puts root<span style="color:#f92672">.</span>max<span style="color:#f92672">.</span>data
 </span></span><span style="display:flex;"><span>puts <span style="color:#e6db74">&#34;SORT&#34;</span>
-</span></span><span style="display:flex;"><span>puts root<span style="color:#f92672">.</span>sort<span style="color:#f92672">.</span>map(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:data</span>)</span></span></code></pre></div>
-<p>This is pretty incredible and really shows off the power of Ruby: we&rsquo;ve built a really powerful
+</span></span><span style="display:flex;"><span>puts root<span style="color:#f92672">.</span>sort<span style="color:#f92672">.</span>map(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:data</span>)
+</span></span></code></pre></div><p>This is pretty incredible and really shows off the power of Ruby: we&rsquo;ve built a really powerful
 data structure in just a few lines of code.  All is not wine and roses though, there&rsquo;s several hard parts
 we didn&rsquo;t implement (inserting a new node, deleting a node, rebalancing), I&rsquo;ll leave those as an exercise
 for the reader to steal from a StackOverflow post.</p>

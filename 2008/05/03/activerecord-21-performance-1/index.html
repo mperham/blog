@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/05/03/activerecord-21-performance-1/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/05/03/activerecord-21-performance-1/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="ActiveRecord 2.1 Performance (Part 1)">
   <meta property="og:description" content="I’ve been playing with the upcoming ActiveRecord 2.1 release in order to gauge any performance concerns. First let me explain the scenario being tested here: we load a lot of data into a database (both inserts and updates) so my testing mostly concerns optimizing bulk loading. This is definitely not the common case of ActiveRecord usage so you’ll need to keep this in mind.
@@ -199,15 +199,15 @@ blockquote,
 </p>
 <p>I&rsquo;ve been playing with the upcoming ActiveRecord 2.1 release in order to gauge any performance concerns.  First let me explain the scenario being tested here: we load a lot of data into a database (both inserts and updates) so my testing mostly concerns optimizing bulk loading. This is definitely not the common case of ActiveRecord usage so you&rsquo;ll need to keep this in mind.</p>
 <p>First thing I noticed was just going from 2.0.2 to 2.1 led my test case time to go from 17.4 sec to 19.9 sec. While not earth shattering, a 15% performance decrease is of some concern. The decrease seems mostly due to this:</p>
-<!-- raw HTML omitted -->
-<p>The smoking gun points to 2.1&rsquo;s partial_updates feature. While useful in many cases, it does entail a small bit of runtime overhead. In my case of bulk loading, this feature is not used. It would be nice to be able to disable dirty attribute tracking completely per process or per model. Disabling the Dirty module by hand led to times in the 17.9 sec range.</p>
-<p>In the meantime, if you need to skip the overhead, you can use the <!-- raw HTML omitted -->write_attribute_without_dirty<!-- raw HTML omitted --> method to bypass dirty tracking.  You will of course want to have partial_updates disabled for this model.</p>
-<!-- raw HTML omitted -->
-<p>And now you need to change this:</p>
-<!-- raw HTML omitted -->
-<p>to this:</p>
-<!-- raw HTML omitted -->
-<p>Remember that this is a hack and not recommended unless this code is in a critical performance path.  The benefits of partial_updates and code cleanliness should almost always outweigh the small performance cost associated with it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>1.14  	 0.06  	 0.00  	 1.09  	 3659/3659  	ActiveRecord::Dirty#write_attribute
+</span></span></code></pre></div><p>The smoking gun points to 2.1&rsquo;s partial_updates feature. While useful in many cases, it does entail a small bit of runtime overhead. In my case of bulk loading, this feature is not used. It would be nice to be able to disable dirty attribute tracking completely per process or per model. Disabling the Dirty module by hand led to times in the 17.9 sec range.</p>
+<p>In the meantime, if you need to skip the overhead, you can use the <code>write_attribute_without_dirty</code> method to bypass dirty tracking.  You will of course want to have partial_updates disabled for this model.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">ActiveRecord</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>partial_updates <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
+</span></span></code></pre></div><p>And now you need to change this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>obj<span style="color:#f92672">.</span>name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Foo&#39;</span>
+</span></span></code></pre></div><p>to this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>obj<span style="color:#f92672">.</span>write_attribute_without_dirty(<span style="color:#e6db74">&#39;name&#39;</span>, <span style="color:#e6db74">&#39;Foo&#39;</span>)
+</span></span></code></pre></div><p>Remember that this is a hack and not recommended unless this code is in a critical performance path.  The benefits of partial_updates and code cleanliness should almost always outweigh the small performance cost associated with it.</p>
 
     </article>
   </div>

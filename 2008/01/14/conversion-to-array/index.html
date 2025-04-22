@@ -5,10 +5,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.4"><meta property="og:url" content="https://www.mikeperham.com/2008/01/14/conversion-to-array/">
+  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/01/14/conversion-to-array/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Conversion to Array">
-  <meta property="og:description" content="If you want to autobox an object into an Array, Ruby provides a deprecated method, Object#to_a, to do this. The better, non-deprecated way is to use Array conversion:">
+  <meta property="og:description" content="If you want to autobox an object into an Array, Ruby provides a deprecated method, Object#to_a, to do this. The better, non-deprecated way is to use Array conversion:
+irb(main):001:0&gt; foo = Object.new =&gt; #&lt;Object:0x15234&gt; irb(main):002:0&gt; foo.to_a (irb):2: warning: default &#39;to_a&#39; will be obsolete =&gt; [#&lt;Object:0x15234&gt;] irb(main):003:0&gt; Array(foo) =&gt; [#&lt;Object:0x15234&gt;] irb(main):004:0&gt; a = Array.new =&gt; [] irb(main):005:0&gt; Array(a) =&gt; []">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="post">
@@ -197,18 +198,18 @@ blockquote,
   
 </p>
 <p>If you want to autobox an object into an Array, Ruby provides a deprecated method, Object#to_a, to do this.  The better, non-deprecated way is to use Array conversion:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>irb(main):<span style="color:#ae81ff">001</span>:<span style="color:#ae81ff">0</span><span style="color:#f92672">&gt;</span> foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">Object</span><span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#75715e">#&lt;Object:0x15234&gt;</span>
+</span></span><span style="display:flex;"><span>irb(main):<span style="color:#ae81ff">002</span>:<span style="color:#ae81ff">0</span><span style="color:#f92672">&gt;</span> foo<span style="color:#f92672">.</span>to_a
+</span></span><span style="display:flex;"><span>(irb):<span style="color:#ae81ff">2</span>: <span style="color:#e6db74">warning</span>: default <span style="color:#e6db74">&#39;to_a&#39;</span> will be obsolete
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[</span><span style="color:#75715e">#&lt;Object:0x15234&gt;]</span>
+</span></span><span style="display:flex;"><span>irb(main):<span style="color:#ae81ff">003</span>:<span style="color:#ae81ff">0</span><span style="color:#f92672">&gt;</span> Array(foo)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[</span><span style="color:#75715e">#&lt;Object:0x15234&gt;]</span>
+</span></span><span style="display:flex;"><span>irb(main):<span style="color:#ae81ff">004</span>:<span style="color:#ae81ff">0</span><span style="color:#f92672">&gt;</span>  a <span style="color:#f92672">=</span> Array<span style="color:#f92672">.</span>new
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[]</span>
+</span></span><span style="display:flex;"><span>irb(main):<span style="color:#ae81ff">005</span>:<span style="color:#ae81ff">0</span><span style="color:#f92672">&gt;</span> Array(a)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[]</span>
+</span></span></code></pre></div>
     </article>
   </div>
 
