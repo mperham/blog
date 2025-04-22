@@ -15,7 +15,8 @@ So if you have a table which holds those categories, how do you write a SQL quer
 
 The [awesome\_nested\_set][3] gem adds really useful tree functionality to your category table. Need to query for all products in a given category or below in the category tree?
 
-<pre lang="ruby">class Category &lt; ActiveRecord::Base
+```ruby
+class Category &lt; ActiveRecord::Base
   acts_as_nested_set
   has_many :products
   belongs_to :parent, :class_name => 'Category'
@@ -34,13 +35,14 @@ subcats = cat.self_and_descendants
 # Find all products within Electronics subtree with one query.
 # A bit messy.
 products = Product.active.joins(:category).where('categories.lft > ? and categories.lft &lt;= ?', cat.lft, cat.rgt)
-</pre>
+```
 
 awesome\_nested\_set is missing some critical documentation, the README explains how to set it up but doesn't cover queries and scopes at all. I couldn't find a way to do something cleaner like so without rolling my own scope:
 
-<pre lang="ruby">cat = Category.find_by_name("Electronics")
+```ruby
+cat = Category.find_by_name("Electronics")
 products = Product.active.within_category(cat)
-</pre>
+```
 
 Is this possible? Could the category association provide some built-in nested set scopes? Nevertheless, adding a few custom scopes is a small price to pay: nested sets turn a very hard SQL problem into something easily solved.
 

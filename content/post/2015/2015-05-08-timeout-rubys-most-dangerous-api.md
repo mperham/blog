@@ -40,29 +40,29 @@ The only safe timeouts to use are lower-level network timeouts.  The underlying 
 understands them and ensures everything is cleaned up properly.  All good network APIs will expose
 those timeouts so you can set them in your application code.  Here's a few examples:
 
-{{< highlight ruby >}}
+```ruby
 # Sidekiq's redis connection pool
 Sidekiq.configure_server do |config|
   config.redis = { :network_timeout => 2, :url => 'redis://localhost:3970/12' }
 end
-{{< / highlight >}}
+```
 
-{{< highlight ruby >}}
+```ruby
 # Generic redis-rb
 $redis = Redis.new(:url => '...', :connect_timeout => 5, :timeout => 5)
-{{< / highlight >}}
+```
 
-{{< highlight ruby >}}
+```ruby
 # Dalli
 $memcached = Dalli::Client.new('...', :socket_timeout => 5)
-{{< / highlight >}}
+```
 
-{{< highlight ruby >}}
+```ruby
 # Net::HTTP
 Net::HTTP.start(host, port, :open_timeout => 5, :read_timeout => 5) do |http|
   http.request(...)
 end
-{{< / highlight >}}
+```
 
 If your favorite network library does not document its timeout options, be a sport
 and open a new issue or send them a PR with updated documentation.  I just did that for

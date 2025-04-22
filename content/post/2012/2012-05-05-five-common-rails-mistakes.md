@@ -15,25 +15,25 @@ I've worked with Rails for quite a while now and in that time I've seen a lot of
 
 Your data model is the core of your application. Without schema constraints, your data will slowly corrode due to bugs in your codebase until you can't depend on any fields being populated. Here's a Contact schema:
 
-{{< highlight ruby >}}
+```ruby
 create_table "contacts" do |t|
   t.integer  "user_id"
   t.string   "name"
   t.string   "phone"
   t.string   "email"
 end
-{{< / highlight >}}
+```
 
 What is required? Presumably a Contact must belong_to a User and have a name &mdash; use database constraints to guarantee this. By adding `:null => false`, we ensure that the model is always consistent even if we have bugs in our validation because the database will not allow a model to be saved if it fails those constraints.
 
-{{< highlight ruby >}}
+```ruby
 create_table "contacts" do |t|
   t.integer  "user_id", :null => false
   t.string   "name", :null => false
   t.string   "phone"
   t.string   "email"
 end
-{{< / highlight >}}
+```
 
 **Bonus points**: use `:limit => N` to size your string columns appropriately. Strings default to 255 characters and phone probably doesn't need to be that big, does it?
 
@@ -47,20 +47,20 @@ Most Rails developers do not write object-oriented Ruby code. They write MVC-ori
 
 If you are creating helper methods, kudos, at least you trying to keep your view layer clean. But developers often don't know the basics of creating tags within helpers, leading to messy string concatenation or interpolation:
 
-{{< highlight ruby >}}
+```ruby
 str = "<li class='vehicle_list'>"
 str += link_to("#{vehicle.title.upcase} Sale", show_all_styles_path(vehicle.id, vehicle.url_title))
 str += "</li>"
 str.html_safe
-{{< / highlight >}}
+```
 
 Yikes, it's ugly and can easily lead to XSS security holes! `content_tag` is your friend.
 
-{{< highlight ruby >}}
+```ruby
 content_tag :li, :class => 'vehicle_list' do
   link_to("#{vehicle.title.upcase} Sale", show_all_styles_path(vehicle.id, vehicle.url_title))
 end
-{{< / highlight >}}
+```
 
 **Bonus points**: start introducing helper methods that take blocks. Nested blocks are a natural fit when generating nested HTML.
 
@@ -68,19 +68,19 @@ end
 
 You need to fix some data so you'll just iterate through it all and fix it, right?
 
-{{< highlight ruby >}}
+```ruby
 User.has_purchased(true).each do |customer|
   customer.grant_role(:customer)
 end
-{{< / highlight >}}
+```
 
 You have an ecommerce site with a million customers. Let's say each User object takes 500 bytes. This code will take 500MB of memory at runtime! Better:
 
-{{< highlight ruby >}}
+```ruby
 User.has_purchased(true).find_each do |customer|
   customer.grant_role(:customer)
 end
-{{< / highlight >}}
+```
 
 `find_each` uses `find_in_batches` to pull in 1000 records at a time, dramatically lowering the runtime memory requirements.
 

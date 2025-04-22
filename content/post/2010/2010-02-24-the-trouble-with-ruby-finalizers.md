@@ -11,30 +11,32 @@ I was test driving [Devil][1], the developer's image library, recently to see if
 
 Devil has a Devil::Image class which uses a finalizer to delete native resources when the image is garbage collected. The problem is that Ruby finalizers are notoriously difficult to use properly so often times they aren't actually run. Here's why:
 
-<pre lang="ruby">class Devil::Image
-    attr_reader :name, :file
+```ruby
+class Devil::Image
+  attr_reader :name, :file
 
-    def initialize(name, file)
-        @name = name
-        @file = file
+  def initialize(name, file)
+    @name = name
+    @file = file
 
-        ObjectSpace.define_finalizer( self, proc { IL.DeleteImages(1, [name]) } )
-    end
+    ObjectSpace.define_finalizer( self, proc { IL.DeleteImages(1, [name]) } )
+  end
 end
-</pre>
+```
 
 So what's wrong with this code? The issue is that the finalizer proc is a closure which holds a reference to it's `self`, thus making it impossible for the image object to ever be garbage collected. When creating a finalizer proc, you should always use a class method to create the proc so that it does not hold a reference to the corresponding instance, like so:
 
-<pre lang="ruby">def initialize(name, file)
-      @name = name
-      @file = file
+```ruby
+def initialize(name, file)
+  @name = name
+  @file = file
 
-      ObjectSpace.define_finalizer( self, self.class.finalize(name) )
-  end
-  def self.finalize(name)
-    proc { IL.DeleteImages(1, [name]) }
-  end
-</pre>
+  ObjectSpace.define_finalizer( self, self.class.finalize(name) )
+end
+def self.finalize(name)
+  proc { IL.DeleteImages(1, [name]) }
+end
+```
 
 A subtle and evil bug, just like its namesake!
 

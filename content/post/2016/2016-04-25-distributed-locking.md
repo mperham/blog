@@ -60,14 +60,16 @@ The code executes 100 "jobs" using 25 threads.  Each job sleeps for 0.1
 sec while holding the lock, meaning that a perfect run will take 10.0
 sec.  [Gist of the actual benchmark code here](https://gist.github.com/mperham/e0248bfb727ebf02ffd6b09172a85301).
 
-    sidekiq-ent
-      0.110000   0.100000   0.210000 ( 10.433794)
-    redis-semaphore
-      0.150000   0.150000   0.300000 ( 10.487963)
-    pmckee11-redis-lock
-      0.460000   0.550000   1.010000 ( 10.718958)
-    ruby_redis_lock
-      0.280000   0.250000   0.530000 ( 11.655952)
+```
+sidekiq-ent
+  0.110000   0.100000   0.210000 ( 10.433794)
+redis-semaphore
+  0.150000   0.150000   0.300000 ( 10.487963)
+pmckee11-redis-lock
+  0.460000   0.550000   1.010000 ( 10.718958)
+ruby_redis_lock
+  0.280000   0.250000   0.530000 ( 11.655952)
+```
 
 The third column shows you the number of seconds actually running on the
 CPU; sidekiq-ent's limiter used 0.21 seconds of CPU time, the

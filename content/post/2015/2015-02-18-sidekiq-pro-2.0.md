@@ -43,11 +43,11 @@ There is a very very small but real chance a scheduled job could be lost.
 For 2.0, I've written a Lua-based scheduler which is atomic and enqueues 50-100x faster than the existing scheduler since it does
 not require any network round trips.  It's very easy to enable:
 
-{{< highlight ruby >}}
+```ruby
 Sidekiq.configure_server do |config|
   config.reliable_scheduler!
 end
-{{< / highlight >}}
+```
 
 It's optional because it does require Redis 2.6.
 
@@ -55,13 +55,13 @@ It's optional because it does require Redis 2.6.
 
 * Various deprecated APIs were removed
 * Reliability features are now enabled via methods, not `require`
-{{< highlight ruby >}}
+```ruby
 Sidekiq::Client.reliable_push!
 
 Sidekiq.configure_server do |config|
   config.reliable_fetch!
 end
-{{< / highlight >}}
+```
 
 ## Conclusion
 

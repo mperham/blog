@@ -13,10 +13,11 @@ Side note: **learn vim if you're a developer and don't know it already**. Every 
 
 The Janus developers recently added a better Go plugin and I wanted to call out a few features that are really cool. Put these lines in your ~/.vimrc.after:
 
-<pre class="brush: plain; gutter: false; title: ; notranslate" title="">au FileType go nmap &lt;leader&gt;c &lt;Plug&gt;(go-coverage)
-au FileType go nmap gd &lt;Plug&gt;(go-def)
-au FileType go nmap &lt;Leader&gt;r &lt;Plug&gt;(go-rename)
-</pre>
+```
+au FileType go nmap <leader>c <Plug>(go-coverage)
+au FileType go nmap gd <Plug>(go-def)
+au FileType go nmap <Leader>r <Plug>(go-rename)
+```
 
 1.  Typing "\c" will open an HTML code coverage report in your browser for the current package showing test coverage.
 2.  Typing "gd" will "goto definition" of the word under the cursor, allowing you to jump to methods or types.

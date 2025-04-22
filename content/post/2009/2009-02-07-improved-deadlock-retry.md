@@ -14,8 +14,9 @@ So I've [forked the code][1] and spruced it up a bit:
 1.  If a deadlock happens, the code will log the output of SHOW INNODB STATUS, which will indicate who was waiting for what. Knowing the tables in contention goes a long way to understanding the problem.
 2.  The code now runs as a gem, not as a plugin. You don't need to put the code in your application, just add this config.gem reference in config/environment.rb and use `rake gems:install` to install it:
 
-<pre lang="ruby">config.gem 'mperham-deadlock_retry', :lib => 'deadlock_retry', :source => 'http://gems.github.com'
-</pre>
+```ruby
+config.gem 'mperham-deadlock_retry', :lib => 'deadlock_retry', :source => 'http://gems.github.com'
+```
 
 This is code I wrote for our internal usage of deadlock_retry at [FiveRuns][2]. Please let me know if you find this improvement useful.
 

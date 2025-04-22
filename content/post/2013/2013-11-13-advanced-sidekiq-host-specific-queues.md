@@ -15,19 +15,21 @@ The problem is that we have multiple app servers and they all run Unicorn and Si
 
 First we need to tell each Sidekiq process to listen to a queue named after the machine's hostname. In your `config/sidekiq.yml`, do this:
 
-<pre lang="yml">---
+```
+---
 :verbose: false
 :concurrency: 25
 :queues:
   - default
-  - &lt;%= `hostname`.strip %>
-</pre>
+  - <%= `hostname`.strip %>
+```
 
 Sidekiq runs the YAML file through ERB automatically so you can easily add the queue dynamically.
 
 Second, we need to configure the jobs to use the queue:
 
-<pre lang="ruby">class ImageUploadProcessor
+```ruby
+class ImageUploadProcessor
   include Sidekiq::Worker
   sidekiq_options queue: `hostname`.strip
 
@@ -35,6 +37,6 @@ Second, we need to configure the jobs to use the queue:
     # process image
   end
 end
-</pre>
+```
 
 Now when we create an ImageUploadProcessor job, it will be saved to a queue named after the machine's hostname and processed by a Sidekiq worker on that machine. Easy!

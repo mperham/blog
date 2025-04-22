@@ -15,7 +15,8 @@ Aaron Patterson gave a talk at GoGaRuCo 2010 about the latest changes in Ruby 1.
 
 With Test::Unit, you just subclass Test::Unit::TestCase, name your methods starting with 'test' and include one or more assertions to verify:
 
-<pre lang="ruby">class TestSomething &lt; Test::Unit::TestCase
+```ruby
+class TestSomething &lt; Test::Unit::TestCase
   def test_foo
     foo = Foo.new
     assert foo
@@ -23,7 +24,7 @@ With Test::Unit, you just subclass Test::Unit::TestCase, name your methods start
     assert_nil bar
   end
 end
-</pre>
+```
 
 Believe it or not, Test::Unit is actually rather slow and bloated. It includes a number of GUIs (GTk v1, GTk v2, FxRuby) that are rarely if ever used. A revamp was needed...
 
@@ -35,51 +36,58 @@ Ruby 1.9 includes an updated version of the venerable Test::Unit which removes a
 
 When you run your test suite, you might notice this at the bottom:
 
-<pre>Test run options: --seed 1261
-</pre>
+```
+Test run options: --seed 1261
+```
 
 This is because MiniTest by default runs your tests in random order. This is a good thing because it prevents your tests from accidentally becoming order-dependent due to "state leakage". If you find that your tests are breaking randomly, it is most likely due to this state leakage. You can run your tests with the same seed to reproduce the problem:
 
-<pre>rake TESTOPTS="--seed=1261"
-</pre>
+```
+rake TESTOPTS="--seed=1261"
+```
 
 **Skip Tests**
 
 MiniTest allows you to easily skip tests that are not working with the \`skip\` method:
 
-<pre lang="ruby">def test_foo
+```ruby
+def test_foo
   skip("Need to debug this...")
   assert_equal false, true
 end
-</pre>
+```
 
 which results in this:
 
-<pre>83 tests, 106 assertions, 0 failures, 0 errors, 1 skips
-</pre>
+```
+83 tests, 106 assertions, 0 failures, 0 errors, 1 skips
+```
 
 **Verbosity**
 
 MiniTest also has a '-v' flag which will print out the time each test takes - excellent for determining those tests which are slowing down your test suite:
 
-<pre>rake TESTOPTS="-v"
-</pre>
+```
+rake TESTOPTS="-v"
+```
 
 which emits a line for each test. It's too bad it doesn't have an option for sorting or a minimum time (like 0.1 sec); this would be useful for suites which have thousands of tests.
 
-<pre>TestMemCache#test_check_size_off: 0.02 s: .
+```
+TestMemCache#test_check_size_off: 0.02 s: .
 TestMemCache#test_check_size_on: 0.01 s: .
 TestMemCache#test_consistent_hashing: 0.11 s: .
 TestMemCache#test_crazy_multithreaded_access: 0.00 s: S
 TestMemCache#test_custom_encoding: 0.00 s: .
 TestMemCache#test_decr: 0.00 s: .
-</pre>
+```
 
 **BDD DSL**
 
 MiniTest also includes a basic BDD DSL like RSpec:
 
-<pre lang="ruby">require 'minitest/spec'
+```ruby
+require 'minitest/spec'
 
 describe Meme do
   before do
@@ -98,7 +106,7 @@ describe Meme do
     end
   end
 end
-</pre>
+```
 
 It even includes a basic mocking API which you can read about in the [MiniTest documentation][1]. These changes are a great step forward for Ruby's standard test library. Personally I'm going to use MiniTest on my next project and see if I can slim down my test dependencies. Happy coding!
 

@@ -14,15 +14,20 @@ url: /2007/10/02/file-uploads-in-merb-versus-rails/
 <p>Merb -- turned off ActiveRecord, environment to production, log level to warn, disabled sessions globally.</p>
 <p>Rails --  environment to production, log level to warn, disabled sessions for the controller.</p>
 <p>The Merb controller code:</p>
-<pre>  def put
+```ruby
+  def put
     FileUtils.mv params[:file][:tempfile].path, MERB_ROOT+"/uploads/#{params[:file][:filename]}.#{next_count}"
-    render :action =&gt; 'index'
-  end</pre>
+    render :action => 'index'
+  end
+```
 <p>The Rails controller code:</p>
-<pre>  def put
+```ruby
+  def put
     File.open(RAILS_ROOT+"/uploads/#{params[:file].original_filename}.#{next_count}", "w") { |f| f.write(params[:file].read) }
     render :action =&gt; 'index'
-  end</pre>
+  end
+```
+
 <p>I used <a href="http://jakarta.apache.org/jmeter/">Apache JMeter</a> to create a group of 25 users trying to upload a 250k image as fast as possible.  On a side note, I can't recommend JMeter highly enough.  I downloaded it and was generating this load within 10 minutes.  The user manual walked me through the basics and the UI had exactly the controls I need to create the FORM POST.</p>
 <p>Without further ado, here's the results.</p>
 <p><a href="http://www.mikeperham.com/wp-content/uploads/2007/10/merb.png" title="merb results"><img src="http://www.mikeperham.com/wp-content/uploads/2007/10/merb.thumbnail.png" alt="merb results" /></a><a href="http://www.mikeperham.com/wp-content/uploads/2007/10/rails.png" title="rails results"><img src="http://www.mikeperham.com/wp-content/uploads/2007/10/rails.thumbnail.png" alt="rails results" /></a></p>

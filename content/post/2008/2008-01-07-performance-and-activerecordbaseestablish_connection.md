@@ -11,10 +11,9 @@ I've got a library which requires its own database so I'm using a shared supercl
 
 Anyone know why using a custom connection would cause such a dramatic performance degradation?  My base class couldn't be simpler:
 
-<pre>    class ContextBase &lt; ActiveRecord::Base</pre>
-
-<pre>      self.abstract_class = true</pre>
-
-<pre>      establish_connection "context_#{ENV['RAILS_ENV'] || 'development'}"</pre>
-
-<pre>    end</pre>
+```ruby
+class ContextBase &lt; ActiveRecord::Base
+  self.abstract_class = true</pre>
+  establish_connection "context_#{ENV['RAILS_ENV'] || 'development'}"
+end
+```

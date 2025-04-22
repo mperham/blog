@@ -24,7 +24,7 @@ Let's build a binary tree in Ruby; you will be amazed at how little code it actu
 Funny thing about a binary tree is that every part of the tree looks like the same: you have a node with some `data`,
 along with `left` and `right` pointers to the child nodes.
 
-{{< highlight ruby >}}
+```ruby
 class Node
   attr_accessor :data, :left, :right
   def initialize(data)
@@ -36,7 +36,7 @@ end
 root = Node.new(7)
 root.left = Node.new(3)
 root.right = Node.new(12)
-{{< / highlight >}}
+```
 
 The amazing thing about `Enumerable` is this: you implement **one** method, `each`, and you get dozens of useful
 methods in return!  `each` knows how to iterate through elements in your data structure and so Ruby can leverage
@@ -45,7 +45,7 @@ that to implement lots of other functionality.
 Remember I said that every part of a binary tree looks the same: that's a hallmark of a recursive data structure.
 We'll use recursion to iterate through the tree in our `each` method:
 
-{{< highlight ruby >}}
+```ruby
 class Node
   include Enumerable
 
@@ -67,7 +67,7 @@ root.right = Node.new(12)
 root.each {|x| puts x.data } # will print "3 7 12"
 
 puts root.inject(0) { |memo, node| memo += node.data }
-{{< / highlight >}}
+```
 
 The final trick to Enumerable is to implement a comparison operator so Ruby can compare two
 Nodes and tell which one is greater.  This allows it to implement sorting, min and max operations.
@@ -76,7 +76,7 @@ like a spaceship if you squint.  Note we delegate the `<=>` call to the `data` i
 the tree is storing comparable data: integers, strings, or a value object which itself
 implements `<=>`.
 
-{{< highlight ruby >}}
+```ruby
 class Node
   include Enumerable
 
@@ -108,7 +108,7 @@ puts "MAX"
 puts root.max.data
 puts "SORT"
 puts root.sort.map(&:data)
-{{< / highlight >}}
+```
 
 This is pretty incredible and really shows off the power of Ruby: we've built a really powerful
 data structure in just a few lines of code.  All is not wine and roses though, there's several hard parts

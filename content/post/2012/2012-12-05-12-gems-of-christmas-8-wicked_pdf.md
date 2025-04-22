@@ -11,12 +11,13 @@ We recently rolled out gift certificates in time for the holiday shopping season
 
 How on earth do I create a PDF? I'm a web developer -- HTML/CSS is no problem -- but PDF is a binary format and making a PDF with a "nice" design is way out of my bailiwick. [wicked_pdf][2] to the rescue! wicked_pdf wraps the `wkhtmltopdf` command line tool which can convert an HTML file into a PDF file for offline access or printing purposes. Our email code is simple: we render the HTML content and then pass it to WickedPdf for conversion.
 
-<pre lang="ruby">pdf_str = render_to_string(:template => 'emails/gift_certificate',
+```ruby
+pdf_str = render_to_string(:template => 'emails/gift_certificate',
                            :layout => false,
                            :locals => { :amount => number_to_currency(amount),
                                         :product_code => pc.code } )
-pdfs &lt;&lt; WickedPdf.new.pdf_from_string(pdf_str)
-</pre>
+pdfs << WickedPdf.new.pdf_from_string(pdf_str)
+```
 
 With wicked_pdf, we didn't have to sacrifice the tools and technologies we know best in order to support PDF files. We rolled out the feature on time and no web developers were harmed in the process.
 

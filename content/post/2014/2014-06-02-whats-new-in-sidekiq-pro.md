@@ -18,10 +18,10 @@ Sidekiq Pro is happy to sponsor [Cascadia Ruby][2] 2014. If you're in Portland f
 
 v1.7 added the ability to pause reliable queues via API. Occasionally you might want a system that enables or disables processing of certain types of messages based on time of day or some other external event. This is easily accomplished now:
 
-{{< highlight ruby >}}
+```ruby >}}
 q = Sidekiq::Queue.new("business_hours_only")
 q.pause!
-{{< / highlight >}}
+```
 
 
 Jobs will accumulate until the queue is unpaused. As you might guess, the Web UI will show when a queue is paused:

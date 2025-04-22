@@ -9,7 +9,8 @@ url: /2010/04/28/bayes_motel-bayesian-classification-for-ruby/
 
 [Bayesian classification][1] is an algorithm which allows us to categorize documents probabilistically. I recently started playing with Twitter data and realized there was no Ruby gem which would allow me to build a spam detector for tweets. The `classifier` gem just works on a set of text by figuring out which words appear in a category but a tweet is much more complicated than that. A tweet looks like this:
 
-<pre lang="ruby">{:text=>"Firesale prices, too! RT @nirajc: Time to change your Facebook password. Hacker selling 1.5m accounts. http://bit.ly/dryY7",
+```ruby
+{:text=>"Firesale prices, too! RT @nirajc: Time to change your Facebook password. Hacker selling 1.5m accounts. http://bit.ly/dryY7",
 :truncated=>false, :created_at=>"Fri Apr 23 18:26:51 +0000 2010", :coordinates=>nil, :geo=>nil, :favorited=>false,
 :source=>"<a href="http://www.tweetdeck.com" rel="nofollow">TweetDeck</a>",  :place=>nil, :contributors=>nil,
 :user=>{:verified=>false, :profile_text_color=>"666666", :friends_count=>226, :created_at=>"Wed Oct 08 07:15:23 +0000 2008",
@@ -21,7 +22,7 @@ url: /2010/04/28/bayes_motel-bayesian-classification-for-ruby/
 :contributors_enabled=>false, :url=>"http://www.aolnews.com", :screen_name=>"carlfranzen", :name=>"Carl Franzen",
 :profile_background_tile=>false, :profile_background_color=>"1A1B1F", :id=>16645918, :geo_enabled=>false,
 :utc_offset=>-18000, :followers_count=>174}, :id=>12717456105}
-</pre>
+```
 
 As you can see, a tweet is just a hash of variables. So which variables are a better indicator of spam? I don't know and chances are you don't either. But if we create a corpus of ham tweets and a corpus of spam tweets, we can train a Bayesian classifier with the two datasets and it will figure out which variable values are seen often in spam and which in ham.
 

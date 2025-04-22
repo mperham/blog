@@ -13,63 +13,26 @@ Time required to process 50,000 empty jobs with a single Sidekiq process running
 
 <table>
   <tr>
-    <th>
-      Version
-    </th>
-    
-    <th>
-      Time
-    </th>
-    
-    <th>
-      With Logging
-    </th>
+    <th>Version</th>
+    <th> Time </th>
+    <th> With Logging </th>
   </tr>
-  
   <tr>
-    <td>
-      2.1.1
-    </td>
-    
-    <td>
-      46 sec
-    </td>
-    
-    <td>
-      67 sec
-    </td>
+    <td> 2.1.1 </td>
+    <td> 46 sec </td>
+    <td> 67 sec </td>
   </tr>
-  
   <tr>
-    <td>
-      2.0.0
-    </td>
-    
-    <td>
-      50 sec
-    </td>
-    
-    <td>
-      70 sec
-    </td>
+    <td> 2.0.0 </td>
+    <td> 50 sec </td>
+    <td> 70 sec </td>
   </tr>
-  
   <tr>
-    <td>
-      1.7.11
-    </td>
-    
-    <td>
-      33 sec
-    </td>
-    
-    <td>
-      51 sec
-    </td>
+    <td> 1.7.11 </td>
+    <td> 33 sec </td>
+    <td> 51 sec </td>
   </tr>
 </table>
-
-&nbsp;
 
 Like last year, JRuby continues to dominate in raw runtime performance. 2.1.1 shows a small performance advantage over 2.0.
 

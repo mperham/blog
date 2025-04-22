@@ -23,34 +23,34 @@ and testable as possible.
 thread and doesn't have any public API aside from starting/stopping the
 thread.
 
-{{< highlight ruby >}}
+```ruby
 p = Sidekiq::Processor.new
 p.start
-{{< / highlight >}}
+```
 
 Interally it has quite a bit of complexity - think of it like an iceberg.
 In order to test those complex internals, I make its [internal API public][1] so that the test suite has full
 access to the methods.  The `start` method spins up a thread which calls a very simple `run` loop similar this:
 
-{{< highlight ruby >}}
+```ruby
 def run
   while !@done
     job = fetch
     process(job) if job
   end
 end
-{{< / highlight >}}
+```
 
 I've kept the run method as simple as possible since we can't call it in
 the test suite but we can call `fetch` and `process` in order to test them:
 
-{{< highlight ruby >}}
+```ruby
 def test_process_fake_job
   p = Sidekiq::Processor.new
   result = p.process(some_fake_job)
   # asserts...
 end
-{{< / highlight >}}
+```
 
 In this case, I've kept the thread management code as simple as
 possible and pushed as much of the code complexity into separate methods
@@ -78,7 +78,7 @@ Generally the pattern is:
 Most people don't know how to do (3) properly so they use `sleep` as a
 hack.  Here's a complete example of how to do it in Ruby:
 
-{{< highlight ruby >}}
+```ruby
 require 'thread'
 
 # We want to test Upcaser by exercising its full API,
@@ -154,7 +154,7 @@ def test_upcaser
   # shut down Upcaser's internal thread
   a.terminate
 end
-{{< / highlight >}}
+```
 
 The "trick" is the callback block passed to the `process` method.  That callback
 will save the results and unlock the main thread once Upcaser's thread is finished processing.  If your API

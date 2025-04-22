@@ -22,14 +22,14 @@ Inspeqtor can now monitor init.d-based services that use PID files. Follow the i
 
 You can now specify your rules in "per second" rates. Previously you had to give a raw number which implicitly depended on the 15 second cycle time. Now your threshold is clearer:
 
-<pre>
+```
 # /etc/inspeqtor/services.d/mysql.inq
 check service mysql
   # before
   if mysql:Queries &gt; 750 then alert
   # now!
   if mysql:Queries &gt; 50/sec then alert
-</pre>
+```
 
 ### Export data
 
@@ -41,19 +41,19 @@ Inspeqtor got a few new features and so did [Inspeqtor Pro][2].
 
 Cron jobs are special because they run in their own cron environment sandbox and are easy to misconfigure. At some point every developer has seen a cron job which works perfectly on their own machine but fails in production due to some environmental bug. With Inspeqtor Pro you give it a list of jobs in /etc/inspeqtor/jobs.d/*.inq along with how often they should "check in" and Inspeqtor will alert you if a job has not checked in within the given window.
 
-<pre>
+```
 # /etc/inspeqtor/jobs.d/whatever.inq
 check jobs
   bank_transfer happens every 2 hours
   warehouse_ftp happens every day
-</pre>
+```
 
 Each job calls inspeqtorctl to check in and tell Inspeqtor it finished successfully.
 
-<pre>
-&gt; inspeqtorctl job_done warehouse_ftp
+```
+> inspeqtorctl job_done warehouse_ftp
 OK
-</pre>
+```
 
 If Inspeqtor does not see a check in within the given period of time, it will fire an alert. [More detail in the wiki][3].
 
@@ -61,10 +61,10 @@ If Inspeqtor does not see a check in within the given period of time, it will fi
 
 Inspeqtor Pro can send collected metrics directly to your Statsd server, meaning you can graph and visualize them with Graphite, Librato, Datadog or others. The integration literally couldn't be simpler, requiring just a single line to your inspeqtor.conf:
 
-<pre>
+```
 # /etc/inspeqtor/inspeqtor.conf
 set statsd_location localhost:8125
-</pre>
+```
 
 Now you can see your metrics, like this:
 

@@ -13,21 +13,23 @@ Ok, we've got our nifty Apache DS running with some custom data. This doesn't do
 
 Make sure your Apache DS server is up and running. We first need to install a Ruby API for accessing LDAP. I found the simplest to use was ruby-net-ldap:
 
-> <pre>gem install ruby-net-ldap</pre>
+> gem install ruby-net-ldap
 
 Next, create a simple ldaptest.rb file to use the API:
 
-<pre>require 'net/ldap'
+```ruby
+require 'net/ldap'
 
 username = 'uid=admin,ou=system'
 password = 'secret'
-ldap_con = Net::LDAP.new( {:host =&gt; 'localhost', :port =&gt; 10389, :auth =&gt;
-    { :method =&gt; :simple, :username =&gt; username, :password =&gt; password }} )
+ldap_con = Net::LDAP.new( {:host => 'localhost', :port => 10389, :auth =>
+    { :method => :simple, :username => username, :password => password }} )
 treebase = "dc=fiveruns,dc=com"
 op_filter = Net::LDAP::Filter.eq( "objectClass", "person" )
-ldap_con.search( :base =&gt; treebase, :filter =&gt; op_filter, :attributes=&gt; 'dn') do |entry|
+ldap_con.search( :base => treebase, :filter => op_filter, :attributes => 'dn') do |entry|
   puts "DN: #{entry.dn}"
-end</pre>
+end
+```
 
 Running it should give this output:
 

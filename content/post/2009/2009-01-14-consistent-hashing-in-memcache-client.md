@@ -16,8 +16,9 @@ Memcached is simple in principle: just like a hashtable, a unique key maps to a 
 
 The naive approach is to hash the key to an integer and do a modulo based on the size of the server set. For a given key, this should return the same, random server from the set every time.
 
-<pre lang="ruby">idx = Zlib.crc32(key) % servers.size
-</pre>
+```ruby
+idx = Zlib.crc32(key) % servers.size
+```
 
 This works great -- if the server set never changes.
 

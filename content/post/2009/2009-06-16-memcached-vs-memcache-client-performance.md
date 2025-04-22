@@ -9,7 +9,8 @@ url: /2009/06/16/memcached-vs-memcache-client-performance/
 
 [memcached][1] is Evan Weaver's Ruby wrapper around the libmemcached C library and widely regarded as quite fast. After an hour of trying, I finally got a build of memcached to actually compile and install on my machine (the trick: you need to download the custom packages Evan links on his blog, nothing else seems to work). Here's the results:
 
-<pre>== memcached 0.13 + libmemcached 0.25.4 versus memcache-client 1.7.4
+```
+== memcached 0.13 + libmemcached 0.25.4 versus memcache-client 1.7.4
 
                                      user     system      total        real
 set:plain:noblock:memcached      0.090000   0.030000   0.120000 (  0.277929)
@@ -30,7 +31,7 @@ missing:ruby:memcache-client     0.570000   0.250000   0.820000 (  1.461293)
 mixed:ruby:noblock:memcached     0.540000   0.620000   1.160000 (  2.429200)
 mixed:ruby:memcached             0.580000   0.570000   1.150000 (  2.610819)
 mixed:ruby:memcache-client       1.580000   0.540000   2.120000 (  3.632775)
-</pre>
+```
 
 In most cases, memcache-client is within 33-50% of the performance of memcached. This is amazing for a (mostly) pure Ruby library performing a lot of network IO against a C library which has been tuned for speed! I hope that puts to bed any lingering doubts that memcache-client is slow.
 

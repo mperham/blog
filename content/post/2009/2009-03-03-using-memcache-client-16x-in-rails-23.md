@@ -9,7 +9,8 @@ url: /2009/03/03/using-memcache-client-16x-in-rails-23/
 
 Jemery Kemper [recently upgraded][1] Rails 2.3's vendored copy of memcache-client to the 1.6.4 release. But what do you do if you are running Rails 2.1/2.2 and want to take advantage of the massive speedup in 1.6.x? You write some really ugly code that performs brain surgery on the Ruby environment to override ActiveSupport. Create `config/initializers/memcache-client-upgrade.rb` with this code:
 
-<pre lang="ruby">require 'rubygems'
+```ruby
+require 'rubygems'
 
 # Brain surgery to use our own version of memcache-client without
 # having to modify activesupport directly.
@@ -33,7 +34,7 @@ if $".find { |file| file =~ /Amemcache.rbZ/ }
 else
   require 'memcache'
 end
-</pre>
+```
 
 If someone knows of a cleaner way to do this, please let me know.
 

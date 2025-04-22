@@ -12,18 +12,21 @@ One of the things I've had on my mind at [The Clymb][1] is better runtime monito
 
 First you'll need to install a [Ruby client][3]. The Ruby client has a nice simple API for collecting various types of metrics: counters, gauges, timings, etc.
 
-<pre lang="sh">gem install statsd-ruby
-</pre>
+```
+gem install statsd-ruby
+```
 
 Next you'll create an initializer to instantiate the client. Note I use a namespace to differentiate between a Rails process and a Sidekiq process.
 
-<pre lang="ruby">METRICS = Statsd.new('stats-collector.acmecorp.com', 8125)
+```ruby
+METRICS = Statsd.new('stats-collector.acmecorp.com', 8125)
 METRICS.namespace = (Sidekiq.server? ? 'sidekiq' : 'web')
-</pre>
+```
 
 Now you'll need to sprinkle metrics reporting throughout the important parts of your application. I hooked up some basic metrics for [Rack][4], Redis and ActiveRecord:
 
-<pre lang="ruby"># Rack stats, courtesy of technoweenie
+```ruby
+# Rack stats, courtesy of technoweenie
 Rails.application.middleware.insert_before ActionDispatch::Static, RackStatsD::ProcessUtilization, :stats => METRICS
 
 SELECT_DELETE = / FROM `(w+)`/
@@ -57,7 +60,7 @@ class Redis::Client
     METRICS.time("redis.#{commands.first.first}.time", &#038;block)
   end
 end
-</pre>
+```
 
 Now that we have some basic runtime stats, we still have two never-ending tasks:
 

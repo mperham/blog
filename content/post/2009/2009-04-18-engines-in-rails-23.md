@@ -13,31 +13,32 @@ Let's spelunk through the code:
 
 `rails-2.3.2/lib/rails/plugin/loader.rb`
 
-<pre lang="ruby">def configure_engines
-          if engines.any?
-            add_engine_routing_configurations
-            add_engine_controller_paths
-            add_engine_view_paths
-          end
-        end
+```ruby
+def configure_engines
+  if engines.any?
+    add_engine_routing_configurations
+    add_engine_controller_paths
+    add_engine_view_paths
+  end
+end
 
-        def add_engine_routing_configurations
-          engines.select(&#038;:routed?).collect(&#038;:routing_file).each do |routing_file|
-            ActionController::Routing::Routes.add_configuration_file(routing_file)
-          end
-        end
+def add_engine_routing_configurations
+  engines.select(&:routed?).collect(&:routing_file).each do |routing_file|
+    ActionController::Routing::Routes.add_configuration_file(routing_file)
+  end
+end
 
-        def add_engine_controller_paths
-          ActionController::Routing.controller_paths += engines.collect(&#038;:controller_path)
-        end
+def add_engine_controller_paths
+  ActionController::Routing.controller_paths += engines.collect(&:controller_path)
+end
 
-        def add_engine_view_paths
-          # reverse it such that the last engine can overwrite view paths from the first, like with routes
-          paths = ActionView::PathSet.new(engines.collect(&#038;:view_path).reverse)
-          ActionController::Base.view_paths.concat(paths)
-          ActionMailer::Base.view_paths.concat(paths) if configuration.frameworks.include?(:action_mailer)
-        end
-</pre>
+def add_engine_view_paths
+  # reverse it such that the last engine can overwrite view paths from the first, like with routes
+  paths = ActionView::PathSet.new(engines.collect(&:view_path).reverse)
+  ActionController::Base.view_paths.concat(paths)
+  ActionMailer::Base.view_paths.concat(paths) if configuration.frameworks.include?(:action_mailer)
+end
+```
 
 For each engine, we add any routes, any controllers and any views. Additionally, the directories within app will be added to the global LOAD_PATH, as with a normal application. Note that engines are processed in order exactly like plugins: alphabetically or based on the order they are listed in `config/environment.rb`.
 

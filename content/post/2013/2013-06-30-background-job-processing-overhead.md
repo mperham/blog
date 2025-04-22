@@ -21,12 +21,13 @@ MRI 2.0.0-p195 -- 286 sec (Resque 1.24.1, one process)
 
 Defaults were used where possible, I used Sidekiq 2.13.0 with 25 worker threads and the worker was a no-op class:
 
-<pre lang="ruby">class LazyWorker
+```ruby
+class LazyWorker
   include Sidekiq::Worker
   def perform
   end
 end
-</pre>
+```
 
 To reproduce the benchmark:
 

@@ -23,7 +23,7 @@ of Sidekiq workers at the same time.  The new `Sidekiq::Limiter` API
 allows you to declare and enforce rate limits across all your Ruby
 processes, Sidekiq or not:
 
-{{< highlight ruby >}}
+```ruby
 # Allow up to 50 concurrent operations to the ERP service
 ERP_LIMITER = Sidekiq::Limiter.concurrent(:erp, 50)
 
@@ -32,7 +32,7 @@ def perform(...)
     Erp.do_something
   end
 end
-{{< / highlight >}}
+```
 
 The Limiter API allows you to limit based on concurrency or a rate limit
 (e.g. 5 ops per sec).
@@ -57,7 +57,7 @@ Jobs are created according to the specified schedule and any Sidekiq process can
 As a side benefit, your system will no longer have that cron machine as a single point of failure.
 It's dead simple to register a periodic job:
 
-{{< highlight ruby >}}
+```ruby
 # config/initializers/sidekiq.rb
 Sidekiq.configure_server do |config|
   config.periodic do |mgr|
@@ -65,7 +65,7 @@ Sidekiq.configure_server do |config|
     mgr.register "*/4 * 10 * *", OddTimedWorker, queue: 'critical'
   end
 end
-{{< / highlight >}}
+```
 
 Your Worker must take no arguments.
 
@@ -85,14 +85,14 @@ user presses a button, you might not want a storm of clicks to create a storm of
 
 To activate the feature, add this line:
 
-{{< highlight ruby >}}
+```ruby
 # config/initializers/sidekiq.rb
 Sidekiq::Enterprise.unique! unless Rails.env.testing?
-{{< / highlight >}}
+```
 
 Your workers must declare their uniqueness TTL with the `unique_for` option:
 
-{{< highlight ruby >}}
+```ruby
 class MyWorker
   include Sidekiq::Worker
   sidekiq_options unique_for: 10.minutes
@@ -100,7 +100,7 @@ class MyWorker
   def perform(...)
   end
 end
-{{< / highlight >}}
+```
 
 The uniqueness will remain in effect until the job is successfully processed or the TTL expires.
 Uniqueness is based on `(class, args, queue)` so you **can** push the same class/arguments

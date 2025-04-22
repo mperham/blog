@@ -11,16 +11,18 @@ I couldn't resist covering one of my own gems in the 12 Gems of Christmas. While
 
 Here's how everyone does it with standard OSX:
 
-<pre lang="sh">launchctl load [oh, what's the blasted filename?]
+```
+launchctl load [oh, what's the blasted filename?]
 cd ~/Library/LaunchAgents
 ls
 launchctl load ~/Library/LaunchAgents/io.redis.redis-server.plist
-</pre>
+```
 
 That's a lot of typing and annoyance every time you want to start Redis. Here's how you do it in lunchy:
 
-<pre lang="sh">lunchy start redis
-</pre>
+```
+lunchy start redis
+```
 
 No need to remember the filename of the plist file, lunchy just scans for a plist with the given substring in it. `lunchy ls` will show you all the agents you can control. See the README for the full command set available and happy l(a)unching!
 

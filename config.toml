@@ -9,6 +9,9 @@ pygmentsCodefences = true
 pygmentsStyle = "monokai"
 rssLimit = 10
 
+[markup.goldmark.renderer]
+  unsafe = true
+
 [permalinks]
   post = "/:year/:month/:day/:title/"
 

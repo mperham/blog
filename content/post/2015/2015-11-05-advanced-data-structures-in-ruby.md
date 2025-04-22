@@ -17,7 +17,7 @@ time-limited `pop` operation.  This can be very useful when coordinating
 time-sensitive operations between threads.  Recently I used it as an alternative
 to `sleep` so I could wake up a sleeping thread immediately:
 
-{{< highlight ruby >}}
+```ruby
 def initialize
   @done = false
   @sleeper = ConnectionPool::TimedStack.new
@@ -42,7 +42,7 @@ def start
     end
   end
 end
-{{< / highlight >}}
+```
 
 ### The algorithms gem
 

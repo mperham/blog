@@ -25,31 +25,34 @@ margin are formatted verbatim.
 <p> 
 For example, the input that produced the above paragraph looked like
 </p> 
-<pre> 
+```
+ 
     1. Lists are typed as indented
        paragraphs with:
        * a '*' or '-' (for bullet lists)
        * a digit followed by a period for
          numbered lists
-</pre> 
+``` 
 </li> 
 <li>Labeled lists (sometimes called description lists) are typed using square
 brackets for the label.
  
-<pre> 
+```
+ 
    [cat]   small domestic animal
    [+cat+] command to copy standard input
-</pre> 
+``` 
 </li> 
 <li>Labeled lists may also be produced by putting a double colon after the
 label. This sets the result in tabular form, so the descriptions all line
 up. This was used to create the 'author' block at the bottom of this
 description.
  
-<pre> 
+```
+ 
    cat::   small domestic animal
    +cat+:: command to copy standard input
-</pre> 
+``` 
 <p> 
 For both kinds of labeled lists, if the body text starts on the same line
 as the label, then the start of that text determines the block indent for
@@ -57,7 +60,8 @@ the rest of the body. The text may also start on the line following the
 label, indented from the start of the label. This is often preferable if
 the label is long. Both the following are valid labeled list entries:
 </p> 
-<pre> 
+```
+ 
    &lt;tt&gt;--output&lt;/tt&gt; &lt;i&gt;name [, name]&lt;/i&gt;::
        specify the name of one or more output files. If multiple
        files are present, the first is used as the index.
@@ -65,14 +69,15 @@ the label is long. Both the following are valid labeled list entries:
    &lt;tt&gt;--quiet:&lt;/tt&gt;:: do not output the names, sizes, byte counts,
                        index areas, or bit ratios of units as
                        they are processed.
-</pre> 
+``` 
 </li> 
 <li>Headings are entered using equals signs
  
-<pre> 
+```
+ 
    = Level One Heading
    == Level Two Heading
-</pre> 
+``` 
 <p> 
 and so on
 </p> 
@@ -99,11 +104,12 @@ upper and lower case letters and underscores. Putting a backslash before
 inline markup stops it being interpreted, which is how I created the table
 above:
 </p> 
-<pre> 
+```
+ 
   _italic_::     \_word_ or \&lt;em&gt;text&lt;/em&gt;
   *bold*::       \*word* or \&lt;b&gt;text&lt;/b&gt;
   +typewriter+:: \+word+ or \&lt;tt&gt;text&lt;/tt&gt;
-</pre> 
+``` 
 </li> 
 <li>Names of classes, source files, and any method names containing an
 underscore or preceded by a hash character are automatically hyperlinked
@@ -125,32 +131,36 @@ target.
 description. If a method calls <tt>yield</tt>, then the parameters passed
 to yield will also be displayed:
  
-<pre> 
+```
+ 
    def fred
      ...
      yield line, address
-</pre> 
+``` 
 <p> 
 This will get documented as
 </p> 
-<pre> 
+```
+ 
    fred() { |line, address| ... }
-</pre> 
+``` 
 <p> 
 You can override this using a comment containing ':yields: ...' immediately
 after the method definition
 </p> 
-<pre> 
+```
+ 
    def fred      # :yields: index, position
      ...
      yield line, address
-</pre> 
+``` 
 <p> 
 which will get documented as
 </p> 
-<pre> 
+```
+ 
     fred() { |index, position| ... }
-</pre> 
+``` 
 </li> 
 <li>':yields:' is an example of a documentation modifier. These appear
 immediately after the start of the document element they are modifying.
@@ -163,7 +173,8 @@ also be omitted. By default, though, modules and classes within that class
 of module <em>will</em> be documented. This is turned off by adding the
 <tt>all</tt> modifier.
  
-<pre> 
+```
+ 
      module SM  #:nodoc:
        class Input
        end
@@ -172,7 +183,7 @@ of module <em>will</em> be documented. This is turned off by adding the
        class Output
        end
      end
-</pre> 
+``` 
 <p> 
 In the above code, only class <tt>SM::Input</tt> will be documented.
 </p> 
@@ -199,7 +210,8 @@ separate external from internal comments, or to stop a comment being
 associated with a method, class, or module. Commenting can be turned back
 on with a line that starts '<tt>#++</tt>'.
  
-<pre> 
+```
+ 
     # Extract the age and calculate the
     # date-of-birth.
     #--
@@ -210,7 +222,7 @@ on with a line that starts '<tt>#++</tt>'.
  
     def get_dob(person)
        ...
-</pre> 
+``` 
 </li> 
 <li>Comment blocks can contain other directives:
  

@@ -11,7 +11,8 @@ Ruby has many different gems and APIs for spawning child processes but none I li
 
 Here we have an example setting up a child process pipeline, performing the equivalent of `ps aux | grep -E 'redis|memcached'`.
 
-<pre lang="ruby">require 'childprocess'
+```ruby
+require 'childprocess'
 
 listing = ChildProcess.build("ps", "aux")
 
@@ -26,7 +27,7 @@ listing.wait
 
 search.io.stdin.close
 search.wait
-</pre>
+```
 
 With subprocesses, the tricky bit is usually hooking up the IO streams correctly. In this case, the `duplex` flag signals that you want to write to STDIN of the process (i.e. use it as the RHS of a pipe). Everything else is pretty straightforward; childprocess makes multi-processing with Ruby simple.
 

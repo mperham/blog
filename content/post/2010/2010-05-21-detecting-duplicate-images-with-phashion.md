@@ -16,17 +16,18 @@ Obviously we can't use something like an MD5 or SHA1 fingerprint -- we have to c
 
 [Phashion][3] is my new Ruby wrapper for the pHash library and wraps just enough of the pHash API to implement the described functionality. Here's the test in the test suite which verifies that Phashion considers the images to be duplicates:
 
-<pre lang="ruby">def assert_duplicate(a, b)
-    assert a.duplicate?(b), "#{a.filename} not dupe of #{b.filename}"
-  end
-  def test_duplicate_detection
-    files = %w(86x86-0a1e.jpeg 86x86-83d6.jpeg 86x86-a855.jpeg)
-    images = files.map {|f| Phashion::Image.new("#{File.dirname(__FILE__) + '/../test/'}#{f}")}
-    assert_duplicate images[0], images[1]
-    assert_duplicate images[1], images[2]
-    assert_duplicate images[0], images[2]
-  end
-</pre>
+```ruby
+def assert_duplicate(a, b)
+  assert a.duplicate?(b), "#{a.filename} not dupe of #{b.filename}"
+end
+def test_duplicate_detection
+  files = %w(86x86-0a1e.jpeg 86x86-83d6.jpeg 86x86-a855.jpeg)
+  images = files.map {|f| Phashion::Image.new("#{File.dirname(__FILE__) + '/../test/'}#{f}")}
+  assert_duplicate images[0], images[1]
+  assert_duplicate images[1], images[2]
+  assert_duplicate images[0], images[2]
+end
+```
 
 pHash does have much more functionality, including video and audio support and persistent MVP tree support for similarity searches based on previously processed files, but I have not wrapped any of those APIs. Try it out and let me know what you think!
 

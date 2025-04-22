@@ -15,16 +15,18 @@ Statsd is a nice metrics aggregation server open sourced by Etsy. We use Statsd 
 
 The [statsd-ruby][2] client sends metrics from all our Unicorn and Sidekiq processes to statsd. One thing I really like about statsd is that it uses UDP for network transport so sending a metric doesn't incur much overhead at all and I don't have to have statsd installed locally or in staging -- the metric send will just silently fail. We set up a global METRICS variable with a Statsd client instance (instances are thread-safe so this is ok, even with Sidekiq) so our code can send metrics trivially:
 
-<pre lang="ruby">statsd_host = Rails.env.production? ? '10.10.1.100' : '127.0.0.1'
+```ruby
+statsd_host = Rails.env.production? ? '10.10.1.100' : '127.0.0.1'
 METRICS = Statsd.new(statsd_host, 8125)
 METRICS.namespace = (Sidekiq.server? ? 'sidekiq' : 'web')
-</pre>
+```
 
 Now we just sprinkle metrics throughout our code. Want to track the number and value of orders that your e-commerce site gets?
 
-<pre lang="ruby">METRICS.increment('orders')
+```ruby
+METRICS.increment('orders')
 METRICS.count('orders.total', @basket.total) if @basket.total > 0
-</pre>
+```
 
 Remember that we might have hundreds of Unicorn processes so statsd will collect and aggregate all the individual metric packets from each process into a single metric value to upload to your metrics service. With statsd and statsd-ruby working for you, you can monitor the metrics important to your business and verify the behavior of your system at runtime.
 

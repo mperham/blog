@@ -10,9 +10,11 @@ url: /2008/04/01/expression-rescue-is-evil/
 ---
 
 One of the cleaner syntax options Ruby gives you is what I call expression rescues.  Take this:  
-`<br />
-<%= @item.parent.name rescue 'None' %><br />
-`  
+
+```erb
+<%= @item.parent.name rescue 'None' %>
+```
+
 This code is an example of a pretty standard requirement: printing out the name of the parent of an item. If the item does not have a parent, it will print 'None'. Under the covers, the following is happening:
 
 1.  Ruby calls the parent method on @item
@@ -24,16 +26,17 @@ This code is an example of a pretty standard requirement: printing out the name 
 So what's the problem? There's several in my experience:
 
 **You often can't tell why the rescue is needed.** In the case above, the usage is straightforward. In other cases, it's much less obvious. Take this code:  
-``
 
-<pre>(@client.plugin_configurations.detector.configuration['paths'].inject('') {|output, path| output &lt;&lt; "#{h(path)}rn"} rescue '')</pre>
+```ruby
+(@client.plugin_configurations.detector.configuration['paths'].inject('') {|output, path| output << "#{h(path)}rn"} rescue '')
+```
 
 Why is this rescue needed? There's no way to know and the complexity of the expression implies exasperation: "I give up trying to handle all these edge cases cleanly. Let's just throw in a rescue." So edge cases and bugs are swept under the proverbial rug.
 
 **They are a performance hit.** Rescues are activated by raising errors. This involves creating a backtrace and this is one of the slowest operations you can perform. One raise is not going to kill you but if you are printing out 100 items, the costs will add up quickly. Here's some benchmark code:  
-``
 
-<pre>require 'benchmark'
+```ruby
+require 'benchmark'
 
 puts Benchmark.measure {
   100000.times {
@@ -46,12 +49,15 @@ puts Benchmark.measure {
     item = nil
     item ? item.name : 'None' # Use tertiary logic
   }
-}</pre>
+}
+```
 
 And the results:
 
-<pre>1.120000   0.110000   1.230000 (  1.225845)
-  0.030000   0.000000   0.030000 (  0.034895)</pre>
+```
+1.120000   0.110000   1.230000 (  1.225845)
+0.030000   0.000000   0.030000 (  0.034895)
+```
 
 Rescuing is 30x slower than the equivalent ternary logic expression on Leopard's ruby 1.8.6.
 

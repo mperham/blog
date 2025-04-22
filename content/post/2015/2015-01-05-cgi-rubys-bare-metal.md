@@ -36,7 +36,7 @@ your code can use to generate HTML responses.
 In my case, Stripe POSTs a blob of JSON in the request body. Since I'm responding to the Stripe robot, it only
 needs to see a 200 OK response &mdash; no fancy view rendering layer required.
 
-{{< highlight ruby >}}
+```ruby
 #!/usr/bin/env ruby
 require 'json'
 require 'cgi'
@@ -51,17 +51,17 @@ do_the_magic(stripe_event) # magic happens right here
 cgi.out("status" => "OK", "type" => "text/plain", "connection" => "close") do
   "Success"
 end
-{{< / highlight >}}
+```
 
 I configured Apache to know to execute my CGI script by adding this inside the vhost configuration:
 
-{{< highlight conf >}}
+```
 ScriptAlias /stripe/ /opt/stripe/
 
 <Directory /opt/stripe/>
   Require all granted
 </Directory>
-{{< / highlight >}}
+```
 
 Now if I request `http://server/stripe/event.rb`, Apache will call `/opt/stripe/event.rb`.
 

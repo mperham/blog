@@ -16,13 +16,13 @@ JSON.  The simplest usage requires you to do two things in your custom code:
 
 1\. Import the package - this has the side effect of registering the `/debug/vars` HTTP endpoint.
 
-{{< highlight go >}}
+```go
 import "expvar"
-{{< / highlight >}}
+```
 
 2\. Start up an HTTP server for your process to handle HTTP requests:
 
-{{< highlight go >}}
+```go
 sock, err := net.Listen("tcp", "localhost:8123")
 if err != nil {
   return err
@@ -31,17 +31,17 @@ go func() {
   fmt.Println("HTTP now available at port 8123")
   http.Serve(sock, nil)
 }()
-{{< / highlight >}}
+```
 
 If you hit [http://localhost:8123/debug/vars][4], you should see something like this:
 
-{{< highlight json >}}
+```json
 {
 "cmdline": ["/var/folders/bc/27hv15_d2zvcc3n3s9dxmfg00000gn/T/go-build421732654/command-line-arguments/_obj/exe/main","-l","debug","-s","i.sock","-c","realtest"],
 "counters": {"a": 10, "b": 10},
 "memstats": {"Alloc":1076016,"TotalAlloc":1801544,"Sys":5966072,"Lookups":209,"Mallocs":7986,"Frees":4528,"HeapAlloc":1076016,"HeapSys":2097152,"HeapIdle":327680,"HeapInuse":1769472,"HeapReleased":0,"HeapObjects":3458,"StackInuse":212992,"StackSys":917504,"MSpanInuse":21504,"MSpanSys":32768,"MCacheInuse":8800,"MCacheSys":16384,"BuckHashSys":1441160,"GCSys":1183744,"OtherSys":277360,"NextGC":1436032,"LastGC":1418102095002592201,"PauseTotalNs":2744531,"PauseNs":[480149,171430,603839,288381,494934,522995,182803,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"NumGC":7,"EnableGC":true,"DebugGC":false}
 }
-{{< / highlight >}}
+```
 
 (Put that blob into [JSONLint][2] if you want to see a more readable but verbose version.)
 
@@ -57,7 +57,7 @@ for monitoring purposes.
 Here you can see how to declare a map of counters and then start to increment them as actions happen in your daemon.
 You can see in the JSON blob above how they appear when exported:
 
-{{< highlight go >}}
+```go
 var (
   counts = expvar.NewMap("counters")
 )
@@ -65,7 +65,7 @@ func init() {
   counts.Add("a", 10)
   counts.Add("b", 10)
 }
-{{< / highlight >}}
+```
 
 ## Wherein I Mix in some Awesome
 

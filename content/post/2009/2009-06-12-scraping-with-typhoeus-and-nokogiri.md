@@ -18,7 +18,8 @@ Some notes:
 *   We tried Curl::Multi but it was giving us occasional bus errors.
 *   My wordpress syntax highlighter is obviously subpar when it comes to regular expressions.
 
-<pre lang="ruby">require 'typhoeus'
+```ruby
+require 'typhoeus'
 require 'nokogiri'
 
 class Wikipedia
@@ -38,28 +39,23 @@ class Wikipedia
     str.gsub /href="/wiki/, 'href="http://en.wikipedia.org/wiki'
   end
 end
-</pre>
+```
 
 And here's how you use it.
 
-<pre lang="ruby">entities = %w(
-
-http://en.wikipedia.org/wiki/Garth_Marenghi's_Darkplace
-
-
-http://en.wikipedia.org/wiki/Bus_error
-
-
-http://en.wikipedia.org/wiki/Washington
-
+```ruby
+entities = %w(
+  http://en.wikipedia.org/wiki/Garth_Marenghi's_Darkplace
+  http://en.wikipedia.org/wiki/Bus_error
+  http://en.wikipedia.org/wiki/Washington
 )
-    content = entities.map do |url|
-      Wikipedia.extract(:base_uri => url)
-    end
-    p content
-</pre>
+content = entities.map do |url|
+  Wikipedia.extract(:base_uri => url)
+end
+p content
+```
 
- [1]: http://www.onespot.com
- [2]: http://www.zemanta.com
- [3]: http://github.com/pauldix/typhoeus
- [4]: http://github.com/tenderlove/nokogiri
+[1]: http://www.onespot.com
+[2]: http://www.zemanta.com
+[3]: http://github.com/pauldix/typhoeus
+[4]: http://github.com/tenderlove/nokogiri

@@ -11,12 +11,14 @@ url: /2009/03/08/tokyo-cabinet-vs-memcached/
 
 One interesting feature of its network access layer, Tokyo Tyrant, is support for the memcached protocol, which means we can access it via memcache-client! I downloaded tokyocabinet and tokyotyrant and built and installed them. I then started a tyrant server like so:
 
-<pre>ttserver -port 45000 data.tch
-</pre>
+```
+ttserver -port 45000 data.tch
+```
 
 Let's try some simple benchmarks:
 
-<pre lang="ruby">require 'rubygems'
+```ruby
+require 'rubygems'
 require 'benchmark'
 
 gem 'memcache-client', '1.7.0'
@@ -47,16 +49,17 @@ Benchmark.bm(20) do |b|
     end
   end
 end
-</pre>
+```
 
 Results:
 
-<pre>user     system      total        real
+```
+user     system      total        real
 memcached-write       0.380000   0.200000   0.580000 (  1.308354)
 tokyo-write           0.470000   0.200000   0.670000 (  1.663922)
 memcached-read        0.410000   0.170000   0.580000 (  1.354334)
 tokyo-read            0.470000   0.180000   0.650000 (  1.688558)
-</pre>
+```
 
 Not too shabby at all! Keep in mind that TC doesn't support time-based key expiration and is persistent. Memcached is designed to be a memory-only cache, so while the underlying semantics of the two are somewhat different, the same basic operations are available to memcache-client. In fact, you can even theoretically use TC as your Rails cache by configuring the mem\_cache\_store to point to your Tokyo Tyrant server instead of memcached!
 

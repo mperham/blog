@@ -18,13 +18,13 @@ Sidekiq Enterprise can now send the global counts you see at
 the top of the Web UI to Statsd for monitoring and
 display within your metrics dashboard. [Read More][0]
 
-{{< highlight ruby >}}
+```ruby
 STATSD = ::Statsd.new(...)
 
 Sidekiq.configure_server do |config|
   config.save_history(STATSD)
 end
-{{< / highlight >}}
+```
 
 ### Multi-Process
 
@@ -40,9 +40,9 @@ don't need to manage individual child processes.  With this new
 multi-process support, it's really simple to scale Sidekiq across all
 cores.  [Read More][1]
 
-{{< highlight ruby >}}
+```ruby
 COUNT=4 bundle exec sidekiqswarm -e production
-{{< / highlight >}}
+```
 
 ## Sidekiq Pro
 
@@ -50,12 +50,12 @@ Until today you had to be running reliable fetch in order to pause
 queues.  This is no longer required!  Anyone running Sidekiq Pro 3.x can now
 pause queues.
 
-{{< highlight ruby >}}
+```ruby
 q = Sidekiq::Queue.new
 q.pause!
 sleep 10
 q.unpause!
-{{< / highlight >}}
+```
 
 [Read More][2]
 
@@ -64,9 +64,9 @@ q.unpause!
 Sidekiq gained support for an ActiveJob-style `set` method, to set options
 dynamically:
 
-{{< highlight ruby >}}
+```ruby
 SomeWorker.set(queue: 'high').perform_async(1, 2, 3)
-{{< / highlight >}}
+```
 
 Also, the Web UI now shows a tag next to any process which is quiet (has
 received the USR1 signal). [Read More][3]

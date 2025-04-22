@@ -11,7 +11,8 @@ One email I get fairly regularly is "Why would I use memcache-client when the pe
 
 His benchmarks, like all performance tests, are a snapshot in time -- they reflect a certain revision of the codebase. Specifically I assume his benchmarks reflect memcache-client 1.5.0. This version is about 18 months old and ships with Rails 2.x. Since 1.5.0, I've taken over the project and done a lot of tuning. Here's some numbers:
 
-<pre>Testing 1.6.4
+```
+Testing 1.6.4
                                      user     system      total        real
 set:plain:memcache-client        0.740000   0.270000   1.010000 (  2.123806)
 set:ruby:memcache-client         0.800000   0.270000   1.070000 (  2.215323)
@@ -30,7 +31,7 @@ get:ruby:memcache-client        29.350000   0.430000  29.780000 ( 30.942459)
 multiget:ruby:memcache-client   30.750000   0.250000  31.000000 ( 31.462482)
 missing:ruby:memcache-client    28.470000   0.410000  28.880000 ( 30.046172)
 mixed:ruby:memcache-client      58.590000   0.840000  59.430000 ( 61.951933)
-</pre>
+```
 
 You can see the exact benchmark code in [memcache-client][2]/`test/test_benchmark.rb`. It's basically just a direct copy of Evan's benchmarks, modified to run as part of the test suite. This is running in Ruby 1.8.6 p114 on a 2.2Ghz Core 2 Duo. The numbers for Ruby 1.9.1 are approx 20% faster.
 

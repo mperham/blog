@@ -27,10 +27,11 @@ What's the result? In development mode, your process will run in the foreground,
 
 Using a deployment tool like Capistrano to directly start any process is a bad idea. What happens when that process crashes? (Most likely it disappears and now your application is broken.) Who rotates the logs to ensure they don't fill the disk? (Most likely you after filling the disk the first time.) Instead, integrate your daemon into the init system, configure it to respawn if it crashes and have Capistrano manage the process via init:
 
-<pre class="brush: ruby; title: ; notranslate" title="">task :restart do
+```ruby
+task :restart do
   run "initctl restart sidekiq"
 end
-</pre>
+```
 
 As always, KISS. Let your operating system handle daemons, respawning and logging while you focus on your application features and users.
 

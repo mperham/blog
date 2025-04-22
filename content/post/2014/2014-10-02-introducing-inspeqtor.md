@@ -21,7 +21,8 @@ Inspeqtor understands the notion of an **application deploy** and will not notif
 
 I want Inspeqtor to be incredibly easy to set up and monitor common, useful metrics. Here's how to monitor mysql:
 
-<pre class="brush: bash; gutter: false; title: ; notranslate" title=""># /etc/inspeqtor/conf.d/mysql.inq
+```bash
+# /etc/inspeqtor/conf.d/mysql.inq
 check service mysql with username dbuser, password thepass, socket /tmp/mysql.sock
   if memory:rss &gt; 1g then alert
   if cpu:user &gt; 90% then alert
@@ -32,7 +33,7 @@ check service mysql with username dbuser, password thepass, socket /tmp/mysql.so
   if mysql:Slow_queries &gt; 10 then alert
   # you can even monitor slave replication lag!
   if mysql:Seconds_Behind_Master &gt; 30 then alert
-</pre>
+```
 
 **That's it**, just a few words of readable English, no XML, YAML or other painful formats. Inspeqtor talks to your init system to find the PID and monitor CPU and RAM. It knows how to log into mysql to gather metrics.
 

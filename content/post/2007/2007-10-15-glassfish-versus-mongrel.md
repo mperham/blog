@@ -11,19 +11,23 @@ I've been working on my upcoming AOR Glassfish talk. Here's some interesting num
 
 #### Memory Usage
 
-<pre>Glassfish - 230MB resident, 840MB virtual
+```
+Glassfish - 230MB resident, 840MB virtual
 Mongrel Cluster (2 nodes) - 46MB resident, 104MB virtual
-Nginx (2 workers) - 2MB resident, 84MB virtual</pre>
+Nginx (2 workers) - 2MB resident, 84MB virtual
+```
 
 #### Page Times
 
 This metric used Apache JMeter to simulate 25 users (threads) to request the home page for ThoughtWorks's Petstore2 Rails demo application as fast as possible. The application was tweaked so that there was no database usage. Numbers are requests/minute and denote with/without downloading associated static content (js/css/etc). Everything was running locally on my MacBook Pro 2.2Ghz.
 
-<pre>Glassfish 790/833
+```
+Glassfish 790/833
 Mongrel 309/621
 2 Mongrels 318/1077
 2 Mongrels + Nginx 888/1050
-Glassfish + Nginx 815/845</pre>
+Glassfish + Nginx 815/845
+```
 
 #### Findings
 

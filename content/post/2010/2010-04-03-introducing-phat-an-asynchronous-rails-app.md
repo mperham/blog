@@ -18,7 +18,8 @@ This is a new breed of Rails application which uses a new mode of execution avai
 
 Here's a sample action which uses memcached and the database. There's nothing odd here -- it's the same old Rails API and codebase we are used to as Ruby developers, it just executes differently under the covers.
 
-<pre lang="ruby">class HelloController &lt; ApplicationController
+```ruby
+class HelloController &lt; ApplicationController
   def world
     site_ids = Rails.cache.fetch 'site_ids', :expires_in => 1.minute do
       Site.all.map(&#038;:id)
@@ -26,13 +27,14 @@ Here's a sample action which uses memcached and the database. There's nothing od
     render :text => site_ids
   end
 end
-</pre>
+```
 
 How does it work? If you want the nitty-gritty, [watch my talk on EventMachine and Fibers][3]. Everything that does network access ideally should be modified to be Fiber-aware. I've updated many gems to be Fiber-aware: [memcache-client][4], [em_postgresql][5] (and activerecord), cassandra, bunny and rsolr to name a few. You'll also need to run thin as your app server, since all of this code assumes it is executing within EventMachine.
 
 Additionally we need to ensure that each request runs in its own Fiber. My new gem, [rack-fiber_pool][6], will do this for you, just add it as Rack middleware in `config/environment.rb`. Here's the basic configuration:
 
-<pre lang="ruby"># Asynchronous DNS lookup
+```ruby
+ # Asynchronous DNS lookup
 require 'em-resolv-replace'
 require 'rack/fiber_pool'
 # Pull in the evented memcache-client.
@@ -46,7 +48,7 @@ Rails::Initializer.run do |config|
   # Get rid of Rack::Lock so we don't kill our concurrency
   config.threadsafe!
 end
-</pre>
+```
 
 Additionally we need to [configure Postgresql][7] and [disable ActionController's reloader mutex][8] as it really doesn't like fibered execution. This is ok because remember -- there's only a single thread executing in our process!
 

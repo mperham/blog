@@ -65,13 +65,13 @@ and most of which are unnecessary.
 Lastly, make sure you only load the gem when necessary.  Use Bundler's
 group support to disable test gems when not testing:
 
-{{< highlight ruby >}}
+```ruby
 group :test do
   gem 'rspec'
   gem 'timecop'
   # etc
 end
-{{< / highlight >}}
+```
 
 ## Gem Developers, Listen Up!
 

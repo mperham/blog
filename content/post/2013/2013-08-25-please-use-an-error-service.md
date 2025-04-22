@@ -18,17 +18,19 @@ An error service is SaaS that provides error handling for your application. Your
 
 Here's what your code might look like if you use logging:
 
-<pre lang="ruby">begin
+```ruby
+begin
   call_foo
 rescue => ex
   Rails.logger.error("Unable to call foo: #{ex.message}")
 end
-</pre>
+```
 
 Insanity! Are you going to scan your logs constantly for errors? Do you look at your body constantly for wounds? Here's what it looks like when you use an error service:
 
-<pre lang="ruby">call_foo
-</pre>
+```ruby
+call_foo
+```
 
 The error service generally integrates into Rails (and Sidekiq, too!) so that your code need do nothing. If call_foo raises an error, you'll get an email seconds later with a backtrace and all the context available (controller parameters, http headers, etc) which often means you can diagnose the problem in seconds.
 

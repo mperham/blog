@@ -20,9 +20,9 @@ The `workers` service is a "fake" service which knows how to start/stop N sideki
 processes.  Upon machine boot, Upstart will start `workers` which will start those N
 processes.  Within `workers.conf` we've declared how many processes we want to start:
 
-{{< highlight ruby >}}
+```
 env NUM_WORKERS=2
-{{< / highlight >}}
+```
 
 If you want to quickly shut down all Sidekiq processes, run `stop workers`. Start
 them back up with `start workers`.  Of course you can do both with `restart workers`.
@@ -31,12 +31,12 @@ It literally can't be any easier!
 The `sidekiq` service is an "instance" service, allowing you to create N processes.
 It requires an index parameter to define which instance you are controlling:
 
-{{< highlight bash >}}
+```
 $ start sidekiq index=0
 $ start sidekiq index=1
 $ stop sidekiq index=2
 etc...
-{{< / highlight >}}
+```
 
 ## Deployment
 
@@ -49,34 +49,34 @@ During a deployment, we want to signal Sidekiq to stop processing jobs as early 
 Sidekiq has as much time as possible to finish any jobs in progress.  We do this by sending
 each process the USR1 signal, here's a Capistrano task which does that:
 
-{{< highlight ruby >}}
+```ruby
 task :quiet do
   on roles(:worker) do
     puts capture("sudo pgrep -f 'sidekiq' | xargs kill -USR1")
   end
 end
-{{< / highlight >}}
+```
 
 Note that `workers` does not support reload since it doesn't map to a single process so we have to
 use that pgrep hack.
 
 You can use Upstart's `reload` command to quiet a specific instance:
 
-{{< highlight bash >}}
+```bash
 $ reload sidekiq index=X
-{{< / highlight >}}
+```
 
 ### Restarting Sidekiq
 
 Restarting is easy: `restart workers`.  This will actually stop and then start the processes.
 
-{{< highlight ruby >}}
+```ruby
 task :restart do
   on roles(:worker) do
     puts capture("sudo restart workers")
   end
 end
-{{< / highlight >}}
+```
 
 ## Notes
 

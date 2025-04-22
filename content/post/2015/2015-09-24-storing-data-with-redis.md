@@ -48,7 +48,7 @@ current database.  You can `MOVE` a key from the current database to another dat
 
 Want to put all your Sidekiq job data in a separate database?
 
-{{< highlight ruby >}}
+```ruby
 # Use DB 4 for all job data
 redis = { url: 'redis://localhost:6379/4' }
 Sidekiq.configure_client do |config|
@@ -57,7 +57,7 @@ end
 Sidekiq.configure_server do |config|
   config.redis = redis
 end
-{{< / highlight >}}
+```
 
 Using separate databases is an easy way to put a "firewall" between datasets without any additional administrative
 overhead.  Now you can FLUSHDB one dataset without affecting another dataset.  Protip: configure your test suites
