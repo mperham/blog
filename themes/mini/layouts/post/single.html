@@ -11,4 +11,10 @@
 </p>
 {{ .Content }}
 
+{{ if .Params.TootId }}
+<hr>
+<script type="module" src="/js/mastodon-comments.js"></script>
+<mastodon-comments host="ruby.social" user="getajobmike" tootId="{{ .Params.TootId }}"></mastodon-comments>
+{{ end }}
+
 {{- end -}}
