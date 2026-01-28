@@ -3,7 +3,6 @@ title: "Adding Mastodon Comments"
 date: 2026-01-27T16:13:50-08:00
 publishdate: 2026-01-27
 lastmod: 2026-01-27
-draft: true
 tags: []
 tootid: 115969488607665905
 ---
