@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2014/05/22/bounded-libraries/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2014/05/22/bounded-libraries/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Bounded Libraries">
   <meta property="og:description" content="I’ve been noticing a theme in certain Rubygems recently that I like: opinionated designs which explicitly don’t allow the user to do certain things. I call these bounded libraries because they draw a functional boundary and won’t go beyond that point.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -201,6 +203,8 @@ blockquote,
 <p>Part of earning the users trust is not just providing high quality functionality but also pushing back on requests where our experience tells them they should not go. Most recently this came up in using the <code>minitest</code> gem. For those that don&rsquo;t know, minitest&rsquo;s mocking and stubbing support is far more limited than what is available in rspec, mocha or flexmock <strong>and this is a good thing</strong>. Every time I experience pain testing a component with minitest, it&rsquo;s because I&rsquo;ve got some coupling which can&rsquo;t be stubbed or mocked away with minitest. I could do this with the other tools but I would just hurt myself twice: I still have that coupling but now I have brittle test code too! minitest&rsquo;s refusal to provide the extensive mocking and stubbing of the others forces me to write better code.</p>
 <p>I&rsquo;ve tried to be very clear in Sidekiq&rsquo;s boundaries: I won&rsquo;t provide features which cripple concurrency as this requires distributed locks and coordination. Examples of those features include unique jobs, cron-scheduled jobs, throttling and rate limiting. These features lead to non-deterministic behavior and hit overall performance hard. Lots of people ask for these features but I always point them to 3rd party gems. I can&rsquo;t stop someone from using Sidekiq but I can refuse to help.</p>
 <p>What are your favorite open source bounded libraries? What boundary lines do they draw?</p>
+
+
     </article>
   </div>
 

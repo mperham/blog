@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2011/02/15/filling-out-pdf-forms-with-jruby/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2011/02/15/filling-out-pdf-forms-with-jruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Filling out PDF forms with JRuby">
   <meta property="og:description" content="I recently had to figure out how to programmatically fill out a PDF based on the form input from a Rails application. It looks like there’s nothing native to Ruby but there is a comprehensive PDF library called iText which will handle form duties. Using JRuby, we can access their Java API to fill out the form pretty easily:
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -217,6 +219,8 @@ blockquote,
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">Pdf</span><span style="color:#f92672">.</span>write
 </span></span></code></pre></div><p>Obviously sample code, not production quality, etc. Really the only hard/tedious part is mapping field names to Ruby object attribute values. If you have a complex form, you may have tens or even hundreds of <code>set_field</code> calls.</p>
+
+
 
     </article>
   </div>

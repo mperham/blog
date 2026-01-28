@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/10/24/laziness-can-hurt/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/10/24/laziness-can-hurt/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Laziness Can Hurt">
   <meta property="og:description" content="I like Rails’s config.gem feature: it’s simple and gives you a lot of functionality for cheap, much like Rails itself. I just spent half a day tracking down a problem because we were overusing it.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -200,6 +202,8 @@ blockquote,
 <p>I like Rails&rsquo;s <code>config.gem</code> feature: it&rsquo;s simple and gives you a lot of functionality for cheap, much like Rails itself.  I just spent half a day tracking down a problem because we were overusing it.</p>
 <p>I tend to be fanatical about minimizing dependencies as it has bit me several times in the past.  In this case, we were using <code>config.gem</code> to load a test dependency, <strong>redgreen</strong>.  All that gem does is colorize your test output.  There&rsquo;s no reason to list it as an application dependency but the team wanted all gems to install with <code>rake gems:install</code>. It didn&rsquo;t sit right with me at the time but I didn&rsquo;t feel strongly enough to raise the issue.  Well as it turns out when you add <strong>redgreen</strong> via <code>config.gem</code>, it adds a test/unit <code>at_exit</code> handler that exhibits some odd behavior, including breaking the test suite on our sandbox/ci server.</p>
 <p>I&rsquo;m not blaming <strong>redgreen</strong> and I&rsquo;m not blaming <code>config.gem</code> since we really weren&rsquo;t using either as designed.  Once it was loaded as normal, everything worked as expected. Lesson reinforced: <em>keep your app&rsquo;s dependencies as simple as possible</em>. There&rsquo;s no reason why <strong>redgreen</strong> should be installed on our production servers.</p>
+
+
 
     </article>
   </div>

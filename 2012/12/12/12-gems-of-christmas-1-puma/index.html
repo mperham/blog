@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/12/12/12-gems-of-christmas-1-puma/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/12/12/12-gems-of-christmas-1-puma/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #1 -- puma">
   <meta property="og:description" content="I’ve spent the last few years working to advance and improve Ruby’s efficiency through concurrency, first with EventMachine and fibers and now with Actors and multithreading so it shouldn’t surprise you that my #1 pick is puma. It’s my belief that puma and sidekiq are a new breed of Ruby infrastructure that can dramatically improve your application’s efficiency — should you decide to take advantage of them.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -204,6 +206,8 @@ blockquote,
 <p>Unicorn/MRI 1.9.3 is the baseline: single-threaded, it runs the 1000 requests in 19 seconds. Puma/MRI manages to speed up a bit but is still hampered by the GIL and runs in 15 seconds. Puma/JRuby unlocks the second core on my MacBook Air and runs in under 9 seconds!</p>
 <p>What this means is simple: threading with puma will get you better performance than Unicorn, even on MRI, and jumping to <a href="http://jruby.org">JRuby</a> gets you a significantly bigger boost by giving you truly parallel threads. It took me about one hour to get our Rails app, which has always run on MRI, working with JRuby. Give JRuby a try some weekend and you might be surprised how well it works!</p>
 <p>I hope you enjoyed my 12 Gems of Christmas series and found a few gems that were worthy of further study.</p>
+
+
 
     </article>
   </div>

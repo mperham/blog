@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/08/05/securing-network-services/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2010/08/05/securing-network-services/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Securing Network Services">
   <meta property="og:description" content="The recent memcached security exposé highlighted the fact that simple vulnerabilities require constant vigilance and education for new developers.
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -211,6 +213,8 @@ blockquote,
 <p>is in the file. Otherwise memcached will by default listen on all interfaces and be exposed publicly.</p>
 <p>Firewall configuration brings another dimension of variability into the mix but I prefer to configure my services to listen correctly first and then determine any additional firewall rules necessary based on the network topology. Using Memcached servers on multiple machine might require some fancy firewall rules to ensure that they can talk to each other while not being exposed publicly. One nice thing about Amazon&rsquo;s EC2 service is that it forces you to explicitly open ports to the public via firewall rules, everything else is internal by default.</p>
 <p>In summary, I always perform a quick port audit of all machines after I&rsquo;m done configuring them to ensure that they are as secure as possible before putting them in production. A quick <code>netstat</code> command can go a long way to ensure a sound night&rsquo;s sleep.</p>
+
+
 
     </article>
   </div>

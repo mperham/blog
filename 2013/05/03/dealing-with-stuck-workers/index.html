@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2013/05/03/dealing-with-stuck-workers/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2013/05/03/dealing-with-stuck-workers/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Dealing with Stuck Workers">
   <meta property="og:description" content="Occasionally Sidekiq users report workers that are “stuck” processing jobs for a long time. Usually this means that there are entries in the Workers page in the Web UI that linger for a long time. This post explains what you can do as a Sidekiq user to track down what is happening.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -207,6 +209,8 @@ blockquote,
 <p>If the PID is gone, the process crashed, the worker dies and the status entry is orphaned in Redis. A Ruby process can crash due to bugs in either the Ruby VM itself or in a native extension your application is using.</p>
 <p>Process crashes can be a serious problem: any jobs executing during the crash are lost. Unless the jobs are optional, you probably want to stop the job loss ASAP and here you have two solutions: spend time or money to stop the loss. If you have time you can find a core dump, use gdb to get a backtrace and start investigating the code at fault. Debugging a crashed process is a highly technical subject and not something that I can really cover adequately in a blog post.</p>
 <p>Alternatively, you can buy <a href="http://sidekiq.org/">Sidekiq Pro</a> and use its reliable queueing feature. I spoke with a Sidekiq user at Railsconf whose processes were crashing and losing jobs. They jumped at the chance: rather than spending days tracking down the bug, they could live with a crash once or twice a day since Upstart would just restart the process and immediately resume the job. It&rsquo;s not the ideal solution but it stopped the loss of jobs and put out the immediate fire: now they could debug the issue at their leisure rather than needing to fix it ASAP.</p>
+
+
     </article>
   </div>
 

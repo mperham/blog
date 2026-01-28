@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/02/15/memcache-client-performance/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/02/15/memcache-client-performance/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Memcache-client Performance">
   <meta property="og:description" content="One email I get fairly regularly is “Why would I use memcache-client when the performance sucks?” Most people point me to Evan Weaver’s BENCHMARKS file in his memcached library as proof that I should just close up shop.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -220,6 +222,8 @@ missing:ruby:memcache-client    28.470000   0.410000  28.880000 ( 30.046172)
 mixed:ruby:memcache-client      58.590000   0.840000  59.430000 ( 61.951933)
 </code></pre><p>You can see the exact benchmark code in <a href="http://github.com/mperham/memcache-client">memcache-client</a>/<code>test/test_benchmark.rb</code>. It&rsquo;s basically just a direct copy of Evan&rsquo;s benchmarks, modified to run as part of the test suite. This is running in Ruby 1.8.6 p114 on a 2.2Ghz Core 2 Duo. The numbers for Ruby 1.9.1 are approx 20% faster.</p>
 <p>The latest numbers are not orders of magnitude slower but rather merely some percentage off. So while Evan&rsquo;s numbers are correct for an old version of memcache-client, they do not represent the current state of the project. It&rsquo;s my belief that memcache-client 1.6.x has perfectly acceptable performance and in return, you get a mostly pure Ruby codebase that works on JRuby, Ruby 1.8 and Ruby 1.9. I hope this clears up any confusion; let me know if you have further questions!</p>
+
+
 
     </article>
   </div>

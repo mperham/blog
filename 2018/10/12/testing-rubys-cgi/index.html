@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2018/10/12/testing-rubys-cgi/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2018/10/12/testing-rubys-cgi/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Testing Ruby&#39;s CGI">
   <meta property="og:description" content="CGI is a standard for generating HTML pages from scripts executed as child processes by a web server. I explained CGI and how I use it in a previous post, CGI: Ruby’s Bare Metal. I like to use CGI because it means that I don’t have to run any Ruby app server (e.g. puma, passenger, unicorn) 24/7. Less moving parts == more robust!
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -313,6 +315,8 @@ server on its own and point it to ours instead.</p>
 </span></span></code></pre></div><p>That&rsquo;s a quick test to make sure the <a href="https://billing.contribsys.com/spro/">billing scripts for Sidekiq
 Pro</a> will render correctly and not crash.
 Now with a little test coverage I&rsquo;ve got more confidence that changes won&rsquo;t break these scripts.</p>
+
+
 
     </article>
   </div>

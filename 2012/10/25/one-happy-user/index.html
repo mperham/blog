@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/10/25/one-happy-user/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/10/25/one-happy-user/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="One Happy User">
   <meta property="og:description" content="I received a nice email the other day from a programmer who wants to remain anonymous due to his job at LargeCorp™. While efficiency is something I strive for in Sidekiq, this story really proves that you can do an amazing amount of work very quickly with the right architecture.
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -213,8 +215,11 @@ minutes — was impossible. Not just impossible, but that it couldn&rsquo;t be d
 <p>And the performance increase I got?</p>
 <p>I was told it would take no less than four hours to do what I wanted to do, which was 600,000 of the complicated queries in less than four hours (and those guys had LOTS of workers).</p>
 <p>One Sidekiq worker does 500,000 in an hour at a concurrency level of 75. The existing solution had more racks of high performance servers acting as workers, I had no idea really, but the three or four racks of boxes took four hours. The four workers I deployed with did two million in an hour, which met my original objective. Well, almost, but shh.</p>
-<p>Sidekiq is new. It&rsquo;s good. I really hope more people try it out to hack at problems they might have.</p></blockquote>
+<p>Sidekiq is new. It&rsquo;s good. I really hope more people try it out to hack at problems they might have.</p>
+</blockquote>
 <p>As a developer who&rsquo;s put a lot of heart and soul into building something, these usage stories always make my day. Thank you for the tale and kind words!</p>
+
+
 
     </article>
   </div>

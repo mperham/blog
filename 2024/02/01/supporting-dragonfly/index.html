@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2024/02/01/supporting-dragonfly/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2024/02/01/supporting-dragonfly/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Supporting Dragonfly">
   <meta property="og:description" content="For about 15 years, Redis has been the dominant choice for background job infrastructure in Ruby.
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -221,6 +223,8 @@ Dragonfly 1.14.1: 800000 jobs in 26.1067 sec, 30643 jobs/sec
 </code></pre><p>Typical business applications processing thousands or even millions of jobs per day may not benefit from Dragonfly but if your job cluster is approaching the limits of scale, you really only had one choice: move to multiple Redis shards.
 Now you have another choice in Sidekiq 7.2: switch to Dragonfly.
 Read the <a href="https://github.com/sidekiq/sidekiq/wiki/Using-Dragonfly">Using Dragonfly</a> wiki page which covers the best tips and tricks for running Dragonfly + Sidekiq.</p>
+
+
 
     </article>
   </div>

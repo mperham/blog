@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/06/16/memcached-vs-memcache-client-performance/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/06/16/memcached-vs-memcache-client-performance/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="memcached vs memcache-client Performance">
   <meta property="og:description" content="memcached is Evan Weaver’s Ruby wrapper around the libmemcached C library and widely regarded as quite fast. After an hour of trying, I finally got a build of memcached to actually compile and install on my machine (the trick: you need to download the custom packages Evan links on his blog, nothing else seems to work). Here’s the results:
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -221,6 +223,8 @@ mixed:ruby:memcached             0.580000   0.570000   1.150000 (  2.610819)
 mixed:ruby:memcache-client       1.580000   0.540000   2.120000 (  3.632775)
 </code></pre><p>In most cases, memcache-client is within 33-50% of the performance of memcached. This is amazing for a (mostly) pure Ruby library performing a lot of network IO against a C library which has been tuned for speed! I hope that puts to bed any lingering doubts that memcache-client is slow.</p>
 <p>Remember: if you are using Rails 2.3, just &ldquo;gem install memcache-client&rdquo; and Rails will pick up the latest version with all these performance improvements.</p>
+
+
 
     </article>
   </div>

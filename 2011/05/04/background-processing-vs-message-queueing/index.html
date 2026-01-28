@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2011/05/04/background-processing-vs-message-queueing/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2011/05/04/background-processing-vs-message-queueing/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Background Processing vs Message Queueing">
   <meta property="og:description" content="One common simplification I see engineers make is equating message queueing with background processing. This is what they are missing: message queueing is a superset of background processing. All message processing is done in the background but background processing does not have to be done via message queues.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -211,6 +213,8 @@ blockquote,
 <li>resque &ndash; forks a new process for every message. Safe but memory hungry.</li>
 </ul>
 <p>The biggest caveat with girl_friday is threading, of course. Typical Ruby deployments aren&rsquo;t thread-friendly but I&rsquo;d like to help change that. Rainbows! is thread-friendly, as are all the JRuby app servers. The <a href="http://github.com/mperham/girl_friday/wiki">girl_friday wiki</a> gives more specifics about features and usage. Are there any other dimensions to the problem that I&rsquo;m missing? Any other projects that solve a similar problem? Post a comment and let me know!</p>
+
+
 
     </article>
   </div>

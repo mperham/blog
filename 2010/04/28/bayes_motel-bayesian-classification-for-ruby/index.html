@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/04/28/bayes_motel-bayesian-classification-for-ruby/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2010/04/28/bayes_motel-bayesian-classification-for-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="bayes_motel -- Bayesian classification for Ruby">
   <meta property="og:description" content="Bayesian classification is an algorithm which allows us to categorize documents probabilistically. I recently started playing with Twitter data and realized there was no Ruby gem which would allow me to build a spam detector for tweets. The classifier gem just works on a set of text by figuring out which words appear in a category but a tweet is much more complicated than that. A tweet looks like this:">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -221,6 +223,8 @@ blockquote,
 <li>We aren&rsquo;t performing any timeline checks or storing previous tweet state &ndash; spammers tend to tweet the same text over and over and their tweets all contain links. This is beyond the scope of a generic Bayesian system.</li>
 </ul>
 <p>I wrote <a href="http://github.com/mperham/bayes_motel">bayes_motel</a> based on my research this last weekend. Give it a try and send a pull request if you make changes you&rsquo;d like to see. The test suite gives more detail about the API and has a few thousand tweets to use as sample data. Happy coding!</p>
+
+
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/09/01/comparing-document-oriented-databases/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/09/01/comparing-document-oriented-databases/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Comparing Document-oriented Databases">
   <meta property="og:description" content="MongoDB is a relatively new “schema-free, document-oriented database.” The closest competitor to MongoDB is probably CouchDB or Tokyo Cabinet’s Table database but all three differ in significant ways:
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -210,6 +212,8 @@ blockquote,
 <p>Tokyo Cabinet feels a little more traditional and lower-level, like a layer on top of BerkeleyDB.  It&rsquo;s similar in design in that they are both C libraries and not designed to run as standalone daemons themselves.  It would be great for embedded applications.</p>
 <p>In my next post, I&rsquo;ll try out each with their latest Ruby driver and see how they perform in basic usecases.  Did I get anything wrong?  Leave a comment and let me know!</p>
 <p>Update: Tokyo Tyrant does not appear to support transactions and so Tokyo Cabinet cannot guarantee ACID when used as a service.</p>
+
+
 
     </article>
   </div>

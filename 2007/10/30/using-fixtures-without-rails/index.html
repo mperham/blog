@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2007/10/30/using-fixtures-without-rails/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2007/10/30/using-fixtures-without-rails/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using Fixtures without Rails">
   <meta property="og:description" content="We’ve got several applications internal to FiveRuns which are Ruby but not Rails. They use ActiveRecord for database access but not the rest of the Rails stack. We still wanted to use fixtures to provide a foundation of data for our testing though so I spent a few hours figuring out how to get fixtures working in a non-Rails world. In essence you need to add this to your test_helper.rb:
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -204,6 +206,8 @@ The only Rails-ism you need to copy is the config/database.yml file. The setup a
 <code>&lt;br /&gt; assert_not_nil accounts(:fiveruns)&lt;br /&gt; </code><br>
 Once you have fixtures working, try the <a href="http://svn.geeksomnia.com/rathole/trunk/README">Rathole</a> plugin which makes fixtures even better!</p>
 <p>PS Apologies for the miserable formatting.  WordPress really tries too hard to be smart and , as a result, just makes everyone look dumb.</p>
+
+
 
     </article>
   </div>

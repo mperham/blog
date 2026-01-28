@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2011/12/30/getting-ichat-to-automatically-reconnect/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2011/12/30/getting-ichat-to-automatically-reconnect/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Getting iChat to automatically reconnect">
   <meta property="og:description" content="I’ve noticed a problem with iChat for the last year or two: if your network drops, you stay Disconnected until you manually tell iChat to log back in. That’s pretty lame, my Comcast cable drops several times a day so I need something a little more robust than that. I found a workaround: use cron to do the work for you. Fire up a Terminal, run crontab -e and put this in it:">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -199,6 +201,8 @@ blockquote,
 <p>I&rsquo;ve noticed a problem with iChat for the last year or two: if your network drops, you stay Disconnected until you manually tell iChat to log back in. That&rsquo;s pretty lame, my Comcast cable drops several times a day so I need something a little more robust than that. I found a workaround: use cron to do the work for you. Fire up a Terminal, run <code>crontab -e</code> and put this in it:</p>
 <pre tabindex="0"><code>*/5 * * * * osascript -e &#39;tell application &#34;System Events&#34; to if (processes whose name is &#34;iChat&#34;) exists then tell application &#34;iChat&#34; to log in&#39;
 </code></pre><p>This uses AppleScript to tell iChat to log in every 5 minutes. Now if the network drops, you&rsquo;ll only be disconnected a few minutes.</p>
+
+
 
     </article>
   </div>

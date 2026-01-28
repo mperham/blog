@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2023/05/08/scaling-huge-transactional-datasets-with-redis-cluster/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2023/05/08/scaling-huge-transactional-datasets-with-redis-cluster/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Scaling Huge Transactional Datasets with Redis Cluster">
   <meta property="og:description" content="Recently I made some minor changes to Sidekiq Enterprise 7.1 in order to greatly increase the scalability of the Rate Limiter feature. Redis has a little-known feature which allows you to safely use MULTI transactions with multiple keys in a cluster. This was a real learning experience for me so I thought other people might find this interesting.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -251,6 +253,8 @@ The only thing that won&rsquo;t work is the &ldquo;Limits&rdquo; tab in the Web 
 <p>Let me be clear: Sidekiq still does not support Clustering of its core data model
 but this is a great example where a knowledgable customer helped me improve Sidekiq.</p>
 <p>If you have a bug, feature or idea for improvement, please <a href="https://github.com/sidekiq/sidekiq/issues/new">open an issue</a>!</p>
+
+
     </article>
   </div>
 

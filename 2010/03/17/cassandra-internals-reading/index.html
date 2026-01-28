@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/03/17/cassandra-internals-reading/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2010/03/17/cassandra-internals-reading/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Cassandra Internals -- Reading">
   <meta property="og:description" content="In my previous post, I discussed how writes happen in Cassandra and why they are so fast. Now we’ll look at reads and learn why they are slow.
@@ -166,6 +166,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -222,6 +224,8 @@ blockquote,
 <p><strong>Reading on an Individual Node</strong></p>
 <p>So all of that distributed system nonsense aside, what does each node do when performing a read? Recall that Cassandra has two levels of storage: Memtable and SSTable. The Memtable read is relatively painless &ndash; we are operating in memory so the data is relatively small and iterating through the contents is fast as possible. To scan the SSTable, Cassandra uses a row-level column index and bloom filter to find the necessary blocks on disk, deserializes them and determines the actual data to return. There&rsquo;s a lot of disk IO here which ultimately makes the read latency higher than a similar DBMS. Cassandra does provide some row caching which solves much of that latency.</p>
 <p>That&rsquo;s a whirlwind tour of Cassandra&rsquo;s read path. Take a look at the <a href="http://wiki.apache.org/cassandra/StorageConfiguration">StorageConfiguration</a> wiki page for much more content on this subject. Next up, I&rsquo;ll discuss some of the various &ldquo;tricks&rdquo; Cassandra uses to solve the myriad of edge cases inherent in distributed systems.</p>
+
+
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2013/02/23/signal-handling-with-ruby/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2013/02/23/signal-handling-with-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Signal Handling with Ruby 2.0">
   <meta property="og:description" content="A user recently ran Sidekiq with Ruby 2.0 and found that the signal handling did not work well at all. Ctrl-C and other signals resulted in some ominous stack traces.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -200,6 +202,8 @@ blockquote,
 <p>A user recently ran Sidekiq with Ruby 2.0 and found that the signal handling did not work well at all. Ctrl-C and other signals resulted in some ominous stack traces.</p>
 <p>It turns out that Ruby 2.0 locks down what you can do in a signal handler in order to prevent unsafe or possibly non-deterministic behavior. You can&rsquo;t take a Mutex within a signal handler anymore as this could result in a thread context switch or even deadlock. In fact <a href="https://bugs.ruby-lang.org/issues/7917">you can&rsquo;t even write to a Logger</a> because it tries to use a Mutex internally.</p>
 <p>I <a href="https://github.com/mperham/sidekiq/commit/fb2c286506107dc0d5d3f297c19df8170b32ef54#L1R3">rewrote the signal handling</a> to conform with the new restrictions: all handlers now just push the name of the signal onto a global array and the main thread polls once per second for unhandled signals. This isn&rsquo;t perfect, polling is something to be avoided where possible, but I don&rsquo;t know of a better solution and it&rsquo;s a lot better than the previous &ldquo;fat&rdquo; handlers that did a lot of work.</p>
+
+
 
     </article>
   </div>

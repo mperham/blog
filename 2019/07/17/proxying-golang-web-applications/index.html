@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2019/07/17/proxying-golang-web-applications/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Proxying Golang Web Applications">
   <meta property="og:description" content="Recently someone posted an issue asking if Faktory could support putting nginx in front of Faktory’s Web UI. Normally you access the Web UI like http://localhost:7420/ but they wanted it to look something like http://somehost:8080/faktory. That’s quite common when trying to wrap multiple systems into something that looks like one website to the browser.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -263,6 +265,8 @@ helper to generate the relative path with any necessary prefix.</p>
 edge case in Go without a blog post on the subject and very rewarding to
 solve it myself. <a href="https://github.com/contribsys/faktory/commit/92d88d33f3a820ad5cc2085b1b12c78b7e5b8ea7">Here&rsquo;s the big commit that landed in Faktory to add
 proxy support.</a>  I hope this helps someone else!</p>
+
+
 
     </article>
   </div>

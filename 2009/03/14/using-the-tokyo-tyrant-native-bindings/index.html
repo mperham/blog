@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/03/14/using-the-tokyo-tyrant-native-bindings/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/03/14/using-the-tokyo-tyrant-native-bindings/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using the Tokyo Tyrant native bindings">
   <meta property="og:description" content="My previous examination of Tokyo Tyrant’s memcache protocol support showed how you can use memcache-client directly with TT. John Mettraux has created Ruby bindings for TT’s own native client for ultimate speed. Let’s take a look at how this affects performance:
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -221,6 +223,8 @@ memcache186-read         0.580000   0.200000   0.780000 (  1.830207)
 memcache191-write        0.430000   0.230000   0.660000 (  1.528519)
 memcache191-read         0.410000   0.220000   0.630000 (  1.591678)
 </code></pre><p>I&rsquo;ve included the memcache protocol times right after for comparision. Notice the system time is basically unchanged but the user time is dramatically lower. This is the overhead of the memcache-client&rsquo;s pure Ruby networking layer. Ruby is a great language but its networking implementation is not blindingly fast. There&rsquo;s definite improvement in Ruby 1.9.1 but still nowhere near bare metal.</p>
+
+
 
     </article>
   </div>

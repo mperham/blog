@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/12/02/12-gems-of-christmas-11-statsd-ruby/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/12/02/12-gems-of-christmas-11-statsd-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #11 -- statsd-ruby">
   <meta property="og:description" content="As software developers, it’s often our job to monitor the systems we build. Step one is to collect the data necessary for monitoring.
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -210,6 +212,8 @@ blockquote,
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">METRICS</span><span style="color:#f92672">.</span>count(<span style="color:#e6db74">&#39;orders.total&#39;</span>, @basket<span style="color:#f92672">.</span>total) <span style="color:#66d9ef">if</span> @basket<span style="color:#f92672">.</span>total <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>
 </span></span></code></pre></div><p>Remember that we might have hundreds of Unicorn processes so statsd will collect and aggregate all the individual metric packets from each process into a single metric value to upload to your metrics service. With statsd and statsd-ruby working for you, you can monitor the metrics important to your business and verify the behavior of your system at runtime.</p>
 <p>Tomorrow we&rsquo;ll discuss a bane of the Rails world: testing JavaScript!</p>
+
+
 
     </article>
   </div>

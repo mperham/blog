@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2018/10/10/building-linux-packages-and-using-github-releases/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2018/10/10/building-linux-packages-and-using-github-releases/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Building Linux Packages and using Github Releases">
   <meta property="og:description" content="I’m preparing to launch Faktory 0.9, a major overhaul to switch from RocksDB to Redis as the storage engine. The improvement in the development process is amazing. But I need to finalize how I distribute Faktory releases. According to a poll I ran, 58% of people want a deb, 32% want a Docker image, 7% want an rpm and 3% are Linux hipsters that lovingly craft each network packet by hand.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -239,9 +241,9 @@ Here&rsquo;s how I create a Faktory release:</p>
 </span></span><span style="display:flex;"><span>  ruby .github/notes.rb <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
 </span></span><span style="display:flex;"><span>  @echo Releasing faktory <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>
 </span></span><span style="display:flex;"><span>  hub release create v<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>_<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>_amd64.deb <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>.x86_64.rpm <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -F /tmp/release-notes.md -e -o
+</span></span></span><span style="display:flex;"><span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>_<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>_amd64.deb <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    -a packaging/output/systemd/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>.x86_64.rpm <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    -F /tmp/release-notes.md -e -o
 </span></span></code></pre></div><p>Note the Ruby script to generate the release notes automatically,
 including changelog link and SHA256 sums for each file.
 <code>brew install hub</code> to get GitHub&rsquo;s handy CLI tool.</p>
@@ -253,6 +255,8 @@ including changelog link and SHA256 sums for each file.
 They don&rsquo;t have the benefit of a full-blown package repo but they provide a stable download link for binaries and are far simpler to setup and use from my POV.
 In reality, I would imagine most teams will fetch and install the package via Puppet/Chef/Ansible.
 Hopefully as Faktory gets more popular, it will make its way into the official distro repos.</p>
+
+
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/02/06/tuning-activerecord/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/02/06/tuning-activerecord/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Tuning ActiveRecord">
   <meta property="og:description" content="We’re in the process of building a very database-heavy system to store lots of metric data for our FiveRuns RM-Manage product. We looked at using tools like RRDTool and Berkeley DB but eventually came to the conclusion that a well-tuned mysql instance will work better for the flexibility and ease of maintenance we would like.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -201,6 +203,8 @@ blockquote,
 <p>So we are using ActiveRecord as our database layer and it does not have a reputation as the speediest of ORM layers but usually that doesn&rsquo;t matter too much. However in this case our system is so heavyweight that tuning ActiveRecord is vital.</p>
 <p>After a quick profile with ruby-prof, it looks like we spend a fair amount of time cloning attributes.  Speak of the devil, apparently <a href="http://blog.pluron.com/2008/01/ruby-on-rails-i.html">this issue has been fixed in Rails Edge</a> so hopefully Rails 2.0.3 will feature this fix.  In the meantime, I rolled my own insert/update statement creation and found that it improved performance by 40-50%!  I could do this because we are inserting large amounts of records and immediately throwing the records away so there is no need to update the model instances in memory.</p>
 <p>Still approximately 1/3 of the time is spent just doing string manipulation to create the database statements.  I might try using mysql&rsquo;s multiple insert feature next and see what it can do for me.</p>
+
+
 
     </article>
   </div>

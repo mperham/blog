@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/12/10/12-gems-of-christmas-3-thor/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/12/10/12-gems-of-christmas-3-thor/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #3 -- thor">
   <meta property="og:description" content="Ever try to write a rake task that took one or more arguments? How about calling a rake task from another task? Rake makes basic invocation simple but everything else obtuse. Enter thor, courtesy of the unstoppable Yehuda Katz. Thor aims to make command line script development simpler by making your scripts standard Ruby objects and providing good documentation in its wiki for many common use cases. Consider a simple example, create a task to process a CSV file:">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -212,6 +214,8 @@ blockquote,
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>You invoke the task via <code>thor inventory:process_csv some_file.csv</code>. Tasks are just public methods within a subclass of Thor. The <code>desc</code> and <code>method_option</code> methods describe those tasks and any expected options on the command line. <code>Thor::Actions</code> gives us some filesystem helper methods, like <code>remove_file</code>. The wiki goes into further detail on things like inter-task dependencies, task grouping, namespaces, etc. Next time you need to write a command line script, give Thor a try and see if it doesn&rsquo;t make your life easier.</p>
 <p>Tomorrow, I&rsquo;ll show you a tool for detecting and fixing a common Rails performance problem.</p>
+
+
 
     </article>
   </div>

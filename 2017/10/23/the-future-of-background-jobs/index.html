@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2017/10/23/the-future-of-background-jobs/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2017/10/23/the-future-of-background-jobs/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Future of Background Jobs">
   <meta property="og:description" content="Whether sending an email, adding an item to your cart or tracking an impression, modern businesses can be modeled as a series of business transactions. I believe that a good background job framework is the best way to execute these transactions and scale your business applications across many machines. A good background job framework gives you:
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -213,7 +215,8 @@ all use similar calling conventions, logging and execution environment.</p>
 <p>In fact, I would argue that the current Serverless trend is
 (background jobs - devops + price).  Squint a bit and a serverless
 function call looks a bit like a background job invocation: both are, at
-their core, asynchronous function calls into your app logic.</p></blockquote>
+their core, asynchronous function calls into your app logic.</p>
+</blockquote>
 <p>For the last five years, I&rsquo;ve created and polished Sidekiq, Sidekiq Pro
 and Sidekiq Enterprise as best as I can, adding features and functionality
 that scale (in the case of a few customers) to billions of jobs per day.</p>
@@ -233,6 +236,8 @@ about its conventions; almost all programming languages can benefit from a
 similar tool.  Tomorrow, I&rsquo;m going to introduce you to my new open source
 project which aims to do all of this: <strong>Faktory</strong>.</p>
 <p><img src="/images/faktory.png" alt="faktory"></p>
+
+
 
     </article>
   </div>

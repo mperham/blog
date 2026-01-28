@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2014/06/02/whats-new-in-sidekiq-pro/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2014/06/02/whats-new-in-sidekiq-pro/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="What&#39;s new in Sidekiq Pro">
   <meta property="og:description" content="Since the Sidekiq 3.0 release, I’ve been slowly chipping away at some new features in Sidekiq Pro. What’s new and upcoming?">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -214,6 +216,8 @@ blockquote,
 <p><strong>Notification deprecations</strong></p>
 <p>I&rsquo;m going to remove notification schemes (campfire, hipchat, email, webhook) in Sidekiq Pro 2.0. They made batch notifications simple but the whole thing suffers from the same problem <a href="https://github.com/github/github-services">github-services</a> suffers from: there&rsquo;s a glut of different services out there and I don&rsquo;t want to add and maintain a notification wrapper for each. Since each notification scheme is a simple wrapper around the Batch <code>complete</code> callback, it&rsquo;s not hard to reproduce it in your application code. I&rsquo;ll provide examples of how to do just that as part of the upgrade notes.</p>
 <p>If you have an idea for a Sidekiq Pro feature, please <a href="https://github.com/mperham/sidekiq/issues">open an issue</a> so we can discuss. Happy &lsquo;kiqing!</p>
+
+
     </article>
   </div>
 

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/03/03/using-memcache-client-16x-in-rails-23/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/03/03/using-memcache-client-16x-in-rails-23/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using memcache-client 1.6.x in Rails &lt; 2.3">
   <meta property="og:description" content="Jemery Kemper recently upgraded Rails 2.3’s vendored copy of memcache-client to the 1.6.4 release. But what do you do if you are running Rails 2.1/2.2 and want to take advantage of the massive speedup in 1.6.x? You write some really ugly code that performs brain surgery on the Ruby environment to override ActiveSupport. Create config/initializers/memcache-client-upgrade.rb with this code:
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -223,6 +225,8 @@ blockquote,
 </span></span><span style="display:flex;"><span>  require <span style="color:#e6db74">&#39;memcache&#39;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>If someone knows of a cleaner way to do this, please let me know.</p>
+
+
 
     </article>
   </div>

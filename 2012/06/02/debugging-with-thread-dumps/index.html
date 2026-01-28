@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/06/02/debugging-with-thread-dumps/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/06/02/debugging-with-thread-dumps/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Debugging with Thread Dumps">
   <meta property="og:description" content="I recently upgraded TheClymb to use the Redis 3.0 gem. When I did this, our test suite halted mid-spec and pegged the CPU at 100%. I suspected an infinite loop but how do you determine where the loop is? A naive approach might use a binary search with print statements but I realized I could do something more effective: dump thread backtraces for the current process.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -216,6 +218,8 @@ blockquote,
 /Users/mperham/.rvm/gems/ruby-1.9.3-p125@theclymb3/gems/redis-3.0.0/lib/redis.rb:1185:in `block in sismember&#39;
 /Users/mperham/.rvm/gems/ruby-1.9.3-p125@theclymb3/gems/redis-3.0.0/lib/redis.rb:36:in `block in synchronize&#39;
 </code></pre><p>We had patched Redis 2.x to count operations for Graphite monitoring and this patch broke in 3.x. Once I fixed it, everything went back to working as normal.</p>
+
+
 
     </article>
   </div>

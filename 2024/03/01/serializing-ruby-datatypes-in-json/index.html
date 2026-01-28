@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Serializing Ruby datatypes in JSON">
   <meta property="og:description" content="Ruby’s JSON library allows you to convert Ruby datatypes into a JSON document, as long as those types are native to JSON: String, bool, int, float, nil, Hash and Array. Everything else converts to a String by default; if you use any other core datatypes, they will not survive a JSON.generate/JSON.parse round trip. Here I pass a Range, Symbol and Time; notice how the end result is three Strings instead of the actual types:">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -243,6 +245,8 @@ Let me explain why.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">JSON</span><span style="color:#f92672">.</span>generate({ <span style="color:#e6db74">:mike</span> <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">123</span>, <span style="color:#e6db74">:bob</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">:brother</span> })
 </span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;{</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">_s:mike</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:123,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">_s:bob</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:{</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">json_class</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">Symbol</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">,</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">s</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">:</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">brother</span><span style="color:#ae81ff">\&#34;</span><span style="color:#e6db74">}}&#34;</span>
 </span></span></code></pre></div><p>And so I have proposed just that to the JSON gem in <a href="https://github.com/flori/json/issues/570">issue #570</a>. If we can get Symbol smuggling support, Sidekiq should be able to support Symbols in job arguments, a huge quality of life improvement for my users. ActiveJob may be able to greatly simply its own marshalling by leveraging this functionality too. Everyone downstream would benefit. If you want to see this supported, please go to that issue and put in a reaction to show your interest.</p>
+
+
 
     </article>
   </div>

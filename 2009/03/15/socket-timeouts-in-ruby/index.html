@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/03/15/socket-timeouts-in-ruby/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/03/15/socket-timeouts-in-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Socket Timeouts in Ruby">
   <meta property="og:description" content="One of Ruby’s weaknesses is its poor networking performance. Much of that has to do with the net/http implementation, which uses Ruby’s awful Timeout library. The issues with Timeout are well documented. SystemTimer provides a reliable alternative that also performs better.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -238,6 +240,8 @@ mixed:ruby:memcache-client       2.760000   0.620000   3.380000 (  5.902549)
                                      user     system      total        real
 mixed:ruby:memcache-client       7.490000   1.270000   8.760000 (  9.361547)
 </code></pre><p>So we&rsquo;ve gone from 22 sec with Timeout to 15 sec with SystemTimer to 9 sec using raw socket timeouts where possible (<a href="http://github.com/mperham/memcache-client/commit/9f5201b77ccb6ef0d021e741cab8468151f2535d">Github commit</a>). For my next trick, I figure I&rsquo;ll rewrite <code>gets</code> to use read so I can remove the need for SystemTimer and Timeout altogether.</p>
+
+
 
     </article>
   </div>

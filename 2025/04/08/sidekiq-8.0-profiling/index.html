@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2025/04/08/sidekiq-8.0-profiling/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2025/04/08/sidekiq-8.0-profiling/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq 8.0: Profiling">
   <meta property="og:description" content="Sidekiq is the most popular background job framework for Ruby applications and over the last 13 years, it has reached maturity in its feature set. It has filled out much of its original design so adding a major new feature is a comparatively rare event these days.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -221,7 +223,8 @@ Profiling is one of those tools you need to learn.</p>
 </ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">SomeJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">profile</span>: <span style="color:#e6db74">&#34;bob&#34;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>)
 </span></span></code></pre></div><blockquote>
-<p>Unfortunately profiling doesn&rsquo;t work with Active Job because AJ doesn&rsquo;t allow arbitrary key/values in the job payload; it ignores the <code>profile</code> element whereas Sidekiq::Job retains unknown key/values. I hope Active Job will support custom elements for triggering middleware and other aspects like profiling and logging in the future.</p></blockquote>
+<p>Unfortunately profiling doesn&rsquo;t work with Active Job because AJ doesn&rsquo;t allow arbitrary key/values in the job payload; it ignores the <code>profile</code> element whereas Sidekiq::Job retains unknown key/values. I hope Active Job will support custom elements for triggering middleware and other aspects like profiling and logging in the future.</p>
+</blockquote>
 <p>Profiling is activated right before the Rails Executor is activated (<code>@reloader</code> below).
 This ensures that any Rails callbacks and server middleware are included in the profiling data as they can contain performance hotspots.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># lib/sidekiq/processor.rb</span>
@@ -264,6 +267,8 @@ The job will crash with an error.</p>
 Try out the profiling functionality, play with the Firefox Profiler UI and you&rsquo;ll start to understand the data and what&rsquo;s happening.
 Open an issue if you have a problem or if we can improve something.
 Good luck and happy profiling!</p>
+
+
 
     </article>
   </div>

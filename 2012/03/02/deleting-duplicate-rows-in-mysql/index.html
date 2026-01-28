@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/03/02/deleting-duplicate-rows-in-mysql/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/03/02/deleting-duplicate-rows-in-mysql/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Deleting Duplicate Rows in MySQL">
   <meta property="og:description" content="You have a table with duplicate rows – somehow a unique index didn’t get created and a bug has added duplicate records to your table. A pox upon that bug!
@@ -166,6 +166,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -217,6 +219,8 @@ blockquote,
 </span></span><span style="display:flex;"><span>add_index <span style="color:#e6db74">:shipments</span>, <span style="color:#f92672">[</span><span style="color:#e6db74">:cart_id</span>, <span style="color:#e6db74">:tracking_number</span><span style="color:#f92672">]</span>, <span style="color:#e6db74">:unique</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>execute <span style="color:#e6db74">&#39;DROP TABLE shipments_with_dupes;&#39;</span>
 </span></span></code></pre></div><p>Recreating the table is much, much faster than trying to delete the records in the existing table and doesn&rsquo;t lock the existing table, making your application downtime minimal. This method will not work if MySQL&rsquo;s sql_mode includes ONLY_FULL_GROUP_BY.</p>
+
+
 
     </article>
   </div>

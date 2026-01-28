@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2014/05/27/the-reconciliation-step/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2014/05/27/the-reconciliation-step/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Reconciliation Step">
   <meta property="og:description" content="A lot of people ask me “How can I guarantee that a batch of jobs finished successfully?” Here’s the sad fact: you can’t. 99% of the time things go perfectly but there will always be some small percentage that fail for a myriad of reasons: hardware failure, software bug, thunderstorms in the cloud.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -200,6 +202,8 @@ blockquote,
 <p>And this is true of business processes in general! Any type of asynchronous processing means you can never be sure of the outcome unless you also have a verification step: I call this step <strong>reconciliation</strong> and here&rsquo;s the dirty secret: <strong>anything critical to the operation of your business requires reconciliation</strong>. The entire Accounting industry is reconciliation: they verify via double-entry bookkeeping that a business&rsquo;s accounts payable and accounts receivable add up because <strong>MONEY</strong>.</p>
 <p>If you have a business process using async processing like Sidekiq, chances are you need to reconcile the output of that process. Typically you&rsquo;ll write jobs which process some records in a database and then a cron job which runs daily to look for &ldquo;strange&rdquo; records. In the case of an e-commerce vendor like <a href="http://theclymb.com/invite-from/mperham">The Clymb</a>, we have areas in our administration tool which look for lingering orders which haven&rsquo;t pushed to the warehouse, reconcile our merchant credit card charges with our bank statements and many other checks. Some of these are automated tools that send email if they detect anything odd, others are manual tools designed to be run by people.</p>
 <p>Reconciliation is the cost of doing business in an imperfect world and part of any executive&rsquo;s job is to ensure their team has put in place necessary reconciliation steps to verify critical operations. What does your business reconcile? How do you do it?</p>
+
+
     </article>
   </div>
 

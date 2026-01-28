@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/01/14/consistent-hashing-in-memcache-client/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/01/14/consistent-hashing-in-memcache-client/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Consistent Hashing in memcache-client">
   <meta property="og:description" content="One of the most important features needed to create a scalable memcached infrastructure is consistent hashing. I recently added consistent hashing to the Ruby memcache-client project and I want to take a moment to explain why this is important.
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -217,6 +219,8 @@ The modulo approach will invalidate 3/4 or 75% of your keys.</p>
 <p><strong>The Future</strong></p>
 <p>I&rsquo;ve checked in this change into GitHub but haven&rsquo;t released a new version yet. I&rsquo;m waiting on one set of fixes and then I&rsquo;ll release 1.6.0 to RubyForge.</p>
 <p>Tom White has a more in-depth explanation of <a href="http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html">consistent hashing</a>. Thanks to him for the image above. I based my implementation on the explanation of <a href="http://www.last.fm/user/RJ/journal/2007/04/10/rz_libketama_-_a_consistent_hashing_algo_for_memcache_clients">libketama</a>.</p>
+
+
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/03/20/cassandra-internals-tricks/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2010/03/20/cassandra-internals-tricks/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Cassandra Internals -- Tricks!">
   <meta property="og:description" content="In my previous posts, I covered how Cassandra reads and writes data. In this post, I want to explain some of the trickery that Cassandra uses to provide a scalable distributed system.
@@ -166,6 +166,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -212,6 +214,8 @@ blockquote,
 <p><strong>Anti-Entropy</strong></p>
 <p>The final trick up Cassandra&rsquo;s proverbial sleeve is <a href="http://wiki.apache.org/cassandra/ArchitectureAntiEntropy">anti-entropy</a>. AE explicitly ensures that the nodes in the cluster agree on the current data. If read repair or hinted handoff don&rsquo;t work due to some set of circumstances, the AE service will ensure that nodes reach eventual consistency. The AE service runs during &ldquo;major compactions&rdquo; (the equivalent of rebuilding a table in an RDBMS) so it is a relatively heavyweight process that runs infrequently. AE uses a <a href="http://en.wikipedia.org/wiki/Hash_tree">Merkle Tree</a> to determine where within the tree of column family data the nodes disagree and then repairs each of those branches.</p>
 <p>This is the last post in my series on Cassandra. I hope you enjoyed them! Please leave a comment if you have questions or if I&rsquo;ve made an error above.</p>
+
+
 
     </article>
   </div>

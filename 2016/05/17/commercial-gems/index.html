@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2016/05/17/commercial-gems/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2016/05/17/commercial-gems/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Serving your own Commercial Rubygems">
   <meta property="og:description" content="It’s not well known but with Rubygems and Bundler, you can distribute access-controlled commercial Rubygems. My gems, Sidekiq Pro and Sidekiq Enterprise, are the most well known example but I’m not a wizard: anyone can distribute gems to a limited set of customers. Here’s how I do it.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -283,6 +285,8 @@ Run `bundle install` and you&#39;re done!
 <h3 id="postscript">Postscript</h3>
 <p>I became a member of <a href="https://rubytogether.org">Ruby Together</a> because I rely on Bundler and the Rubygems infrastructure.
 The fact that we can do this at all is the beauty of Bundler and Rubygems: they are easily federated using HTTP and static files only.  As an alternative, consider npm; it requires CouchDB, a full copy of the npm dataset to serve and only supports a single package server.  This design is much more complex, requiring a much heavier server, and makes it effectively impossible for an individual to run an npm server due to the operational costs and maintenance required.  I encourage anyone whose business depends on Ruby to join.</p>
+
+
 
     </article>
   </div>

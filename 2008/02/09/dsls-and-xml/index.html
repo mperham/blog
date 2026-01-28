@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/02/09/dsls-and-xml/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/02/09/dsls-and-xml/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="DSLs and XML">
   <meta property="og:description" content="I realize now why XML has become so wildly popular in programming. If you look in J2EE or .Net, XML files are used everywhere to drive configuration and glue pieces together. Why?
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -202,6 +204,8 @@ blockquote,
 <p>It&rsquo;s because XML is a syntactically acceptable way to create a DSL without having to derive a grammar!</p>
 <p>You can&rsquo;t use Java to do configuration &ndash; the syntax is just too heavyweight.  But XML is just tags and the languages have built-in support for parsing the XML via SAX or DOM.  You can create a grammar via XSD or XML Schema but it&rsquo;s not required.  XML really offers the lowest barrier to entry for most languages when creating your own DSL.</p>
 <p>This is why Ruby rarely, if ever, uses XML.  There&rsquo;s no point as the language can create syntactically clean DSLs without requiring a separate grammar.</p>
+
+
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/03/10/detecting-event-storms/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/03/10/detecting-event-storms/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Detecting Event Storms">
   <meta property="og:description" content="I’ve got an interesting problem I’m trying to solve. We detect outage events for our customers. However, if we have a bug or an outage on our side, it’s very possible that we can create a false positive and send spurious events. How do you detect these false positives (in very near real time!) in order to route them to /dev/null rather than bigwig@fatcatenterprise.com? :) I’m guessing this is one of those problems I get about once or twice per year which really require mulling for a week or two before I can come up with a comprehensive solution. If you have any brilliant ideas, please comment dear reader. Else I will devote a future posting to what I came up with.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -197,6 +199,8 @@ blockquote,
   
 </p>
 <p>I&rsquo;ve got an interesting problem I&rsquo;m trying to solve.  We detect outage events for our customers.  However, if we have a bug or an outage on our side, it&rsquo;s very possible that we can create a false positive and send spurious events.  How do you detect these false positives (in very near real time!) in order to route them to /dev/null rather than <a href="mailto:bigwig@fatcatenterprise.com">bigwig@fatcatenterprise.com</a>?  :)  I&rsquo;m guessing this is one of those problems I get about once or twice per year which really require mulling for a week or two before I can come up with a comprehensive solution.  If you have any brilliant ideas, please comment dear reader.  Else I will devote a future posting to what I came up with.</p>
+
+
 
     </article>
   </div>

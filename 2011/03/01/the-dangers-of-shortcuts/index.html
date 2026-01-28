@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2011/03/01/the-dangers-of-shortcuts/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2011/03/01/the-dangers-of-shortcuts/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Dangers of Shortcuts">
   <meta property="og:description" content="MongoDB has amazing write performance. Node.js has great I/O concurrency. Telehash is an extremely efficient wire protocol. All three of these systems have a common theme: they take a shortcut in order to provide a leap in performance over existing systems.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -204,6 +206,8 @@ blockquote,
 <li>With Telehash, UDP is a more efficient network protocol than TCP by design. TCP is essentially UDP with reliable delivery baked on top, so it suffers from round trip latency and the state required to track the current network packets in flight in order to ensure delivery. You can use UDP but if a router drops a UDP packet, your application will never know.</li>
 </ul>
 <p>When you are looking at a new system that promises better performance or scalability than existing systems, ask yourself &ldquo;what shortcuts did they take to get that performance or scalability?&rdquo; <strong>Sometimes those shortcuts are worth it but it is completely dependent on your own situation.</strong> If you are writing a small, high-traffic network service, Node.js makes sense. Writing a high volume of low-priority logging data with MongoDB makes sense. I would argue there are very few instances where UDP is a good idea, realtime data streaming is the best case I can think of, off hand. Part of being an engineer is learning when these shortcuts are unreasonable and what you are paying for that shortcut.</p>
+
+
 
     </article>
   </div>

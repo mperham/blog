@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/08/19/mysql-innodb-clustered-indexes-and-rails/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/08/19/mysql-innodb-clustered-indexes-and-rails/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="MySQL InnoDB Clustered Indexes and Rails">
   <meta property="og:description" content="Joe has written an excellent post about one of the more arcane scalability changes you can make to your ActiveRecord schema. In essence, the performance problem is this: mysql tries to write rows in order of the primary key index and ActiveRecord creates an artificial PK called ID. So if I write rows #19 and #20, they will be right next to each other on disk, which is fine if 19 and 20 are related. If they have no relation, their proximity is useless.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -201,6 +203,8 @@ blockquote,
 <p>Instead what we need to do is make sure MySQL uses a composite key which is related to the WHERE clause we will use to query the rows.  In the case of FiveRuns, we collect metric data from many different clients and write those values to a table.  Since the clients report constantly, row #100 might be for client #1 and row #101 might be for client #2.  But realize that when we fetch the data, we always add &ldquo;WHERE client_id = 2&rdquo; to our metric data query.  So what we need to do is create a <a href="http://compositekeys.rubyforge.org/">composite primary key</a> based the constraints we use frequently: (client_id, metric_id, collected_at).  Now MySQL will use a clustered index for those columns so that <em>the rows for each client and metric will be clustered together on disk</em>.  What was potentially 5000 disk seeks before might now be 5 disk seeks.</p>
 <p>As I said before, this is an advanced tweak &ndash; ActiveRecord does not like not having an ID column &ndash; and really only justified if you have millions and millions of rows and a predictable set of constraints.  But if you do, reworking your table&rsquo;s primary key to be application-specific and not artifical can provide tremendous performance benefits.</p>
 <p><a href="http://www.joehruska.com/?p=6">Joe Hruska.com » MySQL InnoDB Clustered Indexes and Rails</a></p>
+
+
 
     </article>
   </div>

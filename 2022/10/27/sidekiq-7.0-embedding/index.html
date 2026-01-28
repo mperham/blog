@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq 7.0: Embedding">
   <meta property="og:description" content="Sidekiq 7.0 can be embedded within another process so you do not need to run a separate Sidekiq process. This is called embedding.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -242,6 +244,8 @@ You can only configure it via Ruby.</li>
 <li><code>Sidekiq.server?</code> will return <code>false</code> because this is not a Sidekiq process but it will run <code>configure_server</code> blocks so every instance is set up automatically for any local gems.</li>
 <li>Graceful restarts (a Sidekiq Enterprise feature) are not supported because we do not have full control of the process.</li>
 </ul>
+
+
 
     </article>
   </div>

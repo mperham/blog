@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/how-sidekiq-works/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/how-sidekiq-works/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="How does Sidekiq work?">
   <meta property="og:description" content="2024-02-04
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -191,7 +193,8 @@ blockquote,
       <h1>How does Sidekiq work?</h1>
 <p>2024-02-04</p>
 <blockquote>
-<p>This article was originally published on <a href="https://dansvetlov.me/sidekiq-internals/">DanSvetlov.me</a> and is republished here with permission of the author. This article is relevant to Sidekiq v7.</p></blockquote>
+<p>This article was originally published on <a href="https://dansvetlov.me/sidekiq-internals/">DanSvetlov.me</a> and is republished here with permission of the author. This article is relevant to Sidekiq v7.</p>
+</blockquote>
 <p><a href="https://github.com/sidekiq/sidekiq">Sidekiq</a> is one of the most ubiquitous<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> Ruby background job processors out there. To anybody who has worked with Ruby on and off Rails, it needs no introduction. Sidekiq has a 10+ year track record of being an efficient, battle-tested and simple-to-use solution for offloading the execution of application logic into the background.</p>
 <p>It utilizes a threaded model for job processing, uses Redis as a backend and claims to have an &lsquo;at least once&rsquo; semantic when it comes to processing jobs (with a caveat) in a free open-source version. Sidekiq also offers 2 additional paid versions - Pro and Enterprise, each of them introducing additional features and extensions. For obvious reasons, I will not go into the details of these versions.</p>
 <p>This article will delve into the internals of Sidekiq to highlight its key aspects, as well as design and implementation decisions that I personally find interesting or peculiar, by diving directly into the source code and following a job through its full lifecycle.</p>
@@ -239,16 +242,16 @@ blockquote,
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">rb_cloexec_pipe</span>(<span style="color:#66d9ef">int</span> descriptors[<span style="color:#ae81ff">2</span>])
 </span></span><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#ifdef HAVE_PIPE2
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> result <span style="color:#f92672">=</span> <span style="color:#a6e22e">pipe2</span>(descriptors, O_CLOEXEC <span style="color:#f92672">|</span> O_NONBLOCK);
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> result <span style="color:#f92672">=</span> <span style="color:#a6e22e">pipe2</span>(descriptors, O_CLOEXEC <span style="color:#f92672">|</span> O_NONBLOCK);
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#else
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> result <span style="color:#f92672">=</span> <span style="color:#a6e22e">pipe</span>(descriptors);
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> result <span style="color:#f92672">=</span> <span style="color:#a6e22e">pipe</span>(descriptors);
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#endif
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (result <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> result;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// ...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Unnamed pipes are extremely handy in forking environments since they can be used by the parent process to communicate with its children and vice versa without much complicated setup. However, Sidekiq does not employ a forking model (in a free OS version) and instead utilizes threads extensively, which all share the process&rsquo;s memory. So why use a pipe? Before we answer this question, let&rsquo;s examine what happens in Sidekiq&rsquo;s signal handlers.</p>
 <p>As evident from the Ruby snippet above, Sidekiq sets up handlers for SIGINT, SIGTERM, SIGTTIN, and SIGTSTP. Each handler is defined sequentially using <code>Signal.trap</code>, which, on UNIX-like systems, internally constructs a handler and invokes the <a href="https://man7.org/linux/man-pages/man2/sigaction.2.html"><code>sigaction</code></a> system call:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">sighandler_t</span>
@@ -257,9 +260,9 @@ blockquote,
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> sigaction sigact, old;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Code that populates the sigact struct is omitted
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Register the signal handler
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">sigaction</span>(signum, <span style="color:#f92672">&amp;</span>sigact, <span style="color:#f92672">&amp;</span>old) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">sigaction</span>(signum, <span style="color:#f92672">&amp;</span>sigact, <span style="color:#f92672">&amp;</span>old) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> SIG_ERR;
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
@@ -270,7 +273,7 @@ blockquote,
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ASSUME</span>(handler <span style="color:#f92672">!=</span> SIG_ERR);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Return the previous handler of the same signal
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> handler;
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> handler;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>As observed, this function returns an instance of a handler previously registered for the same signal.</p>
 <p>Let&rsquo;s revisit the signal registration in <code>Sidekiq::CLI</code>:</p>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/04/01/expression-rescue-is-evil/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/04/01/expression-rescue-is-evil/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Expression Rescue is Evil">
   <meta property="og:description" content="One of the cleaner syntax options Ruby gives you is what I call expression rescues. Take this:
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -232,6 +234,8 @@ blockquote,
 0.030000   0.000000   0.030000 (  0.034895)
 </code></pre><p>Rescuing is 30x slower than the equivalent ternary logic expression on Leopard&rsquo;s ruby 1.8.6.</p>
 <p>Conclusion? While performance is important, I&rsquo;d argue that code readability is more important. When you perform a ternary check, as in the benchmark above, it tells the code reader that this item could be nil. Using the equivalent rescue just tells them this expression could fail for some reason. Nuance, edge cases, newly created bugs&hellip; All are swept under the rug by the evil rescue.</p>
+
+
 
     </article>
   </div>

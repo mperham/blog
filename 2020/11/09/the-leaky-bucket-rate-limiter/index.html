@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Leaky Bucket rate limiter">
   <meta property="og:description" content="A few months ago, a customer asked if I could supply a “leaky bucket” rate limiter as part of Sidekiq Enterprise’s rate limiter suite. It took me a while to find the time and energy to work on it (my need to mentally escape the 2020 election eventually did the trick).
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -332,6 +334,8 @@ the entire engineering lifecycle:</p>
 <p>I&rsquo;ve uploaded the source code for the <a href="https://gist.github.com/mperham/d67e5b7e65ad43682c7cc0bdd31ced95">Rack example limiter and benchmark</a>.
 If you&rsquo;re a Sidekiq Enterprise customer, run <code>bundle up sidekiq-ent</code> to pull in v2.2.0 or greater to try out the new leaky bucket limiter.
 <a href="https://github.com/mperham/sidekiq/issues">Open an issue</a> if you have any questions or problems with it.</p>
+
+
 
     </article>
   </div>

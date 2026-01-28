@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/11/13/rails-plugins-with-multi-threading/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/11/13/rails-plugins-with-multi-threading/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Rails Plugins with Multi-Threading">
   <meta property="og:description" content="I tested tracknowledge with Rails 2.2 yesterday. The main problem was with plugins: two out of the six I use failed with the same issue when used with threadsafe!
@@ -166,6 +166,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -210,13 +212,15 @@ blockquote,
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span>diff --git a/vendor/plugins/exception_notification/init.rb b/vendor/plugins/exception_notification/init.rb
 </span></span><span style="display:flex;"><span>index b39bd95..b1dd2d9 100644
 </span></span><span style="display:flex;"><span><span style="color:#f92672">--- a/vendor/plugins/exception_notification/init.rb
-</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+++ b/vendor/plugins/exception_notification/init.rb
-</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span><span style="color:#75715e">@@ -1 +1,4 @@
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> require &#34;action_mailer&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+++ b/vendor/plugins/exception_notification/init.rb
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -1 +1,4 @@
+</span></span></span><span style="display:flex;"><span> require &#34;action_mailer&#34;
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">+require &#39;exception_notifier&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+require &#39;exception_notifiable&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+require &#39;exception_notifier_helper&#39;
 </span></span></span></code></pre></div><p>If you maintain a Rails plugin, make sure you verify that all classes are loaded in init.rb or you could very well have problems too.</p>
+
+
 
     </article>
   </div>

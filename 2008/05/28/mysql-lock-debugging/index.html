@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/05/28/mysql-lock-debugging/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/05/28/mysql-lock-debugging/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="MySQL lock debugging">
   <meta property="og:description" content="I submitted my first Rails patch this weekend. We’ve been seeing occasional lock contention, timeout and deadlock in our mysql database but without SHOW INNODB STATUS at the time of the error, it’s difficult to track down the cause of the contention. So I added lock error logging to ActiveRecord’s MysqlAdapter class. It was also good to learn the patch submission process as I’m sure this will be just one of many.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -198,6 +200,8 @@ blockquote,
 </p>
 <p>I submitted my first Rails patch this weekend. We&rsquo;ve been seeing occasional lock contention, timeout and deadlock in our mysql database but without SHOW INNODB STATUS at the time of the error, it&rsquo;s difficult to track down the cause of the contention. So I added lock error logging to ActiveRecord&rsquo;s MysqlAdapter class. It was also good to learn the patch submission process as I&rsquo;m sure this will be just one of many.</p>
 <p><a href="http://rails.lighthouseapp.com/projects/8994/tickets/250-mysql-deadlock-debugging">http://rails.lighthouseapp.com/projects/8994/tickets/250-mysql-deadlock-debugging</a></p>
+
+
 
     </article>
   </div>

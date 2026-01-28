@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Taming Rails memory bloat">
   <meta property="og:description" content="MRI, the standard Ruby interpreter, has a serious problem with memory bloat in large Rails apps. It’s quite common for me to see Sidekiq processes which are 1-2GB in RSS or even larger! It turns out that a large part of this memory usage is due to memory fragmentation: MRI uses the OS’s memory allocator by default (on Linux, almost always GNU glibc), which seems to work poorly with Ruby’s memory allocation patterns.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -228,7 +230,8 @@ If you want to try jemalloc, be sure you test your app thoroughly before pushing
 <p><a href="http://oldblog.antirez.com/post/everything-about-redis-24.html">Redis pulled in jemalloc explicitly to reduce memory fragmentation, with
 big success</a>:</p>
 <blockquote>
-<p>&ldquo;Since we introduced the specially encoded data types Redis started suffering from fragmentation. We tried different things to fix the problem, but basically the Linux default allocator in glibc sucks really, really hard. [&hellip;] Every single case of fragmentation in real world systems was fixed by this change, and also the amount of memory used dropped a bit.&rdquo;</p></blockquote>
+<p>&ldquo;Since we introduced the specially encoded data types Redis started suffering from fragmentation. We tried different things to fix the problem, but basically the Linux default allocator in glibc sucks really, really hard. [&hellip;] Every single case of fragmentation in real world systems was fixed by this change, and also the amount of memory used dropped a bit.&rdquo;</p>
+</blockquote>
 <h2 id="trying-jemalloc">Trying jemalloc</h2>
 <p>Want to try jemalloc on OS X?
 My installed rubies seem to hardcode the memory allocator so you might need to build MRI with jemalloc specifically.</p>
@@ -252,6 +255,8 @@ Major Rails apps like <a href="https://gitlab.com/gitlab-org/omnibus-gitlab/issu
 If you have a large Rails app, integrate jemalloc and see significant improvements, please <a href="https://bugs.ruby-lang.org/issues/new">open a Ruby issue</a> with graphs before and after.
 Let&rsquo;s give ruby-core all the data they need to make the right decision.</p>
 <p>Ruby-core jemalloc issues: <a href="https://bugs.ruby-lang.org/issues/13524">13524</a>, <a href="https://bugs.ruby-lang.org/issues/9113">9113</a>, <a href="https://bugs.ruby-lang.org/issues/14718">14718</a></p>
+
+
 
     </article>
   </div>

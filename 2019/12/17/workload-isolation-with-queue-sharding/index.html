@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2019/12/17/workload-isolation-with-queue-sharding/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2019/12/17/workload-isolation-with-queue-sharding/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Workload Isolation with Queue Sharding">
   <meta property="og:description" content="A number of customers have contacted me with a common problem:
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -203,7 +205,8 @@ blockquote,
 <p>We run a multi-tenant system where our users can perform an action which
 results in a huge number of jobs being enqueued. When this happens, other
 users see significant delays in their jobs being processed while our
-Sidekiq cluster works through the backlog for that one user.</p></blockquote>
+Sidekiq cluster works through the backlog for that one user.</p>
+</blockquote>
 <p>The issue is this: if you give 100% of your resources to process that
 user&rsquo;s backlog, 100% of your customers will feel the pain of that backlog
 delay. For years I&rsquo;ve recommended customers use a simple setup with three
@@ -262,6 +265,8 @@ those operations: they can&rsquo;t use the full set of resources in production
 to finish quicker. High priority operations still have the option to
 utilize more than one bulk shard or target the <code>default</code> queue in order to
 blast through a backlog with 100% of your resources.</p>
+
+
 
     </article>
   </div>

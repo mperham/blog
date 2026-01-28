@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/01/18/varnish-on-32-bit-systems/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2010/01/18/varnish-on-32-bit-systems/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Varnish on 32-bit systems">
   <meta property="og:description" content="We run three small EC2 instances for content caching purposes at OneSpot. These systems are 32-bit machines with 1.7GB of RAM. Originally we figured even on a small system Varnish could flood a 100Mb line so we wouldn’t need a more expensive, large EC2 instance. This blog post explains why this turned out to be a poor choice.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -201,6 +203,8 @@ blockquote,
 <p>Executive summary: Varnish really, really wants to run on a 64-bit system. Don&rsquo;t run it on 32-bit systems if possible.</p>
 <p>Varnish wants to memory map the entire cache. This means the entire cache needs to be able to fit into virtual memory. On a 64-bit system, VM is virtually unlimited. On a 32-bit system, processes usually have access to a maximum of 3GB of virtual memory. Since you also need to allocate stack space and other standard process requirements, in practice people don&rsquo;t recommend more than 2GB of cache space for Varnish on 32-bit systems. Pretty small for a web content cache. If you want Varnish to use an entire disk for a cache, it must run on a 64-bit system.</p>
 <p>We had a few minutes of outage recently due to this architecture. We read some <a href="http://kristian.blog.linpro.no/2009/05/25/common-varnish-issues/">Varnish tuning tips</a> and decided to modify our default configuration. Specifically we raised the minimum thread count from 1 to 500. Because, after all, &ldquo;* idle threads are cheap*&rdquo;. But they are only cheap on 64-bit systems where allocating hundreds of MB for extra stack space is a no brainer! When we rolled out this change, the process ran out of memory and couldn&rsquo;t allocate the extra threads. Klaxons went off and I rolled back the changes. Over the next few months, we&rsquo;ll be upgrading our caches to 64 bit so that we don&rsquo;t need to worry about sizing issues moving forward.</p>
+
+
 
     </article>
   </div>

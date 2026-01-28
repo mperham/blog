@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/05/03/activerecord-21-performance-1/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/05/03/activerecord-21-performance-1/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="ActiveRecord 2.1 Performance (Part 1)">
   <meta property="og:description" content="I’ve been playing with the upcoming ActiveRecord 2.1 release in order to gauge any performance concerns. First let me explain the scenario being tested here: we load a lot of data into a database (both inserts and updates) so my testing mostly concerns optimizing bulk loading. This is definitely not the common case of ActiveRecord usage so you’ll need to keep this in mind.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -208,6 +210,8 @@ blockquote,
 </span></span></code></pre></div><p>to this:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>obj<span style="color:#f92672">.</span>write_attribute_without_dirty(<span style="color:#e6db74">&#39;name&#39;</span>, <span style="color:#e6db74">&#39;Foo&#39;</span>)
 </span></span></code></pre></div><p>Remember that this is a hack and not recommended unless this code is in a critical performance path.  The benefits of partial_updates and code cleanliness should almost always outweigh the small performance cost associated with it.</p>
+
+
 
     </article>
   </div>

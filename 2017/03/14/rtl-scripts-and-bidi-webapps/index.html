@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2017/03/14/rtl-scripts-and-bidi-webapps/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2017/03/14/rtl-scripts-and-bidi-webapps/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="RTL scripts and BiDi webapps">
   <meta property="og:description" content="A user recently submitted a Farsi translation for the Sidekiq Web UI and I quickly merged it, happy to see another language supported.
@@ -166,6 +166,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -258,7 +260,7 @@ current locale:</p>
 <h3 id="standards">Standards</h3>
 <p>There are some upcoming standards on the horizon for easier BiDi
 support in CSS so you wouldn&rsquo;t need overrides at all:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>.<span style="color:#a6e22e">someclass</span> { margin-inline-start: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span>.<span style="color:#a6e22e">someclass</span> { <span style="color:#66d9ef">margin-inline-start</span>: <span style="color:#ae81ff">10</span><span style="color:#66d9ef">px</span> }
 </span></span></code></pre></div><p><code>inline-start</code> maps to <code>right</code> in RTL and <code>left</code> in LTR.  Unfortunately
 only Firefox supports this syntax today or I could have just updated
 application.css directly.  I hope the other browser vendors can
@@ -279,6 +281,8 @@ examples) but I make the effort so that more people can use Sidekiq
 comfortably.</p>
 <p><strong>This BiDi work will be part of Sidekiq 5.0.</strong> If you see a problem in your
 own language/locale, please open an issue or send a pull request to fix it.</p>
+
+
 
     </article>
   </div>

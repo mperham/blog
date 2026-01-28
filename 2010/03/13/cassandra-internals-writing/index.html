@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/03/13/cassandra-internals-writing/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2010/03/13/cassandra-internals-writing/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Cassandra Internals -- Writing">
   <meta property="og:description" content="We’ve started using Cassandra as our next-generation data storage engine at OneSpot (replacing a very large Postgresql machine with a cluster of EC2 machines) and so I’ve been using it for the last few weeks. As I’m an infrastructure nerd and a big believer in understanding the various layers in the stack, I’ve been reading up a bit on how Cassandra works and wanted to write a summary for others to benefit from. Since Cassandra is known to have very good write performance, I thought I would cover that first.">
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -218,6 +220,8 @@ blockquote,
 </ul>
 <p>There are lots of edge cases and complications beyond what I&rsquo;ve talked about so far. I highly recommend reading the Cassandra wiki pages for <a href="http://wiki.apache.org/cassandra/ArchitectureInternals">ArchitectureInternals</a> and <a href="http://wiki.apache.org/cassandra/Operations">Operations</a> at the very least. Distributed systems are hard and Cassandra is no different.</p>
 <p>Please leave a comment if you have a correction or want to add detail &ndash; I&rsquo;m not a Cassandra developer so I&rsquo;m sure there&rsquo;s a mistake or two hidden up there.</p>
+
+
 
     </article>
   </div>

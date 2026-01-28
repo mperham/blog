@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/05/25/memory-hungry-ruby-daemons/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/05/25/memory-hungry-ruby-daemons/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Memory-hungry Ruby daemons">
   <meta property="og:description" content="We’ve had a perplexing issue with our Ruby daemons at OneSpot: they seem to grow to 300-400MB each within about 30 minutes, at which point our Monit scripts restart them. We suspected a memory leak and so upgraded from stock Ruby 1.8.5 shipped with CentOS to the latest REE 1.8.6 but nothing changed. I also saw a very similar issue at FiveRuns. Why is this problem seemingly endemic, even with completely different source code? After some thought and research I think I understand the root clause of the problem: it’s part of Ruby’s history and design.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -211,7 +213,8 @@ For example, suppose that the default GC settings are in effect, and 10000 Ruby 
 Multiplicator used for calculating the number of new heaps slots to allocate next time Ruby needs new heap slots. The default is 1.8.</li>
 </ul>
 </li>
-</ul></blockquote>
+</ul>
+</blockquote>
 <p>Take the program in the last example. Suppose that the program creates 10000 more objects. Upon creating the 10000th object, Ruby needs to allocate another heap. This heap will have 10000 * 1.8 = 18000 heap slots. There are now 20000 + 18000 = 38000 heap slots in total, of which 20001 are used and 17999 are unused.</p>
 <p>The next time Ruby needs to allocate a new heap, that heap will have 18000 * 1.8 = 32400 heap slots.</p>
 <p>So MRI will initially allocate the application RUBY_HEAP_MIN_SLOTS or 10,000 slots. Let&rsquo;s assume for ease of math that this corresponds to 1MB of memory. Now Rails and our application code can&rsquo;t fit into anything less than 50MB so Ruby will need to allocate additional heaps for the necessary objects. It does this by using RUBY_HEAP_SLOTS_INCREMENT and RUBY_HEAP_SLOTS_GROWTH_FACTOR each time. So we allocate 1.8MB, 3.24, 5.83, 10.5, 18.9, 34, 61, 110, 198, &hellip; where the size of the newest heap is expanded by 1.8x each time. As you can see, just to get us to our 50MB minimum, we&rsquo;re now allocating 34MB for the latest heap. Once the app starts actually processing data, we&rsquo;ll allocate 61 and then 110 MB!</p>
@@ -221,8 +224,11 @@ Multiplicator used for calculating the number of new heaps slots to allocate nex
 <blockquote>
 <p>export RUBY_HEAP_MIN_SLOTS=800000
 export RUBY_HEAP_SLOTS_INCREMENT=100000
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1</p></blockquote>
+export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1</p>
+</blockquote>
 <p>That gives our daemon ~80MB to start and each heap is a fixed 10MB. Our daemon stabilizes at ~120MB and the memory usage doesn&rsquo;t change, even after hours of processing. My takeaway: if you own a Ruby daemon, you need to tune the heap to ensure it does not take too much memory!</p>
+
+
 
     </article>
   </div>

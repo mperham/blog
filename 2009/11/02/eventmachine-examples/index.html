@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/11/02/eventmachine-examples/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/11/02/eventmachine-examples/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="EventMachine Examples">
   <meta property="og:description" content="I needed to create a simple, but IO-intensive, thumbnailing service for OneSpot last week. This service acts as a proxy to S3 and so a blocking implementation would not scale well, even if threaded. I wanted to use EventMachine instead. Lessons learned:
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -204,6 +206,8 @@ blockquote,
 <li>There&rsquo;s <strong>no</strong> testing support. No libraries for doing async testing and no best practices or suggestions on how to test.</li>
 </ul>
 <p>So how can we make things better rather than just complain? I&rsquo;m going to show you a non-trivial example. In return, I want you to send me more examples. <a href="http://github.com/mperham/evented">Evented</a> is my new Github repository for EventMachine examples. The first example is that big chunk of code that I puzzled over for the last few days which implements the thumbnailing service using Thin, S3, image_science and em-http-request. But I want more examples and I&rsquo;d love to hear ideas on how to test this type of code. Leave a comment, send a pull request, and help me help you!</p>
+
+
 
     </article>
   </div>

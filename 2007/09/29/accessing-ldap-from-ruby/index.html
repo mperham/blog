@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Accessing LDAP from Ruby">
   <meta property="og:description" content="Ok, we’ve got our nifty Apache DS running with some custom data. This doesn’t do much unless our application can access the data in order to perform some sort of logic. So let’s connect the two worlds!
@@ -166,6 +166,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -202,7 +204,8 @@ blockquote,
 <p>Ok, we&rsquo;ve got our nifty Apache DS running with some custom data. This doesn&rsquo;t do much unless our application can access the data in order to perform some sort of logic. So let&rsquo;s connect the two worlds!</p>
 <p>Make sure your Apache DS server is up and running. We first need to install a Ruby API for accessing LDAP. I found the simplest to use was ruby-net-ldap:</p>
 <blockquote>
-<p>gem install ruby-net-ldap</p></blockquote>
+<p>gem install ruby-net-ldap</p>
+</blockquote>
 <p>Next, create a simple ldaptest.rb file to use the API:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;net/ldap&#39;</span>
 </span></span><span style="display:flex;"><span>
@@ -218,8 +221,11 @@ blockquote,
 </span></span></code></pre></div><p>Running it should give this output:</p>
 <blockquote>
 <p>mikeperham:~$ ruby -rubygems ldaptest.rb<br>
-DN: uid=mike,ou=engineering,dc=fiveruns,dc=com</p></blockquote>
+DN: uid=mike,ou=engineering,dc=fiveruns,dc=com</p>
+</blockquote>
 <p>It works! Everything from this point on is just gravy. You can explore the <a href="http://www.gemjack.com/gems/ruby-net-ldap-0.0.4/index.html">ruby-net-ldap rdoc</a> in more depth or try more advanced libraries like <a href="http://wiki.rubyonrails.org/rails/pages/ActiveLDAP">ActiveLdap</a>.</p>
+
+
 
     </article>
   </div>

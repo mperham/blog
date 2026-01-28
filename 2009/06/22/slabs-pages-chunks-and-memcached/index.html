@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/06/22/slabs-pages-chunks-and-memcached/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/06/22/slabs-pages-chunks-and-memcached/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Slabs, Pages, Chunks and Memcached">
   <meta property="og:description" content="Many people don’t know this but the latest memcached release (1.2.8 right now) can be about 15% more efficient in its memory usage than older releases. If you have a 600MB memcached server, upgrading will magically “gain” you 100MB of RAM. Why is this?
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -204,6 +206,8 @@ blockquote,
 <p><a href="http://www.mikeperham.com/wp-content/uploads/2009/06/memcached-memory-allocation.png"><img src="http://www.mikeperham.com/wp-content/uploads/2009/06/memcached-memory-allocation.png" alt="memcached-memory-allocation" title="memcached-memory-allocation" width="526" height="481" class="alignnone size-full wp-image-303" /></a></p>
 <p>In this image, we see a single slab with two pages. Each page has several chunks, the green chunks are empty and some have orange values. The yellow area is the waste we are talking about.</p>
 <p>One of the improvements Facebook made to memcached last year was moving to a smaller exponential so there is not as much waste in storing values in chunks. Instead of 2^n for the slab allocation, the latest versions of memcached use a much smaller growth exponential, 1.25^n, so you will see slabs with sizes 1KB, 1.25KB, 1.56KB, etc&hellip; This means that instead of 25% waste on average, you should see closer to 10%. Effectively you regain 15% of your memcached memory just by installing the latest version!</p>
+
+
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2022/07/29/sidekiq-and-request-specific-context/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2022/07/29/sidekiq-and-request-specific-context/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq and Request-Specific Context">
   <meta property="og:description" content="At some point in growing a large-scale software system, you’ll require “out of band” context: data which is not explicitly passed as an argument to a function but rather implicitly attached to the request, job or event being processed. Usually context is implemented as thread-local variables; your code first sets up the necessary context and then processes the request. A common example is multi-tenancy: you might want to limit any data queried by a given request to a database schema specific to a given tenant. When a request first comes into your system, your code would determine the associated tenant_id and set that context:">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -256,6 +258,8 @@ That is true but I take a more pragmatic stance: they solve a real world problem
 Go chose the opposite approach with their <a href="https://pkg.go.dev/context"><code>context</code></a> package and requires all Go code to pass a <code>context.Context</code> argument to every function.
 I&rsquo;ve worked with both approaches and I still prefer Ruby&rsquo;s thread-local variables which are far easier to integrate into an existing system as it grows.
 The ability to add a significant new feature (e.g. multi-tenancy) without refactoring your entire app is a massive win.</p>
+
+
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2017/06/05/tracking-down-performance-bugs-in-sidekiq-jobs/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2017/06/05/tracking-down-performance-bugs-in-sidekiq-jobs/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Tracking down performance bugs in Sidekiq jobs">
   <meta property="og:description" content="The Problem A Sidekiq Enterprise customer recently emailed me to ask for help.
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -201,7 +203,8 @@ blockquote,
 <h2 id="the-problem">The Problem</h2>
 <p>A Sidekiq Enterprise customer recently emailed me to ask for help.</p>
 <blockquote>
-<p>I&rsquo;m having trouble trying to figure out why one particular worker I have takes so long per job. Some of the jobs are taking 30 minutes. What the program does is load a spreadsheet to the database. When I run &ldquo;top&rdquo;, it looks like this.  What should my next step be?</p></blockquote>
+<p>I&rsquo;m having trouble trying to figure out why one particular worker I have takes so long per job. Some of the jobs are taking 30 minutes. What the program does is load a spreadsheet to the database. When I run &ldquo;top&rdquo;, it looks like this.  What should my next step be?</p>
+</blockquote>
 <p><img src="//www.mikeperham.com/images/debugging-top.jpg" alt="top output"></p>
 <h2 id="the-explanation">The Explanation</h2>
 <p>Great question.  The top screenshot tells me a few things:</p>
@@ -227,6 +230,8 @@ the Excel file; if there was 1000 rows, he&rsquo;d create 1000 jobs and <strong>
 By restructing the job arguments to include the header info, he removed this redundant work and solved
 a problem which had plagued him for months.  Time elapsed: less than an hour!</p>
 <p><strong>Moral of the story: harness the awesome power of Sidekiq&rsquo;s TTIN feature to crush your performance bugs!</strong></p>
+
+
 
     </article>
   </div>

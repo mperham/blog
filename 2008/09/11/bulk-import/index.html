@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/09/11/bulk-import/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/09/11/bulk-import/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Bulk Import">
   <meta property="og:description" content="Some quick performance numbers around bulk insert of data into MySQL. This test inserts 1000 rows into a table. Rails 2.1.0, ar-extensions 0.8.0 and MySQL 5.0.45 on a MacBook Pro running Leopard. I tested a number of configurations but the interesting ones are plain old iteration calling save, using ar-extensions’ import method and bare metal execute.
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -206,6 +208,8 @@ blockquote,
 </ul>
 <p>So the DB driver only takes 3/100s of a second to do the actual insert and return.  Generating a multi-insert statement properly takes almost a half-second.  Proper validation adds almost another second of overhead.  Dumb iteration is slowest of all, due to the repeated round trips to the database.</p>
 <p>As a side note, 50% of the overhead in generating the multi-insert statement comes from the DB adapter&rsquo;s quote method.  It&rsquo;s too bad Rails can&rsquo;t enforce a convention of &ldquo;all identifiers must be database-safe&rdquo; so quoting isn&rsquo;t so heavyweight.</p>
+
+
 
     </article>
   </div>

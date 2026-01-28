@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/04/18/engines-in-rails-23/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/04/18/engines-in-rails-23/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Engines in Rails 2.3">
   <meta property="og:description" content="Engines have been around Rails for years but it wasn’t until the recent 2.3 release that Rails officially supported Engines. So what is an Engine? An Engine is a Rails plugin with full MVC capabilities. In essence, that means your Engine has an app directory with helpers, controllers, models and views just like a standard Rails application. You add an engine to vendor/plugins or through config.gem in your application, just like a plugin, but additionally its app directory is effectively overlaid on top of your application’s app directory.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -231,6 +233,8 @@ blockquote,
 <li>Like plugins, naming becomes a concern. An engine can have a User model but this will lead to problems with the 90% of Rails applications that have a model of the same name. You can put your models within a module but I&rsquo;ve heard of problems when trying to mix Rails autoloading with modularized classes. As with plugins, be sure to err on the side of safety and use a unique name for your classes. I&rsquo;m building an engine called <strong>Queso</strong> and it provides a model called <strong>QuesoSearch</strong>, which is unlikely to collide with application classes unless you are building an application for a Mexican cheese provider. :-)</li>
 </ul>
 <p>So while Engines do have some limitations to be aware of, they do fill a valuable niche; engines provide a good framework for building full-stack generic application functionality. <a href="http://activescaffold.com">ActiveScaffold</a> is one example of a Rails plugin that would be an excellent choice to rewrite as an Engine.</p>
+
+
 
     </article>
   </div>

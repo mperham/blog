@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2010/09/19/dalli-performance-and-garbage-collection/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2010/09/19/dalli-performance-and-garbage-collection/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Dalli Performance and Garbage Collection">
   <meta property="og:description" content="I did an interesting experiment to compare memcache-client and Dalli performance this morning. I wanted to understand which library allocated more objects in order to know which library would have more GC overhead. Ruby 1.9 has a new module GC::Profiler which will generate a report with stats about each GC run. Since both gems have an identical benchmark suite, I ran the GC Profiler on the benchmark suite for each:
@@ -164,6 +164,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -252,6 +254,8 @@ blockquote,
   </tr>
 </table>
 <p>memcache-client runs the GC 4x as much as Dalli and roughly half of Dalli&rsquo;s speed improvement over memcache-client is due to more efficient object allocation requiring less garbage collection. Note that Dalli&rsquo;s GC runs seem to take twice as long as the memcache-client runs. Anyone know Ruby 1.9&rsquo;s GC implementation and have an idea why this might be?</p>
+
+
 
     </article>
   </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2009/12/01/event-driven-applications/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/12/01/event-driven-applications/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Event-Driven Applications">
   <meta property="og:description" content="Getting concurrency in Ruby is tough: Ruby 1.8 threads are green so they don’t execute concurrently. Ruby 1.9 threads are native but they don’t execute concurrently due to the GIL (global interpreter lock) necessary to ensure thread-safety with native extensions. Only JRuby provides a stable, concurrent Ruby VM today. On top of that, writing thread-safe code is tough – code execution is non-deterministic and so everyone gets it wrong, the code is hard to test and bugs painful to track down.">
@@ -163,6 +163,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -208,6 +210,8 @@ blockquote,
 <li>Application exception handling becomes tricky, just as with threads. It&rsquo;s easy to lose an exception.</li>
 </ul>
 <p>Next time, we&rsquo;ll take a deeper look into some event-driven code and how it works.</p>
+
+
 
     </article>
   </div>

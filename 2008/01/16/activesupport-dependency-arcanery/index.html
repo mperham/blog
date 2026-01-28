@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/01/16/activesupport-dependency-arcanery/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/01/16/activesupport-dependency-arcanery/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="ActiveSupport Dependency arcanery">
   <meta property="og:description" content="I was getting the following error when running some Ruby code and a Google search did not clarify what the problem was. ’to_constant_name’: Anonymous modules have no name to be referenced by (ArgumentError)
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -202,6 +204,8 @@ blockquote,
 <p>Essentially the problem was dependency load order.  The error was due to this line:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">ActiveRecord</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>send(<span style="color:#e6db74">:include</span>, <span style="color:#66d9ef">AttributeMapper</span>)
 </span></span></code></pre></div><p>The problem was that I had not required ActiveRecord yet so ActiveSupport blew up with this arcane error.  So, if you start to see odd errors like above, stop and think about any require/load changes you might have recently made.  A quick &lsquo;svn diff&rsquo; showed me exactly what I had changed 5 minutes before to cause this problem.</p>
+
+
 
     </article>
   </div>

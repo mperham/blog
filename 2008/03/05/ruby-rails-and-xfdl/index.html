@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2008/03/05/ruby-rails-and-xfdl/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/03/05/ruby-rails-and-xfdl/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Ruby, Rails and XFDL">
   <meta property="og:description" content="Brian writes:
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -200,9 +202,12 @@ blockquote,
 </p>
 <p>Brian writes:</p>
 <blockquote>
-<p>My open-source web application will need to submit information to a URL in IBM xfdl format.  Is this possible with currently available tools?</p></blockquote>
+<p>My open-source web application will need to submit information to a URL in IBM xfdl format.  Is this possible with currently available tools?</p>
+</blockquote>
 <p>In a word, absolutely.  There&rsquo;s no XFDL &ldquo;native&rdquo; support that I know of but I&rsquo;m guessing that <a href="http://en.wikipedia.org/wiki/Extensible_Forms_Description_Language">XFDL</a> is just another XML standard.  In this case, Ruby can create arbitrary XML with the <strong>builder</strong> library.  You should be able to build your XML document with builder and submit it to the website with Ruby&rsquo;s standard support for HTTP.  Here&rsquo;s a good introduction: <a href="http://www.xml.com/pub/a/2006/01/04/creating-xml-with-ruby-and-builder.html">http://www.xml.com/pub/a/2006/01/04/creating-xml-with-ruby-and-builder.html</a></p>
 <p>Good luck!</p>
+
+
 
     </article>
   </div>

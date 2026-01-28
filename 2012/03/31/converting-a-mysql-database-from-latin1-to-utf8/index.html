@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.146.6"><meta property="og:url" content="https://www.mikeperham.com/2012/03/31/converting-a-mysql-database-from-latin1-to-utf8/">
+  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/03/31/converting-a-mysql-database-from-latin1-to-utf8/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Converting a MySQL database from Latin1 to UTF8">
   <meta property="og:description" content="We had a problem at TheClymb: our database and tables were created with the default Latin1 encoding. Now all of the data in those tables is actually UTF8 because it was all imported via the web browser (which defaults to UTF8) and MySQL doesn’t actually validate or convert data encoding when inserting.
@@ -165,6 +165,8 @@ blockquote,
 
 </style>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 
@@ -238,6 +240,8 @@ blockquote,
 </span></span></code></pre></div><p>With this in mind, I wrote a rake task to convert our application&rsquo;s database. Here&rsquo;s the full script in a <a href="https://gist.github.com/2045565">Github Gist</a>. You&rsquo;ll need to run it with a <code>DOIT</code> parameter to actually make the changes otherwise it will just print the SQL it will run to the terminal. The script will take a long time for large databases since it has to ALTER TABLE, which means MySQL will write out the table to disk in full; the script does minimize the number of ALTER TABLEs it runs to two per table.
 <code>rake convert_to_utf8 DOIT=1</code></p>
 <p>So please think of the Germans and the rest of our international friends: converting the character set of your database to the proper value is important to get correct sorting of results.</p>
+
+
 
     </article>
   </div>
