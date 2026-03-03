@@ -22,6 +22,11 @@ wp-image-1332" />
 
 <img src="/images/family.jpg" alt="family" width="827" class="aligncenter size-full wp-image-1332" />
 
+## Headshots
+
+<img src="/images/me-2015-2.jpg" alt="headshot" width="300" />
+<img src="/images/me-2024-1.jpg" alt="headshot" width="300" />
+
 
 [0]: https://bikeportland.org
 [1]: https://www.contribsys.com
