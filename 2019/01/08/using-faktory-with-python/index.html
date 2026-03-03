@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2019/01/08/using-faktory-with-python/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2019/01/08/using-faktory-with-python/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Using Faktory with Python">
   <meta property="og:description" content="Faktory is my new polyglot background job system, allowing any programming language to use background jobs. I’ve documented how to use Faktory with Ruby and Go as I’m an expert in both languages. Today I wanted to step outside my comfort zone and try Faktory with a language I don’t know: Python. Let’s see how easy it is for me, a noob, to get Python jobs running with Faktory!
@@ -230,7 +230,7 @@ We&rsquo;ll use it to push and fetch jobs.</p>
 <h2 id="client-script">Client Script</h2>
 <p>We&rsquo;ll create a very simple script to create a job every second.  Here we
 create an <code>adder</code> job with two random integers for arguments:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># fclient.py</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># fclient.py</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> faktory
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
@@ -245,7 +245,7 @@ create an <code>adder</code> job with two random integers for arguments:</p>
 <p>The worker is the long-running process which fetches jobs from Faktory and
 executes them.  We register the set of job types we know about and then
 wait for jobs from Faktory.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># fworker.py</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># fworker.py</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> faktory <span style="color:#f92672">import</span> Worker
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> logging

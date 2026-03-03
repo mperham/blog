@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/12/01/datafabric-12-released/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2008/12/01/datafabric-12-released/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="DataFabric 1.2 released">
   <meta property="og:description" content="DataFabric 1.2 supports ActiveRecord 2.2 and its overhauled connection handling. Believe me, this is a good thing. The old connection handling code was awful; the new code is much nicer.
@@ -205,7 +205,7 @@ blockquote,
 <p><strong>How It Works</strong></p>
 <p>data_fabric 1.0 supported dynamic connections by proxying the connection stored in the global static connection hash. This is thread-unsafe and therefore didn&rsquo;t support ActiveRecord&rsquo;s multithreaded mode (<code>allow_concurrency</code> = true).</p>
 <p>data_fabric 1.2 supports ActiveRecord 2.0 and 2.1 through the exact same code as data_fabric 1.1 except refactored to load only when those two versions are detected. If ActiveRecord 2.2 or greater is detected, the new proxy code is used. The new proxy works on a per-class basis and overrides the four class methods which make up the public connection API on ActiveRecord::Base:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">data_fabric</span>(options)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">data_fabric</span>(options)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">DataFabric</span><span style="color:#f92672">.</span>log { <span style="color:#e6db74">&#34;Creating data_fabric proxy for class </span><span style="color:#e6db74">#{</span>name<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> }
 </span></span><span style="display:flex;"><span>  @proxy <span style="color:#f92672">=</span> <span style="color:#66d9ef">DataFabric</span><span style="color:#f92672">::</span><span style="color:#66d9ef">ConnectionProxy</span><span style="color:#f92672">.</span>new(self, options)
 </span></span><span style="display:flex;"><span>

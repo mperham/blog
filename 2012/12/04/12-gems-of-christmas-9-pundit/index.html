@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/12/04/12-gems-of-christmas-9-pundit/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2012/12/04/12-gems-of-christmas-9-pundit/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #9 -- pundit">
   <meta property="og:description" content="When it comes to authorization, Ryan Bates’ CanCan gem is the 800 lb gorilla that most Rails apps use. pundit is the latest gem from Jonas Nicklas (author of Carrierwave and Capybara) with some interesting ideas that you might like. Pundit uses code conventions along with a plain old Ruby API to make for a very simple implementation. First, write a policy for each type of model you wish to authorize:">
@@ -199,13 +199,13 @@ blockquote,
   
 </p>
 <p>When it comes to authorization, Ryan Bates&rsquo; CanCan gem is the 800 lb gorilla that most Rails apps use. <a href="https://github.com/elabs/pundit">pundit</a> is the latest gem from Jonas Nicklas (author of Carrierwave and Capybara) with some interesting ideas that you might like. Pundit uses code conventions along with a plain old Ruby API to make for a very simple implementation. First, write a policy for each type of model you wish to authorize:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PostPolicy</span> <span style="color:#f92672">&amp;</span>lt; <span style="color:#66d9ef">Struct</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:user</span>, <span style="color:#e6db74">:post</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PostPolicy</span> <span style="color:#f92672">&amp;</span>lt; <span style="color:#66d9ef">Struct</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">:user</span>, <span style="color:#e6db74">:post</span>)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create?</span>
 </span></span><span style="display:flex;"><span>    user<span style="color:#f92672">.</span>admin? <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> post<span style="color:#f92672">.</span>published?
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>Then in the corresponding controller, use <code>authorize</code> to verify permissions:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create</span>
 </span></span><span style="display:flex;"><span>  @post <span style="color:#f92672">=</span> <span style="color:#66d9ef">Post</span><span style="color:#f92672">.</span>new(params<span style="color:#f92672">[</span><span style="color:#e6db74">:post</span><span style="color:#f92672">]</span>)
 </span></span><span style="display:flex;"><span>  authorize @post
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> @post<span style="color:#f92672">.</span>save

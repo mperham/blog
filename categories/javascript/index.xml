@@ -15,7 +15,7 @@
       <title>Node.js Roundup</title>
       <link>https://www.mikeperham.com/2011/03/18/node-js-roundup/</link>
       <pubDate>Fri, 18 Mar 2011 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2011/03/18/node-js-roundup/</guid>
       <description>&lt;p&gt;I just finished a three-part series of blog posts on Node.js over on the Carbon Five blog. JavaScript and Node are very different from Ruby and EventMachine, providing me lots to learn over the course of the last few weeks. Take a look; I hope you learn something too!&lt;/p&gt;
 &lt;ul&gt;

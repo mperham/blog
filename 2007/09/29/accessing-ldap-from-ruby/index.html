@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2007/09/29/accessing-ldap-from-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Accessing LDAP from Ruby">
   <meta property="og:description" content="Ok, we’ve got our nifty Apache DS running with some custom data. This doesn’t do much unless our application can access the data in order to perform some sort of logic. So let’s connect the two worlds!
@@ -207,7 +207,7 @@ blockquote,
 <p>gem install ruby-net-ldap</p>
 </blockquote>
 <p>Next, create a simple ldaptest.rb file to use the API:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;net/ldap&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;net/ldap&#39;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>username <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;uid=admin,ou=system&#39;</span>
 </span></span><span style="display:flex;"><span>password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;secret&#39;</span>

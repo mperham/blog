@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2018/10/10/building-linux-packages-and-using-github-releases/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2018/10/10/building-linux-packages-and-using-github-releases/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Building Linux Packages and using Github Releases">
   <meta property="og:description" content="I’m preparing to launch Faktory 0.9, a major overhaul to switch from RocksDB to Redis as the storage engine. The improvement in the development process is amazing. But I need to finalize how I distribute Faktory releases. According to a poll I ran, 58% of people want a deb, 32% want a Docker image, 7% want an rpm and 3% are Linux hipsters that lovingly craft each network packet by hand.">
@@ -236,7 +236,7 @@ apt/yum repos are notoriously painful to setup and run.
 Easiest quick solution that I know of is to use GitHub releases:
 tag the code, generate the packages and then create a release.
 Here&rsquo;s how I create a Faktory release:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-make" data-lang="make"><span style="display:flex;"><span><span style="color:#a6e22e">release</span><span style="color:#f92672">:</span> clean test package tag
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-make" data-lang="make"><span style="display:flex;"><span><span style="color:#a6e22e">release</span><span style="color:#f92672">:</span> clean test package tag
 </span></span><span style="display:flex;"><span>  @echo Generating release notes
 </span></span><span style="display:flex;"><span>  ruby .github/notes.rb <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
 </span></span><span style="display:flex;"><span>  @echo Releasing faktory <span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>-<span style="color:#66d9ef">$(</span>ITERATION<span style="color:#66d9ef">)</span>
@@ -248,7 +248,7 @@ Here&rsquo;s how I create a Faktory release:</p>
 including changelog link and SHA256 sums for each file.
 <code>brew install hub</code> to get GitHub&rsquo;s handy CLI tool.</p>
 <p>To install that DEB:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -LO https://github.com/contribsys/faktory/releases/download/v0.9.0-beta3/faktory_0.9.0-beta3_amd64.deb
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -LO https://github.com/contribsys/faktory/releases/download/v0.9.0-beta3/faktory_0.9.0-beta3_amd64.deb
 </span></span><span style="display:flex;"><span>dpkg -i faktory_0.9.0-beta3_amd64.deb
 </span></span></code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>GitHub Releases work well enough for now.

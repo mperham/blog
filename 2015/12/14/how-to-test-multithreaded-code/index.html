@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2015/12/14/how-to-test-multithreaded-code/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2015/12/14/how-to-test-multithreaded-code/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="How to Test Multithreaded Code">
   <meta property="og:description" content="Multithreaded code is hard to write and even harder to test. Since much of my work is dedicated to making Ruby threading easier for my users and customers, I thought some might be interested in the patterns I’ve developed to make multithreaded code as simple and testable as possible.
@@ -214,12 +214,12 @@ and testable as possible.</p>
 <p><a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L24">Sidekiq::Processor</a> is an object which is designed to run in its own
 thread and doesn&rsquo;t have any public API aside from starting/stopping the
 thread.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
 </span></span><span style="display:flex;"><span>p<span style="color:#f92672">.</span>start
 </span></span></code></pre></div><p>Interally it has quite a bit of complexity - think of it like an iceberg.
 In order to test those complex internals, I make its <a href="https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/processor.rb#L62">internal API public</a> so that the test suite has full
 access to the methods.  The <code>start</code> method spins up a thread which calls a very simple <code>run</code> loop similar this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">while</span> <span style="color:#f92672">!</span>@done
 </span></span><span style="display:flex;"><span>    job <span style="color:#f92672">=</span> fetch
 </span></span><span style="display:flex;"><span>    process(job) <span style="color:#66d9ef">if</span> job
@@ -227,7 +227,7 @@ access to the methods.  The <code>start</code> method spins up a thread which ca
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>I&rsquo;ve kept the run method as simple as possible since we can&rsquo;t call it in
 the test suite but we can call <code>fetch</code> and <code>process</code> in order to test them:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_process_fake_job</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_process_fake_job</span>
 </span></span><span style="display:flex;"><span>  p <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Processor</span><span style="color:#f92672">.</span>new
 </span></span><span style="display:flex;"><span>  result <span style="color:#f92672">=</span> p<span style="color:#f92672">.</span>process(some_fake_job)
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># asserts...</span>
@@ -254,7 +254,7 @@ Generally the pattern is:</p>
 </ol>
 <p>Most people don&rsquo;t know how to do (3) properly so they use <code>sleep</code> as a
 hack.  Here&rsquo;s a complete example of how to do it in Ruby:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;thread&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;thread&#39;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># We want to test Upcaser by exercising its full API,</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># including the internal threading.</span>

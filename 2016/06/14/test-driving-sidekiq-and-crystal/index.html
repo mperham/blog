@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2016/06/14/test-driving-sidekiq-and-crystal/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2016/06/14/test-driving-sidekiq-and-crystal/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Test Driving Sidekiq and Crystal">
   <meta property="og:description" content="It’s alive! I’ve finished the initial port of the three core pieces of Sidekiq, the client API, the job execution engine and the Web UI, to Crystal. Let’s assume we have a Ruby app using Sidekiq.rb and integrate Sidekiq.cr to run beside it.
@@ -219,7 +219,7 @@ with <code>./sidekiq -q crystal</code>.  Sidekiq.cr is now listening for jobs on
 the <code>crystal</code> queue only.  Any Ruby-based jobs should use other queues
 so the Crystal worker will never see them - exactly what we want.</p>
 <p>We&rsquo;ve defined one Worker in the Crystal app:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">module</span> Sample
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">module</span> Sample
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyWorker</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Worker</span>
 </span></span><span style="display:flex;"><span>
@@ -231,7 +231,7 @@ so the Crystal worker will never see them - exactly what we want.</p>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>Open up an IRB console and run this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#34;sidekiq&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#34;sidekiq&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Client</span><span style="color:#f92672">.</span>push(<span style="color:#e6db74">&#34;class&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;Sample::MyWorker&#34;</span>, <span style="color:#e6db74">&#34;args&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;Ruby&#34;</span>, <span style="color:#ae81ff">3</span><span style="color:#f92672">]</span>, <span style="color:#e6db74">&#34;queue&#34;</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#34;crystal&#34;</span>)
 </span></span></code></pre></div><p>Immediately you should see Sidekiq.cr print out three lines:</p>
 <pre tabindex="0"><code>2016-06-13T21:03:21.676Z 3936 TID-223icg0 JID=896704d437d398abdf13eb06 INFO: Start

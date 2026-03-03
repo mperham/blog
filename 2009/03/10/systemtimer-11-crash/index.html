@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/03/10/systemtimer-11-crash/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2009/03/10/systemtimer-11-crash/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="SystemTimer 1.1 crash">
   <meta property="og:description" content="We’re trying to use SystemTimer 1.1 on 64-bit Ubuntu and find that it crashes. An hour’s worth of investigation led to this fix:
@@ -200,7 +200,7 @@ blockquote,
   
 </p>
 <p>We&rsquo;re trying to use SystemTimer 1.1 on 64-bit Ubuntu and find that it crashes. An hour&rsquo;s worth of investigation led to this fix:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#f92672">--- a/ext/system_timer/system_timer_native.c
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#f92672">--- a/ext/system_timer/system_timer_native.c
 </span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">+++ b/ext/system_timer/system_timer_native.c
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">@@ -25,7 +25,7 @@ static void install_ruby_sigalrm_handler(VALUE);
 </span></span></span><span style="display:flex;"><span> static void restore_original_ruby_sigalrm_handler(VALUE);

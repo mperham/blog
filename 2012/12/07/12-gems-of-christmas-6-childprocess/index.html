@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/12/07/12-gems-of-christmas-6-childprocess/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2012/12/07/12-gems-of-christmas-6-childprocess/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="12 Gems of Christmas #6 -- childprocess">
   <meta property="og:description" content="Ruby has many different gems and APIs for spawning child processes but none I like more than childprocess. posix-spawn and open4 are popular alternatives but childprocess has a clean Ruby API and aims to work on all Ruby platforms.
@@ -202,7 +202,7 @@ blockquote,
 </p>
 <p>Ruby has many different gems and APIs for spawning child processes but none I like more than childprocess. <a href="https://github.com/rtomayko/posix-spawn">posix-spawn</a> and <a href="https://github.com/ahoward/open4">open4</a> are popular alternatives but <a href="https://github.com/jarib/childprocess">childprocess</a> has a clean Ruby API and aims to work on all Ruby platforms.</p>
 <p>Here we have an example setting up a child process pipeline, performing the equivalent of <code>ps aux | grep -E 'redis|memcached'</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;childprocess&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;childprocess&#39;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>listing <span style="color:#f92672">=</span> <span style="color:#66d9ef">ChildProcess</span><span style="color:#f92672">.</span>build(<span style="color:#e6db74">&#34;ps&#34;</span>, <span style="color:#e6db74">&#34;aux&#34;</span>)
 </span></span><span style="display:flex;"><span>

@@ -15,7 +15,7 @@
       <title>My Next Chapter</title>
       <link>https://www.mikeperham.com/2014/07/02/my-next-chapter/</link>
       <pubDate>Wed, 02 Jul 2014 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2014/07/02/my-next-chapter/</guid>
       <description>&lt;p&gt;After 2.5 years I&amp;rsquo;ve decided to move on from The Clymb. I&amp;rsquo;m incredibly proud of our accomplishments during my time there: the site has dramatically increased in stability and scalability, the GitHub development workflow really improved code quality and we increased the size of the development team from 3 to 15. On the technical side, we moved from manually-configured cloud-based servers to Chef-managed dedicated servers, switched email providers twice, moved warehouses and rewrote our inventory and fulfillment process, integrated our logistics and fulfillment processes with an ERP system, and much more. I&amp;rsquo;m really proud to have helped grow the business while they helped me grow in management skill.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;What am I doing next?&lt;/strong&gt;&lt;/p&gt;</description>
@@ -25,7 +25,7 @@
       <title>Board Games and Beverages at Railsconf 2013</title>
       <link>https://www.mikeperham.com/2013/04/17/board-games-and-beverages-at-railsconf-2013/</link>
       <pubDate>Wed, 17 Apr 2013 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2013/04/17/board-games-and-beverages-at-railsconf-2013/</guid>
       <description>&lt;img src=&#34;http://www.wired.com/geekdad/wp-content/uploads/2009/12/carcassonne-board.jpg&#34; width=&#34;600&#34; height=&#34;401&#34; alt=&#34;Carcassonne&#34; class=&#34;aligncenter&#34; /&gt;
 &lt;p&gt;You are invited to a whimsical evening of merriment and gamesmanship!&lt;/p&gt;
@@ -39,7 +39,7 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       <title>One Great Year at The Clymb</title>
       <link>https://www.mikeperham.com/2013/01/31/one-great-year-at-the-clymb/</link>
       <pubDate>Thu, 31 Jan 2013 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2013/01/31/one-great-year-at-the-clymb/</guid>
       <description>&lt;p&gt;I joined &lt;a href=&#34;http://www.theclymb.com/invite-from/mperham&#34;&gt;The Clymb&lt;/a&gt; one year ago today and what an amazing year it&amp;rsquo;s been.&lt;/p&gt;
 &lt;p&gt;Some context for you: I was employee 33 and the third engineer to join. The test suite had hundreds of failures and had been running red for months. We were on REE, Rails 2.3 and Delayed Job &amp;ndash; a stack that was current two years before &amp;ndash; and had no error service to know what errors were happening in production. The site was deployed with fabric, a Python-based tool. The first two developers were overworked and fought fires all day, every day.&lt;/p&gt;</description>
@@ -49,7 +49,7 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       <title>I&#39;m back!</title>
       <link>https://www.mikeperham.com/2012/02/04/im-back/</link>
       <pubDate>Sat, 04 Feb 2012 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2012/02/04/im-back/</guid>
       <description>&lt;p&gt;I haven&amp;rsquo;t blogged much for the last year because most of my technical blogging went to the &lt;a href=&#34;http://blog.carbonfive.com&#34;&gt;Carbon Five blog&lt;/a&gt;. Now that I&amp;rsquo;ve moved to Portland and have a new job at &lt;a href=&#34;http://www.theclymb.com/invite-from/mperham&#34;&gt;TheClymb&lt;/a&gt; I&amp;rsquo;ll be returning my attention to my own blog so expect new content regularly again!&lt;/p&gt;</description>
     </item>
@@ -58,7 +58,7 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       <title>Moving On</title>
       <link>https://www.mikeperham.com/2010/12/27/moving-on/</link>
       <pubDate>Mon, 27 Dec 2010 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2010/12/27/moving-on/</guid>
       <description>&lt;p&gt;Good news, everybody — I&amp;rsquo;m starting a new job in 2011! I&amp;rsquo;ve accepted a position at &lt;a href=&#34;http://carbonfive.com&#34;&gt;Carbon Five&lt;/a&gt;. While I enjoyed the challenges of starting a new business, I found the 60+ hr work weeks just unmaintainable with a new baby in the house. Carbon Five presents me many of the same challenges of Bootspring (e.g. finding new clients, recruiting new developers, designing and developing great code for victory) without the tedious bits (e.g. working alone, administrivia, etc). I&amp;rsquo;m very excited to meet and work with a new set of smart people and solve new problems in the coming year!&lt;/p&gt;</description>
     </item>
@@ -67,7 +67,7 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       <title>Risk and Startups</title>
       <link>https://www.mikeperham.com/2010/04/20/risk-and-startups/</link>
       <pubDate>Tue, 20 Apr 2010 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2010/04/20/risk-and-startups/</guid>
       <description>&lt;p&gt;I&amp;rsquo;ve worked at 7-8 startups in the last 12 years, learning along the way that I love the freedom and flexibility that a small company affords. You pay a good price for that freedom though in the form of risk: your job will be measured in terms of months and years, not decades. My parents spent decades at their jobs working for large corporations; that kind of job security does not exist at a startup.&lt;/p&gt;</description>
     </item>
@@ -76,7 +76,7 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       <title>Heading to RubyConf 2009</title>
       <link>https://www.mikeperham.com/2009/09/30/heading-to-rubyconf-2009/</link>
       <pubDate>Wed, 30 Sep 2009 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2009/09/30/heading-to-rubyconf-2009/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;http://rubyconf.org&#34;&gt;RubyConf 2009&lt;/a&gt; is taking place in San Francisco November 19-21. I&amp;rsquo;ll be there and have most of the 18th free if anyone is near SFO and wants to join me in some coffeeshop coding.&lt;/p&gt;</description>
     </item>
@@ -85,7 +85,7 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       <title>FiveRuns Dash, now with 100% more rimshot!</title>
       <link>https://www.mikeperham.com/2009/02/24/fiveruns-dash-now-with-100-more-rimshot/</link>
       <pubDate>Tue, 24 Feb 2009 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2009/02/24/fiveruns-dash-now-with-100-more-rimshot/</guid>
       <description>&lt;p&gt;I&amp;rsquo;m giving away a free copy of my iPhone app, &lt;a href=&#34;http://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=301088210&amp;amp;mt=8&#34;&gt;Zinger&lt;/a&gt;, to every person who gets their app running with our new metrics service, &lt;a href=&#34;http://dash.fiveruns.com&#34;&gt;Dash&lt;/a&gt;. Just email me. Steps (&lt;a href=&#34;http://support.fiveruns.com/faqs/dash/rails&#34;&gt;documented in more depth here&lt;/a&gt;):&lt;/p&gt;
 &lt;ol&gt;
@@ -98,7 +98,7 @@ sudo gem install fiveruns-dash-rails -s http://gems.github.com
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;4&#34;&gt;
 &lt;li&gt;Add the gem to your &lt;code&gt;config/environment.rb&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Rails&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Initializer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;run &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;config&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Rails&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Initializer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;run &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;config&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  config&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;gem &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;json&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# needed because of a bug in json_pure&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  config&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;gem &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;fiveruns-dash-rails&amp;#39;&lt;/span&gt;,
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#e6db74&#34;&gt;:lib&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;fiveruns_dash_rails&amp;#39;&lt;/span&gt;,
@@ -106,7 +106,7 @@ sudo gem install fiveruns-dash-rails -s http://gems.github.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;5&#34;&gt;
 &lt;li&gt;Add the initializer file &lt;code&gt;config/initializers/dash.rb&lt;/code&gt; to start Dash:&lt;/li&gt;
 &lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; defined?(&lt;span style=&#34;color:#66d9ef&#34;&gt;Fiveruns&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Dash&lt;/span&gt;)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; defined?(&lt;span style=&#34;color:#66d9ef&#34;&gt;Fiveruns&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Dash&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;Fiveruns&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Dash&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;Rails&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;start(&lt;span style=&#34;color:#e6db74&#34;&gt;:production&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;YOUR-APP-TOKEN-HERE&amp;#39;&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;end&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This will start Dash in the production environment. We don&amp;rsquo;t recommend using Dash in development mode. If you have a staging environment, you can create a separate app for that environment and combine the two like so:&lt;/p&gt;</description>
@@ -116,7 +116,7 @@ sudo gem install fiveruns-dash-rails -s http://gems.github.com
       <title>How I Achieved my Dream with the iPhone</title>
       <link>https://www.mikeperham.com/2009/01/15/dreams-and-the-iphone/</link>
       <pubDate>Thu, 15 Jan 2009 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2009/01/15/dreams-and-the-iphone/</guid>
       <description>&lt;p&gt;This article spurred me in a completely unexpected technical direction over the winter break: &lt;a href=&#34;http://www.macrumors.com/2008/12/28/massive-christmas-ipod-touch-sales-boost-app-store-downloads/&#34;&gt;Massive Christmas iPod Touch Sales Boost App Store Downloads&lt;/a&gt;. Two facts struck me:&lt;/p&gt;
 &lt;ul&gt;
@@ -130,7 +130,7 @@ sudo gem install fiveruns-dash-rails -s http://gems.github.com
       <title>New Look</title>
       <link>https://www.mikeperham.com/2008/11/23/new-look/</link>
       <pubDate>Sun, 23 Nov 2008 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2008/11/23/new-look/</guid>
       <description>&lt;p&gt;I cleaned up the blog style as I thought the previous look and feel was a little busy. I hope you like the changes!&lt;/p&gt;</description>
     </item>

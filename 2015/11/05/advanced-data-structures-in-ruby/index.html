@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2015/11/05/advanced-data-structures-in-ruby/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2015/11/05/advanced-data-structures-in-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Advanced Data Structures in Ruby">
   <meta property="og:description" content="Ruby provides several complex data structures out of the box; hash, array, set, and queue are all I need 99% of the time. However knowing about more advanced data structures means you know when to reach for something more esoteric. Here’s two examples I’ve used recently.
@@ -208,7 +208,7 @@ esoteric.  Here&rsquo;s two examples I&rsquo;ve used recently.</p>
 time-limited <code>pop</code> operation.  This can be very useful when coordinating
 time-sensitive operations between threads.  Recently I used it as an alternative
 to <code>sleep</code> so I could wake up a sleeping thread immediately:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>
 </span></span><span style="display:flex;"><span>  @done <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  @sleeper <span style="color:#f92672">=</span> <span style="color:#66d9ef">ConnectionPool</span><span style="color:#f92672">::</span><span style="color:#66d9ef">TimedStack</span><span style="color:#f92672">.</span>new
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2009/03/15/socket-timeouts-in-ruby/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2009/03/15/socket-timeouts-in-ruby/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Socket Timeouts in Ruby">
   <meta property="og:description" content="One of Ruby’s weaknesses is its poor networking performance. Much of that has to do with the net/http implementation, which uses Ruby’s awful Timeout library. The issues with Timeout are well documented. SystemTimer provides a reliable alternative that also performs better.
@@ -201,7 +201,7 @@ blockquote,
 </p>
 <p>One of Ruby&rsquo;s weaknesses is its poor networking performance. Much of that has to do with the net/http implementation, which uses Ruby&rsquo;s awful Timeout library. The issues with Timeout are <a href="http://blog.headius.com/2008/02/rubys-threadraise-threadkill-timeoutrb.html">well documented</a>. <a href="http://ph7spot.com/articles/system_timer">SystemTimer</a> provides a reliable alternative that also performs better.</p>
 <p>However I started today wondering if there was a better way. Enabling timeouts has a huge performance hit on my memcache-client library and reducing the overhead would go a long way to making it perform safely <strong>and</strong> quickly. Since C programs need socket timeouts also, I figured there had to be a low-level alternative, and indeed there is: the <code>SO_SNDTIMEO</code> and <code>SO_RCVTIMEO</code> socket options. It&rsquo;s a bit involved to create a proper socket with these options but possible:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">connect_to</span>(host, port, timeout<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">connect_to</span>(host, port, timeout<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>)
 </span></span><span style="display:flex;"><span>  addr <span style="color:#f92672">=</span> <span style="color:#66d9ef">Socket</span><span style="color:#f92672">.</span>getaddrinfo(host, <span style="color:#66d9ef">nil</span>)
 </span></span><span style="display:flex;"><span>  sock <span style="color:#f92672">=</span> <span style="color:#66d9ef">Socket</span><span style="color:#f92672">.</span>new(<span style="color:#66d9ef">Socket</span><span style="color:#f92672">.</span>const_get(addr<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">][</span><span style="color:#ae81ff">0</span><span style="color:#f92672">]</span>), <span style="color:#66d9ef">Socket</span><span style="color:#f92672">::</span><span style="color:#66d9ef">SOCK_STREAM</span>, <span style="color:#ae81ff">0</span>)
 </span></span><span style="display:flex;"><span>

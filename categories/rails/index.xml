@@ -15,10 +15,10 @@
       <title>Setting MySQL DATETIME column defaults in Rails</title>
       <link>https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/</link>
       <pubDate>Sat, 17 May 2014 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://dev.mysql.com/doc/refman/5.6/en/timestamp-initialization.html&#34;&gt;Starting in MySQL 5.6.5&lt;/a&gt;, datetime columns can have an actual useful default of CURRENT_TIMESTAMP and MySQL will auto-populate the columns as necessary. This is incredibly handy if you ever do bulk updates in SQL, now you don&amp;rsquo;t need to remember to set updated_at! Inserting records manually will auto-populate those columns too. Let&amp;rsquo;s try it:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;up&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;up&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  create_table &lt;span style=&#34;color:#e6db74&#34;&gt;:rows&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;t&lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    t&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;integer &lt;span style=&#34;color:#e6db74&#34;&gt;:value&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    t&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;datetime &lt;span style=&#34;color:#e6db74&#34;&gt;:created_at&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;null&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;default&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CURRENT_TIMESTAMP&amp;#34;&lt;/span&gt;
@@ -32,7 +32,7 @@
       <title>Don&#39;t Forget What&#39;s Important</title>
       <link>https://www.mikeperham.com/2014/01/18/dont-forget-whats-important/</link>
       <pubDate>Sat, 18 Jan 2014 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2014/01/18/dont-forget-whats-important/</guid>
       <description>&lt;p&gt;Technologies come and go. We learn and grow as engineers over time but some things are eternal: knowing what is truly important to you is critical in differentiating between a path to misery versus fulfillment. Like your coworkers and your environment, the technology you work with day to day can make a big difference in your job satisfaction.&lt;/p&gt;</description>
     </item>
@@ -41,7 +41,7 @@
       <title>Please Use an Error Service!</title>
       <link>https://www.mikeperham.com/2013/08/25/please-use-an-error-service/</link>
       <pubDate>Sun, 25 Aug 2013 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2013/08/25/please-use-an-error-service/</guid>
       <description>&lt;p&gt;In &lt;a href=&#34;http://www.mikeperham.com/2012/03/03/the-perils-of-rescue-exception/&#34;&gt;The Perils of &amp;ldquo;rescue Exception&amp;rdquo;&lt;/a&gt; I explained one major error handling issue I see in almost all Ruby code. The second mistake I see is using logging rather than an error service.&lt;/p&gt;</description>
     </item>
@@ -50,7 +50,7 @@
       <title>Board Games and Beverages at Railsconf 2013</title>
       <link>https://www.mikeperham.com/2013/04/17/board-games-and-beverages-at-railsconf-2013/</link>
       <pubDate>Wed, 17 Apr 2013 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2013/04/17/board-games-and-beverages-at-railsconf-2013/</guid>
       <description>&lt;img src=&#34;http://www.wired.com/geekdad/wp-content/uploads/2009/12/carcassonne-board.jpg&#34; width=&#34;600&#34; height=&#34;401&#34; alt=&#34;Carcassonne&#34; class=&#34;aligncenter&#34; /&gt;
 &lt;p&gt;You are invited to a whimsical evening of merriment and gamesmanship!&lt;/p&gt;
@@ -64,7 +64,7 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       <title>Railsconf 2013 events</title>
       <link>https://www.mikeperham.com/2013/04/11/railsconf-2013-events/</link>
       <pubDate>Thu, 11 Apr 2013 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2013/04/11/railsconf-2013-events/</guid>
       <description>&lt;p&gt;Want to know what&amp;rsquo;s going on during Railsconf 2013 outside of the conference center? Here&amp;rsquo;s a list of all events open to the public, this page will be updated as I learn of more events. Email mperham at gmail with event details.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Sunday 4/28&lt;/strong&gt;&lt;/p&gt;
@@ -81,7 +81,7 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       <title>12 Gems of Christmas #2 -- bullet</title>
       <link>https://www.mikeperham.com/2012/12/11/12-gems-of-christmas-2-bullet/</link>
       <pubDate>Tue, 11 Dec 2012 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2012/12/11/12-gems-of-christmas-2-bullet/</guid>
       <description>&lt;p&gt;ActiveRecord has been a huge boon for web development in promoting conventions in databases. Every new company I joined we had to determine how to name tables, primary keys and indexes. Standardizing id, automatic timestamps, pluralizing nouns, all of it makes development easier and more friendly to developers who just want to build stuff, not worry about every mundane detail.&lt;/p&gt;
 &lt;p&gt;All is not wine and roses though, ActiveRecord suffers from a common ORM performance issue: the N+1 query problem. Find all shopping carts created in the last month and print out the number of items in those carts. This is what you might see in your terminal:&lt;/p&gt;</description>
@@ -91,7 +91,7 @@ When: Tuesday, 4/30 7-11pm&lt;/p&gt;
       <title>12 Gems of Christmas #5 -- lograge</title>
       <link>https://www.mikeperham.com/2012/12/08/12-gems-of-christmas-5-lograge/</link>
       <pubDate>Sat, 08 Dec 2012 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2012/12/08/12-gems-of-christmas-5-lograge/</guid>
       <description>&lt;p&gt;Rails has a problem: its production logging is somewhat lacking. By default, Rails will emit a bunch of lines for each request, which makes grepping the output tougher than it should be. Look at this, it&amp;rsquo;s nice to look at but painful to aggregate:&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Started GET &amp;#34;/&amp;#34; for 127.0.0.1 at 2012-03-10 14:28:14 +0100
@@ -109,7 +109,7 @@ Completed 200 OK in 79ms (Views: 78.8ms | ActiveRecord: 0.0ms)
       <title>12 Gems of Christmas #9 -- pundit</title>
       <link>https://www.mikeperham.com/2012/12/04/12-gems-of-christmas-9-pundit/</link>
       <pubDate>Tue, 04 Dec 2012 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2012/12/04/12-gems-of-christmas-9-pundit/</guid>
       <description>&lt;p&gt;When it comes to authorization, Ryan Bates&amp;rsquo; CanCan gem is the 800 lb gorilla that most Rails apps use. &lt;a href=&#34;https://github.com/elabs/pundit&#34;&gt;pundit&lt;/a&gt; is the latest gem from Jonas Nicklas (author of Carrierwave and Capybara) with some interesting ideas that you might like. Pundit uses code conventions along with a plain old Ruby API to make for a very simple implementation. First, write a policy for each type of model you wish to authorize:&lt;/p&gt;</description>
     </item>
@@ -118,7 +118,7 @@ Completed 200 OK in 79ms (Views: 78.8ms | ActiveRecord: 0.0ms)
       <title>12 Gems of Christmas #10 -- konacha</title>
       <link>https://www.mikeperham.com/2012/12/03/12-gems-of-christmas-10-konacha/</link>
       <pubDate>Mon, 03 Dec 2012 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2012/12/03/12-gems-of-christmas-10-konacha/</guid>
       <description>&lt;p&gt;It&amp;rsquo;s got a crazy name but solves a serious problem that continues to vex the Rails community: javascript testing. There are a number of libraries out there that try to solve the problem but &lt;a href=&#34;https://github.com/jfirebaugh/konacha&#34;&gt;konacha&lt;/a&gt; is the first I&amp;rsquo;m aware of that integrates tightly with Rails 3 and Sprockets to make JavaScript testing as easy as possible within your Rails app. For instance, you might have &lt;code&gt;spec/javascripts/array_sum_spec.js&lt;/code&gt;:&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//= require array_sum
@@ -139,7 +139,7 @@ describe(&amp;#34;Array#sum&amp;#34;, function() {
       <title>Using Statsd with Rails</title>
       <link>https://www.mikeperham.com/2012/08/25/using-statsd-with-rails/</link>
       <pubDate>Sat, 25 Aug 2012 00:00:00 +0000</pubDate>
-      
+      <author>Mike Perham</author>
       <guid>https://www.mikeperham.com/2012/08/25/using-statsd-with-rails/</guid>
       <description>&lt;p&gt;One of the things I&amp;rsquo;ve had on my mind at &lt;a href=&#34;http://www.theclymb.com/invite-from/mperham&#34;&gt;The Clymb&lt;/a&gt; is better runtime monitoring for our website and servers. We have NewRelic but I always want more. With this in mind, I decided to try out &lt;a href=&#34;http://github.com/etsy/statsd&#34;&gt;statsd&lt;/a&gt; to collect and aggregate metrics for visualization. By using statsd, you get two benefits: 1) metric aggregation so you don&amp;rsquo;t have to pay for N machines reporting metrics to a pay service and 2) control over where your metrics go so you can route them to Graphite, Librato Metrics or any other standard metrics service.&lt;/p&gt;</description>
     </item>

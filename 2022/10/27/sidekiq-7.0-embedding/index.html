@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2022/10/27/sidekiq-7.0-embedding/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq 7.0: Embedding">
   <meta property="og:description" content="Sidekiq 7.0 can be embedded within another process so you do not need to run a separate Sidekiq process. This is called embedding.
@@ -208,7 +208,7 @@ Embedding does have a serious limitation: Ruby&rsquo;s Global VM Lock limits the
 <h2 id="definition">Definition</h2>
 <p>The process owning library (e.g. puma or passenger) will typically have some sort of lifecycle callbacks which you can use to create, start and stop the Sidekiq instance.
 Here&rsquo;s how you can do this with <code>puma</code> but the principle is the same for <code>passenger</code> or any other process.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># config/puma.rb </span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># config/puma.rb </span>
 </span></span><span style="display:flex;"><span>workers <span style="color:#ae81ff">2</span>
 </span></span><span style="display:flex;"><span>threads <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>
 </span></span><span style="display:flex;"><span>

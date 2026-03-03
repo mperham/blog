@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2014/05/17/setting-mysql-datetime-column-defaults-in-rails/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Setting MySQL DATETIME column defaults in Rails">
   <meta property="og:description" content="Starting in MySQL 5.6.5, datetime columns can have an actual useful default of CURRENT_TIMESTAMP and MySQL will auto-populate the columns as necessary. This is incredibly handy if you ever do bulk updates in SQL, now you don’t need to remember to set updated_at! Inserting records manually will auto-populate those columns too. Let’s try it:
@@ -200,7 +200,7 @@ blockquote,
   
 </p>
 <p><a href="https://dev.mysql.com/doc/refman/5.6/en/timestamp-initialization.html">Starting in MySQL 5.6.5</a>, datetime columns can have an actual useful default of CURRENT_TIMESTAMP and MySQL will auto-populate the columns as necessary. This is incredibly handy if you ever do bulk updates in SQL, now you don&rsquo;t need to remember to set updated_at! Inserting records manually will auto-populate those columns too. Let&rsquo;s try it:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">up</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">up</span>
 </span></span><span style="display:flex;"><span>  create_table <span style="color:#e6db74">:rows</span> <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>t<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>    t<span style="color:#f92672">.</span>integer <span style="color:#e6db74">:value</span>
 </span></span><span style="display:flex;"><span>    t<span style="color:#f92672">.</span>datetime <span style="color:#e6db74">:created_at</span>, <span style="color:#e6db74">null</span>: <span style="color:#66d9ef">false</span>, <span style="color:#e6db74">default</span>: <span style="color:#e6db74">&#34;CURRENT_TIMESTAMP&#34;</span>

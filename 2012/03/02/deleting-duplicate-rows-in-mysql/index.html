@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/03/02/deleting-duplicate-rows-in-mysql/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2012/03/02/deleting-duplicate-rows-in-mysql/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Deleting Duplicate Rows in MySQL">
   <meta property="og:description" content="You have a table with duplicate rows – somehow a unique index didn’t get created and a bug has added duplicate records to your table. A pox upon that bug!
@@ -212,7 +212,7 @@ blockquote,
 <ol start="2">
 <li>Recreate the table with GROUP BY</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>execute <span style="color:#e6db74">&#39;CREATE TABLE shipments_deduped like shipments;&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>execute <span style="color:#e6db74">&#39;CREATE TABLE shipments_deduped like shipments;&#39;</span>
 </span></span><span style="display:flex;"><span>execute <span style="color:#e6db74">&#39;INSERT shipments_deduped SELECT * FROM shipments GROUP BY cart_id, tracking_number;&#39;</span>
 </span></span><span style="display:flex;"><span>execute <span style="color:#e6db74">&#39;RENAME TABLE shipments TO shipments_with_dupes;&#39;</span>
 </span></span><span style="display:flex;"><span>execute <span style="color:#e6db74">&#39;RENAME TABLE shipments_deduped TO shipments;&#39;</span>

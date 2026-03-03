@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2017/12/11/sidekiq-pro-statsd-support--new-and-improved/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2017/12/11/sidekiq-pro-statsd-support--new-and-improved/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq Pro Statsd support -- new and improved!">
   <meta property="og:description" content="Drivy&#39;s impressive Sidekiq dashboard [source] Several customers have been asking for more metrics to track Sidekiq internals: when is a job dropped due to uniqueness or expiration? I’ve had to put off the work while working on Faktory but recently I took a week off to focus on Sidekiq and implement this feature.
@@ -219,7 +219,7 @@ metrics into their own internal format.</p>
 <p>You plug in the Statsd client in your initializer and Sidekiq Pro will add metrics:</p>
 <div style="clear: both">
 </div>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;statsd-ruby&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#39;statsd-ruby&#39;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Pro</span><span style="color:#f92672">.</span>statsd <span style="color:#f92672">=</span> <span style="color:#f92672">-&gt;</span>{ <span style="color:#f92672">::</span><span style="color:#66d9ef">Statsd</span><span style="color:#f92672">.</span>new(<span style="color:#e6db74">&#34;127.0.0.1&#34;</span>, <span style="color:#ae81ff">8125</span>) }
 </span></span></code></pre></div><p>Note that it&rsquo;s a Proc; Sidekiq Pro uses a connection pool with several clients so a
 single global client doesn&rsquo;t become a source of thread and socket contention.</p>

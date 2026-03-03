@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2020/06/03/trimming-dependencies-rack-protection/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2020/06/03/trimming-dependencies-rack-protection/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Trimming Dependencies: rack-protection">
   <meta property="og:description" content="Recently I discussed how I was evaluating all of Sidekiq’s current dependencies to see if any could be removed or vendored to reduce upstream churn, security issues, and other maintenance chores. I was able to remove concurrent-ruby from Sidekiq Pro and Sidekiq Enterprise, which is a major win considering the size of that gem. A simple benchmark showed removing that gem shrunk a basic Sidekiq Pro process from 60MB to 50MB, a 16% improvement!">
@@ -217,7 +217,7 @@ seemed like a lot for the feature, I didn&rsquo;t really understand the code wel
 I find the rack codebase to be a bit abstract for my own tastes, with lots of options, abstract classes/modules and one line methods which make the code harder to follow and navigate.
 To that end, I removed a lot of options and features Sidekiq doesn&rsquo;t use, inlined or removed some methods and shrank the code from 230 to 130 lines.
 The public API is now this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">::</span><span style="color:#66d9ef">CsrfProtection</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">::</span><span style="color:#66d9ef">CsrfProtection</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(app, options <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>)
 </span></span><span style="display:flex;"><span>    @app <span style="color:#f92672">=</span> app
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
@@ -234,7 +234,7 @@ I wanted four tests:</p>
 <li>a POST with a good token</li>
 </ul>
 <p>All I had to do was provide those <code>app</code> and <code>env</code> parameters, easy right??? Actually Rack&rsquo;s <code>call</code> interface made it rather elegant: you can call a block with <code>.call</code> so my &ldquo;test app&rdquo; is just a block! I explicitly chose not to use Rack&rsquo;s test helper DSL in order to better understand how Rack works under the covers. Here&rsquo;s the simple GET test:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(env, <span style="color:#f92672">&amp;</span>block)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(env, <span style="color:#f92672">&amp;</span>block)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Web</span><span style="color:#f92672">::</span><span style="color:#66d9ef">CsrfProtection</span><span style="color:#f92672">.</span>new(block)<span style="color:#f92672">.</span>call(env)
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>
@@ -250,7 +250,7 @@ I wanted four tests:</p>
 </span></span></code></pre></div><p>In a real world app that block would render an HTML template,
 injecting the <code>:csrf_token</code> into a hidden form input.</p>
 <p>The trickiest part was constructing Rack&rsquo;s <code>env</code> which is a magical Hash full of pain and wonder:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">session</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">session</span>
 </span></span><span style="display:flex;"><span>  @session <span style="color:#f92672">||=</span> {}
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>
@@ -266,7 +266,7 @@ injecting the <code>:csrf_token</code> into a hidden form input.</p>
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>Don&rsquo;t ask; it works. A POST looks like this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>result <span style="color:#f92672">=</span> call(env(<span style="color:#e6db74">:post</span>, { <span style="color:#e6db74">&#34;authenticity_token&#34;</span><span style="color:#f92672">=&gt;</span>goodtoken })) <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>result <span style="color:#f92672">=</span> call(env(<span style="color:#e6db74">:post</span>, { <span style="color:#e6db74">&#34;authenticity_token&#34;</span><span style="color:#f92672">=&gt;</span>goodtoken })) <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">[</span><span style="color:#ae81ff">200</span>, {}, <span style="color:#f92672">[</span><span style="color:#e6db74">&#34;OK&#34;</span><span style="color:#f92672">]]</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>refute_nil result

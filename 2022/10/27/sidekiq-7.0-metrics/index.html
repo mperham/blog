@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2022/10/27/sidekiq-7.0-metrics/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2022/10/27/sidekiq-7.0-metrics/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq 7.0: Metrics">
   <meta property="og:description" content="Sidekiq 7.0 introduces a new subsystem for gathering job execution data along with a new Metrics tab within the Web UI to visualize this data. The data is designed to help you answer a few questions:
@@ -243,7 +243,7 @@ With more buckets you can track a wider spread of execution times but require mo
 See <a href="https://github.com/sidekiq/sidekiq"><code>lib/sidekiq/metrics/</code></a> for details.</p>
 <h2 id="tracking-deployments">Tracking Deployments</h2>
 <p>Sidekiq provides a simple Deploy API so capistrano scripts or similar can mark a deploy. The Metrics graphs will show a vertical line at that point in time so sudden changes can be correlated. If the current directory is a Git repo, here&rsquo;s a simple script which will label each deploy with the current git SHA and commit subject (e.g. &ldquo;d0f12ab3 Add foo to bar&rdquo;):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#34;sidekiq/deploy&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>require <span style="color:#e6db74">&#34;sidekiq/deploy&#34;</span>
 </span></span><span style="display:flex;"><span>gitdesc <span style="color:#f92672">=</span> <span style="color:#e6db74">`git log -1 --format=&#34;%h %s&#34;`</span><span style="color:#f92672">.</span>strip
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Deploy</span><span style="color:#f92672">.</span>mark!(gitdesc)
 </span></span></code></pre></div><p>You&rsquo;ll see a vertical red line for every deploy in the graphs and the legend for that point on the X-axis will display the deploy label.</p>

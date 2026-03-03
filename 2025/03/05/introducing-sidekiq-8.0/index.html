@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2025/03/05/introducing-sidekiq-8.0/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2025/03/05/introducing-sidekiq-8.0/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Introducing Sidekiq 8.0">
   <meta property="og:description" content="After six months of hard work, I’m thrilled to announce the general availability of Sidekiq 8.0! 🥳🎉
@@ -209,7 +209,7 @@ Subscribe to my <a href="https://www.mikeperham.com/index.xml">RSS feed</a> if y
 <h2 id="whats-new">What&rsquo;s New?</h2>
 <h3 id="profiling">Profiling</h3>
 <p>Profiling allows you to see how long your code takes to execute, allowing you to find unexpected performace problems. Sidekiq 8.0 makes job profiling in production <strong>so easy</strong>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">MyJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">profile</span>: <span style="color:#e6db74">&#34;mike&#34;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>args<span style="color:#f92672">...</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">MyJob</span><span style="color:#f92672">.</span>set(<span style="color:#e6db74">profile</span>: <span style="color:#e6db74">&#34;mike&#34;</span>)<span style="color:#f92672">.</span>perform_async(<span style="color:#f92672">...</span>args<span style="color:#f92672">...</span>)
 </span></span></code></pre></div><p>If you tag a job with a <code>profile</code> attribute, Sidekiq will run it within <a href="https://vernier.prof">Vernier</a> and store the report in Redis.
 You access the profile report in the new <code>Profiles</code> tab of the Web UI.
 For more details, refer to the <a href="https://github.com/sidekiq/sidekiq/wiki/Profiling">Profiling</a> wiki page.</p>

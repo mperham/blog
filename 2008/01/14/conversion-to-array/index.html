@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/01/14/conversion-to-array/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2008/01/14/conversion-to-array/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Conversion to Array">
   <meta property="og:description" content="If you want to autobox an object into an Array, Ruby provides a deprecated method, Object#to_a, to do this. The better, non-deprecated way is to use Array conversion:
@@ -200,7 +200,7 @@ blockquote,
   
 </p>
 <p>If you want to autobox an object into an Array, Ruby provides a deprecated method, Object#to_a, to do this.  The better, non-deprecated way is to use Array conversion:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>irb(main):<span style="color:#ae81ff">001</span>:<span style="color:#ae81ff">0</span><span style="color:#f92672">&gt;</span> foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">Object</span><span style="color:#f92672">.</span>new
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>irb(main):<span style="color:#ae81ff">001</span>:<span style="color:#ae81ff">0</span><span style="color:#f92672">&gt;</span> foo <span style="color:#f92672">=</span> <span style="color:#66d9ef">Object</span><span style="color:#f92672">.</span>new
 </span></span><span style="display:flex;"><span><span style="color:#f92672">=&gt;</span> <span style="color:#75715e">#&lt;Object:0x15234&gt;</span>
 </span></span><span style="display:flex;"><span>irb(main):<span style="color:#ae81ff">002</span>:<span style="color:#ae81ff">0</span><span style="color:#f92672">&gt;</span> foo<span style="color:#f92672">.</span>to_a
 </span></span><span style="display:flex;"><span>(irb):<span style="color:#ae81ff">2</span>: <span style="color:#e6db74">warning</span>: default <span style="color:#e6db74">&#39;to_a&#39;</span> will be obsolete

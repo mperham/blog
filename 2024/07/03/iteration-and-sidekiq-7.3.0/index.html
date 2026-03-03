@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2024/07/03/iteration-and-sidekiq-7.3.0/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2024/07/03/iteration-and-sidekiq-7.3.0/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Iteration and Sidekiq 7.3.0">
   <meta property="og:description" content="Sidekiq is the most popular background job framework for Ruby and works really well if you follow the design guidelines: keep your jobs short and idempotent. What happens if you have a job which processes a large amount of data serially, the infamous long-running job? In that case, deployments can lead to the job failing mid-way because the job will not gracefully allow the Sidekiq process to restart. To fix this, Sidekiq 7.3 just shipped with a major new feature: Iterable Jobs.">
@@ -208,7 +208,7 @@ Thank you Dima!</p>
 <p>A common cause of long-running jobs is processing a large amount of data in a loop.
 For example, below we iterate through each each Product in our database.
 If there are one million Products, this might take a while!</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProductImageChecker</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProductImageChecker</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Job</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)
@@ -221,7 +221,7 @@ If there are one million Products, this might take a while!</p>
 </span></span></code></pre></div><p>Note a major flaw in the code above: if an error occurs or a deploy is triggered, the job will restart Product processing from the very beginning.</p>
 <p>With <code>Sidekiq::IterableJob</code>, we break the loop into discrete chunks which Sidekiq knows about, allowing Sidekiq to break the processing at any point in the loop.
 Notice we don&rsquo;t provide a <code>perform</code> method but rather two methods which control the work loop:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProductImageChecker</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProductImageChecker</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">include</span> <span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">::</span><span style="color:#66d9ef">IterableJob</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build_enumerator</span>(<span style="color:#f92672">*</span>args, <span style="color:#e6db74">cursor</span>:)
@@ -237,7 +237,7 @@ Notice we don&rsquo;t provide a <code>perform</code> method but rather two metho
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>Internally this looks something like:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">perform</span>(<span style="color:#f92672">*</span>args)
 </span></span><span style="display:flex;"><span>  e <span style="color:#f92672">=</span> build_enumerator(<span style="color:#f92672">*</span>args)
 </span></span><span style="display:flex;"><span>  e<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>item, cursor<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>    save_cursor(cursor) <span style="color:#66d9ef">if</span> stopping? <span style="color:#f92672">||</span> five_seconds_passed?
@@ -276,7 +276,7 @@ I approached him about the feature and he kindly agreed to promote the code to S
 <p>The one other change I want to highlight is a move to increase the security of the Web UI.
 Version 7.2.0 had a XSS CVE slip into the release so I decided to improve our security by disabling all inline &lt;script&gt; tags within the Web UI html.
 Starting in v7.3.0 you can use static JS files, but not inline JS code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt; ... &lt;/<span style="color:#f92672">script</span>&gt;                       <span style="color:#75715e">&lt;!-- bad, wont work --&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt; ... &lt;/<span style="color:#f92672">script</span>&gt;                       <span style="color:#75715e">&lt;!-- bad, wont work --&gt;</span>
 </span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;my-extension/file.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt; <span style="color:#75715e">&lt;!-- good, will work --&gt;</span>
 </span></span></code></pre></div><p>Instead I&rsquo;ve added a new API to register web extensions, along with a <code>script_tag</code> helper method which can reference your static .js files.
 See <a href="https://github.com/sidekiq/sidekiq/tree/main/examples/webui-ext"><code>examples/webui-ext</code></a> for all of the details.

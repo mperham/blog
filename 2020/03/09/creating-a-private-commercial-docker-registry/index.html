@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2020/03/09/creating-a-private-commercial-docker-registry/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Creating a private, commercial Docker registry">
   <meta property="og:description" content="One thing I’ve come to respect about containers are how easy they make packaging and running Linux infrastructure. No more fighting the distro for the right version of a package, a dozen builds for a dozen distro-specific packages, etc. Everything is encapsulated within a single container image that runs on any modern Linux.
@@ -217,7 +217,7 @@ open source but it is Apache licensed so anyone can run it for any
 purpose.</p>
 <p>I wasn&rsquo;t too happy with this step &ndash; I don&rsquo;t like adding moving parts to my production servers &ndash; but there wasn&rsquo;t any other supported deployment mechanism.
 I developed this set of commands to install Docker and the registry image.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>apt-get install -y gnupg-agent software-properties-common
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>apt-get install -y gnupg-agent software-properties-common
 </span></span><span style="display:flex;"><span>curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 </span></span><span style="display:flex;"><span>add-apt-repository <span style="color:#e6db74">&#34;deb [arch=amd64] https://download.docker.com/linux/ubuntu </span><span style="color:#66d9ef">$(</span>lsb_release -cs<span style="color:#66d9ef">)</span><span style="color:#e6db74"> stable&#34;</span>
 </span></span><span style="display:flex;"><span>apt-get install -y docker-ce docker-ce-cli containerd.io
@@ -237,7 +237,7 @@ The core are these lines:</p>
 Both should be able to access the registry but the general public should not.
 How can I configure Apache to authenticate users from list A or list B?
 Turns out it was pretty easy with a single trick: <code>AuthBasicProvider</code> allows multiple sources.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-apache" data-lang="apache"><span style="display:flex;"><span><span style="color:#75715e"># sites-enabled/auth.conf</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-apache" data-lang="apache"><span style="display:flex;"><span><span style="color:#75715e"># sites-enabled/auth.conf</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;AuthnProviderAlias</span> <span style="color:#e6db74">file fpro</span><span style="color:#f92672">&gt;</span>
 </span></span><span style="display:flex;"><span>	AuthUserFile <span style="color:#e6db74">&#34;/var/fpro.passwd&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/AuthnProviderAlias&gt;</span>
@@ -278,7 +278,7 @@ configuration we:</p>
 <p>If Apache limits access to read only, how do we push new images?
 Use an SSH tunnel to bypass Apache!
 Since the registry listens on localhost:5000, I build the image on my laptop, open an SSH tunnel to localhost:5000 on the server and push new image:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh -N -f -L 5000:localhost:5000 root@registry.example.com
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh -N -f -L 5000:localhost:5000 root@registry.example.com
 </span></span><span style="display:flex;"><span>sleep <span style="color:#ae81ff">2</span>
 </span></span><span style="display:flex;"><span>docker tag example/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span> host.docker.internal:5000/example/<span style="color:#66d9ef">$(</span>NAME<span style="color:#66d9ef">)</span>:<span style="color:#66d9ef">$(</span>VERSION<span style="color:#66d9ef">)</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># NB: add &#34;host.docker.internal:5000&#34; to insecure registries in Docker Settings</span>

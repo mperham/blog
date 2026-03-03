@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2020/11/09/the-leaky-bucket-rate-limiter/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="The Leaky Bucket rate limiter">
   <meta property="og:description" content="A few months ago, a customer asked if I could supply a “leaky bucket” rate limiter as part of Sidekiq Enterprise’s rate limiter suite. It took me a while to find the time and energy to work on it (my need to mentally escape the 2020 election eventually did the trick).
@@ -229,7 +229,7 @@ Redis provides newer <a href="https://redis.io/commands#hash">Hash commands</a> 
 <h2 id="implementation">Implementation</h2>
 <p>You gotta buy Sidekiq Enterprise if you want the real deal but here&rsquo;s
 the core of the implementation:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#75715e">-- Decrement the drops based on the time which has passed since</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#75715e">-- Decrement the drops based on the time which has passed since</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">-- the last call.</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> drops <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">and</span> (lastcall <span style="color:#f92672">+</span> driprate) <span style="color:#f92672">&lt;</span> current_time <span style="color:#66d9ef">then</span>
 </span></span><span style="display:flex;"><span>  drops <span style="color:#f92672">=</span> drops <span style="color:#f92672">-</span> math.floor((current_time <span style="color:#f92672">-</span> lastcall) <span style="color:#f92672">/</span> driprate)
@@ -251,7 +251,7 @@ until the next drip.</p>
 <p>Of course I wrote some basic tests for the limiter but I wanted to take
 it further and implement a <strong>Rack-based limiter middleware</strong>. Here it
 is:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LeakyLimiter</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LeakyLimiter</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(app)
 </span></span><span style="display:flex;"><span>    @app <span style="color:#f92672">=</span> app
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>

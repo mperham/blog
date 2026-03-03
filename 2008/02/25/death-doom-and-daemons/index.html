@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2008/02/25/death-doom-and-daemons/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2008/02/25/death-doom-and-daemons/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Death, Doom and Daemons!">
   <meta property="og:description" content="We’re actually starting to run the new FiveRuns service daemons internally and found that they were dying due to various issues so I integrated a little bit of ActionMailer code to email the dev team when a daemon dies with the relevant details. Below is what I did – do you have any tips for monitoring Ruby daemon processes?">
@@ -200,7 +200,7 @@ blockquote,
 </p>
 <p>We&rsquo;re actually starting to run the new FiveRuns service daemons internally and found that they were dying due to various issues so I integrated a little bit of ActionMailer code to email the dev team when a daemon dies with the relevant details.  Below is what I did &ndash; do you have any tips for monitoring Ruby daemon processes?</p>
 <p>First we need to create an ActionMailer which will send email:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DemiseMailer</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DemiseMailer</span> <span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">condolences</span>(name, err)
 </span></span><span style="display:flex;"><span>    require <span style="color:#e6db74">&#39;socket&#39;</span>
 </span></span><span style="display:flex;"><span>
@@ -211,7 +211,7 @@ blockquote,
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>and call the mailer when the daemon dies:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
 </span></span><span style="display:flex;"><span>  loader <span style="color:#f92672">=</span> <span style="color:#66d9ef">Loader</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Engine</span><span style="color:#f92672">.</span>new
 </span></span><span style="display:flex;"><span>  loader<span style="color:#f92672">.</span>load(<span style="color:#66d9ef">true</span>)
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">rescue</span> <span style="color:#f92672">=&gt;</span> e
@@ -232,7 +232,7 @@ My condolences on your loss.
 Sincerely,
 DemiseMailer
 </code></pre><p>and finally configure ActionMailer to send SMTP email:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>template_root <span style="color:#f92672">=</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>expand_path(<span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>dirname(__FILE__))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>template_root <span style="color:#f92672">=</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>expand_path(<span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>dirname(__FILE__))
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">ActionMailer</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Base</span><span style="color:#f92672">.</span>smtp_settings <span style="color:#f92672">=</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#e6db74">:address</span> <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;email.example.com&#39;</span>,
 </span></span><span style="display:flex;"><span>  <span style="color:#e6db74">:domain</span>  <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;example.com&#39;</span>,

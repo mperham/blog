@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2016/02/09/kill-your-dependencies/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2016/02/09/kill-your-dependencies/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Kill Your Dependencies">
   <meta property="og:description" content="This post talks about Ruby but it’s true of every language community: Python, JavaScript, Java, etc. The scourge of dependencies spares no one.
@@ -250,7 +250,7 @@ dependencies than their value warrants.  Example of a bad gem: the
 and most of which are unnecessary.</p>
 <p>Lastly, make sure you only load the gem when necessary.  Use Bundler&rsquo;s
 group support to disable test gems when not testing:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>group <span style="color:#e6db74">:test</span> <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>group <span style="color:#e6db74">:test</span> <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#39;rspec&#39;</span>
 </span></span><span style="display:flex;"><span>  gem <span style="color:#e6db74">&#39;timecop&#39;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># etc</span>

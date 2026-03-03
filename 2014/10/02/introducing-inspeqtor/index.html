@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2014/10/02/introducing-inspeqtor/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2014/10/02/introducing-inspeqtor/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Introducing Inspeqtor">
   <meta property="og:description" content="I’ve written server-side applications for a decade now, and monitoring the components of your application is critical but painful. What monitors the CPU and RAM usage of your custom daemons? What monitors Redis, MySQL, memcached and the other parts of your system to ensure they are all behaving normally? What if I told you you could do all that and set it up in less than 5 minutes?
@@ -205,7 +205,7 @@ blockquote,
 <p>Inspeqtor is a Linux daemon which understands processes and major, popular pieces of application infrastructure. You write very simple rules about the services running on the machine and Inspeqtor will notify you when those rules are breached, processes disappear or change PID.</p>
 <p>Inspeqtor understands the notion of an <strong>application deploy</strong> and will not notify you during the deploy process since change is normal and expected.</p>
 <p>I want Inspeqtor to be incredibly easy to set up and monitor common, useful metrics. Here&rsquo;s how to monitor mysql:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># /etc/inspeqtor/conf.d/mysql.inq</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># /etc/inspeqtor/conf.d/mysql.inq</span>
 </span></span><span style="display:flex;"><span>check service mysql with username dbuser, password thepass, socket /tmp/mysql.sock
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> memory:rss &amp;gt; 1g <span style="color:#66d9ef">then</span> alert
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> cpu:user &amp;gt; 90% <span style="color:#66d9ef">then</span> alert

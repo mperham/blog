@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2012/06/02/debugging-with-thread-dumps/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2012/06/02/debugging-with-thread-dumps/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Debugging with Thread Dumps">
   <meta property="og:description" content="I recently upgraded TheClymb to use the Redis 3.0 gem. When I did this, our test suite halted mid-spec and pegged the CPU at 100%. I suspected an infinite loop but how do you determine where the loop is? A naive approach might use a binary search with print statements but I realized I could do something more effective: dump thread backtraces for the current process.
@@ -201,7 +201,7 @@ blockquote,
 </p>
 <p>I recently upgraded <a href="http://www.theclymb.com/invite-from/mperham">TheClymb</a> to use the Redis 3.0 gem. When I did this, our test suite halted mid-spec and pegged the CPU at 100%. I suspected an infinite loop but how do you determine where the loop is? A naive approach might use a binary search with print statements but I realized I could do something more effective: dump thread backtraces for the current process.</p>
 <p>I wrote this trap recently to help people debugging their code when using <a href="http://mperham.github.com/sidekiq/">Sidekiq</a>, which is multi-threaded, but never expected it to be useful in a single-threaded scenario! Put this in your test helper:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>trap <span style="color:#e6db74">&#39;TTIN&#39;</span> <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>trap <span style="color:#e6db74">&#39;TTIN&#39;</span> <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">Thread</span><span style="color:#f92672">.</span>list<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>thread<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>    puts <span style="color:#e6db74">&#34;Thread TID-</span><span style="color:#e6db74">#{</span>thread<span style="color:#f92672">.</span>object_id<span style="color:#f92672">.</span>to_s(<span style="color:#ae81ff">36</span>)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
 </span></span><span style="display:flex;"><span>    puts thread<span style="color:#f92672">.</span>backtrace<span style="color:#f92672">.</span>join(<span style="color:#e6db74">&#34;n&#34;</span>)

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2015/07/16/sidekiq-and-upstart/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2015/07/16/sidekiq-and-upstart/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq and Upstart">
   <meta property="og:description" content="The best and most reliable way to manage multiple Sidekiq processes is with Upstart. Many developers know little to nothing about Upstart so I wanted to write up how to integrate Sidekiq with Upstart. With Upstart doing the hard work, it becomes easy to manage deployments with Capistrano or another similar tool.
@@ -227,7 +227,7 @@ as late as possible.</p>
 <p>During a deployment, we want to signal Sidekiq to stop processing jobs as early as possible so
 Sidekiq has as much time as possible to finish any jobs in progress.  We do this by sending
 each process the USR1 signal, here&rsquo;s a Capistrano task which does that:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>task <span style="color:#e6db74">:quiet</span> <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>task <span style="color:#e6db74">:quiet</span> <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>  on roles(<span style="color:#e6db74">:worker</span>) <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>    puts capture(<span style="color:#e6db74">&#34;sudo pgrep -f &#39;sidekiq&#39; | xargs kill -USR1&#34;</span>)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
@@ -235,10 +235,10 @@ each process the USR1 signal, here&rsquo;s a Capistrano task which does that:</p
 </span></span></code></pre></div><p>Note that <code>workers</code> does not support reload since it doesn&rsquo;t map to a single process so we have to
 use that pgrep hack.</p>
 <p>You can use Upstart&rsquo;s <code>reload</code> command to quiet a specific instance:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ reload sidekiq index<span style="color:#f92672">=</span>X
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ reload sidekiq index<span style="color:#f92672">=</span>X
 </span></span></code></pre></div><h3 id="restarting-sidekiq">Restarting Sidekiq</h3>
 <p>Restarting is easy: <code>restart workers</code>.  This will actually stop and then start the processes.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>task <span style="color:#e6db74">:restart</span> <span style="color:#66d9ef">do</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span>task <span style="color:#e6db74">:restart</span> <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>  on roles(<span style="color:#e6db74">:worker</span>) <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>    puts capture(<span style="color:#e6db74">&#34;sudo restart workers&#34;</span>)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>

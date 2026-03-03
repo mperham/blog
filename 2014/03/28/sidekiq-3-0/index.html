@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.154.5"><meta property="og:url" content="https://www.mikeperham.com/2014/03/28/sidekiq-3-0/">
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2014/03/28/sidekiq-3-0/">
   <meta property="og:site_name" content="Mike Perham">
   <meta property="og:title" content="Sidekiq 3.0!">
   <meta property="og:description" content="After tons of work on Sidekiq 2.x for the last 18 months, I decided it was time for some deeper refactoring and cleanup necessitating a major version bump.
@@ -216,7 +216,7 @@ blockquote,
 <li><strong>shutdown</strong> &ndash; run as the last code executed by Sidekiq before it exits</li>
 </ol>
 <p>It&rsquo;ll look something like this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#66d9ef">Sidekiq</span><span style="color:#f92672">.</span>configure_server <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>config<span style="color:#f92672">|</span>
 </span></span><span style="display:flex;"><span>  config<span style="color:#f92672">.</span>on(<span style="color:#e6db74">:shutdown</span>) <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>    puts <span style="color:#e6db74">&#34;Goodbye cruel world!&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
