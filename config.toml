@@ -9,10 +9,6 @@ pygmentsCodefences = true
 pygmentsStyle = "monokai"
 rssLimit = 10
 
-[author]
-  name = "Mike Perham"
-  email = "blog@perham.net"
-
 [markup.goldmark.renderer]
   unsafe = true
 
