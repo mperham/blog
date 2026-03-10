@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2026/03/10/sidekiq-in-the-terminal/">
+  <meta property="og:site_name" content="Mike Perham">
+  <meta property="og:title" content="Sidekiq in the terminal">
+  <meta property="og:description" content="My favorite tech movement in 2025 wasn’t anything artifical, but rather the resurgence in interest around building terminal interfaces with two new frameworks. Charm and Ratatui which make developing pure text user interfaces easier than ever before using Go or Rust. They provide a huge set of components and examples showing you how to build various types of functionality.
+Mainframe applications ruled the 70s and 80s, providing terminal interfaces for business operations. You might still see a ticket agent using a terminal to check you in at the airport. That’s an interface to a mainframe application, allowing the agent to lookup your ticket and assign you a seat quickly, with just a few keystrokes. To this day I remember my mom, a pharmacist, complaining about the new DOS -&gt; Windows upgrade that the IT department rolled out to stores. Navigating their retail point of sale terminal application was much faster with a keyboard, the Windows version required a stream of precise mouse clicks and couldn’t rely on typing by muscle memory. Today interactive terminal interfaces are rare but I think Charm and Ratatui make this option much easier to provide.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2026-03-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-03-10T00:00:00+00:00">
+
+  <meta name="description" content="Ruby, OSS and the Internet">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://www.mikeperham.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://www.mikeperham.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://www.mikeperham.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://www.mikeperham.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://www.mikeperham.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="alternate" type="application/rss+xml" href="https://mikeperham.com/index.xml" title="Mike Perham">
+
+  
+  <title>Sidekiq in the terminal | Mike Perham</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+  font-size: 19px;
+}
+
+blockquote p {
+  margin-bottom: 0;
+}
+
+.publish-date {
+  font-family: monospace;
+  font-size: 0.8em;
+  margin-right: 0.5em;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 960px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border: 1px solid #6c757d;
+  border-left: 5px solid #6c757d;
+  background-color: #eee;
+}
+
+</style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js" integrity="sha512-uHOKtSfJWScGmyyFr2O2+efpDx2nhwHU2v7MVeptzZoiC7bdF6Ny/CmZhN2AwIK1oCFiVQQ5DA/L9FSzyPNu6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+
+<body>
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand mr-0" href="/">Mike Perham</a>
+    <ul class="navbar-nav d-flex flex-row">
+      <li class="nav-item"><a class="nav-link" title="Sidekiq" href="https://sidekiq.org">Sidekiq🥋</a></li>
+      <li class="nav-item"><a class="nav-link" title="Faktory" href="https://contribsys.com/faktory">Faktory🏭</a></li>
+    </ul>
+    <ul class="navbar-nav float-right d-none d-md-flex">
+      
+      <li class="nav-item"><a class="nav-link" href="mailto:mike@perham.net">📧 Email</a></li>
+      <li class="nav-item"><a class="nav-link" rel="me" href="https://ruby.social/@getajobmike">📣 Mastodon</a></li>
+      <li class="nav-item"><a class="nav-link" href="/index.xml" title="RSS"><img src="/images/rss.png" width="16"
+            height="16" /> RSS</a></li>
+      <li class="nav-item d-none d-md-flex"><a class="nav-link" title="About" href="/about/">❓</a></li>
+    </ul>
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Sidekiq in the terminal</h1>
+<p>
+  <small class="text-secondary">
+  
+  
+  2026-03-10
+  </small>
+  
+</p>
+<p>My favorite tech movement in 2025 wasn&rsquo;t anything artifical, but rather the resurgence in interest around building terminal interfaces with two new frameworks.
+<a href="https://charm.land">Charm</a> and <a href="https://ratatui.rs">Ratatui</a> which make developing pure text user interfaces easier than ever before using Go or Rust.
+They provide a huge set of <a href="https://www.ratatui.rs/showcase/widgets/">components</a> and <a href="https://github.com/charmbracelet/bubbletea/tree/main/examples">examples</a> showing you how to build various types of functionality.</p>
+<p>Mainframe applications ruled the 70s and 80s, providing terminal interfaces for business operations.
+You might still see a ticket agent using a terminal to check you in at the airport.
+That&rsquo;s an interface to a mainframe application, allowing the agent to lookup your ticket and assign you a seat quickly, with just a few keystrokes.
+To this day I remember my mom, a pharmacist, complaining about the new DOS -&gt; Windows upgrade that the IT department rolled out to stores.
+Navigating their retail point of sale terminal application was much faster with a keyboard, the Windows version required a stream of precise mouse clicks and couldn&rsquo;t rely on typing by muscle memory.
+Today interactive terminal interfaces are rare but I think Charm and Ratatui make this option much easier to provide.</p>
+<h2 id="old-man-shouts-at-cloud">Old Man shouts at Cloud</h2>
+<p>To quote a wise man:</p>
+<blockquote>
+<p>The web browser is a terrible interface for many tasks &ndash;me, 2026</p>
+</blockquote>
+<p>He makes a great point.
+Web browsers tend to be complex and quite difficult to program application user interface logic, requiring expertise in HTML, CSS, JS.
+But for many <a href="https://en.wikipedia.org/wiki/Line_of_business">&ldquo;line of business&rdquo;</a> applications, a keyboard-based terminal interface can be much faster in a far more secure environment, with none of the browser security concerns around accessing remote content and executing JavaScript.</p>
+<p>Tasks are often quite simple:</p>
+<ol start="0">
+<li>navigate to feature</li>
+<li>display a list of data</li>
+<li>choose a subset via filtering or manual selection</li>
+<li>take some action</li>
+</ol>
+<p>Basic CRUD operations are also common, think of any admin web interface using scaffolding or gems like <code>active_admin</code>, <code>rails_admin</code> or Avo.
+For many tasks and use cases, using a text interface could operate much faster and is far simpler and easier to develop and maintain.
+I&rsquo;m thinking of things like Mastodon&rsquo;s admin tools and Sidekiq&rsquo;s own Web UI.
+Some moderation tools work on user posts, others on job retry sets!</p>
+<figure>
+  <img alt="kiq" src="/images/kiq.png">
+  <figcaption>
+    <small>
+      Four scheduled jobs selected, notice the Controls at the bottom where I can Delete, Enqueue or Kill the selected jobs with a keystroke.
+    </small>
+  </figcaption>
+</figure>
+<p>So with that context in mind, for the last few months I&rsquo;ve been iterating on <code>kiq</code>, a new administration interface for Sidekiq, a speedy terminal application based on Kerrick Long&rsquo;s <a href="https://www.ratatui-ruby.dev">ratatui_ruby</a> gem.
+It&rsquo;s not a 100% clone of Sidekiq&rsquo;s Web UI, some of the missing bits are intentional, some are TBD due to the different environments.
+It&rsquo;s also very beta in performance and polish; we&rsquo;ll improve that over time but I would not use kiq in production just yet.
+You can try it out locally if you&rsquo;re already running Sidekiq 8.1:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ruby" data-lang="ruby"><span style="display:flex;"><span><span style="color:#75715e"># in your Gemfile, need to use the main branch</span>
+</span></span><span style="display:flex;"><span>gem <span style="color:#e6db74">&#34;sidekiq&#34;</span>, <span style="color:#e6db74">github</span>: <span style="color:#e6db74">&#34;sidekiq/sidekiq&#34;</span>
+</span></span><span style="display:flex;"><span>gem <span style="color:#e6db74">&#34;ratatui_ruby&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># now run</span>
+</span></span><span style="display:flex;"><span>bundle install
+</span></span><span style="display:flex;"><span>bundle exec kiq
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Set REDIS_URL or REDIS_PROVIDER to talk to another Redis over the network</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">REDIS_URL</span><span style="color:#f92672">=</span><span style="color:#e6db74">redis</span>:<span style="color:#e6db74">//</span>redis<span style="color:#f92672">.</span>example<span style="color:#f92672">.</span>com:<span style="color:#ae81ff">6379</span><span style="color:#f92672">/</span><span style="color:#ae81ff">0</span> bundle exec kiq
+</span></span></code></pre></div><p>I don&rsquo;t think terminals are good for information dense views/graphs like the Home and Metrics tabs.
+Maybe those screens should be removed or redesigned to focus on tables of text rather than display a low fidelity graph.
+That&rsquo;s where your opinion matters!
+Which Sidekiq admin tasks or use cases can we improve with <code>kiq</code>?
+Please send me feedback via <a href="https://github.com/sidekiq/sidekiq/discussions/6946">this Discussion</a> and we&rsquo;ll make it better together!</p>
+<h2 id="an-idle-thought">An Idle Thought</h2>
+<blockquote>
+<p>If Ratatui is replacing the web interface, who&rsquo;s going to build a proper application framework on top of Ratatui? <a href="https://www.rooibos.run">Rooibos</a> provides an interesting, Ractor-friendly routing API. I think there&rsquo;s lots of potential for innovation here if someone wants to build the next big open source project for Ruby.</p>
+</blockquote>
+<h2 id="special-thanks">Special Thanks</h2>
+<p>Thank you so much to Felipe Vogel and Kerrick Long for their work over the last few months.
+Felipe has contributed substantially to <code>kiq</code>&rsquo;s implementation and Kerrick has provided help and quick bug fixes to <a href="https://github.com/setdef/RatatuiRuby?tab=readme-ov-file#ratatui_ruby">ratatui_ruby</a>.</p>
+
+
+
+    </article>
+  </div>
+
+  
+
+</body>
+
+</html>

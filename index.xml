@@ -6,10 +6,27 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 27 Jan 2026 16:13:50 -0800</lastBuildDate>
+    <lastBuildDate>Tue, 10 Mar 2026 10:35:10 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Sidekiq in the terminal</title>
+      <link>https://www.mikeperham.com/2026/03/10/sidekiq-in-the-terminal/</link>
+      <pubDate>Tue, 10 Mar 2026 10:35:10 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2026/03/10/sidekiq-in-the-terminal/</guid>
+      <description>&lt;p&gt;My favorite tech movement in 2025 wasn&amp;rsquo;t anything artifical, but rather the resurgence in interest around building terminal interfaces with two new frameworks.
+&lt;a href=&#34;https://charm.land&#34;&gt;Charm&lt;/a&gt; and &lt;a href=&#34;https://ratatui.rs&#34;&gt;Ratatui&lt;/a&gt; which make developing pure text user interfaces easier than ever before using Go or Rust.
+They provide a huge set of &lt;a href=&#34;https://www.ratatui.rs/showcase/widgets/&#34;&gt;components&lt;/a&gt; and &lt;a href=&#34;https://github.com/charmbracelet/bubbletea/tree/main/examples&#34;&gt;examples&lt;/a&gt; showing you how to build various types of functionality.&lt;/p&gt;
+&lt;p&gt;Mainframe applications ruled the 70s and 80s, providing terminal interfaces for business operations.
+You might still see a ticket agent using a terminal to check you in at the airport.
+That&amp;rsquo;s an interface to a mainframe application, allowing the agent to lookup your ticket and assign you a seat quickly, with just a few keystrokes.
+To this day I remember my mom, a pharmacist, complaining about the new DOS -&amp;gt; Windows upgrade that the IT department rolled out to stores.
+Navigating their retail point of sale terminal application was much faster with a keyboard, the Windows version required a stream of precise mouse clicks and couldn&amp;rsquo;t rely on typing by muscle memory.
+Today interactive terminal interfaces are rare but I think Charm and Ratatui make this option much easier to provide.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Adding Mastodon Comments</title>
@@ -126,18 +143,6 @@ I consider this a valuable quid pro quo: if you change my open source to make mo
       <guid>https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/</guid>
       <description>&lt;p&gt;Ruby&amp;rsquo;s JSON library allows you to convert Ruby datatypes into a JSON document, as long as those types are native to JSON: String, bool, int, float, nil, Hash and Array.
 Everything else converts to a String by default; if you use any other core datatypes, they will not survive a &lt;code&gt;JSON.generate/JSON.parse&lt;/code&gt; round trip. Here I pass a Range, Symbol and Time; notice how the end result is three Strings instead of the actual types:&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>How does Sidekiq work?</title>
-      <link>https://www.mikeperham.com/2024/02/22/how-does-sidekiq-work/</link>
-      <pubDate>Thu, 22 Feb 2024 10:59:46 -0800</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2024/02/22/how-does-sidekiq-work/</guid>
-      <description>&lt;p&gt;A few weeks ago, I sat gobsmacked at my laptop reading one of the most impressive technical deep dives I&amp;rsquo;ve ever read.
-Dan Svetlov wrote a blog post &amp;ldquo;How does Sidekiq really work?&amp;rdquo; on &lt;a href=&#34;https://dansvetlov.me&#34;&gt;his blog&lt;/a&gt; which delved deep into Sidekiq&amp;rsquo;s internals, explaining how it actually works.
-The most impressive part of this blog post is that it was 100% accurate.
-There were no mistakes or misunderstandings, Dan did the work and shows the receipts.&lt;/p&gt;</description>
     </item>
     
   </channel>
