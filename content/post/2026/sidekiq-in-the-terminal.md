@@ -6,8 +6,8 @@ lastmod: 2026-03-10
 tags: []
 ---
 
-My favorite tech movement in 2025 wasn't anything artifical, but rather the resurgence in interest around building terminal interfaces with two new frameworks.
-[Charm](https://charm.land) and [Ratatui](https://ratatui.rs) which make developing pure text user interfaces easier than ever before using Go or Rust.
+My favorite tech movement in 2025 wasn't anything artifical, but rather the resurgence in interest around building terminal interfaces with two new frameworks,
+[Charm](https://charm.land) and [Ratatui](https://ratatui.rs), which make developing pure text user interfaces easier than ever before using Go or Rust.
 They provide a huge set of [components](https://www.ratatui.rs/showcase/widgets/) and [examples](https://github.com/charmbracelet/bubbletea/tree/main/examples) showing you how to build various types of functionality.
 
 Mainframe applications ruled the 70s and 80s, providing terminal interfaces for business operations.
