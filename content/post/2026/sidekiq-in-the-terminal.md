@@ -4,6 +4,7 @@ date: 2026-03-10T10:35:10-07:00
 publishdate: 2026-03-10
 lastmod: 2026-03-10
 tags: []
+tootid: 116207458351572525
 ---
 
 My favorite tech movement in 2025 wasn't anything artifical, but rather the resurgence in interest around building terminal interfaces with two new frameworks,
