@@ -5,17 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2019/07/19/something-for-nothing/">
-  <meta property="og:site_name" content="Mike Perham">
-  <meta property="og:title" content="Something For Nothing">
-  <meta property="og:description" content="Do you like free things? Would you like to get something for nothing? Are you a Sidekiq user? If you answered yes to these questions, I have a case study in how one customer effectively got Sidekiq Enterprise for free.
+  <meta name="generator" content="Hugo 0.162.1"><meta property="og:url" content="https://www.mikeperham.com/2019/07/19/something-for-nothing/">
+	<meta property="og:site_name" content="Mike Perham">
+	<meta property="og:title" content="Something For Nothing">
+	<meta property="og:description" content="Do you like free things? Would you like to get something for nothing? Are you a Sidekiq user? If you answered yes to these questions, I have a case study in how one customer effectively got Sidekiq Enterprise for free.
 One Friday morning, two engineers jumped into my weekly Happy Hour to ask me about a Sidekiq problem they were having.
 “We have two Sidekiq dynos with 40 threads each: we find that after about 5 minutes, they are only using about 20 threads; shouldn’t all 40 threads pick up jobs? The jobs perform image processing.”">
-  <meta property="og:locale" content="en_us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2019-07-19T10:27:11-07:00">
-    <meta property="article:modified_time" content="2019-07-19T10:27:11-07:00">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2019-07-19T10:27:11-07:00">
+		<meta property="article:modified_time" content="2019-07-19T10:27:11-07:00">
 
   <meta name="description" content="Ruby, OSS and the Internet">
   
@@ -232,40 +232,40 @@ dyno</a>. We reduce the thread count so each core
 isn&rsquo;t crushed by image processing.</p>
 <p>In summary:</p>
 <table>
-  <thead>
-      <tr>
-          <th></th>
-          <th>Before</th>
-          <th>After</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Dynos</td>
-          <td>2</td>
-          <td>1</td>
-      </tr>
-      <tr>
-          <td>Threads</td>
-          <td>80 (2 x 40)</td>
-          <td>80 (4 x 20)</td>
-      </tr>
-      <tr>
-          <td>Core usage</td>
-          <td>50%</td>
-          <td>100%</td>
-      </tr>
-      <tr>
-          <td>Cost</td>
-          <td>$500</td>
-          <td>$250 + $179</td>
-      </tr>
-      <tr>
-          <td>Savings</td>
-          <td></td>
-          <td>$71/mo</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th></th>
+					<th>Before</th>
+					<th>After</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Dynos</td>
+					<td>2</td>
+					<td>1</td>
+			</tr>
+			<tr>
+					<td>Threads</td>
+					<td>80 (2 x 40)</td>
+					<td>80 (4 x 20)</td>
+			</tr>
+			<tr>
+					<td>Core usage</td>
+					<td>50%</td>
+					<td>100%</td>
+			</tr>
+			<tr>
+					<td>Cost</td>
+					<td>$500</td>
+					<td>$250 + $179</td>
+			</tr>
+			<tr>
+					<td>Savings</td>
+					<td></td>
+					<td>$71/mo</td>
+			</tr>
+	</tbody>
 </table>
 <p>Before they had 1 busy core and 3 idle cores on each dyno.  Now they
 have 4 busy cores and can spin down the second dyno instance to save

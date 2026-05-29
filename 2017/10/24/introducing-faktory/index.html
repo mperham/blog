@@ -5,17 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.157.0"><meta property="og:url" content="https://www.mikeperham.com/2017/10/24/introducing-faktory/">
-  <meta property="og:site_name" content="Mike Perham">
-  <meta property="og:title" content="Introducing Faktory">
-  <meta property="og:description" content="Yesterday I explained how a good background job framework is critical to scaling business applications. Today, meet Faktory.
+  <meta name="generator" content="Hugo 0.162.1"><meta property="og:url" content="https://www.mikeperham.com/2017/10/24/introducing-faktory/">
+	<meta property="og:site_name" content="Mike Perham">
+	<meta property="og:title" content="Introducing Faktory">
+	<meta property="og:description" content="Yesterday I explained how a good background job framework is critical to scaling business applications. Today, meet Faktory.
 I’ve spent the last six months building Faktory, a new background job system which aims to bring the best practices developed over the last five years in Sidekiq to every programming language.
 The Basics Faktory is a server daemon which provides a simple API to produce and consume background jobs. Here’s the chatter to create and execute a background job:">
-  <meta property="og:locale" content="en_us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2017-10-24T07:00:00-07:00">
-    <meta property="article:modified_time" content="2017-10-24T07:00:00-07:00">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="post">
+		<meta property="article:published_time" content="2017-10-24T07:00:00-07:00">
+		<meta property="article:modified_time" content="2017-10-24T07:00:00-07:00">
 
   <meta name="description" content="Ruby, OSS and the Internet">
   
@@ -246,19 +246,16 @@ a library for building a Go-based worker process</li>
 <p>Many existing job systems provide no persistence or a simple binlog
 which can be replayed in case of crash.</p>
 <p>Faktory goes further and provides the same job persistence, state management and
-monitoring Web UI that Sidekiq does.  It uses
-Facebook&rsquo;s high-performance <a href="http://rocksdb.org">RocksDB</a> embedded
-datastore internally to
-persist all job data, queues, error state, etc.  It exposes a Web UI
-(which is similar to Sidekiq&rsquo;s), allowing you to see the current
+monitoring Web UI that Sidekiq does.  It uses a Redis child process internally to
+persist all job data, queues, error state, etc. Faktory also exposes a Web UI
+(similar to Sidekiq&rsquo;s), allowing you to see the current
 state of your queues, jobs and workers.</p>
 <p>Faktory listens on port 7419 for commands and port 7420 for the Web UI.
 7419 for the robot workers, 7420 for the human bosses.</p>
 <h2 id="get-started">Get Started</h2>
 <p>The project is brand new so it will take a few weeks to polish the
-development process.  If you are a Gopher, you can build the binary locally with Go 1.9.
-If you have Vagrant 2.x running, you can run Faktory via
-the Vagrant box in <code>build/ubuntu</code>.  See the <a href="https://github.com/contribsys/faktory/wiki/Development">Development wiki page</a>
+development process.  If you are a Gopher, you can build the binary locally with Go.
+See the <a href="https://github.com/contribsys/faktory/wiki/Development">Development wiki page</a>
 for more detail.</p>
 <p>We&rsquo;ll eventually get some install options plugged into the
 <a href="https://github.com/contribsys/faktory/wiki/Installation">Installation wiki page</a>.
@@ -267,9 +264,8 @@ Like all new things, it&rsquo;s rough today but it will get better over time.</p
 <p>Q. Can I use it in production?</br>
 A. It&rsquo;s a brand new project but only you can determine how risk tolerant you are.
 I will release 1.0 when the APIs are solid and I feel it is stable.</p>
-<p>Q. Does Faktory require Redis?<br/>
-A. No. Faktory is a standalone 64-bit Linux binary; it needs a Faktory worker
-process to consume jobs.  Redis -&gt; Sidekiq == Faktory -&gt; Faktory worker</p>
+<p>Q. Does Faktory require I install Redis?<br/>
+A. No. Faktory installs and manages Redis internall. You don&rsquo;t need to do anything.</p>
 <p>Q. Are there other things like Faktory?<br/>
 A. Yep, beanstalkd, starling, gearman and others.  Faktory aims to be
 more feature-rich and better supported.  Many of Faktory&rsquo;s OSS competitors
@@ -295,9 +291,7 @@ A. Because &ldquo;Faqtory&rdquo; sounds like software for building this FAQ and
 a multi-billion dollar conglomerate has the worldwide trademark
 for &ldquo;Worq&rdquo;.</p>
 <p>Q. Where can I ask further questions?<br/>
-A. Since you&rsquo;ve read to the bottom, you get top sekret access to the
-<a href="https://gitter.im/contribsys/faktory">contribsys/faktory</a> Gitter chat room.
-I&rsquo;ll hang out there when I can. Stop by and say hi!</p>
+A. Open an issue or discussion.</p>
 
 
 
