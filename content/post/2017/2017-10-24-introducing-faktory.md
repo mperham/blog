@@ -54,11 +54,9 @@ Many existing job systems provide no persistence or a simple binlog
 which can be replayed in case of crash.
 
 Faktory goes further and provides the same job persistence, state management and
-monitoring Web UI that Sidekiq does.  It uses
-Facebook's high-performance [RocksDB](http://rocksdb.org) embedded
-datastore internally to
-persist all job data, queues, error state, etc.  It exposes a Web UI
-(which is similar to Sidekiq's), allowing you to see the current
+monitoring Web UI that Sidekiq does.  It uses a Redis child process internally to
+persist all job data, queues, error state, etc. Faktory also exposes a Web UI
+(similar to Sidekiq's), allowing you to see the current
 state of your queues, jobs and workers.
 
 Faktory listens on port 7419 for commands and port 7420 for the Web UI.
@@ -67,9 +65,8 @@ Faktory listens on port 7419 for commands and port 7420 for the Web UI.
 ## Get Started
 
 The project is brand new so it will take a few weeks to polish the
-development process.  If you are a Gopher, you can build the binary locally with Go 1.9.
-If you have Vagrant 2.x running, you can run Faktory via
-the Vagrant box in `build/ubuntu`.  See the [Development wiki page](https://github.com/contribsys/faktory/wiki/Development)
+development process.  If you are a Gopher, you can build the binary locally with Go.
+See the [Development wiki page](https://github.com/contribsys/faktory/wiki/Development)
 for more detail.
 
 We'll eventually get some install options plugged into the
@@ -82,9 +79,8 @@ Q. Can I use it in production?</br>
 A. It's a brand new project but only you can determine how risk tolerant you are.
 I will release 1.0 when the APIs are solid and I feel it is stable.
 
-Q. Does Faktory require Redis?<br/>
-A. No. Faktory is a standalone 64-bit Linux binary; it needs a Faktory worker
-process to consume jobs.  Redis -> Sidekiq == Faktory -> Faktory worker
+Q. Does Faktory require I install Redis?<br/>
+A. No. Faktory installs and manages Redis internall. You don't need to do anything.
 
 Q. Are there other things like Faktory?<br/>
 A. Yep, beanstalkd, starling, gearman and others.  Faktory aims to be
@@ -117,6 +113,4 @@ a multi-billion dollar conglomerate has the worldwide trademark
 for "Worq".
 
 Q. Where can I ask further questions?<br/>
-A. Since you've read to the bottom, you get top sekret access to the
-[contribsys/faktory](https://gitter.im/contribsys/faktory) Gitter chat room.
-I'll hang out there when I can. Stop by and say hi!
+A. Open an issue or discussion.
