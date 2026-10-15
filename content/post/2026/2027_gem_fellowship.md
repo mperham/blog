@@ -17,7 +17,7 @@ I believe in committing both time and money to ensure that the Ruby ecosystem pr
 Open source maintainers can't pay their rent or mortgage with kind words.
 
 In 2026 we funded eight maintainers with fellowship grants between $2500 and $20,000.
-This funded individual maintainers like Marco Roth of Herb, Jared White of Bridgetown, Jeanine Atkinson of Rouge and James Couball of ruby-git.
+This funded individual maintainers like Marco Roth of Herb, Jared White of Bridgetown, Jeanine Adkisson of Rouge and James Couball of ruby-git.
 With their Fellowship grant, these projects delivered significant improvements and new features for us all.
 Learn more at our [2026 Fellows](https://gem.coop/updates/2026-fellowship/) page.
 
