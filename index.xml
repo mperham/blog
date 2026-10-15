@@ -6,10 +6,26 @@
     <description>Recent content on Mike Perham</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Mar 2026 10:35:10 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 15 Oct 2026 07:57:53 -0700</lastBuildDate>
     
 	<atom:link href="https://www.mikeperham.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Coming soon: the 2027 Gem Fellowship</title>
+      <link>https://www.mikeperham.com/2026/10/15/coming-soon-the-2027-gem-fellowship/</link>
+      <pubDate>Thu, 15 Oct 2026 07:57:53 -0700</pubDate>
+      <author>Mike Perham</author>
+      <guid>https://www.mikeperham.com/2026/10/15/coming-soon-the-2027-gem-fellowship/</guid>
+      <description>&lt;p&gt;Last year I founded the Gem Fellowship with $100,000 in funding.
+Myself and the gem.coop team judged applications from 40+ projects and funded eight with awards between $2500 and $20,000.
+This year I&amp;rsquo;m providing $100,000 again but we want to do more!
+&lt;strong&gt;Would you and your company like to join me in supporting Ruby OSS maintainers?&lt;/strong&gt;
+&lt;a href=&#34;https://gem.coop/fellowship/sponsor/&#34;&gt;More details on sponsorship here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Ruby open source tooling and its community are fundamental to &lt;a href=&#34;https://sidekiq.org&#34;&gt;Sidekiq&lt;/a&gt; and its success.
+I believe in committing both time and money to ensure that the Ruby ecosystem provides not only recognition to the people maintaining our common infrastructure every day but funding.
+Open source maintainers can&amp;rsquo;t pay their rent or mortgage with kind words.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Sidekiq in the terminal</title>
@@ -133,16 +149,6 @@ As far as I know this was done in order to prevent service providers from adding
 &lt;p&gt;In principle I like this change.&lt;/p&gt;
 &lt;p&gt;My &lt;a href=&#34;https://github.com/contribsys/faktory&#34;&gt;Faktory&lt;/a&gt; project uses the AGPL license for the same purpose: Faktory is open source and anyone who offers Faktory as a service &lt;strong&gt;with proprietary changes&lt;/strong&gt; should have to open source those changes too.
 I consider this a valuable quid pro quo: if you change my open source to make money, you must contribute some of that value back to the community in return.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Serializing Ruby datatypes in JSON</title>
-      <link>https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/</link>
-      <pubDate>Fri, 01 Mar 2024 09:42:08 -0800</pubDate>
-      <author>Mike Perham</author>
-      <guid>https://www.mikeperham.com/2024/03/01/serializing-ruby-datatypes-in-json/</guid>
-      <description>&lt;p&gt;Ruby&amp;rsquo;s JSON library allows you to convert Ruby datatypes into a JSON document, as long as those types are native to JSON: String, bool, int, float, nil, Hash and Array.
-Everything else converts to a String by default; if you use any other core datatypes, they will not survive a &lt;code&gt;JSON.generate/JSON.parse&lt;/code&gt; round trip. Here I pass a Range, Symbol and Time; notice how the end result is three Strings instead of the actual types:&lt;/p&gt;</description>
     </item>
     
   </channel>

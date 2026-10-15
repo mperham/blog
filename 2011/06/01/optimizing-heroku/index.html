@@ -5,12 +5,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <meta name="generator" content="Hugo 0.162.1"><meta property="og:url" content="https://www.mikeperham.com/2011/06/01/optimizing-heroku/">
+  <meta name="generator" content="Hugo 0.168.0"><meta property="og:url" content="https://www.mikeperham.com/2011/06/01/optimizing-heroku/">
 	<meta property="og:site_name" content="Mike Perham">
 	<meta property="og:title" content="Optimizing Heroku">
 	<meta property="og:description" content="I spent some time recently playing with a trivial Rails 3 app using girl_friday and learned a few interesting things:
 Michael’s post on using Unicorn with Heroku is a fantastic idea and great way to improve the efficiency of your Heroku application’s web dynos.
-Heroku imposes a limit of 15 threads per Ruby process (there is an open question about this, it might just be a bug in the Heroku Cedar stack, which is still beta). If you are using thin, you get 1 process and 15 threads per dyno. If you are using Unicorn, you get 3 processes* and 45 threads. UPDATE: I don’t believe Heroku has a thread limit, just a memory limit.">
+Heroku imposes a limit of 15 threads per Ruby process (there is an open question about this, it might just be a bug in the Heroku Cedar stack, which is still beta). If you are using thin, you get 1 process and 15 threads per dyno. If you are using Unicorn, you get 3 processes* and 45 threads. UPDATE: I don’t believe Heroku has a thread limit, just a memory limit.
+girl_friday defaults to 5 threads per queue. With the thread limit on Heroku, you’ll want to carefully ration the size of each queue. girl_friday’s Rack status app can tell you at runtime which queues are busy and which are quiet for tuning purposes.
+girl_friday can, in many cases, replace or dramatically reduce your need for separate worker dynos, saving you money.
+Where 3 is based on the memory consumption of your application. YMMV.">
 	<meta property="og:locale" content="en_us">
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="post">
